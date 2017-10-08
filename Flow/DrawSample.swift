@@ -8,33 +8,31 @@
 
 import UIKit
 
+@IBDesignable
 class DrawSample: UIView {
 
+    var yPosition: CGFloat = 1.0;
+    
     override func draw(_ rect: CGRect) {
         
-        let context = UIGraphicsGetCurrentContext()
-
-        context?.setLineWidth(1)
-        context?.setStrokeColor(UIColor.black.cgColor)
+        let my = UIGraphicsGetCurrentContext()
+        let staff = Staff(width: bounds.width, height: bounds.height, context: my)
         
-        context?.move(to: CGPoint(x: 50, y: 60))
-        context?.addLine(to: CGPoint(x: 1000, y: 60))
-        
-        context?.move(to: CGPoint(x: 50, y: 70))
-        context?.addLine(to: CGPoint(x: 1000, y: 70))
-        
-        context?.move(to: CGPoint(x: 50, y: 80))
-        context?.addLine(to: CGPoint(x: 1000, y: 80))
-        
-        context?.move(to: CGPoint(x: 50, y: 90))
-        context?.addLine(to: CGPoint(x: 1000, y: 90))
-        
-        context?.move(to: CGPoint(x: 50, y: 100))
-        context?.addLine(to: CGPoint(x: 1000, y: 100))
-        
-        /*let rectangle = CGRect(x: 50, y: 50, width: 100, height: 50)
-        context?.addRect(rectangle)*/
-        
-        context?.strokePath()
+        staff.draw(yPosition: yPosition)
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touchPoint = touches.first?.location(in: self) {
+            yPosition = touchPoint.y
+            updateDrawing()
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        updateDrawing()
+    }
+    
+    func updateDrawing(){
+        self.setNeedsDisplay()
     }
 }
