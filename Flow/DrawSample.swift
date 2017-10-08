@@ -19,6 +19,7 @@ class DrawSample: UIView {
         let staff = Staff(width: bounds.width, height: bounds.height, context: my)
         
         staff.draw(yPosition: yPosition)
+        staff.draw(yPosition: yPosition)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
