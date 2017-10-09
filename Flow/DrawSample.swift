@@ -15,9 +15,10 @@ class DrawSample: UIView {
     
     override func draw(_ rect: CGRect) {
         
-        let my = UIGraphicsGetCurrentContext()
-        let staff = Staff(width: bounds.width, height: bounds.height, context: my)
+        let context = UIGraphicsGetCurrentContext()
+        let staff = Staff(width: bounds.width, height: bounds.height, context: context)
         
+        staff.draw(yPosition: yPosition)
         staff.draw(yPosition: yPosition)
         staff.draw(yPosition: yPosition)
     }
