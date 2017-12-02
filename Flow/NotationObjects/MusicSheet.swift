@@ -12,10 +12,13 @@ import UIKit
 class MusicSheet: UIView {
     
     let lineSpace:CGFloat = 30 // Spaces between lines in staff
-    let staffSpace:CGFloat = 200 // Spaces between stafff
+    let staffSpace:CGFloat = 280 // Spaces between staff
     let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
     let startY:CGFloat = 200
-    var staffIndex:CGFloat = 0
+    let startYConnection:CGFloat = 80
+    let grandStaffSpace:CGFloat = 560 // change * 2 of staff space
+    var grandStaffIndex:CGFloat = 0
+    var staffIndex:CGFloat = -1
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -26,12 +29,30 @@ class MusicSheet: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G)
+        /*drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G)
         drawStaff(startX: lefRightPadding, startY: startY + staffSpace, clefType: Clef.F)
+        drawStaffConnection(startX: lefRightPadding, startY: 80)
         drawStaff(startX: lefRightPadding, startY: startY + staffSpace * 2, clefType: Clef.G)
         drawStaff(startX: lefRightPadding, startY: startY + staffSpace * 3, clefType: Clef.F)
+        drawStaffConnection(startX: lefRightPadding, startY: 480)
         drawStaff(startX: lefRightPadding, startY: startY + staffSpace * 4, clefType: Clef.G)
         drawStaff(startX: lefRightPadding, startY: startY + staffSpace * 5, clefType: Clef.F)
+        drawStaffConnection(startX: lefRightPadding, startY: 880)*/
+        
+        setupGrandStaff(startX: lefRightPadding, startY: startY)
+        setupGrandStaff(startX: lefRightPadding, startY: startY)
+        setupGrandStaff(startX: lefRightPadding, startY: startY)
+    }
+    
+    //Setup a grand staff
+    private func setupGrandStaff(startX:CGFloat, startY:CGFloat) {
+        staffIndex += 1
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G)
+        staffIndex += 1
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.F)
+        drawStaffConnection(startX: lefRightPadding, startY: startYConnection + grandStaffSpace * grandStaffIndex)
+        
+        grandStaffIndex += 1
     }
     
     // Draws a staff
@@ -63,4 +84,23 @@ class MusicSheet: UIView {
         }
     }
 
+    private func drawStaffConnection(startX:CGFloat, startY:CGFloat) {
+        let bezierPath = UIBezierPath()
+        UIColor.black.setStroke()
+        bezierPath.lineWidth = 2
+        
+        bezierPath.move(to: CGPoint(x: startX, y: startY))
+        bezierPath.addLine(to: CGPoint(x: startX, y: startY + 400)) // change if staff space changes
+        bezierPath.stroke()
+        
+        bezierPath.move(to: CGPoint(x: endX, y: startY))
+        bezierPath.addLine(to: CGPoint(x: endX, y: startY + 400)) // change if staff space changes
+        bezierPath.stroke()
+        
+        let brace = UIImage(named:"brace-185")
+        let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 50, y: startY + 26, width: 22.4, height: 296))
+        
+        braceView.image = brace
+        self.addSubview(braceView)
+    }
 }

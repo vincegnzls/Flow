@@ -64,7 +64,7 @@
                                 <rect key="frame" x="0.0" y="64" width="1112" height="770"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bCt-Js-Xda" customClass="MusicSheet" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="1112" height="1300"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1112" height="1500"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ehO-1o-QVe">
                                                 <rect key="frame" x="195" y="79" width="52" height="61"/>
@@ -95,7 +95,7 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="1300" id="xo5-Y1-ev2"/>
+                                            <constraint firstAttribute="height" constant="1500" id="xo5-Y1-ev2"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -122,6 +122,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="Editor" id="Hhe-eV-Nri"/>
                     <size key="freeformSize" width="1112" height="834"/>
+                    <connections>
+                        <outlet property="height" destination="xo5-Y1-ev2" id="n6n-09-Ew5"/>
+                        <outlet property="titleLabel" destination="xo5-Y1-ev2" id="VJJ-Uf-rI9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2W-99-FM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
