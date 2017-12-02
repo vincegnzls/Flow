@@ -18,5 +18,12 @@ class MusicNotation {
          gridCoordinates: GridCoordinates?) {
         self.screenCoordinates = screenCoordinates
         self.gridCoordinates = gridCoordinates
+        
+        self.setImage()
+    }
+    
+    // Sets the image based on the music notation
+    func setImage() {
+        // Do nothing
     }
 }
