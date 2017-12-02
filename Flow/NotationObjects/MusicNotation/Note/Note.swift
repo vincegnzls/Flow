@@ -9,36 +9,35 @@
 import UIKit
 
 class Note: MusicNotation {
-    
-    struct Pitch {
-        var step: String
-        var octave: Int
-        
-        init(step: String, octave: Int) {
-            self.step = step
-            self.octave = octave
-        }
-    }
-    
     // MARK: Properties
     var pitch: Pitch
     var type: RestNoteType
+    var accidental: Accidental?
+    var staffIndex: Int
     
     init(screenCoordinates: ScreenCoordinates?,
          gridCoordinates: GridCoordinates?,
          pitch: Pitch,
-         type: RestNoteType) {
+         type: RestNoteType,
+         accidental: Accidental?,
+         staffIndex: Int) {
         self.pitch = pitch
         self.type = type
+        self.accidental = accidental
+        self.staffIndex = staffIndex
         super.init(screenCoordinates: screenCoordinates, gridCoordinates: gridCoordinates)
-        
-        self.setImage()
     }
     
-    private func setImage() {
+    // Set the image based on the note type and location in the staff
+    override func setImage() {
         switch self.type {
         case .sixtyFourth:
-            print("sixty fourth note")
+            if self.staffIndex > 12 {
+                // Stem goes up
+            }
+            else {
+                // Stem goes down 
+            }
         case .thirtySecond:
             print("thirty second note")
         case.sixteenth:
