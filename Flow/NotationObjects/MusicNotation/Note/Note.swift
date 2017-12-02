@@ -30,26 +30,6 @@ class Note: MusicNotation {
     
     // Set the image based on the note type and location in the staff
     override func setImage() {
-        switch self.type {
-        case .sixtyFourth:
-            if self.staffIndex > 12 {
-                // Stem goes up
-            }
-            else {
-                // Stem goes down 
-            }
-        case .thirtySecond:
-            print("thirty second note")
-        case.sixteenth:
-            print("sixteenth note")
-        case .eighth:
-            print("eighth note")
-        case .quarter:
-            print("quarter note")
-        case .half:
-            print("half note")
-        case .whole:
-            print("whole note")
-        }
+        self.image = type.getNoteImage(isUpwards: self.staffIndex > 12)
     }
 }
