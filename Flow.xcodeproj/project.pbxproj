@@ -13,9 +13,9 @@
 		61370E1E1F82A1CB002B6A09 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61370E1D1F82A1CB002B6A09 /* Assets.xcassets */; };
 		61370E211F82A1CB002B6A09 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61370E1F1F82A1CB002B6A09 /* LaunchScreen.storyboard */; };
 		613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613EE8D41F98EB5F004FD009 /* Staff.swift */; };
+		613EE8D71F98F011004FD009 /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613EE8D61F98F011004FD009 /* MusicSheet.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
 		61F99B2C1F9F059800C94446 /* WholeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F99B2B1F9F059800C94446 /* WholeNote.swift */; };
-		86F254B31FD2A80100C25553 /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F254B21FD2A80100C25553 /* MusicSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,9 +46,9 @@
 		61370E271F82A1CB002B6A09 /* FlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		61370E321F82A1CB002B6A09 /* FlowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		613EE8D41F98EB5F004FD009 /* Staff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Staff.swift; sourceTree = "<group>"; };
+		613EE8D61F98F011004FD009 /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		61F99B2B1F9F059800C94446 /* WholeNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WholeNote.swift; sourceTree = "<group>"; };
-		86F254B21FD2A80100C25553 /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,8 +81,8 @@
 			children = (
 				61EC34951F8A7C4200A4A5D6 /* Line.swift */,
 				613EE8D41F98EB5F004FD009 /* Staff.swift */,
+				613EE8D61F98F011004FD009 /* MusicSheet.swift */,
 				61F99B2B1F9F059800C94446 /* WholeNote.swift */,
-				86F254B21FD2A80100C25553 /* MusicSheet.swift */,
 			);
 			path = NotationObjects;
 			sourceTree = "<group>";
@@ -253,12 +253,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				613EE8D71F98F011004FD009 /* MusicSheet.swift in Sources */,
 				61F99B2C1F9F059800C94446 /* WholeNote.swift in Sources */,
 				61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
-				86F254B31FD2A80100C25553 /* MusicSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
