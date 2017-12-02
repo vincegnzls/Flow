@@ -15,6 +15,13 @@
 		61370E211F82A1CB002B6A09 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61370E1F1F82A1CB002B6A09 /* LaunchScreen.storyboard */; };
 		613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613EE8D41F98EB5F004FD009 /* Staff.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
+		8633747B1FD3282E003D7936 /* RestNoteType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8633747A1FD3282E003D7936 /* RestNoteType.swift */; };
+		8633747D1FD3283A003D7936 /* Rest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8633747C1FD3283A003D7936 /* Rest.swift */; };
+		8633747F1FD32847003D7936 /* MusicNotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8633747E1FD32847003D7936 /* MusicNotation.swift */; };
+		863374811FD32849003D7936 /* MusicNotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863374801FD32849003D7936 /* MusicNotation.swift */; };
+		863374851FD32856003D7936 /* Accidental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863374821FD32856003D7936 /* Accidental.swift */; };
+		863374861FD32856003D7936 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863374831FD32856003D7936 /* Note.swift */; };
+		863374871FD32856003D7936 /* Pitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863374841FD32856003D7936 /* Pitch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +54,13 @@
 		61370E321F82A1CB002B6A09 /* FlowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		613EE8D41F98EB5F004FD009 /* Staff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Staff.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		8633747A1FD3282E003D7936 /* RestNoteType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RestNoteType.swift; path = ../../../../../../../../Downloads/MusicNotation/RestNoteType.swift; sourceTree = "<group>"; };
+		8633747C1FD3283A003D7936 /* Rest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Rest.swift; path = ../../../../../../../../../Downloads/MusicNotation/Rest/Rest.swift; sourceTree = "<group>"; };
+		8633747E1FD32847003D7936 /* MusicNotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MusicNotation.swift; path = ../../../../../../../../../Downloads/MusicNotation/MusicNotation.swift; sourceTree = "<group>"; };
+		863374801FD32849003D7936 /* MusicNotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotation.swift; sourceTree = "<group>"; };
+		863374821FD32856003D7936 /* Accidental.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Accidental.swift; path = ../../../../../../../../../Downloads/MusicNotation/Note/Accidental.swift; sourceTree = "<group>"; };
+		863374831FD32856003D7936 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Note.swift; path = ../../../../../../../../../Downloads/MusicNotation/Note/Note.swift; sourceTree = "<group>"; };
+		863374841FD32856003D7936 /* Pitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Pitch.swift; path = ../../../../../../../../../Downloads/MusicNotation/Note/Pitch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +91,7 @@
 		612909FC1F89FFFC0094F9B7 /* NotationObjects */ = {
 			isa = PBXGroup;
 			children = (
+				863374771FD3279F003D7936 /* MusicNotation */,
 				61EC34951F8A7C4200A4A5D6 /* Line.swift */,
 				613EE8D41F98EB5F004FD009 /* Staff.swift */,
 				612D07A51FD2C6780006BD0E /* MusicSheet.swift */,
@@ -114,6 +129,37 @@
 				61370E221F82A1CB002B6A09 /* Info.plist */,
 			);
 			path = Flow;
+			sourceTree = "<group>";
+		};
+		863374771FD3279F003D7936 /* MusicNotation */ = {
+			isa = PBXGroup;
+			children = (
+				863374801FD32849003D7936 /* MusicNotation.swift */,
+				8633747A1FD3282E003D7936 /* RestNoteType.swift */,
+				863374791FD327FA003D7936 /* Note */,
+				863374781FD327EA003D7936 /* Rest */,
+			);
+			name = MusicNotation;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		863374781FD327EA003D7936 /* Rest */ = {
+			isa = PBXGroup;
+			children = (
+				8633747C1FD3283A003D7936 /* Rest.swift */,
+				8633747E1FD32847003D7936 /* MusicNotation.swift */,
+			);
+			path = Rest;
+			sourceTree = "<group>";
+		};
+		863374791FD327FA003D7936 /* Note */ = {
+			isa = PBXGroup;
+			children = (
+				863374831FD32856003D7936 /* Note.swift */,
+				863374821FD32856003D7936 /* Accidental.swift */,
+				863374841FD32856003D7936 /* Pitch.swift */,
+			);
+			path = Note;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,8 +299,15 @@
 				61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */,
 				612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
+				863374811FD32849003D7936 /* MusicNotation.swift in Sources */,
+				8633747F1FD32847003D7936 /* MusicNotation.swift in Sources */,
+				8633747D1FD3283A003D7936 /* Rest.swift in Sources */,
+				863374871FD32856003D7936 /* Pitch.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
+				863374861FD32856003D7936 /* Note.swift in Sources */,
+				863374851FD32856003D7936 /* Accidental.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
+				8633747B1FD3282E003D7936 /* RestNoteType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
