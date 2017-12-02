@@ -1,28 +1,26 @@
 //
-//  Music Sheet.swift
+//  MusicSheet.swift
 //  Flow
 //
-//  Created by Vince on 19/10/2017.
+//  Created by Kevin Chan on 02/12/2017.
 //  Copyright © 2017 MusicG. All rights reserved.
 //
 
 import UIKit
 
-class Music_Sheet: UIStackView {
+/*
+    Singleton class that handles the drawing of the staff and other stuff
+ */
+class MusicSheet: UIView {
 
-    override init(frame: CGRect) {
-        super.init(frame:frame)
-        setupSheet()
+    /*
+    // Only override draw() if you perform custom drawing.
+    // An empty implementation adversely affects performance during animation.
+    override func draw(_ rect: CGRect) {
+        // Drawing code
     }
+    */
+
     
-    required init(coder: NSCoder) {
-        super.init(coder: coder)
-        setupSheet()
-    }
-
-    private func setupSheet() {
-        let staff = Staff()
-        
-        addArrangedSubview(staff)
-    }
+    
 }
