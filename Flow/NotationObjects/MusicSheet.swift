@@ -98,7 +98,7 @@ class MusicSheet: UIView {
         bezierPath.stroke()
         
         let brace = UIImage(named:"brace-185")
-        let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 50, y: startY + 50, width: 22.4, height: 296))
+        let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: 400))
         
         braceView.image = brace
         self.addSubview(braceView)
