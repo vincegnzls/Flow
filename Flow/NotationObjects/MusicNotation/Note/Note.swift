@@ -13,7 +13,7 @@ class Note: MusicNotation {
     var pitch: Pitch
     var type: RestNoteType
     var accidental: Accidental?
-    var staffIndex: Int
+    var staffIndex: Int // Index of the note in the staff (starts at the lowest space/line)
     
     init(screenCoordinates: ScreenCoordinates?,
          gridCoordinates: GridCoordinates?,

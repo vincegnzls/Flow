@@ -38,19 +38,54 @@ enum RestNoteType {
     func getNoteImage(isUpwards: Bool) -> UIImage {
         switch self {
         case .sixtyFourth:
-            return UIImage(named: "64th-rest")!
+            if isUpwards {
+                return UIImage(named: "64th-up")!
+            }
+            else {
+                return UIImage(named: "64th-down")!
+            }
         case .thirtySecond:
-            return UIImage(named: "32nd-rest")!
+            if isUpwards {
+                return UIImage(named: "32nd-up")!
+            }
+            else {
+                return UIImage(named: "32nd-down")!
+            }
         case .sixteenth:
-            return UIImage(named: "16th-rest")!
+            if isUpwards {
+                return UIImage(named: "16th-up")!
+            }
+            else {
+                return UIImage(named: "16th-down")!
+            }
         case .eighth:
-            return UIImage(named: "eighth-rest")!
+            if isUpwards {
+                return UIImage(named: "eighth-up")!
+            }
+            else {
+                return UIImage(named: "eighth-down")!
+            }
         case .quarter:
-            return UIImage(named: "quarter-rest")!
+            if isUpwards {
+                return UIImage(named: "quarter-up")!
+            }
+            else {
+                return UIImage(named: "quarter-down")!
+            }
         case .half:
-            return UIImage(named: "half-rest")!
+            if isUpwards {
+                return UIImage(named: "half-up")!
+            }
+            else {
+                return UIImage(named: "half-down")!
+            }
         case .whole:
-            return UIImage(named: "whole-rest")!
+            if isUpwards {
+                return UIImage(named: "whole-up")!
+            }
+            else {
+                return UIImage(named: "whole-down")!
+            }
         }
     }
 }
