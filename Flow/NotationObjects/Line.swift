@@ -20,8 +20,4 @@ class Line: UIButton {
         bezierPath.lineWidth = 2
         bezierPath.stroke()
     }
-    
-    public func changeToBlue() {
-        UIColor.blue.setStroke()
-    }
 }
