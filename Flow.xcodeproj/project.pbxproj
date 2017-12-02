@@ -16,6 +16,11 @@
 		613EE8D71F98F011004FD009 /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613EE8D61F98F011004FD009 /* MusicSheet.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
 		61F99B2C1F9F059800C94446 /* WholeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F99B2B1F9F059800C94446 /* WholeNote.swift */; };
+		86EAE88C1FD2BE9800E4A1DE /* MusicNotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86EAE88B1FD2BE9800E4A1DE /* MusicNotation.swift */; };
+		86EAE8921FD2D28900E4A1DE /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86EAE8911FD2D28900E4A1DE /* Note.swift */; };
+		86EAE8941FD2D47A00E4A1DE /* RestNoteType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86EAE8931FD2D47A00E4A1DE /* RestNoteType.swift */; };
+		86EAE8971FD2D90F00E4A1DE /* ScreenCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86EAE8961FD2D90F00E4A1DE /* ScreenCoordinates.swift */; };
+		86EAE8991FD2D98500E4A1DE /* GridCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86EAE8981FD2D98500E4A1DE /* GridCoordinates.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +54,11 @@
 		613EE8D61F98F011004FD009 /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		61F99B2B1F9F059800C94446 /* WholeNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WholeNote.swift; sourceTree = "<group>"; };
+		86EAE88B1FD2BE9800E4A1DE /* MusicNotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotation.swift; sourceTree = "<group>"; };
+		86EAE8911FD2D28900E4A1DE /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		86EAE8931FD2D47A00E4A1DE /* RestNoteType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestNoteType.swift; sourceTree = "<group>"; };
+		86EAE8961FD2D90F00E4A1DE /* ScreenCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCoordinates.swift; sourceTree = "<group>"; };
+		86EAE8981FD2D98500E4A1DE /* GridCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCoordinates.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +89,7 @@
 		612909FC1F89FFFC0094F9B7 /* NotationObjects */ = {
 			isa = PBXGroup;
 			children = (
+				86EAE88A1FD2BE8700E4A1DE /* MusicNotation */,
 				61EC34951F8A7C4200A4A5D6 /* Line.swift */,
 				613EE8D41F98EB5F004FD009 /* Staff.swift */,
 				613EE8D61F98F011004FD009 /* MusicSheet.swift */,
@@ -108,6 +119,7 @@
 		61370E151F82A1CB002B6A09 /* Flow */ = {
 			isa = PBXGroup;
 			children = (
+				86EAE8951FD2D8FB00E4A1DE /* Utils */,
 				612909FC1F89FFFC0094F9B7 /* NotationObjects */,
 				61370E161F82A1CB002B6A09 /* AppDelegate.swift */,
 				61370E181F82A1CB002B6A09 /* ViewController.swift */,
@@ -117,6 +129,33 @@
 				61370E221F82A1CB002B6A09 /* Info.plist */,
 			);
 			path = Flow;
+			sourceTree = "<group>";
+		};
+		86EAE88A1FD2BE8700E4A1DE /* MusicNotation */ = {
+			isa = PBXGroup;
+			children = (
+				86EAE88D1FD2BF1E00E4A1DE /* Note */,
+				86EAE88B1FD2BE9800E4A1DE /* MusicNotation.swift */,
+			);
+			path = MusicNotation;
+			sourceTree = "<group>";
+		};
+		86EAE88D1FD2BF1E00E4A1DE /* Note */ = {
+			isa = PBXGroup;
+			children = (
+				86EAE8911FD2D28900E4A1DE /* Note.swift */,
+				86EAE8931FD2D47A00E4A1DE /* RestNoteType.swift */,
+			);
+			path = Note;
+			sourceTree = "<group>";
+		};
+		86EAE8951FD2D8FB00E4A1DE /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				86EAE8961FD2D90F00E4A1DE /* ScreenCoordinates.swift */,
+				86EAE8981FD2D98500E4A1DE /* GridCoordinates.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,9 +295,14 @@
 				613EE8D71F98F011004FD009 /* MusicSheet.swift in Sources */,
 				61F99B2C1F9F059800C94446 /* WholeNote.swift in Sources */,
 				61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */,
+				86EAE8921FD2D28900E4A1DE /* Note.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
+				86EAE88C1FD2BE9800E4A1DE /* MusicNotation.swift in Sources */,
+				86EAE8991FD2D98500E4A1DE /* GridCoordinates.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
+				86EAE8941FD2D47A00E4A1DE /* RestNoteType.swift in Sources */,
+				86EAE8971FD2D90F00E4A1DE /* ScreenCoordinates.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
