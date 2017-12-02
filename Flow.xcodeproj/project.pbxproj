@@ -23,6 +23,7 @@
 		864CE5AC1FD33076001FF059 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5AB1FD33076001FF059 /* Note.swift */; };
 		864CE5AF1FD3309F001FF059 /* ScreenCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5AE1FD3309F001FF059 /* ScreenCoordinates.swift */; };
 		864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B01FD330DA001FF059 /* GridCoordinates.swift */; };
+		864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B21FD355E8001FF059 /* SWXMLHash.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		864CE5AB1FD33076001FF059 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		864CE5AE1FD3309F001FF059 /* ScreenCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCoordinates.swift; sourceTree = "<group>"; };
 		864CE5B01FD330DA001FF059 /* GridCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCoordinates.swift; sourceTree = "<group>"; };
+		864CE5B21FD355E8001FF059 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +168,7 @@
 		864CE5AD1FD3308F001FF059 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				864CE5B21FD355E8001FF059 /* SWXMLHash.swift */,
 				864CE5AE1FD3309F001FF059 /* ScreenCoordinates.swift */,
 				864CE5B01FD330DA001FF059 /* GridCoordinates.swift */,
 			);
@@ -315,6 +318,7 @@
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
 				864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */,
 				863374811FD32849003D7936 /* MusicNotation.swift in Sources */,
+				864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */,
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
