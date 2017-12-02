@@ -7,15 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612D07A51FD2C6780006BD0E /* MusicSheet.swift */; };
 		61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61370E161F82A1CB002B6A09 /* AppDelegate.swift */; };
 		61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61370E181F82A1CB002B6A09 /* ViewController.swift */; };
 		61370E1C1F82A1CB002B6A09 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61370E1A1F82A1CB002B6A09 /* Main.storyboard */; };
 		61370E1E1F82A1CB002B6A09 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61370E1D1F82A1CB002B6A09 /* Assets.xcassets */; };
 		61370E211F82A1CB002B6A09 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61370E1F1F82A1CB002B6A09 /* LaunchScreen.storyboard */; };
 		613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613EE8D41F98EB5F004FD009 /* Staff.swift */; };
-		613EE8D71F98F011004FD009 /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613EE8D61F98F011004FD009 /* MusicSheet.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
-		61F99B2C1F9F059800C94446 /* WholeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F99B2B1F9F059800C94446 /* WholeNote.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		612D07A51FD2C6780006BD0E /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 		61370E131F82A1CB002B6A09 /* Flow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61370E161F82A1CB002B6A09 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61370E181F82A1CB002B6A09 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -46,9 +46,7 @@
 		61370E271F82A1CB002B6A09 /* FlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		61370E321F82A1CB002B6A09 /* FlowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		613EE8D41F98EB5F004FD009 /* Staff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Staff.swift; sourceTree = "<group>"; };
-		613EE8D61F98F011004FD009 /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
-		61F99B2B1F9F059800C94446 /* WholeNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WholeNote.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,8 +79,7 @@
 			children = (
 				61EC34951F8A7C4200A4A5D6 /* Line.swift */,
 				613EE8D41F98EB5F004FD009 /* Staff.swift */,
-				613EE8D61F98F011004FD009 /* MusicSheet.swift */,
-				61F99B2B1F9F059800C94446 /* WholeNote.swift */,
+				612D07A51FD2C6780006BD0E /* MusicSheet.swift */,
 			);
 			path = NotationObjects;
 			sourceTree = "<group>";
@@ -253,9 +250,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				613EE8D71F98F011004FD009 /* MusicSheet.swift in Sources */,
-				61F99B2C1F9F059800C94446 /* WholeNote.swift in Sources */,
 				61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */,
+				612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,

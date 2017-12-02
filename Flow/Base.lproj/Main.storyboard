@@ -60,29 +60,72 @@
                         <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" placeholderIntrinsicWidth="1366" placeholderIntrinsicHeight="984" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="UVE-dA-Nz1" userLabel="Staff" customClass="Staff" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="83" y="191" width="946" height="150"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                            </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Composition Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZhB-8d-v8t">
-                                <rect key="frame" x="535" y="119" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-FI-wrK">
+                                <rect key="frame" x="0.0" y="64" width="1112" height="770"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bCt-Js-Xda" customClass="MusicSheet" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="1112" height="1300"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ehO-1o-QVe">
+                                                <rect key="frame" x="195" y="79" width="52" height="61"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <attributedString key="attributedText">
+                                                    <fragment content="4">
+                                                        <attributes>
+                                                            <font key="NSFont" size="90" name="Optima-Bold"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Juh-pD-hbm">
+                                                <rect key="frame" x="195" y="139" width="52" height="61"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <attributedString key="attributedText">
+                                                    <fragment content="4">
+                                                        <attributes>
+                                                            <font key="NSFont" size="90" name="Optima-Bold"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1300" id="xo5-Y1-ev2"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="bCt-Js-Xda" secondAttribute="trailing" id="6yC-YM-h1r"/>
+                                    <constraint firstItem="bCt-Js-Xda" firstAttribute="leading" secondItem="9Me-FI-wrK" secondAttribute="leading" id="DfM-UL-Qnd"/>
+                                    <constraint firstItem="bCt-Js-Xda" firstAttribute="top" secondItem="9Me-FI-wrK" secondAttribute="top" id="g4l-Dq-SDk"/>
+                                    <constraint firstAttribute="bottom" secondItem="bCt-Js-Xda" secondAttribute="bottom" id="ofv-bK-9Aw"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <accessibility key="accessibilityConfiguration">
+                            <accessibilityTraits key="traits" allowsDirectInteraction="YES"/>
+                        </accessibility>
+                        <constraints>
+                            <constraint firstItem="9Me-FI-wrK" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="96U-OV-wpB"/>
+                            <constraint firstItem="9Me-FI-wrK" firstAttribute="top" secondItem="j19-iv-FrW" secondAttribute="top" id="9cg-8I-HhV"/>
+                            <constraint firstItem="9Me-FI-wrK" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="J7Z-wZ-LpL"/>
+                            <constraint firstItem="9Me-FI-wrK" firstAttribute="bottom" secondItem="j19-iv-FrW" secondAttribute="bottom" id="py3-iI-nN2"/>
+                            <constraint firstItem="bCt-Js-Xda" firstAttribute="width" secondItem="ACD-nf-3gA" secondAttribute="width" id="sgU-I3-59M"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="j19-iv-FrW"/>
                     </view>
                     <navigationItem key="navigationItem" title="Editor" id="Hhe-eV-Nri"/>
-                    <connections>
-                        <outlet property="titleLabel" destination="ZhB-8d-v8t" id="TCi-Tp-HQ2"/>
-                    </connections>
+                    <size key="freeformSize" width="1112" height="834"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2W-99-FM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1183.7481698389458" y="130.6640625"/>
+            <point key="canvasLocation" x="1183.2733812949641" y="130.21582733812951"/>
         </scene>
     </scenes>
 </document>
