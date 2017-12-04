@@ -43,9 +43,9 @@ class MusicSheet: UIView {
     //Setup a grand staff
     private func setupGrandStaff(startX:CGFloat, startY:CGFloat) {
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.g)
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G)
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.f)
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.F)
         drawStaffConnection(startX: lefRightPadding, startY: startYConnection + grandStaffSpace * grandStaffIndex)
         
         grandStaffIndex += 1
@@ -63,7 +63,7 @@ class MusicSheet: UIView {
         var clef = UIImage(named:"treble-clef")
         var clefView = UIImageView(frame: CGRect(x: 110, y: 45 + startY - 200, width: 67.2, height: 192))
         
-        if clefType == Clef.f {
+        if clefType == .F {
             clef = UIImage(named:"bass-clef")
             clefView = UIImageView(frame: CGRect(x: 110, y: 35 + startY - 200, width: 67.2, height: 192))
         }

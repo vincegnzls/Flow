@@ -52,6 +52,13 @@ class Note: MusicNotation {
     override func setImage() {
         var isUpwards: Bool
         
-        //self.image = type.getNoteImage()
+        if clef == .G {
+            isUpwards = pitch.octave < 5
+        }
+        else {
+            isUpwards = pitch.octave < 2
+        }
+        
+        self.image = type.getNoteImage(isUpwards: isUpwards)
     }
 }
