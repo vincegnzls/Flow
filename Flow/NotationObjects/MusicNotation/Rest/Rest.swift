@@ -12,6 +12,11 @@ class Rest: MusicNotation {
     // MARK: Properties
     var type: RestNoteType
     
+    init(type: RestNoteType) {
+        self.type = type
+        super.init()
+    }
+    
     init(screenCoordinates: ScreenCoordinates?,
          gridCoordinates: GridCoordinates?,
          type: RestNoteType) {

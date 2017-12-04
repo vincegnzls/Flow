@@ -24,6 +24,11 @@
 		864CE5AF1FD3309F001FF059 /* ScreenCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5AE1FD3309F001FF059 /* ScreenCoordinates.swift */; };
 		864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B01FD330DA001FF059 /* GridCoordinates.swift */; };
 		864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B21FD355E8001FF059 /* SWXMLHash.swift */; };
+		8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A51FD4E8E800EB81BD /* Composition.swift */; };
+		8696A8A91FD4EA5800EB81BD /* ParserWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A81FD4EA5800EB81BD /* ParserWriter.swift */; };
+		8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */; };
+		8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8AD1FD4EB6500EB81BD /* KeySignature.swift */; };
+		8696A8B11FD4F1A800EB81BD /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8B01FD4F1A800EB81BD /* Measure.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +70,11 @@
 		864CE5AE1FD3309F001FF059 /* ScreenCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCoordinates.swift; sourceTree = "<group>"; };
 		864CE5B01FD330DA001FF059 /* GridCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCoordinates.swift; sourceTree = "<group>"; };
 		864CE5B21FD355E8001FF059 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
+		8696A8A51FD4E8E800EB81BD /* Composition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Composition.swift; sourceTree = "<group>"; };
+		8696A8A81FD4EA5800EB81BD /* ParserWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserWriter.swift; sourceTree = "<group>"; };
+		8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignature.swift; sourceTree = "<group>"; };
+		8696A8AD1FD4EB6500EB81BD /* KeySignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignature.swift; sourceTree = "<group>"; };
+		8696A8B01FD4F1A800EB81BD /* Measure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measure.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +105,7 @@
 		612909FC1F89FFFC0094F9B7 /* NotationObjects */ = {
 			isa = PBXGroup;
 			children = (
+				8696A8AA1FD4EB4300EB81BD /* Composition */,
 				863374771FD3279F003D7936 /* MusicNotation */,
 				61EC34951F8A7C4200A4A5D6 /* Line.swift */,
 				613EE8D41F98EB5F004FD009 /* Staff.swift */,
@@ -124,6 +135,7 @@
 		61370E151F82A1CB002B6A09 /* Flow */ = {
 			isa = PBXGroup;
 			children = (
+				8696A8A71FD4EA1000EB81BD /* FileHandling */,
 				864CE5AD1FD3308F001FF059 /* Utils */,
 				612909FC1F89FFFC0094F9B7 /* NotationObjects */,
 				61370E161F82A1CB002B6A09 /* AppDelegate.swift */,
@@ -173,6 +185,33 @@
 				864CE5B01FD330DA001FF059 /* GridCoordinates.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		8696A8A71FD4EA1000EB81BD /* FileHandling */ = {
+			isa = PBXGroup;
+			children = (
+				8696A8A81FD4EA5800EB81BD /* ParserWriter.swift */,
+			);
+			path = FileHandling;
+			sourceTree = "<group>";
+		};
+		8696A8AA1FD4EB4300EB81BD /* Composition */ = {
+			isa = PBXGroup;
+			children = (
+				8696A8AF1FD4F19500EB81BD /* Measure */,
+				8696A8A51FD4E8E800EB81BD /* Composition.swift */,
+				8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */,
+				8696A8AD1FD4EB6500EB81BD /* KeySignature.swift */,
+			);
+			path = Composition;
+			sourceTree = "<group>";
+		};
+		8696A8AF1FD4F19500EB81BD /* Measure */ = {
+			isa = PBXGroup;
+			children = (
+				8696A8B01FD4F1A800EB81BD /* Measure.swift */,
+			);
+			path = Measure;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -311,13 +350,18 @@
 			files = (
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
 				61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */,
+				8696A8B11FD4F1A800EB81BD /* Measure.swift in Sources */,
 				612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */,
+				8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */,
+				8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */,
 				864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */,
 				864CE5A81FD32FEB001FF059 /* Pitch.swift in Sources */,
 				864CE5AF1FD3309F001FF059 /* ScreenCoordinates.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
+				8696A8A91FD4EA5800EB81BD /* ParserWriter.swift in Sources */,
 				864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */,
 				863374811FD32849003D7936 /* MusicNotation.swift in Sources */,
+				8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */,
 				864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */,
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
