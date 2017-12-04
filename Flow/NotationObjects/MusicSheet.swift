@@ -99,4 +99,8 @@ class MusicSheet: UIView {
         braceView.image = brace
         self.addSubview(braceView)
     }
+    
+    private func addMusicNotation(musicNotation: MusicNotation) {
+        
+    }
 }
