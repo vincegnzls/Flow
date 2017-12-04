@@ -124,6 +124,7 @@
                     <size key="freeformSize" width="1112" height="834"/>
                     <connections>
                         <outlet property="height" destination="xo5-Y1-ev2" id="n6n-09-Ew5"/>
+                        <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
                         <outlet property="titleLabel" destination="xo5-Y1-ev2" id="VJJ-Uf-rI9"/>
                     </connections>
                 </viewController>
