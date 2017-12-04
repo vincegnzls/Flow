@@ -17,7 +17,7 @@ class Measure {
     init() {
         self.keySignature = .c
         self.timeSignature = TimeSignature()
-        self.clef = .g
+        self.clef = .G
         self.notationObjects = []
     }
     

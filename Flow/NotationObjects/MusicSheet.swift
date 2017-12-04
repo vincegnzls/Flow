@@ -11,14 +11,16 @@ import UIKit
 @IBDesignable
 class MusicSheet: UIView {
     
-    let lineSpace:CGFloat = 30 // Spaces between lines in staff
-    let staffSpace:CGFloat = 280 // Spaces between staff
-    let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
-    let startY:CGFloat = 200
-    let startYConnection:CGFloat = 80
-    let grandStaffSpace:CGFloat = 560 // change * 2 of staff space
-    var grandStaffIndex:CGFloat = 0
-    var staffIndex:CGFloat = -1
+    private let lineSpace:CGFloat = 30 // Spaces between lines in staff
+    private let staffSpace:CGFloat = 280 // Spaces between staff
+    private let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
+    private let startY:CGFloat = 200
+    private let startYConnection:CGFloat = 80
+    private let grandStaffSpace:CGFloat = 560 // change * 2 of staff space
+    private var grandStaffIndex:CGFloat = 0
+    private var staffIndex:CGFloat = -1
+    
+    private var grid = [[MusicNotation]]()
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
