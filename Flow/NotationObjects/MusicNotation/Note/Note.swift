@@ -15,6 +15,26 @@ class Note: MusicNotation {
     var accidental: Accidental?
     var staffIndex: Int // Index of the note in the staff (starts at the lowest space/line)
     
+    init(pitch: Pitch,
+         type: RestNoteType,
+         staffIndex: Int) {
+        self.pitch = pitch
+        self.type = type
+        self.staffIndex = staffIndex
+        super.init()
+    }
+    
+    init(pitch: Pitch,
+         type: RestNoteType,
+         accidental: Accidental?,
+         staffIndex: Int) {
+        self.pitch = pitch
+        self.type = type
+        self.accidental = accidental
+        self.staffIndex = staffIndex
+        super.init()
+    }
+    
     init(screenCoordinates: ScreenCoordinates?,
          gridCoordinates: GridCoordinates?,
          pitch: Pitch,

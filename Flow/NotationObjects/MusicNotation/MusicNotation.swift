@@ -14,6 +14,10 @@ class MusicNotation {
     var gridCoordinates: GridCoordinates?
     var image: UIImage?
     
+    init() {
+        self.setImage()
+    }
+    
     init(screenCoordinates: ScreenCoordinates?,
          gridCoordinates: GridCoordinates?) {
         self.screenCoordinates = screenCoordinates
