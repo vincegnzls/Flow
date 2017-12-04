@@ -13,25 +13,25 @@ class Note: MusicNotation {
     var pitch: Pitch
     var type: RestNoteType
     var accidental: Accidental?
-    var staffIndex: Int // Index of the note in the staff (starts at the lowest space/line)
+    var clef: Clef
     
     init(pitch: Pitch,
          type: RestNoteType,
-         staffIndex: Int) {
+         clef: Clef) {
         self.pitch = pitch
         self.type = type
-        self.staffIndex = staffIndex
+        self.clef = clef
         super.init()
     }
     
     init(pitch: Pitch,
          type: RestNoteType,
          accidental: Accidental?,
-         staffIndex: Int) {
+         clef: Clef) {
         self.pitch = pitch
         self.type = type
         self.accidental = accidental
-        self.staffIndex = staffIndex
+        self.clef = clef
         super.init()
     }
     
@@ -40,16 +40,18 @@ class Note: MusicNotation {
          pitch: Pitch,
          type: RestNoteType,
          accidental: Accidental?,
-         staffIndex: Int) {
+         clef: Clef) {
         self.pitch = pitch
         self.type = type
         self.accidental = accidental
-        self.staffIndex = staffIndex
+        self.clef = clef
         super.init(screenCoordinates: screenCoordinates, gridCoordinates: gridCoordinates)
     }
     
     // Set the image based on the note type and location in the staff
     override func setImage() {
-        self.image = type.getNoteImage(isUpwards: self.staffIndex > 12)
+        var isUpwards: Bool
+        
+        //self.image = type.getNoteImage()
     }
 }
