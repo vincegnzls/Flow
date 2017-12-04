@@ -9,5 +9,5 @@
 import Foundation
 
 enum Clef {
-    case g, f
+    case G, F
 }

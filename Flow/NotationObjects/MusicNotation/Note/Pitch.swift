@@ -7,10 +7,20 @@
 //
 
 struct Pitch {
-    var step: String
+    enum Step {
+        case C,
+            D,
+            E,
+            F,
+            G,
+            A,
+            B
+    }
+    
+    var step: Step
     var octave: Int
     
-    init(step: String, octave: Int) {
+    init(step: Step, octave: Int) {
         self.step = step
         self.octave = octave
     }
