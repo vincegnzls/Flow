@@ -29,6 +29,7 @@
 		8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */; };
 		8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8AD1FD4EB6500EB81BD /* KeySignature.swift */; };
 		8696A8B11FD4F1A800EB81BD /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8B01FD4F1A800EB81BD /* Measure.swift */; };
+		8696A8B31FD4F52600EB81BD /* Clef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8B21FD4F52600EB81BD /* Clef.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignature.swift; sourceTree = "<group>"; };
 		8696A8AD1FD4EB6500EB81BD /* KeySignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignature.swift; sourceTree = "<group>"; };
 		8696A8B01FD4F1A800EB81BD /* Measure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measure.swift; sourceTree = "<group>"; };
+		8696A8B21FD4F52600EB81BD /* Clef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clef.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,7 +137,6 @@
 		61370E151F82A1CB002B6A09 /* Flow */ = {
 			isa = PBXGroup;
 			children = (
-				8696A8A71FD4EA1000EB81BD /* FileHandling */,
 				864CE5AD1FD3308F001FF059 /* Utils */,
 				612909FC1F89FFFC0094F9B7 /* NotationObjects */,
 				61370E161F82A1CB002B6A09 /* AppDelegate.swift */,
@@ -180,6 +181,7 @@
 		864CE5AD1FD3308F001FF059 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8696A8A71FD4EA1000EB81BD /* FileHandling */,
 				864CE5B21FD355E8001FF059 /* SWXMLHash.swift */,
 				864CE5AE1FD3309F001FF059 /* ScreenCoordinates.swift */,
 				864CE5B01FD330DA001FF059 /* GridCoordinates.swift */,
@@ -202,6 +204,7 @@
 				8696A8A51FD4E8E800EB81BD /* Composition.swift */,
 				8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */,
 				8696A8AD1FD4EB6500EB81BD /* KeySignature.swift */,
+				8696A8B21FD4F52600EB81BD /* Clef.swift */,
 			);
 			path = Composition;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
 				61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */,
 				8696A8B11FD4F1A800EB81BD /* Measure.swift in Sources */,
+				8696A8B31FD4F52600EB81BD /* Clef.swift in Sources */,
 				612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */,
 				8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */,
 				8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */,

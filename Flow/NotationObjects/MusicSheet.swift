@@ -24,10 +24,6 @@ class MusicSheet: UIView {
         return bounds.width - lefRightPadding
     }
     
-    enum Clef {
-        case G, F
-    }
-    
     override func draw(_ rect: CGRect) {
         /*drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G)
         drawStaff(startX: lefRightPadding, startY: startY + staffSpace, clefType: Clef.F)
@@ -47,9 +43,9 @@ class MusicSheet: UIView {
     //Setup a grand staff
     private func setupGrandStaff(startX:CGFloat, startY:CGFloat) {
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G)
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.g)
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.F)
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.f)
         drawStaffConnection(startX: lefRightPadding, startY: startYConnection + grandStaffSpace * grandStaffIndex)
         
         grandStaffIndex += 1
@@ -67,7 +63,7 @@ class MusicSheet: UIView {
         var clef = UIImage(named:"treble-clef")
         var clefView = UIImageView(frame: CGRect(x: 110, y: 45 + startY - 200, width: 67.2, height: 192))
         
-        if clefType == Clef.F {
+        if clefType == Clef.f {
             clef = UIImage(named:"bass-clef")
             clefView = UIImageView(frame: CGRect(x: 110, y: 35 + startY - 200, width: 67.2, height: 192))
         }
