@@ -100,7 +100,13 @@ class MusicSheet: UIView {
         self.addSubview(braceView)
     }
     
-    private func addMusicNotation(musicNotation: MusicNotation) {
+    public func addMusicNotation(note: MusicNotation) {
+        print("ADD NOTE")
         
+        let noteImageView = UIImageView(frame: CGRect(x: ((note.screenCoordinates)?.x)!, y: ((note.screenCoordinates)?.y)!, width: (note.image?.size.width)!, height: (note.image?.size.height)!))
+        
+        noteImageView.image = note.image
+        
+        self.addSubview(noteImageView)
     }
 }
