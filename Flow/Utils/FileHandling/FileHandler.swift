@@ -9,16 +9,25 @@
 import Foundation
 
 // Singleton class for handling files
-class ParserWriter {
+class FileHandler {
     
-    static let instance = ParserWriter()
-    
-    // File storage
+    // MARK: Constants
+    private static let KEY_COMPOSITION_LIST: String = "composition_list"
     private let documentsDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
-                                                           appropriateFor: nil, create: true)
+                                                                  appropriateFor: nil, create: true) // For file handling
     
-    private init() {}
+    // MARK: Shared instance
+    static let instance = FileHandler()
     
+    // MARK: Properties
+    var compositions: Array<CompositionInfo>
+    
+    private init() {
+        compositions = Array<CompositionInfo>()
+        retrieveCompositionList()
+    }
+    
+    // MARK: File handling functions
     func readFile(_ fileName: String) -> Composition {
         let fileURL = documentsDirectory.appendingPathComponent(fileName).appendingPathExtension("xml")
         var readString = ""
@@ -45,6 +54,7 @@ class ParserWriter {
         }
     }
     
+    // MARK: Conversion functions
     func convertCompositionToMusicXML(_ composition: Composition) -> String {
         let xml = AEXMLDocument()
         // Perform conversion here
@@ -56,5 +66,21 @@ class ParserWriter {
         // Perform conversion here
         
         return Composition()
+    }
+    
+    private func retrieveCompositionList() {
+        if let objects = UserDefaults.standard.value(forKey: FileHandler.KEY_COMPOSITION_LIST) as? Data {
+            let decoder = JSONDecoder()
+            if let objectsDecoded = try? decoder.decode(Array.self, from: objects) as [CompositionInfo] {
+                compositions = objectsDecoded
+            }
+        }
+    }
+    
+    func saveCompositionList() {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(compositions){
+            UserDefaults.standard.set(encoded, forKey: FileHandler.KEY_COMPOSITION_LIST)
+        }
     }
 }
