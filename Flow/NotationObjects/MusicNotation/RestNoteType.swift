@@ -40,50 +40,43 @@ enum RestNoteType {
         case .sixtyFourth:
             if isUpwards {
                 return UIImage(named: "64th-up")!
-            }
-            else {
+            } else {
                 return UIImage(named: "64th-down")!
             }
         case .thirtySecond:
             if isUpwards {
                 return UIImage(named: "32nd-up")!
-            }
-            else {
+            } else {
                 return UIImage(named: "32nd-down")!
             }
         case .sixteenth:
             if isUpwards {
                 return UIImage(named: "16th-up")!
-            }
-            else {
+            } else {
                 return UIImage(named: "16th-down")!
             }
         case .eighth:
             if isUpwards {
                 return UIImage(named: "eighth-up")!
-            }
-            else {
+            } else {
                 return UIImage(named: "eighth-down")!
             }
         case .quarter:
             if isUpwards {
                 return UIImage(named: "quarter-up")!
-            }
-            else {
+            } else {
                 return UIImage(named: "quarter-down")!
             }
         case .half:
             if isUpwards {
                 return UIImage(named: "half-up")!
-            }
-            else {
+            } else {
                 return UIImage(named: "half-down")!
             }
         case .whole:
             if isUpwards {
                 return UIImage(named: "whole-up")!
-            }
-            else {
+            } else {
                 return UIImage(named: "whole-down")!
             }
         }

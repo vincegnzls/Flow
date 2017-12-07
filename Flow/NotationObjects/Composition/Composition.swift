@@ -9,26 +9,27 @@
 import Foundation
 
 class Composition {
-    var name: String
+    // Holds information about the composition
+    var compositionInfo: CompositionInfo
     var measures: Array<Measure>
     
     init() {
-        self.name = "Untitled"
+        self.compositionInfo = CompositionInfo()
         self.measures = []
     }
     
-    init(name: String) {
-        self.name = name
+    init(compositionInfo: CompositionInfo, measures: Array<Measure>) {
+        self.compositionInfo = compositionInfo
+        self.measures = measures
+    }
+    
+    init(compositionInfo: CompositionInfo) {
+        self.compositionInfo = compositionInfo
         self.measures = []
     }
     
     init(measures: Array<Measure>) {
-        self.name = "Untitled"
-        self.measures = measures
-    }
-    
-    init(name: String, measures: Array<Measure>) {
-        self.name = name
+        self.compositionInfo = CompositionInfo()
         self.measures = measures
     }
 }

@@ -54,11 +54,10 @@ class Note: MusicNotation {
         
         if clef == .G {
             isUpwards = pitch.octave < 5
-        }
-        else {
+        } else {
             isUpwards = pitch.octave < 2
         }
-        
+         
         self.image = type.getNoteImage(isUpwards: isUpwards)
     }
 }
