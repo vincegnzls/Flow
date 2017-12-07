@@ -58,7 +58,7 @@ class Note: MusicNotation {
         else {
             isUpwards = pitch.octave < 2
         }
-        
+         
         self.image = type.getNoteImage(isUpwards: isUpwards)
     }
 }
