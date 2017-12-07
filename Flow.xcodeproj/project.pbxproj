@@ -38,6 +38,8 @@
 		8696A8C01FD5898200EB81BD /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8BA1FD5898200EB81BD /* Parser.swift */; };
 		8696A8C11FD5898200EB81BD /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8BB1FD5898200EB81BD /* Document.swift */; };
 		869F3C5F1FD8FCC500CC236F /* ControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869F3C5E1FD8FCC500CC236F /* ControlsView.swift */; };
+		86A0287C1FD97C3500305C0C /* NotationControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0287B1FD97C3500305C0C /* NotationControlsView.swift */; };
+		86A0287E1FD97C4B00305C0C /* CursorControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0287D1FD97C4B00305C0C /* CursorControlsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +96,8 @@
 		8696A8BA1FD5898200EB81BD /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		8696A8BB1FD5898200EB81BD /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		869F3C5E1FD8FCC500CC236F /* ControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsView.swift; sourceTree = "<group>"; };
+		86A0287B1FD97C3500305C0C /* NotationControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationControlsView.swift; sourceTree = "<group>"; };
+		86A0287D1FD97C4B00305C0C /* CursorControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorControlsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,7 +259,6 @@
 			isa = PBXGroup;
 			children = (
 				869F3C601FD8FCC900CC236F /* Controls */,
-				869F3C5E1FD8FCC500CC236F /* ControlsView.swift */,
 			);
 			path = ViewObjects;
 			sourceTree = "<group>";
@@ -263,6 +266,9 @@
 		869F3C601FD8FCC900CC236F /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				869F3C5E1FD8FCC500CC236F /* ControlsView.swift */,
+				86A0287B1FD97C3500305C0C /* NotationControlsView.swift */,
+				86A0287D1FD97C4B00305C0C /* CursorControlsView.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -403,6 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
+				86A0287C1FD97C3500305C0C /* NotationControlsView.swift in Sources */,
 				61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */,
 				8696A8BE1FD5898200EB81BD /* Error.swift in Sources */,
 				8696A8B11FD4F1A800EB81BD /* Measure.swift in Sources */,
@@ -418,6 +425,7 @@
 				864CE5AF1FD3309F001FF059 /* ScreenCoordinates.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
 				8696A8A91FD4EA5800EB81BD /* FileHandler.swift in Sources */,
+				86A0287E1FD97C4B00305C0C /* CursorControlsView.swift in Sources */,
 				864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */,
 				8696A8BD1FD5898200EB81BD /* Options.swift in Sources */,
 				863374811FD32849003D7936 /* MusicNotation.swift in Sources */,
