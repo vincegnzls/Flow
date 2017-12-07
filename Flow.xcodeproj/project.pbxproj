@@ -37,6 +37,7 @@
 		8696A8BF1FD5898200EB81BD /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8696A8B91FD5898200EB81BD /* Info.plist */; };
 		8696A8C01FD5898200EB81BD /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8BA1FD5898200EB81BD /* Parser.swift */; };
 		8696A8C11FD5898200EB81BD /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8BB1FD5898200EB81BD /* Document.swift */; };
+		869F3C5F1FD8FCC500CC236F /* ControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869F3C5E1FD8FCC500CC236F /* ControlsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +93,7 @@
 		8696A8B91FD5898200EB81BD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8696A8BA1FD5898200EB81BD /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		8696A8BB1FD5898200EB81BD /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
+		869F3C5E1FD8FCC500CC236F /* ControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 			children = (
 				864CE5AD1FD3308F001FF059 /* Utils */,
 				612909FC1F89FFFC0094F9B7 /* NotationObjects */,
+				869F3C5D1FD8FBA400CC236F /* ViewObjects */,
 				61370E161F82A1CB002B6A09 /* AppDelegate.swift */,
 				61370E181F82A1CB002B6A09 /* ViewController.swift */,
 				61370E1A1F82A1CB002B6A09 /* Main.storyboard */,
@@ -246,6 +249,22 @@
 				8696A8BA1FD5898200EB81BD /* Parser.swift */,
 			);
 			path = AEXML;
+			sourceTree = "<group>";
+		};
+		869F3C5D1FD8FBA400CC236F /* ViewObjects */ = {
+			isa = PBXGroup;
+			children = (
+				869F3C601FD8FCC900CC236F /* Controls */,
+				869F3C5E1FD8FCC500CC236F /* ControlsView.swift */,
+			);
+			path = ViewObjects;
+			sourceTree = "<group>";
+		};
+		869F3C601FD8FCC900CC236F /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controls;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -393,6 +412,7 @@
 				8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */,
 				8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */,
 				864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */,
+				869F3C5F1FD8FCC500CC236F /* ControlsView.swift in Sources */,
 				861F781A1FD6E12A00C51BD2 /* CompositionInfo.swift in Sources */,
 				864CE5A81FD32FEB001FF059 /* Pitch.swift in Sources */,
 				864CE5AF1FD3309F001FF059 /* ScreenCoordinates.swift in Sources */,

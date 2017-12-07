@@ -106,6 +106,11 @@
                                     <constraint firstAttribute="bottom" secondItem="bCt-Js-Xda" secondAttribute="bottom" id="ofv-bK-9Aw"/>
                                 </constraints>
                             </scrollView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DaO-LK-FvT" customClass="ControlsView" customModule="Flow" customModuleProvider="target">
+                                <rect key="frame" x="750" y="600" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <accessibility key="accessibilityConfiguration">
