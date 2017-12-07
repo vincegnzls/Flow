@@ -135,7 +135,7 @@
                                                 <state key="normal" title="Left" image="controls-arrow-left"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvu-kk-ULo">
-                                                <rect key="frame" x="54" y="62" width="50" height="50"/>
+                                                <rect key="frame" x="54" y="60" width="50" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Up" image="controls-arrow-up"/>
                                             </button>
@@ -172,8 +172,8 @@
     </scenes>
     <resources>
         <image name="controls-arrow-down" width="320" height="320"/>
-        <image name="controls-arrow-left" width="310" height="320"/>
-        <image name="controls-arrow-right" width="320" height="320"/>
+        <image name="controls-arrow-left" width="320" height="320"/>
+        <image name="controls-arrow-right" width="310" height="320"/>
         <image name="controls-arrow-up" width="320" height="320"/>
     </resources>
 </document>
