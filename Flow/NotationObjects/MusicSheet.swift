@@ -95,6 +95,10 @@ class MusicSheet: UIView {
         bezierPath.addLine(to: CGPoint(x: endX, y: startY + 400)) // change if staff space changes
         bezierPath.stroke()
         
+        bezierPath.move(to: CGPoint(x: (endX + startX) / 2, y: startY))
+        bezierPath.addLine(to: CGPoint(x: (endX + startX) / 2, y: startY + 400)) // change if staff space changes
+        bezierPath.stroke()
+        
         let brace = UIImage(named:"brace-185")
         let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: 400))
         
