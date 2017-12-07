@@ -10,14 +10,6 @@ import UIKit
 
 class ControlsView: UIView {
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -33,22 +25,23 @@ class ControlsView: UIView {
     @objc func draggedView(_ sender:UIPanGestureRecognizer){
         if let superview = self.superview {
             superview.bringSubview(toFront: self)
+            
+            let safeArea = superview.safeAreaInsets
             let translation = sender.translation(in: superview)
             var newCenterX = self.center.x + translation.x
             var newCenterY = self.center.y + translation.y
             
+            // Validation to prevent controls from being dragged outside of the screen
             if newCenterX + self.bounds.width / 2 >= superview.bounds.width {
                 newCenterX = superview.bounds.width - self.bounds.width / 2
-            }
-            else if newCenterX <= self.bounds.width / 2 {
+            } else if newCenterX <= self.bounds.width / 2 {
                 newCenterX = self.bounds.width / 2
             }
             
             if newCenterY + self.bounds.height / 2 >= superview.bounds.height {
                 newCenterY = superview.bounds.height - self.bounds.height / 2
-            }
-            else if newCenterY <= self.bounds.height / 2 {
-                newCenterY = self.bounds.height / 2
+            } else if newCenterY <= self.bounds.height / 2 + safeArea.top {
+                newCenterY = self.bounds.height / 2 + safeArea.top
             }
             
             self.center = CGPoint(x: newCenterX, y: newCenterY)
