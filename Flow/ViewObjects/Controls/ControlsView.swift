@@ -42,7 +42,7 @@ class ControlsView: UIView {
         if let superview = self.superview {
             superview.bringSubview(toFront: self)
             
-            let safeArea = superview.safeAreaInsets
+            
             let translation = sender.translation(in: superview)
             var newCenterX = self.center.x + translation.x
             var newCenterY = self.center.y + translation.y
@@ -54,10 +54,21 @@ class ControlsView: UIView {
                 newCenterX = self.bounds.width / 2
             }
             
-            if newCenterY + self.bounds.height / 2 >= superview.bounds.height {
-                newCenterY = superview.bounds.height - self.bounds.height / 2
-            } else if newCenterY <= self.bounds.height / 2 + safeArea.top {
-                newCenterY = self.bounds.height / 2 + safeArea.top
+            if #available(iOS 11, *) {
+                let safeArea = superview.safeAreaInsets
+                
+                if newCenterY + self.bounds.height / 2 >= superview.bounds.height {
+                    newCenterY = superview.bounds.height - self.bounds.height / 2
+                } else if newCenterY <= self.bounds.height / 2 + safeArea.top {
+                    newCenterY = self.bounds.height / 2 + safeArea.top
+                }
+            }
+            else {
+                if newCenterY + self.bounds.height / 2 >= superview.bounds.height {
+                    newCenterY = superview.bounds.height - self.bounds.height / 2
+                } else if newCenterY <= self.bounds.height / 2 {
+                    newCenterY = self.bounds.height / 2
+                }
             }
             
             self.center = CGPoint(x: newCenterX, y: newCenterY)
