@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -107,7 +108,7 @@
                                 </constraints>
                             </scrollView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DaO-LK-FvT" customClass="ControlsView" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="650" y="469" width="312" height="259"/>
+                                <rect key="frame" x="650" y="469" width="362" height="259"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLW-3Y-Rf2" customClass="NotationControlsView" customModule="Flow" customModuleProvider="target">
@@ -116,26 +117,26 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x7c-ta-wj1" customClass="CursorControlsView" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="153" y="0.0" width="159" height="259"/>
+                                        <rect key="frame" x="153" y="0.0" width="209" height="259"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zt0-BY-37g">
-                                                <rect key="frame" x="54" y="160" width="50" height="50"/>
+                                                <rect key="frame" x="69" y="164" width="70" height="70"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Down" image="controls-arrow-down"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Opm-cW-adW">
-                                                <rect key="frame" x="101" y="110" width="50" height="50"/>
+                                                <rect key="frame" x="139" y="94" width="70" height="70"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Right" image="controls-arrow-right"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bt9-Bg-dg0">
-                                                <rect key="frame" x="8" y="110" width="50" height="50"/>
+                                                <rect key="frame" x="0.0" y="94" width="70" height="70"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Left" image="controls-arrow-left"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvu-kk-ULo">
-                                                <rect key="frame" x="54" y="60" width="50" height="50"/>
+                                                <rect key="frame" x="69" y="24" width="70" height="70"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Up" image="controls-arrow-up"/>
                                             </button>

@@ -64,10 +64,12 @@ class ControlsView: UIView {
                 }
             }
             else {
+                let statusBarHeight = UIApplication.shared.statusBarFrame.height
+                
                 if newCenterY + self.bounds.height / 2 >= superview.bounds.height {
                     newCenterY = superview.bounds.height - self.bounds.height / 2
-                } else if newCenterY <= self.bounds.height / 2 {
-                    newCenterY = self.bounds.height / 2
+                } else if newCenterY <= self.bounds.height / 2  + statusBarHeight {
+                    newCenterY = self.bounds.height / 2 + statusBarHeight
                 }
             }
             
