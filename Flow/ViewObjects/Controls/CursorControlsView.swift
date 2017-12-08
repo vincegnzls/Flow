@@ -24,4 +24,20 @@ class CursorControlsView: UIView {
     private func setup() {
         
     }
+    
+    @IBAction func tapUpArrowKey(_ sender: UIButton) {
+        print("Up")
+    }
+    
+    @IBAction func tapDownArrowKey(_ sender: UIButton) {
+        print("Down")
+    }
+    
+    @IBAction func tapRightArrowKey(_ sender: UIButton) {
+        print("Right")
+    }
+    
+    @IBAction func tapLeftArrowKey(_ sender: UIButton) {
+        print("Left")
+    }
 }

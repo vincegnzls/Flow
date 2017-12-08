@@ -124,21 +124,33 @@
                                                 <rect key="frame" x="69" y="164" width="70" height="70"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Down" image="controls-arrow-down"/>
+                                                <connections>
+                                                    <action selector="tapDownArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="awk-J5-KMB"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Opm-cW-adW">
                                                 <rect key="frame" x="139" y="94" width="70" height="70"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Right" image="controls-arrow-right"/>
+                                                <connections>
+                                                    <action selector="tapRightArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="VtA-Ko-IkX"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bt9-Bg-dg0">
                                                 <rect key="frame" x="0.0" y="94" width="70" height="70"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Left" image="controls-arrow-left"/>
+                                                <connections>
+                                                    <action selector="tapLeftArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="iag-av-SY7"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvu-kk-ULo">
                                                 <rect key="frame" x="69" y="24" width="70" height="70"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Up" image="controls-arrow-up"/>
+                                                <connections>
+                                                    <action selector="tapUpArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="AJV-BY-Ja0"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </view>
