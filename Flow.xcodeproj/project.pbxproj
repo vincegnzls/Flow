@@ -20,6 +20,7 @@
 		861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD51FDC1E24003FE0A5 /* EventNames.swift */; };
 		861B3DD81FDC1E48003FE0A5 /* ObserverList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD71FDC1E48003FE0A5 /* ObserverList.swift */; };
 		861B3DDA1FDC20E2003FE0A5 /* KeyNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */; };
+		861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DDD1FDC43C5003FE0A5 /* Observer.swift */; };
 		861F781A1FD6E12A00C51BD2 /* CompositionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */; };
 		863374811FD32849003D7936 /* MusicNotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863374801FD32849003D7936 /* MusicNotation.swift */; };
 		864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A11FD32FC3001FF059 /* RestNoteType.swift */; };
@@ -82,6 +83,7 @@
 		861B3DD51FDC1E24003FE0A5 /* EventNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNames.swift; sourceTree = "<group>"; };
 		861B3DD71FDC1E48003FE0A5 /* ObserverList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverList.swift; sourceTree = "<group>"; };
 		861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyNames.swift; sourceTree = "<group>"; };
+		861B3DDD1FDC43C5003FE0A5 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionInfo.swift; sourceTree = "<group>"; };
 		863374801FD32849003D7936 /* MusicNotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotation.swift; sourceTree = "<group>"; };
 		864CE5A11FD32FC3001FF059 /* RestNoteType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestNoteType.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				861B3DD51FDC1E24003FE0A5 /* EventNames.swift */,
 				861B3DD71FDC1E48003FE0A5 /* ObserverList.swift */,
 				861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */,
+				861B3DDD1FDC43C5003FE0A5 /* Observer.swift */,
 			);
 			path = "Event Broadcasting";
 			sourceTree = "<group>";
@@ -462,6 +465,7 @@
 				8696A8C11FD5898200EB81BD /* Document.swift in Sources */,
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				8696A8C01FD5898200EB81BD /* Parser.swift in Sources */,
+				861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
