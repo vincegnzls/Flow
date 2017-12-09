@@ -12,7 +12,7 @@ class Measure {
     var keySignature: KeySignature
     var timeSignature: TimeSignature
     var clef: Clef
-    var notationObjects: Array<MusicNotation>
+    var notationObjects: [MusicNotation]
     
     init() {
         self.keySignature = .c

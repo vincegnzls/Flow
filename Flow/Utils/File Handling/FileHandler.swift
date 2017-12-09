@@ -20,10 +20,10 @@ class FileHandler {
     static let instance = FileHandler()
     
     // MARK: Properties
-    var compositions: Array<CompositionInfo>
+    var compositions: [CompositionInfo]
     
     private init() {
-        compositions = Array<CompositionInfo>()
+        compositions = []
         retrieveCompositionList()
     }
     

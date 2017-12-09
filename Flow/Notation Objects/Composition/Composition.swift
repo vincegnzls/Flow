@@ -11,14 +11,14 @@ import Foundation
 class Composition {
     // Holds information about the composition
     var compositionInfo: CompositionInfo
-    var measures: Array<Measure>
+    var measures: [Measure]
     
     init() {
         self.compositionInfo = CompositionInfo()
         self.measures = []
     }
     
-    init(compositionInfo: CompositionInfo, measures: Array<Measure>) {
+    init(compositionInfo: CompositionInfo, measures: [Measure]) {
         self.compositionInfo = compositionInfo
         self.measures = measures
     }
@@ -28,7 +28,7 @@ class Composition {
         self.measures = []
     }
     
-    init(measures: Array<Measure>) {
+    init(measures: [Measure]) {
         self.compositionInfo = CompositionInfo()
         self.measures = measures
     }
