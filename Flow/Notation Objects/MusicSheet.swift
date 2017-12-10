@@ -24,7 +24,8 @@ class MusicSheet: UIView {
     private let yCursor = CAShapeLayer()
     private let xCursor = CAShapeLayer()
     
-    private var curCursorLocation = ScreenCoordinates(x: 0, y: 0)
+    private var curCursorYLocation = ScreenCoordinates(x: 0, y: 0)
+    private var curCursorXLocation = ScreenCoordinates(x: 0, y: 0)
     
     private var grid = [Measure]()
     
@@ -43,6 +44,9 @@ class MusicSheet: UIView {
         setupGrandStaff(startX: lefRightPadding, startY: startY)
         
         setupCursor()
+        
+        EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
+                                              observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
     }
     
     //Setup a grand staff
@@ -64,6 +68,7 @@ class MusicSheet: UIView {
         
         var curSpace:CGFloat = 0
         
+        // Handles adding of clef based on parameter
         var clef = UIImage(named:"treble-clef")
         var clefView = UIImageView(frame: CGRect(x: 110, y: 45 + startY - 200, width: 67.2, height: 192))
         
@@ -75,6 +80,7 @@ class MusicSheet: UIView {
         clefView.image = clef
         self.addSubview(clefView)
         
+        // Add 5 lines
         for _ in 0..<5 {
             bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
             bezierPath.addLine(to: CGPoint(x: endX, y: startY - curSpace))
@@ -153,9 +159,47 @@ class MusicSheet: UIView {
         self.layer.addSublayer(yCursor)
         self.layer.addSublayer(xCursor)
         
-        curCursorLocation = ScreenCoordinates(x: 300, y: 50 + sheetYOffset)
+        curCursorYLocation = ScreenCoordinates(x: 300, y: 50 + sheetYOffset)
+        curCursorXLocation = ScreenCoordinates(x: 300, y: 50 + sheetYOffset)
         
-        moveCursor(location: curCursorLocation)
+        // Adjust initial placement of cursor
+        moveCursor(location: curCursorXLocation)
+    }
+    
+    func onArrowKeyPressed(params: Parameters) {
+        let direction:ArrowKey = params.get(key: KeyNames.ARROW_KEY_DIRECTION) as! ArrowKey
+        
+        if direction == ArrowKey.up {
+            
+            curCursorYLocation.y -= 20
+            moveCursorY(location: curCursorYLocation)
+            
+        } else if direction == ArrowKey.down {
+            
+            curCursorYLocation.y += 20
+            moveCursorY(location: curCursorYLocation)
+            
+        } else if direction == ArrowKey.left {
+            
+            curCursorXLocation.x -= 20
+            curCursorYLocation.x = curCursorXLocation.x
+            moveCursorX(location: curCursorXLocation)
+            moveCursorY(location: curCursorYLocation)
+            
+        } else if direction == ArrowKey.right {
+            
+            curCursorXLocation.x += 20
+            curCursorYLocation.x = curCursorXLocation.x
+            moveCursorX(location: curCursorXLocation)
+            moveCursorY(location: curCursorYLocation)
+            
+        }
+        
+        let xLocString = "CURSOR X LOCATION: (" + String(describing: curCursorXLocation.x) + ", " + String(describing: curCursorXLocation.y) + ")"
+        let yLocString = "CURSOR Y LOCATION: (" + String(describing: curCursorYLocation.x) + ", " + String(describing: curCursorYLocation.y) + ")"
+        
+        print(xLocString)
+        print(yLocString)
     }
     
     public func moveCursor(location: ScreenCoordinates) {
