@@ -62,7 +62,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-FI-wrK">
-                                <rect key="frame" x="0.0" y="64" width="1112" height="770"/>
+                                <rect key="frame" x="0.0" y="144" width="1112" height="690"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bCt-Js-Xda" customClass="MusicSheet" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="1112" height="1800"/>
@@ -275,6 +275,20 @@
                                     </view>
                                 </subviews>
                             </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VHe-OH-6BV" userLabel="Menu">
+                                <rect key="frame" x="0.0" y="64" width="1112" height="72"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eop-Mu-t87">
+                                        <rect key="frame" x="65" y="26" width="42" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <accessibility key="accessibilityConfiguration">
@@ -282,9 +296,9 @@
                         </accessibility>
                         <constraints>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="96U-OV-wpB"/>
-                            <constraint firstItem="9Me-FI-wrK" firstAttribute="top" secondItem="j19-iv-FrW" secondAttribute="top" id="9cg-8I-HhV"/>
+                            <constraint firstItem="9Me-FI-wrK" firstAttribute="top" secondItem="j19-iv-FrW" secondAttribute="top" constant="80" id="AGD-xO-GGd"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="J7Z-wZ-LpL"/>
-                            <constraint firstItem="9Me-FI-wrK" firstAttribute="bottom" secondItem="j19-iv-FrW" secondAttribute="bottom" id="py3-iI-nN2"/>
+                            <constraint firstAttribute="bottom" secondItem="9Me-FI-wrK" secondAttribute="bottom" id="Qir-0X-7qr"/>
                             <constraint firstItem="bCt-Js-Xda" firstAttribute="width" secondItem="ACD-nf-3gA" secondAttribute="width" id="sgU-I3-59M"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="j19-iv-FrW"/>
