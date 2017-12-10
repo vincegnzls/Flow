@@ -109,7 +109,7 @@ class MusicSheet: UIView {
         let staffConnection = CAShapeLayer()
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
-        bezierPath.lineWidth = 2 
+        bezierPath.lineWidth = 2
         
         bezierPath.move(to: CGPoint(x: startX, y: startY))
         bezierPath.addLine(to: CGPoint(x: startX, y: startY + 400)) // change if staff space changes
@@ -147,6 +147,9 @@ class MusicSheet: UIView {
     }
     
     private func setupCursor() {
+        
+        yCursor.zPosition = .greatestFiniteMagnitude
+        xCursor.zPosition = .greatestFiniteMagnitude
         
         // Setup horizontal cursor
         let yPath = UIBezierPath()
@@ -191,11 +194,11 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.left {
             
-            /*let note = MusicNotation()
+            let note = MusicNotation()
             note.screenCoordinates = curCursorYLocation
             note.image = UIImage(named: "whole-head")
             
-            addMusicNotation(note: note)*/
+            addMusicNotation(note: note)
             
             curCursorXLocation.x -= 20
             curCursorYLocation.x = curCursorXLocation.x
@@ -204,11 +207,11 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.right {
             
-            /*let note = MusicNotation()
+            let note = MusicNotation()
             note.screenCoordinates = curCursorYLocation
             note.image = UIImage(named: "whole-head")
             
-            addMusicNotation(note: note)*/
+            addMusicNotation(note: note)
             
             curCursorXLocation.x += 20
             curCursorYLocation.x = curCursorXLocation.x
