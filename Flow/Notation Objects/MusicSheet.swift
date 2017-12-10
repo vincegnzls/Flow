@@ -11,11 +11,12 @@ import UIKit
 @IBDesignable
 class MusicSheet: UIView {
     
+    private let sheetYOffset:CGFloat = 100
     private let lineSpace:CGFloat = 30 // Spaces between lines in staff
     private let staffSpace:CGFloat = 280 // Spaces between staff
     private let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
-    private let startY:CGFloat = 200
-    private let startYConnection:CGFloat = 80
+    private var startY:CGFloat = 200
+    private var startYConnection:CGFloat = 80
     private let grandStaffSpace:CGFloat = 560 // change * 2 of staff space
     private var grandStaffIndex:CGFloat = 0
     private var staffIndex:CGFloat = -1
@@ -33,6 +34,9 @@ class MusicSheet: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
+        startY += sheetYOffset
+        startYConnection += sheetYOffset
         
         setupGrandStaff(startX: lefRightPadding, startY: startY)
         setupGrandStaff(startX: lefRightPadding, startY: startY)
@@ -133,7 +137,7 @@ class MusicSheet: UIView {
 
         yCursor.path = yPath.cgPath
         yCursor.strokeColor = UIColor.blue.cgColor
-        yCursor.lineWidth = 3
+        yCursor.lineWidth = 5
         
         let xPath = UIBezierPath()
         xPath.move(to: CGPoint(x: 10, y: 0))
@@ -146,21 +150,21 @@ class MusicSheet: UIView {
         self.layer.addSublayer(yCursor)
         self.layer.addSublayer(xCursor)
         
-        curCursorLocation = ScreenCoordinates(x: 300, y: 50)
+        curCursorLocation = ScreenCoordinates(x: 300, y: 50 + sheetYOffset)
         
         moveCursor(location: curCursorLocation)
     }
     
-    private func moveCursor(location: ScreenCoordinates) {
+    public func moveCursor(location: ScreenCoordinates) {
         yCursor.position = CGPoint(x: location.x, y: location.y)
         xCursor.position = CGPoint(x: location.x, y: location.y)
     }
     
-    private func moveCursorY(location: ScreenCoordinates) {
+    public func moveCursorY(location: ScreenCoordinates) {
         yCursor.position = CGPoint(x: location.x, y: location.y)
     }
     
-    private func moveCursorX(location: ScreenCoordinates) {
+    public func moveCursorX(location: ScreenCoordinates) {
         xCursor.position = CGPoint(x: location.x, y: location.y)
     }
 }
