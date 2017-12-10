@@ -40,9 +40,10 @@ class ObserverList {
     }
     
     func addObserver(_ function: Observer) {
-        if !self.observers.contains(where: { observer in observer.id == function.id}) {
-            self.observers.append(function)
-        }
+//        if !self.observers.contains(where: { observer in observer.id == function.id}) {
+//            self.observers.append(function)
+//        }
+        self.observers.append(function)
     }
     
     func removeObserver(_ function: Observer) {

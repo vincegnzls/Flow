@@ -7,5 +7,5 @@
 //
 
 struct KeyNames {
-    
+    static let ARROW_KEY_DIRECTION = "ARROW_KEY_DIRECTION"
 }
