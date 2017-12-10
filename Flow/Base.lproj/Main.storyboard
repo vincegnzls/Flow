@@ -29,7 +29,7 @@
         <!--Start Menu-->
         <scene sceneID="KA9-Fa-yBN">
             <objects>
-                <viewController id="dfI-mq-vOZ" customClass="ViewController" customModule="Flow" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dfI-mq-vOZ" customClass="StartMenuViewController" customModule="Flow" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ebx-xl-QYE">
                         <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
