@@ -131,21 +131,24 @@ class MusicSheet: UIView {
     }
     
     private func setupCursor() {
+        
+        // Setup horizontal cursor
         let yPath = UIBezierPath()
         yPath.move(to: .zero)
         yPath.addLine(to: CGPoint(x: 20, y: 0))
 
         yCursor.path = yPath.cgPath
-        yCursor.strokeColor = UIColor.blue.cgColor
-        yCursor.lineWidth = 5
+        yCursor.strokeColor = UIColor(red:0.00, green:0.47, blue:1.00, alpha:1.0).cgColor
+        yCursor.lineWidth = 8
         
+        // Setup vertical cursor
         let xPath = UIBezierPath()
         xPath.move(to: CGPoint(x: 10, y: 0))
         xPath.addLine(to: CGPoint(x: 10, y: 460))
         
         xCursor.path = xPath.cgPath
-        xCursor.strokeColor = UIColor.blue.cgColor
-        xCursor.lineWidth = 3
+        xCursor.strokeColor = UIColor(red:0.00, green:0.47, blue:1.00, alpha:1.0).cgColor
+        xCursor.lineWidth = 4
         
         self.layer.addSublayer(yCursor)
         self.layer.addSublayer(xCursor)
