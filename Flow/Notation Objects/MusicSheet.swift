@@ -129,7 +129,7 @@ class MusicSheet: UIView {
     public func addMusicNotation(note: MusicNotation) {
         print("ADD NOTE")
         
-        let noteImageView = UIImageView(frame: CGRect(x: ((note.screenCoordinates)?.x)!, y: ((note.screenCoordinates)?.y)!, width: (note.image?.size.width)!, height: (note.image?.size.height)!))
+        let noteImageView = UIImageView(frame: CGRect(x: ((note.screenCoordinates)?.x)! + 1.8, y: ((note.screenCoordinates)?.y)! - 5, width: (note.image?.size.width)!, height: (note.image?.size.height)!))
         
         noteImageView.image = note.image
         
@@ -181,12 +181,24 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.left {
             
+            /*let note = MusicNotation()
+            note.screenCoordinates = curCursorYLocation
+            note.image = UIImage(named: "whole-head")
+            
+            addMusicNotation(note: note)*/
+            
             curCursorXLocation.x -= 20
             curCursorYLocation.x = curCursorXLocation.x
             moveCursorX(location: curCursorXLocation)
             moveCursorY(location: curCursorYLocation)
             
         } else if direction == ArrowKey.right {
+            
+            /*let note = MusicNotation()
+            note.screenCoordinates = curCursorYLocation
+            note.image = UIImage(named: "whole-head")
+            
+            addMusicNotation(note: note)*/
             
             curCursorXLocation.x += 20
             curCursorYLocation.x = curCursorXLocation.x
