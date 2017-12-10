@@ -20,26 +20,25 @@ class MusicSheet: UIView {
     private var grandStaffIndex:CGFloat = 0
     private var staffIndex:CGFloat = -1
     
-    private var grid = [[MusicNotation]]()
+    private let yCursor = CAShapeLayer()
+    private let xCursor = CAShapeLayer()
+    
+    private var curCursorLocation = ScreenCoordinates(x: 0, y: 0)
+    
+    private var grid = [Measure]()
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
     }
     
-    override func draw(_ rect: CGRect) {
-        /*drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G)
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace, clefType: Clef.F)
-        drawStaffConnection(startX: lefRightPadding, startY: 80)
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * 2, clefType: Clef.G)
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * 3, clefType: Clef.F)
-        drawStaffConnection(startX: lefRightPadding, startY: 480)
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * 4, clefType: Clef.G)
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * 5, clefType: Clef.F)
-        drawStaffConnection(startX: lefRightPadding, startY: 880)*/
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         
         setupGrandStaff(startX: lefRightPadding, startY: startY)
         setupGrandStaff(startX: lefRightPadding, startY: startY)
         setupGrandStaff(startX: lefRightPadding, startY: startY)
+        
+        setupCursor()
     }
     
     //Setup a grand staff
@@ -56,9 +55,8 @@ class MusicSheet: UIView {
     // Draws a staff
     private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef) {
         // Sets the line format
+        let staff = CAShapeLayer()
         let bezierPath = UIBezierPath()
-        UIColor.black.setStroke()
-        bezierPath.lineWidth = 2
         
         var curSpace:CGFloat = 0
         
@@ -76,16 +74,22 @@ class MusicSheet: UIView {
         for _ in 0..<5 {
             bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
             bezierPath.addLine(to: CGPoint(x: endX, y: startY - curSpace))
-            bezierPath.stroke()
+            //bezierPath.stroke()
             
             curSpace += lineSpace
         }
+        
+        // Setup staff lines
+        staff.path = bezierPath.cgPath
+        staff.strokeColor = UIColor.black.cgColor
+        staff.lineWidth = 2
+        
+        self.layer.addSublayer(staff)
     }
 
     private func drawStaffConnection(startX:CGFloat, startY:CGFloat) {
+        let staffConnection = CAShapeLayer()
         let bezierPath = UIBezierPath()
-        UIColor.black.setStroke()
-        bezierPath.lineWidth = 2
         
         bezierPath.move(to: CGPoint(x: startX, y: startY))
         bezierPath.addLine(to: CGPoint(x: startX, y: startY + 400)) // change if staff space changes
@@ -98,6 +102,12 @@ class MusicSheet: UIView {
         bezierPath.move(to: CGPoint(x: (endX + startX) / 2, y: startY))
         bezierPath.addLine(to: CGPoint(x: (endX + startX) / 2, y: startY + 400)) // change if staff space changes
         bezierPath.stroke()
+        
+        staffConnection.path = bezierPath.cgPath
+        staffConnection.strokeColor = UIColor.black.cgColor
+        staffConnection.lineWidth = 2
+        
+        self.layer.addSublayer(staffConnection)
         
         let brace = UIImage(named:"brace-185")
         let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: 400))
@@ -114,5 +124,43 @@ class MusicSheet: UIView {
         noteImageView.image = note.image
         
         self.addSubview(noteImageView)
+    }
+    
+    private func setupCursor() {
+        let yPath = UIBezierPath()
+        yPath.move(to: .zero)
+        yPath.addLine(to: CGPoint(x: 20, y: 0))
+
+        yCursor.path = yPath.cgPath
+        yCursor.strokeColor = UIColor.blue.cgColor
+        yCursor.lineWidth = 3
+        
+        let xPath = UIBezierPath()
+        xPath.move(to: CGPoint(x: 10, y: 0))
+        xPath.addLine(to: CGPoint(x: 10, y: 460))
+        
+        xCursor.path = xPath.cgPath
+        xCursor.strokeColor = UIColor.blue.cgColor
+        xCursor.lineWidth = 3
+        
+        self.layer.addSublayer(yCursor)
+        self.layer.addSublayer(xCursor)
+        
+        curCursorLocation = ScreenCoordinates(x: 300, y: 50)
+        
+        moveCursor(location: curCursorLocation)
+    }
+    
+    private func moveCursor(location: ScreenCoordinates) {
+        yCursor.position = CGPoint(x: location.x, y: location.y)
+        xCursor.position = CGPoint(x: location.x, y: location.y)
+    }
+    
+    private func moveCursorY(location: ScreenCoordinates) {
+        yCursor.position = CGPoint(x: location.x, y: location.y)
+    }
+    
+    private func moveCursorX(location: ScreenCoordinates) {
+        xCursor.position = CGPoint(x: location.x, y: location.y)
     }
 }
