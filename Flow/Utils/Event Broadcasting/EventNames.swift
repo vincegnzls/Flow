@@ -7,5 +7,5 @@
 //
 
 struct EventNames {
-    
+    static let ARROW_KEY_PRESSED = "ARROW_KEY_PRESSED"
 }
