@@ -20,12 +20,12 @@ class EventBroadcaster {
         self.eventObservers = [:]
     }
     
-    func addObserver(event: String, function: Observer) {
+    func addObserver(event: String, observer: Observer) {
         if let observers = self.eventObservers[event] {
-            observers.addObserver(function)
+            observers.addObserver(observer)
         } else {
             let observerList = ObserverList()
-            observerList.addObserver(function)
+            observerList.addObserver(observer)
             self.eventObservers.updateValue(observerList, forKey: event)
         }
     }
@@ -34,9 +34,9 @@ class EventBroadcaster {
         self.eventObservers.removeValue(forKey: event)
     }
     
-    func removeFunction(event: String, function: Observer) {
+    func removeObserver(event: String, observer: Observer) {
         if let observers = self.eventObservers[event] {
-            observers.removeObserver(function)
+            observers.removeObserver(observer)
         }
     }
     

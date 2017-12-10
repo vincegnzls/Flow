@@ -47,6 +47,7 @@
 		86A0287C1FD97C3500305C0C /* NotationControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0287B1FD97C3500305C0C /* NotationControlsView.swift */; };
 		86A0287E1FD97C4B00305C0C /* CursorControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0287D1FD97C4B00305C0C /* CursorControlsView.swift */; };
 		86A9B27E1FDD0324007EB37C /* ArrowKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A9B27D1FDD0324007EB37C /* ArrowKey.swift */; };
+		86A9B2801FDD046A007EB37C /* TestClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A9B27F1FDD046A007EB37C /* TestClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +113,7 @@
 		86A0287B1FD97C3500305C0C /* NotationControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationControlsView.swift; sourceTree = "<group>"; };
 		86A0287D1FD97C4B00305C0C /* CursorControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorControlsView.swift; sourceTree = "<group>"; };
 		86A9B27D1FDD0324007EB37C /* ArrowKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowKey.swift; sourceTree = "<group>"; };
+		86A9B27F1FDD046A007EB37C /* TestClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestClass.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +196,7 @@
 				861B3DD71FDC1E48003FE0A5 /* ObserverList.swift */,
 				861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */,
 				861B3DDD1FDC43C5003FE0A5 /* Observer.swift */,
+				86A9B27F1FDD046A007EB37C /* TestClass.swift */,
 			);
 			path = "Event Broadcasting";
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 				864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */,
 				869F3C5F1FD8FCC500CC236F /* ControlsView.swift in Sources */,
 				861F781A1FD6E12A00C51BD2 /* CompositionInfo.swift in Sources */,
+				86A9B2801FDD046A007EB37C /* TestClass.swift in Sources */,
 				864CE5A81FD32FEB001FF059 /* Pitch.swift in Sources */,
 				864CE5AF1FD3309F001FF059 /* ScreenCoordinates.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
