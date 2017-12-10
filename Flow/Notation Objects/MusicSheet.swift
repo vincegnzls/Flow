@@ -39,14 +39,20 @@ class MusicSheet: UIView {
         startY += sheetYOffset
         startYConnection += sheetYOffset
         
-        setupGrandStaff(startX: lefRightPadding, startY: startY)
-        setupGrandStaff(startX: lefRightPadding, startY: startY)
-        setupGrandStaff(startX: lefRightPadding, startY: startY)
+        //setupGrandStaff(startX: lefRightPadding, startY: startY)
+        //setupGrandStaff(startX: lefRightPadding, startY: startY)
+        //setupGrandStaff(startX: lefRightPadding, startY: startY)
         
         setupCursor()
         
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
+    }
+    
+    override func draw(_ rect: CGRect) {
+        setupGrandStaff(startX: lefRightPadding, startY: startY)
+        setupGrandStaff(startX: lefRightPadding, startY: startY)
+        setupGrandStaff(startX: lefRightPadding, startY: startY)
     }
     
     //Setup a grand staff
@@ -65,6 +71,8 @@ class MusicSheet: UIView {
         // Sets the line format
         let staff = CAShapeLayer()
         let bezierPath = UIBezierPath()
+        UIColor.black.setStroke()
+        bezierPath.lineWidth = 2
         
         var curSpace:CGFloat = 0
         
@@ -84,7 +92,7 @@ class MusicSheet: UIView {
         for _ in 0..<5 {
             bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
             bezierPath.addLine(to: CGPoint(x: endX, y: startY - curSpace))
-            //bezierPath.stroke()
+            bezierPath.stroke()
             
             curSpace += lineSpace
         }
@@ -94,12 +102,14 @@ class MusicSheet: UIView {
         staff.strokeColor = UIColor.black.cgColor
         staff.lineWidth = 2
         
-        self.layer.addSublayer(staff)
+        //self.layer.addSublayer(staff)
     }
 
     private func drawStaffConnection(startX:CGFloat, startY:CGFloat) {
         let staffConnection = CAShapeLayer()
         let bezierPath = UIBezierPath()
+        UIColor.black.setStroke()
+        bezierPath.lineWidth = 2 
         
         bezierPath.move(to: CGPoint(x: startX, y: startY))
         bezierPath.addLine(to: CGPoint(x: startX, y: startY + 400)) // change if staff space changes
@@ -117,7 +127,7 @@ class MusicSheet: UIView {
         staffConnection.strokeColor = UIColor.black.cgColor
         staffConnection.lineWidth = 2
         
-        self.layer.addSublayer(staffConnection)
+        //self.layer.addSublayer(staffConnection)
         
         let brace = UIImage(named:"brace-185")
         let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: 400))
