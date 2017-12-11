@@ -28,7 +28,6 @@
 		864CE5A81FD32FEB001FF059 /* Pitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A71FD32FEB001FF059 /* Pitch.swift */; };
 		864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A91FD3301E001FF059 /* Accidental.swift */; };
 		864CE5AC1FD33076001FF059 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5AB1FD33076001FF059 /* Note.swift */; };
-		864CE5AF1FD3309F001FF059 /* ScreenCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5AE1FD3309F001FF059 /* ScreenCoordinates.swift */; };
 		864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B01FD330DA001FF059 /* GridCoordinates.swift */; };
 		864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B21FD355E8001FF059 /* SWXMLHash.swift */; };
 		8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A51FD4E8E800EB81BD /* Composition.swift */; };
@@ -94,7 +93,6 @@
 		864CE5A71FD32FEB001FF059 /* Pitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pitch.swift; sourceTree = "<group>"; };
 		864CE5A91FD3301E001FF059 /* Accidental.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accidental.swift; sourceTree = "<group>"; };
 		864CE5AB1FD33076001FF059 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
-		864CE5AE1FD3309F001FF059 /* ScreenCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCoordinates.swift; sourceTree = "<group>"; };
 		864CE5B01FD330DA001FF059 /* GridCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCoordinates.swift; sourceTree = "<group>"; };
 		864CE5B21FD355E8001FF059 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
 		8696A8A51FD4E8E800EB81BD /* Composition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Composition.swift; sourceTree = "<group>"; };
@@ -240,7 +238,6 @@
 				8696A8B41FD5896F00EB81BD /* AEXML */,
 				8696A8A71FD4EA1000EB81BD /* File Handling */,
 				864CE5B21FD355E8001FF059 /* SWXMLHash.swift */,
-				864CE5AE1FD3309F001FF059 /* ScreenCoordinates.swift */,
 				864CE5B01FD330DA001FF059 /* GridCoordinates.swift */,
 			);
 			path = Utils;
@@ -465,7 +462,6 @@
 				861F781A1FD6E12A00C51BD2 /* CompositionInfo.swift in Sources */,
 				86A9B2801FDD046A007EB37C /* TestClass.swift in Sources */,
 				864CE5A81FD32FEB001FF059 /* Pitch.swift in Sources */,
-				864CE5AF1FD3309F001FF059 /* ScreenCoordinates.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
 				8696A8A91FD4EA5800EB81BD /* FileHandler.swift in Sources */,
 				86A0287E1FD97C4B00305C0C /* CursorControlsView.swift in Sources */,

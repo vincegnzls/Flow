@@ -24,8 +24,8 @@ class MusicSheet: UIView {
     private let yCursor = CAShapeLayer()
     private let xCursor = CAShapeLayer()
     
-    private var curCursorYLocation = ScreenCoordinates(x: 0, y: 0)
-    private var curCursorXLocation = ScreenCoordinates(x: 0, y: 0)
+    private var curCursorYLocation = CGPoint(x: 0, y: 0)
+    private var curCursorXLocation = CGPoint(x: 0, y: 0)
     
     private var grid = [Measure]()
     
@@ -172,8 +172,8 @@ class MusicSheet: UIView {
         self.layer.addSublayer(yCursor)
         self.layer.addSublayer(xCursor)
         
-        curCursorYLocation = ScreenCoordinates(x: 300, y: 50 + sheetYOffset)
-        curCursorXLocation = ScreenCoordinates(x: 300, y: 50 + sheetYOffset)
+        curCursorYLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
+        curCursorXLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
         
         // Adjust initial placement of cursor
         moveCursor(location: curCursorXLocation)
@@ -227,16 +227,16 @@ class MusicSheet: UIView {
         print(yLocString)
     }
     
-    public func moveCursor(location: ScreenCoordinates) {
-        yCursor.position = CGPoint(x: location.x, y: location.y)
-        xCursor.position = CGPoint(x: location.x, y: location.y)
+    public func moveCursor(location: CGPoint) {
+        yCursor.position = location
+        xCursor.position = location
     }
     
-    public func moveCursorY(location: ScreenCoordinates) {
-        yCursor.position = CGPoint(x: location.x, y: location.y)
+    public func moveCursorY(location: CGPoint) {
+        yCursor.position = location
     }
     
-    public func moveCursorX(location: ScreenCoordinates) {
-        xCursor.position = CGPoint(x: location.x, y: location.y)
+    public func moveCursorX(location: CGPoint) {
+        xCursor.position = location
     }
 }
