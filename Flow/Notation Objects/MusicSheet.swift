@@ -11,7 +11,7 @@ import UIKit
 @IBDesignable
 class MusicSheet: UIView {
     
-    private let sheetYOffset:CGFloat = 100
+    private let sheetYOffset:CGFloat = 60
     private let lineSpace:CGFloat = 30 // Spaces between lines in staff
     private let staffSpace:CGFloat = 280 // Spaces between staff
     private let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
@@ -21,8 +21,8 @@ class MusicSheet: UIView {
     private var grandStaffIndex:CGFloat = 0
     private var staffIndex:CGFloat = -1
     
-    private let yCursor = CAShapeLayer()
-    private let xCursor = CAShapeLayer()
+    private let yCursor = CAShapeLayer() // Horizontal cursor
+    private let xCursor = CAShapeLayer() // Vertical cursor
     
     private var curCursorYLocation = ScreenCoordinates(x: 0, y: 0)
     private var curCursorXLocation = ScreenCoordinates(x: 0, y: 0)
@@ -148,8 +148,8 @@ class MusicSheet: UIView {
     
     private func setupCursor() {
         
-        yCursor.zPosition = .greatestFiniteMagnitude
-        xCursor.zPosition = .greatestFiniteMagnitude
+        yCursor.zPosition = .greatestFiniteMagnitude // Places horizontal cursor to front
+        xCursor.zPosition = .greatestFiniteMagnitude // Places vertical cursor to front
         
         // Setup horizontal cursor
         let yPath = UIBezierPath()

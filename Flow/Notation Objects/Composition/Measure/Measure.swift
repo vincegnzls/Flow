@@ -13,12 +13,14 @@ class Measure {
     var timeSignature: TimeSignature
     var clef: Clef
     var notationObjects: [MusicNotation]
+    var bounds: Bounds
     
     init() {
         self.keySignature = .c
         self.timeSignature = TimeSignature()
         self.clef = .G
         self.notationObjects = []
+        self.bounds = Bounds()
     }
     
     init(keySignature: KeySignature, timeSignature: TimeSignature, clef: Clef) {
@@ -26,5 +28,6 @@ class Measure {
         self.timeSignature = timeSignature
         self.clef = clef
         self.notationObjects = []
+        self.bounds = Bounds()
     }
 }
