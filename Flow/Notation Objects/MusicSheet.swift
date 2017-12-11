@@ -33,9 +33,17 @@ class MusicSheet: UIView {
         return bounds.width - lefRightPadding
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setup()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
+        self.setup()
+    }
+    
+    private func setup() {
         startY += sheetYOffset
         startYConnection += sheetYOffset
         
