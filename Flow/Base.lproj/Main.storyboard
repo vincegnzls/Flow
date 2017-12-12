@@ -275,19 +275,26 @@
                                     </view>
                                 </subviews>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VHe-OH-6BV" userLabel="Menu">
-                                <rect key="frame" x="0.0" y="64" width="1112" height="72"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VHe-OH-6BV" userLabel="Menu" customClass="MenuBar" customModule="Flow" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="1112" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eop-Mu-t87">
-                                        <rect key="frame" x="65" y="26" width="42" height="21"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="atk-1G-Xla">
+                                        <rect key="frame" x="28" y="14" width="252" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Untitled Composition">
+                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="touchCompositionTitle:" destination="VHe-OH-6BV" eventType="touchUpInside" id="kGJ-6r-s9C"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="compositionTitleButton" destination="atk-1G-Xla" id="HjF-pT-jZ9"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -307,6 +314,7 @@
                     <size key="freeformSize" width="1112" height="834"/>
                     <connections>
                         <outlet property="height" destination="xo5-Y1-ev2" id="n6n-09-Ew5"/>
+                        <outlet property="menuBar" destination="VHe-OH-6BV" id="EC9-aQ-TAh"/>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
                         <outlet property="titleLabel" destination="xo5-Y1-ev2" id="VJJ-Uf-rI9"/>
                     </connections>

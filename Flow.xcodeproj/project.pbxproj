@@ -48,6 +48,7 @@
 		86A0287E1FD97C4B00305C0C /* CursorControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0287D1FD97C4B00305C0C /* CursorControlsView.swift */; };
 		86A9B27E1FDD0324007EB37C /* ArrowKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A9B27D1FDD0324007EB37C /* ArrowKey.swift */; };
 		86A9B2801FDD046A007EB37C /* TestClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A9B27F1FDD046A007EB37C /* TestClass.swift */; };
+		86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */; };
 		86CCD7C31FDD783400A0FC8D /* StartMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -115,6 +116,7 @@
 		86A0287D1FD97C4B00305C0C /* CursorControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorControlsView.swift; sourceTree = "<group>"; };
 		86A9B27D1FDD0324007EB37C /* ArrowKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowKey.swift; sourceTree = "<group>"; };
 		86A9B27F1FDD046A007EB37C /* TestClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestClass.swift; sourceTree = "<group>"; };
+		86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenuViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -293,6 +295,7 @@
 			isa = PBXGroup;
 			children = (
 				869F3C601FD8FCC900CC236F /* Controls */,
+				86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */,
 			);
 			path = "View Objects";
 			sourceTree = "<group>";
@@ -475,6 +478,7 @@
 				8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */,
 				864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */,
 				8696A8C11FD5898200EB81BD /* Document.swift in Sources */,
+				86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */,
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				8696A8C01FD5898200EB81BD /* Parser.swift in Sources */,
 				861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */,
