@@ -11,6 +11,11 @@ import UIKit
 class MenuBar: UIView {
     
     @IBOutlet weak var compositionTitleButton: UIButton!
+    var compositionInfo: CompositionInfo? {
+        didSet {
+            self.compositionTitleButton.setTitle(compositionInfo?.name, for: .normal)
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
