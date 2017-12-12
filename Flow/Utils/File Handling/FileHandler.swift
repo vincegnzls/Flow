@@ -29,13 +29,13 @@ class FileHandler {
     
     // MARK: File handling functions
     func readFile(_ compositionInfo: CompositionInfo) -> Composition {
-        let fileURL = documentsDirectory.appendingPathComponent(compositionInfo.name).appendingPathExtension("xml")
+        let fileURL = documentsDirectory.appendingPathComponent(compositionInfo.id).appendingPathExtension("xml")
         var readString = ""
         
         do {
             readString = try String(contentsOf: fileURL)
         } catch let error as NSError {
-            print("Failed to read file \(compositionInfo.name)")
+            print("Failed to read file \(compositionInfo.name) with id \(compositionInfo.id)")
             print(error)
         }
         
@@ -45,13 +45,13 @@ class FileHandler {
     }
     
     func saveFile(composition: Composition) {
-        let fileURL = documentsDirectory.appendingPathComponent(composition.compositionInfo.name).appendingPathExtension("xml")
+        let fileURL = documentsDirectory.appendingPathComponent(composition.compositionInfo.id).appendingPathExtension("xml")
         
         let writeString = convertCompositionToMusicXML(composition)
         do {
             try writeString.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
         } catch let error as NSError {
-            print("Failed to write to file \(composition.compositionInfo.name)")
+            print("Failed to write to file \(composition.compositionInfo.name) with id \(composition.compositionInfo.id)")
             print(error)
         }
     }
