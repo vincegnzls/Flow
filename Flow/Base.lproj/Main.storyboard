@@ -279,9 +279,12 @@
                                 <rect key="frame" x="0.0" y="64" width="1112" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="atk-1G-Xla">
-                                        <rect key="frame" x="28" y="14" width="252" height="32"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="atk-1G-Xla">
+                                        <rect key="frame" x="30" y="15" width="250" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="8fE-jV-VgF"/>
+                                            <constraint firstAttribute="width" constant="250" id="bcC-gZ-O4d"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="Untitled Composition">
                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -290,6 +293,96 @@
                                             <action selector="touchCompositionTitle:" destination="VHe-OH-6BV" eventType="touchUpInside" id="kGJ-6r-s9C"/>
                                         </connections>
                                     </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="9Hs-i6-gdR">
+                                        <rect key="frame" x="320" y="15" width="140" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qem-w8-Fmc">
+                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="UOD-b1-6MC"/>
+                                                    <constraint firstAttribute="width" constant="30" id="vCz-d2-LYK"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="copy-icon"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vQ4-7s-KOn">
+                                                <rect key="frame" x="55" y="0.0" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="51P-Ue-mum"/>
+                                                    <constraint firstAttribute="width" constant="30" id="yKe-v7-sg4"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="cut-icon"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXo-Cu-cT8">
+                                                <rect key="frame" x="110" y="0.0" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="F4x-rC-ui9"/>
+                                                    <constraint firstAttribute="width" constant="30" id="j8d-9k-3Yd"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="paste-icon"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="yas-1d-fsP">
+                                        <rect key="frame" x="505" y="15" width="85" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Xl-iY-dhL">
+                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="Ws2-qf-0Np"/>
+                                                    <constraint firstAttribute="width" constant="30" id="jcQ-70-uLG"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="undo-icon"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3uR-Lt-EcU">
+                                                <rect key="frame" x="55" y="0.0" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="Pyv-bu-r8M"/>
+                                                    <constraint firstAttribute="height" constant="30" id="uXS-Fa-i3f"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="redo-icon"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="SCc-Kb-bEu">
+                                        <rect key="frame" x="641" y="15" width="195" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sX4-39-CPE">
+                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="cVv-Dm-CLy"/>
+                                                    <constraint firstAttribute="width" constant="30" id="vd5-es-N5Z"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="natural"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FMF-eP-Bb4">
+                                                <rect key="frame" x="55" y="0.0" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="BIW-yn-Dmx"/>
+                                                    <constraint firstAttribute="width" constant="30" id="QY7-WZ-Z5b"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="flat"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JmN-tT-NCl">
+                                                <rect key="frame" x="110" y="0.0" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="5lv-rm-6IK"/>
+                                                    <constraint firstAttribute="width" constant="30" id="U1P-8Y-vfM"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="sharp"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BCw-CF-8jm">
+                                                <rect key="frame" x="165" y="0.0" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="3vL-59-VeS"/>
+                                                    <constraint firstAttribute="height" constant="30" id="BLA-zc-UE3"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="double-sharp"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
@@ -332,8 +425,17 @@
         <image name="controls-arrow-left" width="320" height="320"/>
         <image name="controls-arrow-right" width="310" height="320"/>
         <image name="controls-arrow-up" width="320" height="320"/>
+        <image name="copy-icon" width="50" height="50"/>
+        <image name="cut-icon" width="50" height="50"/>
+        <image name="double-sharp" width="9" height="9"/>
+        <image name="flat" width="8" height="39"/>
         <image name="half-up" width="12" height="40"/>
+        <image name="natural" width="6" height="26"/>
+        <image name="paste-icon" width="50" height="50"/>
         <image name="quarter-up" width="12" height="40"/>
+        <image name="redo-icon" width="50" height="50"/>
+        <image name="sharp" width="8" height="26"/>
+        <image name="undo-icon" width="50" height="50"/>
         <image name="whole-head" width="16" height="10"/>
     </resources>
 </document>
