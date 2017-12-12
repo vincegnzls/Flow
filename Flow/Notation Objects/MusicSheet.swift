@@ -247,4 +247,18 @@ class MusicSheet: UIView {
     public func moveCursorX(location: CGPoint) {
         xCursor.position = location
     }
+    
+    // used for
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        let location = touch.location(in: self)
+        
+        let relXLocation = CGPoint(x: location.x, y: curCursorXLocation.y)
+        
+        curCursorXLocation = relXLocation
+        moveCursorX(location: relXLocation)
+        
+        curCursorYLocation = location
+        moveCursorY(location: location)
+    }
 }
