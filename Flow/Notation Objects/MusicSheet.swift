@@ -11,6 +11,12 @@ import UIKit
 @IBDesignable
 class MusicSheet: UIView {
     
+    // TO REMOVE LATER ON; USED FOR TESTING PURPOSES ONLY
+    
+    private var snapPoints = [CGPoint]()
+    
+    // END OF REMOVE LATER
+    
     private let sheetYOffset:CGFloat = 60
     private let lineSpace:CGFloat = 30 // Spaces between lines in staff
     private let staffSpace:CGFloat = 280 // Spaces between staff
@@ -46,6 +52,22 @@ class MusicSheet: UIView {
     private func setup() {
         startY += sheetYOffset
         startYConnection += sheetYOffset
+        
+        // TO REMOVE IN FUTURE (FOR TESTING)
+        
+        var currSnapPoint:CGPoint = CGPoint(x: 264.5, y: 140.5)
+        
+        for i in 1...9 {
+            snapPoints.append(currSnapPoint)
+            
+            if i % 2 == 0 {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 16.5)
+            } else {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 13.5)
+            }
+        }
+        
+        // END REMOVE
         
         //setupGrandStaff(startX: lefRightPadding, startY: startY)
         //setupGrandStaff(startX: lefRightPadding, startY: startY)
@@ -253,12 +275,35 @@ class MusicSheet: UIView {
         let touch = touches.first!
         let location = touch.location(in: self)
         
-        let relXLocation = CGPoint(x: location.x, y: curCursorXLocation.y)
+        print("LOCATION TAPPED: \(location)")
+        
+        var closestPoint:CGPoint = snapPoints[0];
+        
+        let x2:CGFloat = location.x - snapPoints[0].x
+        let y2:CGFloat = location.y - snapPoints[0].y
+        
+        var currDistance:CGFloat = (x2 * x2) + (y2 * y2)
+        
+        for i in 1...snapPoints.count-1 {
+            let x2:CGFloat = location.x - snapPoints[i].x
+            let y2:CGFloat = location.y - snapPoints[i].y
+            
+            let potDistance = (x2 * x2) + (y2 * y2)
+            
+            if (potDistance < currDistance) {
+                currDistance = potDistance
+                closestPoint = snapPoints[i]
+            }
+        }
+        
+        let relXLocation = CGPoint(x: closestPoint.x, y: curCursorXLocation.y)
+        
+        print("NEAREST POINT: \(closestPoint)")
         
         curCursorXLocation = relXLocation
         moveCursorX(location: relXLocation)
         
-        curCursorYLocation = location
-        moveCursorY(location: location)
+        curCursorYLocation = closestPoint
+        moveCursorY(location: closestPoint)
     }
 }
