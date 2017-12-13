@@ -11,7 +11,13 @@ import UIKit
 @IBDesignable
 class MusicSheet: UIView {
     
-    private let sheetYOffset:CGFloat = 100
+    // TO REMOVE LATER ON; USED FOR TESTING PURPOSES ONLY
+    
+    private var snapPoints = [CGPoint]()
+    
+    // END OF REMOVE LATER
+    
+    private let sheetYOffset:CGFloat = 60
     private let lineSpace:CGFloat = 30 // Spaces between lines in staff
     private let staffSpace:CGFloat = 280 // Spaces between staff
     private let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
@@ -21,11 +27,11 @@ class MusicSheet: UIView {
     private var grandStaffIndex:CGFloat = 0
     private var staffIndex:CGFloat = -1
     
-    private let yCursor = CAShapeLayer()
-    private let xCursor = CAShapeLayer()
+    private let yCursor = CAShapeLayer() // Horizontal cursor
+    private let xCursor = CAShapeLayer() // Vertical cursor
     
-    private var curCursorYLocation = ScreenCoordinates(x: 0, y: 0)
-    private var curCursorXLocation = ScreenCoordinates(x: 0, y: 0)
+    private var curCursorYLocation = CGPoint(x: 0, y: 0)
+    private var curCursorXLocation = CGPoint(x: 0, y: 0)
     
     private var grid = [Measure]()
     
@@ -33,11 +39,35 @@ class MusicSheet: UIView {
         return bounds.width - lefRightPadding
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setup()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
+        self.setup()
+    }
+    
+    private func setup() {
         startY += sheetYOffset
         startYConnection += sheetYOffset
+        
+        // TO REMOVE IN FUTURE (FOR TESTING)
+        
+        var currSnapPoint:CGPoint = CGPoint(x: 264.5, y: 140.5)
+        
+        for i in 1...9 {
+            snapPoints.append(currSnapPoint)
+            
+            if i % 2 == 0 {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 16.5)
+            } else {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 13.5)
+            }
+        }
+        
+        // END REMOVE
         
         //setupGrandStaff(startX: lefRightPadding, startY: startY)
         //setupGrandStaff(startX: lefRightPadding, startY: startY)
@@ -148,8 +178,8 @@ class MusicSheet: UIView {
     
     private func setupCursor() {
         
-        yCursor.zPosition = .greatestFiniteMagnitude
-        xCursor.zPosition = .greatestFiniteMagnitude
+        yCursor.zPosition = .greatestFiniteMagnitude // Places horizontal cursor to front
+        xCursor.zPosition = .greatestFiniteMagnitude // Places vertical cursor to front
         
         // Setup horizontal cursor
         let yPath = UIBezierPath()
@@ -172,8 +202,8 @@ class MusicSheet: UIView {
         self.layer.addSublayer(yCursor)
         self.layer.addSublayer(xCursor)
         
-        curCursorYLocation = ScreenCoordinates(x: 300, y: 50 + sheetYOffset)
-        curCursorXLocation = ScreenCoordinates(x: 300, y: 50 + sheetYOffset)
+        curCursorYLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
+        curCursorXLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
         
         // Adjust initial placement of cursor
         moveCursor(location: curCursorXLocation)
@@ -227,16 +257,53 @@ class MusicSheet: UIView {
         print(yLocString)
     }
     
-    public func moveCursor(location: ScreenCoordinates) {
-        yCursor.position = CGPoint(x: location.x, y: location.y)
-        xCursor.position = CGPoint(x: location.x, y: location.y)
+    public func moveCursor(location: CGPoint) {
+        yCursor.position = location
+        xCursor.position = location
     }
     
-    public func moveCursorY(location: ScreenCoordinates) {
-        yCursor.position = CGPoint(x: location.x, y: location.y)
+    public func moveCursorY(location: CGPoint) {
+        yCursor.position = location
     }
     
-    public func moveCursorX(location: ScreenCoordinates) {
-        xCursor.position = CGPoint(x: location.x, y: location.y)
+    public func moveCursorX(location: CGPoint) {
+        xCursor.position = location
+    }
+    
+    // used for
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        let location = touch.location(in: self)
+        
+        print("LOCATION TAPPED: \(location)")
+        
+        var closestPoint:CGPoint = snapPoints[0];
+        
+        let x2:CGFloat = location.x - snapPoints[0].x
+        let y2:CGFloat = location.y - snapPoints[0].y
+        
+        var currDistance:CGFloat = (x2 * x2) + (y2 * y2)
+        
+        for i in 1...snapPoints.count-1 {
+            let x2:CGFloat = location.x - snapPoints[i].x
+            let y2:CGFloat = location.y - snapPoints[i].y
+            
+            let potDistance = (x2 * x2) + (y2 * y2)
+            
+            if (potDistance < currDistance) {
+                currDistance = potDistance
+                closestPoint = snapPoints[i]
+            }
+        }
+        
+        let relXLocation = CGPoint(x: closestPoint.x, y: curCursorXLocation.y)
+        
+        print("NEAREST POINT: \(closestPoint)")
+        
+        curCursorXLocation = relXLocation
+        moveCursorX(location: relXLocation)
+        
+        curCursorYLocation = closestPoint
+        moveCursorY(location: closestPoint)
     }
 }

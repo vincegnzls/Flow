@@ -10,7 +10,7 @@ import UIKit
 
 class MusicNotation {
     // MARK: Properties
-    var screenCoordinates: ScreenCoordinates?
+    var screenCoordinates: CGPoint?
     var gridCoordinates: GridCoordinates?
     var image: UIImage?
     
@@ -18,7 +18,7 @@ class MusicNotation {
         self.setImage()
     }
     
-    init(screenCoordinates: ScreenCoordinates?,
+    init(screenCoordinates: CGPoint?,
          gridCoordinates: GridCoordinates?) {
         self.screenCoordinates = screenCoordinates
         self.gridCoordinates = gridCoordinates

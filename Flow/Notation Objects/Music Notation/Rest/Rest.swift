@@ -17,7 +17,7 @@ class Rest: MusicNotation {
         super.init()
     }
     
-    init(screenCoordinates: ScreenCoordinates?,
+    init(screenCoordinates: CGPoint?,
          gridCoordinates: GridCoordinates?,
          type: RestNoteType) {
         self.type = type

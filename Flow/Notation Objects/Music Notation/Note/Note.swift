@@ -35,7 +35,7 @@ class Note: MusicNotation {
         super.init()
     }
     
-    init(screenCoordinates: ScreenCoordinates?,
+    init(screenCoordinates: CGPoint?,
          gridCoordinates: GridCoordinates?,
          pitch: Pitch,
          type: RestNoteType,

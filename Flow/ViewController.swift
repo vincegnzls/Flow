@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var musicSheet: MusicSheet!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var height: NSLayoutConstraint!
+    @IBOutlet weak var menuBar: MenuBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
