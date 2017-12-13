@@ -25,7 +25,7 @@ class NotationControlsView: UIView {
         // Set up border
         self.layer.borderWidth = 1.5
         self.layer.borderColor = UIColor.black.cgColor
-        self.layer.cornerRadius = 10
+        //self.layer.cornerRadius = 10
         
         // Set up shadow
         self.layer.shadowColor = UIColor.black.cgColor
