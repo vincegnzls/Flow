@@ -401,6 +401,10 @@
                                                         <integer key="value" value="1"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="deleteNote:" destination="87U-aK-pku" eventType="touchUpInside" id="JHc-9Q-HW7"/>
+                                                    <action selector="deleteNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="zG3-BC-F6e"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

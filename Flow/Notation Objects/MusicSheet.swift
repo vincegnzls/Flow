@@ -74,6 +74,8 @@ class MusicSheet: UIView {
         
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
+        EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
+                                              observer: Observer(id: "MusicSheet.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
     }
     
     override func draw(_ rect: CGRect) {
@@ -256,14 +258,15 @@ class MusicSheet: UIView {
         let noteImageView = UIImageView(frame: CGRect(x: ((note.screenCoordinates)?.x)! + 1.8, y: ((note.screenCoordinates)?.y)! - 5, width: (note.image?.size.width)!, height: (note.image?.size.height)!))
         
         noteImageView.image = note.image
+        //noteImageView.tag = 1
         
         self.addSubview(noteImageView)
     }
     
     private func setupCursor() {
         
-        yCursor.zPosition = .greatestFiniteMagnitude // Places horizontal cursor to front
-        xCursor.zPosition = .greatestFiniteMagnitude // Places vertical cursor to front
+        yCursor.zPosition = CGFloat.greatestFiniteMagnitude // Places horizontal cursor to front
+        xCursor.zPosition = CGFloat.greatestFiniteMagnitude // Places vertical cursor to front
         
         // Setup horizontal cursor
         let yPath = UIBezierPath()
@@ -389,5 +392,21 @@ class MusicSheet: UIView {
         
         curCursorYLocation = closestPoint
         moveCursorY(location: closestPoint)
+    }
+    
+    func onDeleteKeyPressed() {
+        print("DELETE CALLED")
+        
+        var subViews = self.subviews
+        
+        //ALTERNATIVE : self.view.viewWithTag(100)
+        
+        if let viewWithTag = subViews.popLast() {
+            print("Tag 1")
+            viewWithTag.removeFromSuperview()
+        }
+        else {
+            print("tag not found")
+        }
     }
 }

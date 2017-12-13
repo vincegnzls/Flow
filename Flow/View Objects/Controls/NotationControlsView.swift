@@ -33,4 +33,13 @@ class NotationControlsView: UIView {
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 5
     }
+    
+    @IBAction func deleteNote(_ sender: UIButton) {
+        print("DELETE")
+        deleteKeyTapped()
+    }
+    
+    func deleteKeyTapped() {
+        EventBroadcaster.instance.postEvent(event: EventNames.DELETE_KEY_PRESSED)
+    }
 }
