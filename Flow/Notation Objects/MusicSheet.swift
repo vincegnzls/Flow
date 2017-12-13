@@ -82,8 +82,8 @@ class MusicSheet: UIView {
     
     override func draw(_ rect: CGRect) {
         setupGrandStaff(startX: lefRightPadding, startY: startY)
-        //setupGrandStaff(startX: lefRightPadding, startY: startY)
-        //setupGrandStaff(startX: lefRightPadding, startY: startY)
+        setupGrandStaff(startX: lefRightPadding, startY: startY)
+        setupGrandStaff(startX: lefRightPadding, startY: startY)
     }
     
     //Setup a grand staff
@@ -261,12 +261,12 @@ class MusicSheet: UIView {
         
         if direction == ArrowKey.up {
             
-            curCursorYLocation.y -= 20
+            curCursorYLocation.y -= 15
             moveCursorY(location: curCursorYLocation)
             
         } else if direction == ArrowKey.down {
             
-            curCursorYLocation.y += 20
+            curCursorYLocation.y += 15
             moveCursorY(location: curCursorYLocation)
             
         } else if direction == ArrowKey.left {
@@ -277,7 +277,7 @@ class MusicSheet: UIView {
             
             addMusicNotation(note: note)
             
-            curCursorXLocation.x -= 20
+            curCursorXLocation.x -= 40
             curCursorYLocation.x = curCursorXLocation.x
             moveCursorX(location: curCursorXLocation)
             moveCursorY(location: curCursorYLocation)
@@ -290,7 +290,7 @@ class MusicSheet: UIView {
             
             addMusicNotation(note: note)
             
-            curCursorXLocation.x += 20
+            curCursorXLocation.x += 40
             curCursorYLocation.x = curCursorXLocation.x
             moveCursorX(location: curCursorXLocation)
             moveCursorY(location: curCursorYLocation)
