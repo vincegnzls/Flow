@@ -70,10 +70,6 @@ class MusicSheet: UIView {
         
         // END REMOVE
         
-        //setupGrandStaff(startX: lefRightPadding, startY: startY)
-        //setupGrandStaff(startX: lefRightPadding, startY: startY)
-        //setupGrandStaff(startX: lefRightPadding, startY: startY)
-        
         setupCursor()
         
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
@@ -81,49 +77,76 @@ class MusicSheet: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        setupGrandStaff(startX: lefRightPadding, startY: startY)
-        setupGrandStaff(startX: lefRightPadding, startY: startY)
-        setupGrandStaff(startX: lefRightPadding, startY: startY)
+        setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: true)
+        setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false)
+        setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false)
     }
     
     //Setup a grand staff
-    private func setupGrandStaff(startX:CGFloat, startY:CGFloat) {
+    private func setupGrandStaff(startX:CGFloat, startY:CGFloat, withTimeSig:Bool) {
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G, numMeasures:2)
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G, numMeasures:2, withTimeSig: withTimeSig)
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.F, numMeasures:2)
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.F, numMeasures:2, withTimeSig: withTimeSig)
         drawStaffConnection(startX: lefRightPadding, startY: startYConnection + grandStaffSpace * grandStaffIndex)
         
         grandStaffIndex += 1
     }
     
     // Draws a staff
-    private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, numMeasures:CGFloat) {
-        // Sets the line format
-        /*let staff = CAShapeLayer()
-        let bezierPath = UIBezierPath()
-        UIColor.black.setStroke()
-        bezierPath.lineWidth = 2
-        
-        var curSpace:CGFloat = 0
-        
-        // Add 5 lines
-        for _ in 0..<5 {
-            bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
-            bezierPath.addLine(to: CGPoint(x: endX, y: startY - curSpace))
-            bezierPath.stroke()
-            
-            curSpace += lineSpace
+    private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, numMeasures:CGFloat, withTimeSig:Bool) {
+        // Handles adding of clef based on parameter
+        if withTimeSig {
+            drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType)
+        } else {
+            drawClefLabel(startX: startX, startY: startY, clefType: clefType)
         }
         
-        // Setup staff lines
-        staff.path = bezierPath.cgPath
-        staff.strokeColor = UIColor.black.cgColor
-        staff.lineWidth = 2*/
+        // Adjust initial space for clef and time signature
+        var startMeasure:CGFloat = 0
         
-        //self.layer.addSublayer(staff)
+        if withTimeSig {
+            startMeasure = startX + 160
+        } else {
+            startMeasure = startX + 85
+        }
+
+        // Track distance for each measure to be printed
+        let distance:CGFloat = (endX-startMeasure)/numMeasures
+    
+        var modStartX:CGFloat = startMeasure
+        for i in 1...Int(numMeasures) {
+            if i == 1 {
+                drawMeasure(startX: modStartX, endX:modStartX+distance, startY: startY, withLeftLine: false)
+            } else {
+                drawMeasure(startX: modStartX, endX: modStartX+distance, startY: startY)
+            }
+            
+            modStartX = modStartX + distance
+        }
+    }
+    
+    // Draws the clef and time before the staff
+    private func drawClefTimeLabel(startX:CGFloat, startY:CGFloat, clefType:Clef) {
         
-        // Handles adding of clef based on parameter
+        drawClefLabel(startX: startX, startY: startY, clefType: clefType)
+        
+        // TODO implement switch case for time sig
+        let upperTimeSig = UIImage(named:"numeral-4")
+        let lowerTimeSig = UIImage(named:"numeral-4")
+        
+        let upperTimeView = UIImageView(frame: CGRect(x:195 ,y: startY - 120, width:52, height:61))
+        let lowerTimeView = UIImageView(frame: CGRect(x:195 ,y: startY - 60, width:52, height:61))
+        
+        upperTimeView.image = upperTimeSig
+        lowerTimeView.image = lowerTimeSig
+        
+        self.addSubview(upperTimeView)
+        self.addSubview(lowerTimeView)
+    }
+    
+    // Draws the clef before the staff
+    private func drawClefLabel(startX: CGFloat, startY: CGFloat, clefType: Clef) {
         var clef = UIImage(named:"treble-clef")
         var clefView = UIImageView(frame: CGRect(x: 110, y: 45 + startY - 200, width: 67.2, height: 192))
         
@@ -135,17 +158,36 @@ class MusicSheet: UIView {
         clefView.image = clef
         self.addSubview(clefView)
         
-        let distance:CGFloat = (endX-startX)/numMeasures       // distance
-    
-        var modStartX:CGFloat = startX
-        for _ in 1...Int(numMeasures) {
-            drawMeasure(startX: modStartX, endX:modStartX+distance, startY: startY)
+        // START Draw lines for clef
+        let bezierPath = UIBezierPath()
+        UIColor.black.setStroke()
+        bezierPath.lineWidth = 2
+        
+        var curSpace:CGFloat = 0
+        
+        // Draws 5 lines
+        for _ in 0..<5 {
+            bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
+            bezierPath.addLine(to: CGPoint(x: endX, y: startY - curSpace))
+            bezierPath.stroke()
             
-            modStartX = modStartX + distance
+            curSpace += lineSpace
         }
+        
+        curSpace -= lineSpace // THIS IS NECESSARY FOR ADJUSTING THE LEFT LINE
+        
+        // Draws left vertical line
+        bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
+        bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
+        bezierPath.stroke()
+        
+        measureXDivs.insert(startX)
+        
+        // END Draw lines for clef
     }
     
-    private func drawMeasure(startX:CGFloat, endX:CGFloat, startY:CGFloat) {
+    // Draws a measure
+    private func drawMeasure(startX:CGFloat, endX:CGFloat, startY:CGFloat, withLeftLine:Bool = true) {
         
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
@@ -162,14 +204,16 @@ class MusicSheet: UIView {
             curSpace += lineSpace
         }
         
-        curSpace -= lineSpace
+        curSpace -= lineSpace // THIS IS NECESSARY FOR ADJUSTING THE LEFT AND RIGHT LINES
         
         //draw line before measure
-        bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
-        bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
-        bezierPath.stroke()
-        
-        measureXDivs.insert(startX)
+        if withLeftLine {
+            bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
+            bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
+            bezierPath.stroke()
+            
+            measureXDivs.insert(startX)
+        }
         
         //draw line after measure
         bezierPath.move(to: CGPoint(x: endX, y: startY - curSpace))
@@ -180,19 +224,12 @@ class MusicSheet: UIView {
         
     }
 
+    // Draws connecting lines for grand staves
     private func drawStaffConnection(startX:CGFloat, startY:CGFloat) {
         let staffConnection = CAShapeLayer()
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
         bezierPath.lineWidth = 2
-        
-        /*bezierPath.move(to: CGPoint(x: startX, y: startY))
-        bezierPath.addLine(to: CGPoint(x: startX, y: startY + 400)) // change if staff space changes
-        bezierPath.stroke()
-        
-        bezierPath.move(to: CGPoint(x: endX, y: startY))
-        bezierPath.addLine(to: CGPoint(x: endX, y: startY + 400)) // change if staff space changes
-        bezierPath.stroke()*/
         
         for x in measureXDivs {
             bezierPath.move(to: CGPoint(x: x, y: startY))
@@ -204,10 +241,10 @@ class MusicSheet: UIView {
         staffConnection.strokeColor = UIColor.black.cgColor
         staffConnection.lineWidth = 2
         
-        //self.layer.addSublayer(staffConnection)
-        
         let brace = UIImage(named:"brace-185")
         let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: 400))
+        
+        measureXDivs.removeAll()
         
         braceView.image = brace
         self.addSubview(braceView)
