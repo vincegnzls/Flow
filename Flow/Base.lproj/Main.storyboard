@@ -591,6 +591,17 @@
                                                 <action selector="onChangeNBeats:" destination="cUa-Ia-SFW" eventType="valueChanged" id="Mq6-yV-s3B"/>
                                             </connections>
                                         </slider>
+                                        <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iUt-dz-lEv">
+                                            <rect key="frame" x="430" y="209" width="417" height="216"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        </pickerView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Set Key Signature" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZEs-ca-dQD">
+                                            <rect key="frame" x="558" y="178" width="161" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <userDefinedRuntimeAttributes>
@@ -612,6 +623,7 @@
                     </visualEffectView>
                     <connections>
                         <outlet property="beatDurationLabel" destination="YxG-qy-psA" id="Pkj-7G-kKS"/>
+                        <outlet property="keySignaturePicker" destination="iUt-dz-lEv" id="VUt-S9-EHH"/>
                         <outlet property="nBeatsLabel" destination="cMO-fH-QBP" id="RLI-Nk-x5B"/>
                     </connections>
                 </viewController>

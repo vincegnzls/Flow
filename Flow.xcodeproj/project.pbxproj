@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		610ECE341FE6DAE9009CC0F2 /* TimeSignaturePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE331FE6DAE9009CC0F2 /* TimeSignaturePicker.swift */; };
 		611BFC9E1FE678C2001511B2 /* TimeSignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */; };
 		611BFCA11FE67948001511B2 /* TimeSignaturePopupDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */; };
 		612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612D07A51FD2C6780006BD0E /* MusicSheet.swift */; };
@@ -74,6 +75,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		610ECE331FE6DAE9009CC0F2 /* TimeSignaturePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignaturePicker.swift; sourceTree = "<group>"; };
 		611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignatureViewController.swift; sourceTree = "<group>"; };
 		611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignaturePopupDesignable.swift; sourceTree = "<group>"; };
 		612D07A51FD2C6780006BD0E /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
@@ -153,6 +155,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		610ECE321FE6D9B5009CC0F2 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */,
+				611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */,
+				61370E181F82A1CB002B6A09 /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		611BFC9F1FE67928001511B2 /* IBDesignables */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,7 +182,6 @@
 				61EC34951F8A7C4200A4A5D6 /* Line.swift */,
 				613EE8D41F98EB5F004FD009 /* Staff.swift */,
 				612D07A51FD2C6780006BD0E /* MusicSheet.swift */,
-				61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */,
 			);
 			path = "Notation Objects";
 			sourceTree = "<group>";
@@ -196,18 +207,16 @@
 		61370E151F82A1CB002B6A09 /* Flow */ = {
 			isa = PBXGroup;
 			children = (
+				610ECE321FE6D9B5009CC0F2 /* Controllers */,
 				611BFC9F1FE67928001511B2 /* IBDesignables */,
 				864CE5AD1FD3308F001FF059 /* Utils */,
 				612909FC1F89FFFC0094F9B7 /* Notation Objects */,
 				869F3C5D1FD8FBA400CC236F /* View Objects */,
 				61370E161F82A1CB002B6A09 /* AppDelegate.swift */,
-				61370E181F82A1CB002B6A09 /* ViewController.swift */,
-				86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */,
 				61370E1A1F82A1CB002B6A09 /* Main.storyboard */,
 				61370E1D1F82A1CB002B6A09 /* Assets.xcassets */,
 				61370E1F1F82A1CB002B6A09 /* LaunchScreen.storyboard */,
 				61370E221F82A1CB002B6A09 /* Info.plist */,
-				611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */,
 			);
 			path = Flow;
 			sourceTree = "<group>";
@@ -314,8 +323,10 @@
 		869F3C5D1FD8FBA400CC236F /* View Objects */ = {
 			isa = PBXGroup;
 			children = (
+				61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */,
 				869F3C601FD8FCC900CC236F /* Controls */,
 				86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */,
+				610ECE331FE6DAE9009CC0F2 /* TimeSignaturePicker.swift */,
 			);
 			path = "View Objects";
 			sourceTree = "<group>";
@@ -493,6 +504,7 @@
 				61B1316B1FE1513900ADCDF0 /* ButtonEffect.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
 				8696A8A91FD4EA5800EB81BD /* FileHandler.swift in Sources */,
+				610ECE341FE6DAE9009CC0F2 /* TimeSignaturePicker.swift in Sources */,
 				86A0287E1FD97C4B00305C0C /* CursorControlsView.swift in Sources */,
 				864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */,
 				6135C82B1FDEC35000AF9EA9 /* Bounds.swift in Sources */,
