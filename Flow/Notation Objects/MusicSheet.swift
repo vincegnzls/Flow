@@ -30,8 +30,8 @@ class MusicSheet: UIView {
     private let yCursor = CAShapeLayer() // Horizontal cursor
     private let xCursor = CAShapeLayer() // Vertical cursor
     
-    private var curCursorYLocation = CGPoint(x: 0, y: 0)
-    private var curCursorXLocation = CGPoint(x: 0, y: 0)
+    private var curYCursorLocation = CGPoint(x: 0, y: 0)
+    private var curXCursorLocation = CGPoint(x: 0, y: 0)
     
     private var measureXDivs = Set<CGFloat>()
     private var grid = [Measure]()
@@ -289,11 +289,11 @@ class MusicSheet: UIView {
         self.layer.addSublayer(yCursor)
         self.layer.addSublayer(xCursor)
         
-        curCursorYLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
-        curCursorXLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
+        curYCursorLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
+        curXCursorLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
         
         // Adjust initial placement of cursor
-        moveCursor(location: curCursorXLocation)
+        moveCursor(location: curXCursorLocation)
     }
     
     func onArrowKeyPressed(params: Parameters) {
@@ -301,44 +301,44 @@ class MusicSheet: UIView {
         
         if direction == ArrowKey.up {
             
-            curCursorYLocation.y -= 15
-            moveCursorY(location: curCursorYLocation)
+            curYCursorLocation.y -= 15
+            moveCursorY(location: curYCursorLocation)
             
         } else if direction == ArrowKey.down {
             
-            curCursorYLocation.y += 15
-            moveCursorY(location: curCursorYLocation)
+            curYCursorLocation.y += 15
+            moveCursorY(location: curYCursorLocation)
             
         } else if direction == ArrowKey.left {
             
             let note = MusicNotation()
-            note.screenCoordinates = curCursorYLocation
+            note.screenCoordinates = curYCursorLocation
             note.image = UIImage(named: "whole-head")
             
             addMusicNotation(note: note)
             
-            curCursorXLocation.x -= 40
-            curCursorYLocation.x = curCursorXLocation.x
-            moveCursorX(location: curCursorXLocation)
-            moveCursorY(location: curCursorYLocation)
+            curXCursorLocation.x -= 40
+            curYCursorLocation.x = curXCursorLocation.x
+            moveCursorX(location: curXCursorLocation)
+            moveCursorY(location: curYCursorLocation)
             
         } else if direction == ArrowKey.right {
             
             let note = MusicNotation()
-            note.screenCoordinates = curCursorYLocation
+            note.screenCoordinates = curYCursorLocation
             note.image = UIImage(named: "whole-head")
             
             addMusicNotation(note: note)
             
-            curCursorXLocation.x += 40
-            curCursorYLocation.x = curCursorXLocation.x
-            moveCursorX(location: curCursorXLocation)
-            moveCursorY(location: curCursorYLocation)
+            curXCursorLocation.x += 40
+            curYCursorLocation.x = curXCursorLocation.x
+            moveCursorX(location: curXCursorLocation)
+            moveCursorY(location: curYCursorLocation)
             
         }
         
-        let xLocString = "CURSOR X LOCATION: (" + String(describing: curCursorXLocation.x) + ", " + String(describing: curCursorXLocation.y) + ")"
-        let yLocString = "CURSOR Y LOCATION: (" + String(describing: curCursorYLocation.x) + ", " + String(describing: curCursorYLocation.y) + ")"
+        let xLocString = "CURSOR X LOCATION: (" + String(describing: curXCursorLocation.x) + ", " + String(describing: curXCursorLocation.y) + ")"
+        let yLocString = "CURSOR Y LOCATION: (" + String(describing: curYCursorLocation.x) + ", " + String(describing: curYCursorLocation.y) + ")"
         
         print(xLocString)
         print(yLocString)
@@ -383,14 +383,14 @@ class MusicSheet: UIView {
             }
         }
         
-        let relXLocation = CGPoint(x: closestPoint.x, y: curCursorXLocation.y)
+        let relXLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
         
         print("NEAREST POINT: \(closestPoint)")
         
-        curCursorXLocation = relXLocation
+        curXCursorLocation = relXLocation
         moveCursorX(location: relXLocation)
         
-        curCursorYLocation = closestPoint
+        curYCursorLocation = closestPoint
         moveCursorY(location: closestPoint)
     }
     
