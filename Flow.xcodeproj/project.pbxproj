@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		611BFC9E1FE678C2001511B2 /* TimeSignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */; };
+		611BFCA11FE67948001511B2 /* TimeSignaturePopupDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */; };
 		612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612D07A51FD2C6780006BD0E /* MusicSheet.swift */; };
 		6135C82B1FDEC35000AF9EA9 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135C82A1FDEC35000AF9EA9 /* Bounds.swift */; };
 		61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61370E161F82A1CB002B6A09 /* AppDelegate.swift */; };
@@ -71,6 +73,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignatureViewController.swift; sourceTree = "<group>"; };
+		611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignaturePopupDesignable.swift; sourceTree = "<group>"; };
 		612D07A51FD2C6780006BD0E /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 		6135C82A1FDEC35000AF9EA9 /* Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
 		61370E131F82A1CB002B6A09 /* Flow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,6 +151,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		611BFC9F1FE67928001511B2 /* IBDesignables */ = {
+			isa = PBXGroup;
+			children = (
+				611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */,
+			);
+			path = IBDesignables;
+			sourceTree = "<group>";
+		};
 		612909FC1F89FFFC0094F9B7 /* Notation Objects */ = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +193,7 @@
 		61370E151F82A1CB002B6A09 /* Flow */ = {
 			isa = PBXGroup;
 			children = (
+				611BFC9F1FE67928001511B2 /* IBDesignables */,
 				864CE5AD1FD3308F001FF059 /* Utils */,
 				612909FC1F89FFFC0094F9B7 /* Notation Objects */,
 				869F3C5D1FD8FBA400CC236F /* View Objects */,
@@ -191,6 +204,7 @@
 				61370E1D1F82A1CB002B6A09 /* Assets.xcassets */,
 				61370E1F1F82A1CB002B6A09 /* LaunchScreen.storyboard */,
 				61370E221F82A1CB002B6A09 /* Info.plist */,
+				611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */,
 			);
 			path = Flow;
 			sourceTree = "<group>";
@@ -449,6 +463,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				611BFC9E1FE678C2001511B2 /* TimeSignatureViewController.swift in Sources */,
 				861B3DDA1FDC20E2003FE0A5 /* KeyNames.swift in Sources */,
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
 				861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */,
@@ -486,6 +501,7 @@
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				8696A8C01FD5898200EB81BD /* Parser.swift in Sources */,
 				861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */,
+				611BFCA11FE67948001511B2 /* TimeSignaturePopupDesignable.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
