@@ -18,43 +18,59 @@ class KeySignatureDesignable: UIButton {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
-    private struct Constants {
-        static let numberOfGlasses = 8
-        static let lineWidth: CGFloat = 5.0
-        static let arcWidth: CGFloat = 76
-        
-        static var halfOfLineWidth: CGFloat {
-            return lineWidth / 2
-        }
-    }
     
-    @IBInspectable var counter: Int = 5
-    @IBInspectable var outlineColor: UIColor = UIColor.blue
-    @IBInspectable var counterColor: UIColor = UIColor.orange
+    @IBInspectable var index: Int = 0
+    @IBInspectable var outlineColor: UIColor = UIColor.black
     
     override func draw(_ rect: CGRect) {
         // 1
-        let center = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
+        let center = CGPoint(x: bounds.width - 5, y: bounds.height)
         
         // 3
-        let startAngle: CGFloat = .pi
-        let endAngle: CGFloat = 3 * .pi
+        var startAngle: CGFloat = .pi / -2
+        let endAngle: CGFloat = 2 * .pi * 0.08333333333
         
+        UIColor.white.setFill()
         
+        let path = UIBezierPath()
+        
+        if index == 1 {
+            startAngle -= endAngle
+        } else if index > 1 {
+            for _ in 0...index-1 {
+                startAngle -= endAngle
+            }
+        }
+        
+        path.move(to: center)
         //2 - draw the outer arc
-        let outlinePath = UIBezierPath(arcCenter: center,
-                                       radius: bounds.width/2,
-                                       startAngle: startAngle,
-                                       endAngle: endAngle,
-                                       clockwise: true)
+        path.addArc(withCenter: center,
+                    radius: bounds.height - 5,
+                    startAngle: startAngle,
+                    endAngle: startAngle - endAngle,
+                    clockwise: false)
+        path.move(to: center)
         
         //4 - close the path
-        outlinePath.close()
+        path.close()
+        
+        path.fill()
         
         outlineColor.setStroke()
-        outlinePath.lineWidth = Constants.lineWidth
-        outlinePath.stroke()
+        path.lineWidth = 3.5
+        path.stroke()
+
+        if index == 1 {
+            startAngle -= endAngle
+        } else if index > 1 {
+            for _ in 0...index-1 {
+                startAngle -= endAngle
+            }
+        }
+        
     }
 
+    func drawKeySignature(index: CGFloat) {
+        
+    }
 }
