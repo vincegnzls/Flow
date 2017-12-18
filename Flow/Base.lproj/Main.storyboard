@@ -599,7 +599,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xol-jn-CnT" customClass="KeySignaturePicker" customModule="Flow" customModuleProvider="target">
-                                            <rect key="frame" x="518" y="31" width="100" height="289"/>
+                                            <rect key="frame" x="524" y="31" width="100" height="289"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         </pickerView>
                                     </subviews>

@@ -61,7 +61,7 @@ class TimeSignatureViewController: UIViewController {
     }
     
     
-    // Updates label whenever number of beats is changed
+    // Updates label whenever beat duration is changed
     @IBAction func onChangeBeatDuration(_ sender: UISlider) {
         beatDurationLabel.text = String(Int(sender.value) * 2)
     }
