@@ -8,20 +8,20 @@
 
 import Foundation
 
-enum KeySignature {
-    case c,
-        f,
-        bFlat,
-        eFlat,
-        aFlat,
-        dFlat,
-        gFlat,
-        cFlat,
-        g,
-        d,
-        a,
-        e,
-        b,
-        fSharp,
-        cSharp
+enum KeySignature: String {
+    case c = "C",
+        f = "F",
+        bFlat = "B Flat",
+        eFlat = "E Flat",
+        aFlat = "A Flat",
+        dFlat = "D Flat",
+        gFlat = "G Flat",
+        cFlat = "C Flat",
+        g = "G",
+        d = "D",
+        a = "A",
+        e = "E",
+        b = "B",
+        fSharp = "F Sharp",
+        cSharp = "C Sharp"
 }
