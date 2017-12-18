@@ -225,7 +225,6 @@
 				61370E1D1F82A1CB002B6A09 /* Assets.xcassets */,
 				61370E1F1F82A1CB002B6A09 /* LaunchScreen.storyboard */,
 				61370E221F82A1CB002B6A09 /* Info.plist */,
-				610ECE351FE787EA009CC0F2 /* KeySignaturePicker.swift */,
 			);
 			path = Flow;
 			sourceTree = "<group>";
@@ -332,6 +331,7 @@
 		869F3C5D1FD8FBA400CC236F /* View Objects */ = {
 			isa = PBXGroup;
 			children = (
+				610ECE351FE787EA009CC0F2 /* KeySignaturePicker.swift */,
 				61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */,
 				869F3C601FD8FCC900CC236F /* Controls */,
 				86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */,
