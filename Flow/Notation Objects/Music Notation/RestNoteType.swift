@@ -8,7 +8,8 @@
 import UIKit
 
 enum RestNoteType {
-    case sixtyFourth,
+    case
+        sixtyFourth,
         thirtySecond,
         sixteenth,
         eighth,

@@ -16,7 +16,7 @@
 		612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612D07A51FD2C6780006BD0E /* MusicSheet.swift */; };
 		6135C82B1FDEC35000AF9EA9 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135C82A1FDEC35000AF9EA9 /* Bounds.swift */; };
 		61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61370E161F82A1CB002B6A09 /* AppDelegate.swift */; };
-		61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61370E181F82A1CB002B6A09 /* ViewController.swift */; };
+		61370E191F82A1CB002B6A09 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61370E181F82A1CB002B6A09 /* EditorViewController.swift */; };
 		61370E1C1F82A1CB002B6A09 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61370E1A1F82A1CB002B6A09 /* Main.storyboard */; };
 		61370E1E1F82A1CB002B6A09 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61370E1D1F82A1CB002B6A09 /* Assets.xcassets */; };
 		61370E211F82A1CB002B6A09 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61370E1F1F82A1CB002B6A09 /* LaunchScreen.storyboard */; };
@@ -88,7 +88,7 @@
 		6135C82A1FDEC35000AF9EA9 /* Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
 		61370E131F82A1CB002B6A09 /* Flow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61370E161F82A1CB002B6A09 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		61370E181F82A1CB002B6A09 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		61370E181F82A1CB002B6A09 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		61370E1B1F82A1CB002B6A09 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		61370E1D1F82A1CB002B6A09 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61370E201F82A1CB002B6A09 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -166,7 +166,7 @@
 			children = (
 				86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */,
 				611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */,
-				61370E181F82A1CB002B6A09 /* ViewController.swift */,
+				61370E181F82A1CB002B6A09 /* EditorViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -492,7 +492,7 @@
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
 				861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */,
 				86A0287C1FD97C3500305C0C /* NotationControlsView.swift in Sources */,
-				61370E191F82A1CB002B6A09 /* ViewController.swift in Sources */,
+				61370E191F82A1CB002B6A09 /* EditorViewController.swift in Sources */,
 				86A9B27E1FDD0324007EB37C /* ArrowKey.swift in Sources */,
 				861B3DD21FDC1D5F003FE0A5 /* EventBroadcaster.swift in Sources */,
 				610ECE361FE787EA009CC0F2 /* KeySignaturePicker.swift in Sources */,

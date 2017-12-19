@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class EditorViewController: UIViewController {
     
     @IBOutlet weak var musicSheet: MusicSheet!
     @IBOutlet weak var titleLabel: UILabel!
@@ -27,6 +27,16 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    @IBAction func onTapSave(_ sender: UIBarButtonItem) {
+        let comp = Composition()
+        var test = FileHandler.instance.convertCompositionToMusicXML(comp)
+        
+        print("\(test)")
+        
+        //FileHandler.instance.convertMusicXMLtoComposition(test)
     }
 }
 

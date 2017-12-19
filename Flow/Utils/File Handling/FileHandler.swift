@@ -59,14 +59,71 @@ class FileHandler {
     // MARK: Conversion functions
     func convertCompositionToMusicXML(_ composition: Composition) -> String {
         let xml = AEXMLDocument()
-        // Perform conversion here
+
+        let scoreElement = xml.addChild(name: "score-partwise", attributes: ["version": "3.1"])
         
-        return xml.xml
+        // Part list
+        let partListElement = scoreElement.addChild(name: "part-list")
+        let scorePartElement = partListElement.addChild(name: "score-part", attributes: ["id": "P1"])
+        scorePartElement.addChild(name: "part-name", value: "Music")
+        
+        // Part
+        let partElement = scoreElement.addChild(name: "part", attributes: ["id": "P1"])
+        
+        // Loop through measures
+        for (index, measure) in composition.measures.enumerated() {
+            let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(index)"])
+            
+            // Set attributes
+            let attributesElement = measureElement.addChild(name: "attributes")
+            
+            // Key signature
+            let keyElement = attributesElement.addChild(name: "key")
+            keyElement.addChild(name: "fifths", value: "\(measure.keySignature.rawValue)")
+            
+            // Time signature
+            let timeSignatureElement = attributesElement.addChild(name: "time")
+            timeSignatureElement.addChild(name: "beats", value: "\(measure.timeSignature.beats)")
+            timeSignatureElement.addChild(name: "beat-type", value: "\(measure.timeSignature.beatType)")
+            
+            // Clef
+            let clefElement = attributesElement.addChild(name: "clef")
+            clefElement.addChild(name: "sign", value: measure.clef.rawValue)
+            clefElement.addChild(name: "line", value: "\(measure.clef.getStandardLine())")
+            
+            // Add notes and/or rests
+        }
+        
+        // Get string format of xml
+        var xmlString = xml.xml
+        
+        // Add MusicXML Declaration
+        let doctype =
+        """
+        
+        <!DOCTYPE score-partwise PUBLIC
+            "-//Recordare//DTD MusicXML 3.1 Partwise//EN"
+            "http://www.musicxml.org/dtds/partwise.dtd">
+        """
+        var index = xmlString.index(of: ">")!
+        index = xmlString.index(index, offsetBy: 1, limitedBy: xmlString.endIndex)!
+        xmlString.insert(contentsOf: doctype, at: index)
+        
+        return xmlString
     }
     
     func convertMusicXMLtoComposition(_ xml: String) -> Composition {
         // Perform conversion here
-        
+        do {
+            let xml = try AEXMLDocument(xml: xml)
+            
+            print(xml.root.name)
+            for child in xml.root.children {
+                print(child.name)
+            }
+        } catch {
+            print("\(error)")
+        }
         return Composition()
     }
     
