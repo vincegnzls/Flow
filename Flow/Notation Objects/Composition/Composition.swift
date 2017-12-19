@@ -13,23 +13,8 @@ class Composition {
     var compositionInfo: CompositionInfo
     var measures: [Measure]
     
-    init() {
-        self.compositionInfo = CompositionInfo()
-        self.measures = []
-    }
-    
-    init(compositionInfo: CompositionInfo, measures: [Measure]) {
+    init(compositionInfo: CompositionInfo = CompositionInfo(), measures: [Measure] = []) {
         self.compositionInfo = compositionInfo
-        self.measures = measures
-    }
-    
-    init(compositionInfo: CompositionInfo) {
-        self.compositionInfo = compositionInfo
-        self.measures = []
-    }
-    
-    init(measures: [Measure]) {
-        self.compositionInfo = CompositionInfo()
         self.measures = measures
     }
 }
