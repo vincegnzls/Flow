@@ -14,17 +14,10 @@ struct Bounds {
     var startY:CGFloat
     var endY:CGFloat
     
-    init(startX:CGFloat, endX:CGFloat, startY:CGFloat, endY:CGFloat) {
+    init(startX:CGFloat = 0, endX:CGFloat = 0, startY:CGFloat = 0, endY:CGFloat = 0) {
         self.startX = startX
         self.endX = endX
         self.startY = startY
         self.endY = endY
-    }
-    
-    init() {
-        self.startX = 0
-        self.endX = 0
-        self.startY = 0
-        self.endY = 0
     }
 }

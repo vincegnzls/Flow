@@ -15,12 +15,8 @@ class MusicNotation {
     var image: UIImage?
     var imageView: UIImageView?
     
-    init() {
-        self.setImage()
-    }
-    
-    init(screenCoordinates: CGPoint?,
-         gridCoordinates: GridCoordinates?) {
+    init(screenCoordinates: CGPoint? = nil,
+         gridCoordinates: GridCoordinates? = nil) {
         self.screenCoordinates = screenCoordinates
         self.gridCoordinates = gridCoordinates
         
