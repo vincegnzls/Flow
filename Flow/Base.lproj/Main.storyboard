@@ -56,7 +56,7 @@
         <!--Editor-->
         <scene sceneID="ZHK-WR-61c">
             <objects>
-                <viewController id="ldS-Qo-c4z" customClass="ViewController" customModule="Flow" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ldS-Qo-c4z" customClass="EditorViewController" customModule="Flow" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ACD-nf-3gA">
                         <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -486,7 +486,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="j19-iv-FrW"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Editor" id="Hhe-eV-Nri"/>
+                    <navigationItem key="navigationItem" title="Editor" id="Hhe-eV-Nri">
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="HR0-Bv-Tya">
+                            <connections>
+                                <action selector="onTapSave:" destination="ldS-Qo-c4z" id="d5m-eI-AP1"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <size key="freeformSize" width="1112" height="834"/>
                     <connections>
                         <outlet property="height" destination="xo5-Y1-ev2" id="n6n-09-Ew5"/>

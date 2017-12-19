@@ -39,7 +39,7 @@ extension KeySignaturePicker: UIPickerViewDelegate {
         // Adds key letter as a label
         let keySignatureLabel = UILabel(frame: CGRect(x: 0, y: 0, width: customWidth, height: 30))
         
-        keySignatureLabel.text = keySignatures[row].key.rawValue
+        keySignatureLabel.text = keySignatures[row].key.toString()
         keySignatureLabel.textColor = .white
         keySignatureLabel.textAlignment = .center
         keySignatureLabel.font = UIFont.systemFont(ofSize: 25, weight: UIFont.Weight.light)
@@ -60,6 +60,6 @@ extension KeySignaturePicker: UIPickerViewDelegate {
     
     // Listener when key signature is changed
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print(keySignatures[row].key.rawValue)
+        print(keySignatures[row].key.toString())
     }
 }
