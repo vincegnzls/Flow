@@ -59,7 +59,14 @@ class FileHandler {
     // MARK: Conversion functions
     func convertCompositionToMusicXML(_ composition: Composition) -> String {
         let xml = AEXMLDocument()
-        // Perform conversion here
+        
+        let score = xml.addChild(name: "score-partwise", attributes: ["version": "3.1"])
+        let partList = score.addChild(name: "part-list")
+        let scorePart = partList.addChild(name: "score-part", attributes: ["id": "P1"])
+        scorePart.addChild(name: "part-name", value: "Music")
+        
+        score.addChild(name: "part", attributes: ["id": "P1"])
+        // loop through measures
         
         return xml.xml
     }
