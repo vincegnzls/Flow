@@ -15,31 +15,11 @@ class Note: MusicNotation {
     var accidental: Accidental?
     var clef: Clef
     
-    init(pitch: Pitch,
-         type: RestNoteType,
-         clef: Clef) {
-        self.pitch = pitch
-        self.type = type
-        self.clef = clef
-        super.init()
-    }
-    
-    init(pitch: Pitch,
-         type: RestNoteType,
-         accidental: Accidental?,
-         clef: Clef) {
-        self.pitch = pitch
-        self.type = type
-        self.accidental = accidental
-        self.clef = clef
-        super.init()
-    }
-    
-    init(screenCoordinates: CGPoint?,
-         gridCoordinates: GridCoordinates?,
+    init(screenCoordinates: CGPoint? = nil,
+         gridCoordinates: GridCoordinates? = nil,
          pitch: Pitch,
          type: RestNoteType,
-         accidental: Accidental?,
+         accidental: Accidental? = nil,
          clef: Clef) {
         self.pitch = pitch
         self.type = type

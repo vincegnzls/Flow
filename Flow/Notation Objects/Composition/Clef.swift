@@ -8,6 +8,15 @@
 
 import Foundation
 
-enum Clef {
-    case G, F
+enum Clef: String {
+    case
+        G   = "G",
+        F   = "F"
+    
+    func getStandardLine() -> Int {
+        switch self {
+        case .G: return 2
+        case .F: return 4
+        }
+    }
 }
