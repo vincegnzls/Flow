@@ -15,19 +15,14 @@ class Measure {
     var notationObjects: [MusicNotation]
     var bounds: Bounds
     
-    init() {
-        self.keySignature = .c
-        self.timeSignature = TimeSignature()
-        self.clef = .G
-        self.notationObjects = []
-        self.bounds = Bounds()
-    }
-    
-    init(keySignature: KeySignature, timeSignature: TimeSignature, clef: Clef) {
+    init(keySignature: KeySignature = .c,
+         timeSignature: TimeSignature = TimeSignature(),
+         clef: Clef = .G,
+         notationObjects: [MusicNotation] = []) {
         self.keySignature = keySignature
         self.timeSignature = timeSignature
         self.clef = clef
-        self.notationObjects = []
+        self.notationObjects = notationObjects
         self.bounds = Bounds()
     }
 }

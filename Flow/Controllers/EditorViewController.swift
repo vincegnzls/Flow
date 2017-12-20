@@ -31,12 +31,23 @@ class EditorViewController: UIViewController {
     
     
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
-        let comp = Composition()
-        var test = FileHandler.instance.convertCompositionToMusicXML(comp)
+        
+        let measure = Measure(keySignature: KeySignature.c,
+                              timeSignature: TimeSignature(),
+                              clef: Clef.G)
+        measure.notationObjects.append(Note(pitch: Pitch(step: Step.A, octave: 2),
+                                            type: RestNoteType.quarter,
+                                            clef: Clef.G))
+        measure.notationObjects.append(Rest(type: .half))
+        
+        var measures = [Measure]()
+        measures.append(measure)
+        let comp = Composition(measures: measures)
+        let test = FileHandler.instance.convertCompositionToMusicXML(comp)
         
         print("\(test)")
         
-        //FileHandler.instance.convertMusicXMLtoComposition(test)
+        FileHandler.instance.convertMusicXMLtoComposition(test)
     }
 }
 

@@ -311,7 +311,7 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.left {
             
-            let note = MusicNotation()
+            let note = MusicNotation(type: .whole)
             note.screenCoordinates = curYCursorLocation
             note.image = UIImage(named: "whole-head")
             
@@ -324,7 +324,7 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.right {
             
-            let note = MusicNotation()
+            let note = MusicNotation(type: .whole)
             note.screenCoordinates = curYCursorLocation
             note.image = UIImage(named: "whole-head")
             

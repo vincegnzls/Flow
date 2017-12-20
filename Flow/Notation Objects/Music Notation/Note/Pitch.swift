@@ -7,16 +7,6 @@
 //
 
 struct Pitch {
-    enum Step {
-        case C,
-            D,
-            E,
-            F,
-            G,
-            A,
-            B
-    }
-    
     var step: Step
     var octave: Int
     

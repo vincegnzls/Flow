@@ -56,6 +56,7 @@
 		86A0287E1FD97C4B00305C0C /* CursorControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0287D1FD97C4B00305C0C /* CursorControlsView.swift */; };
 		86A9B27E1FDD0324007EB37C /* ArrowKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A9B27D1FDD0324007EB37C /* ArrowKey.swift */; };
 		86A9B2801FDD046A007EB37C /* TestClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A9B27F1FDD046A007EB37C /* TestClass.swift */; };
+		86B8EFEC1FEAA5E600DD834E /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B8EFEB1FEAA5E600DD834E /* Step.swift */; };
 		86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */; };
 		86CCD7C31FDD783400A0FC8D /* StartMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */; };
 /* End PBXBuildFile section */
@@ -132,6 +133,7 @@
 		86A0287D1FD97C4B00305C0C /* CursorControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorControlsView.swift; sourceTree = "<group>"; };
 		86A9B27D1FDD0324007EB37C /* ArrowKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowKey.swift; sourceTree = "<group>"; };
 		86A9B27F1FDD046A007EB37C /* TestClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestClass.swift; sourceTree = "<group>"; };
+		86B8EFEB1FEAA5E600DD834E /* Step.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
 		86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenuViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -260,6 +262,7 @@
 				864CE5AB1FD33076001FF059 /* Note.swift */,
 				864CE5A71FD32FEB001FF059 /* Pitch.swift */,
 				864CE5A91FD3301E001FF059 /* Accidental.swift */,
+				86B8EFEB1FEAA5E600DD834E /* Step.swift */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				8696A8B31FD4F52600EB81BD /* Clef.swift in Sources */,
 				612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */,
 				861B3DD41FDC1E0E003FE0A5 /* Parameters.swift in Sources */,
+				86B8EFEC1FEAA5E600DD834E /* Step.swift in Sources */,
 				8696A8BC1FD5898200EB81BD /* Element.swift in Sources */,
 				8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */,
 				8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */,
