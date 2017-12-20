@@ -39,7 +39,7 @@ class MusicSheet: UIView {
     // used for tracking coordinates of measures
     private var measureCoords = [GridSystem.MeasurePoints]()
     
-    private var selectedMeasure:Measure = Measure()
+    private var selectedMeasureCoord:GridSystem.MeasurePoints?
     private var grid = [Measure]()
     
     private var endX: CGFloat {
@@ -58,13 +58,13 @@ class MusicSheet: UIView {
     
     private func setup() {
         
-        GridSystem.init()
+        _ = GridSystem.init() // init grid system singleton
         
         startY += sheetYOffset
         startYConnection += sheetYOffset
         
         // TO REMOVE IN FUTURE (FOR TESTING)
-        
+        /*
         var currSnapPoint:CGPoint = CGPoint(x: 264.5, y: 140.5)
         
         for i in 1...9 {
@@ -76,7 +76,7 @@ class MusicSheet: UIView {
                 currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 13.5)
             }
         }
-        
+        */
         // END REMOVE
         
         setupCursor()
@@ -226,6 +226,7 @@ class MusicSheet: UIView {
         grid.append(Measure())
         
         GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
+        GridSystem.sharedInstance?.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: createSnapPoints(initialX: startX + 20, initialY: startY-curSpace))
         
         //draw line before measure
         if withLeftLine {
@@ -279,6 +280,25 @@ class MusicSheet: UIView {
         
         return points
         
+    }
+    
+    private func createSnapPoints (initialX: CGFloat, initialY: CGFloat) -> [CGPoint] {
+        var snapPoints = [CGPoint]()
+        
+        var currSnapPoint:CGPoint = CGPoint(x: initialX, y: initialY)
+        
+        for i in 1...9 {
+            print(currSnapPoint)
+            snapPoints.append(currSnapPoint)
+            
+            if i % 2 == 0 {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 16.5)
+            } else {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 13.5)
+            }
+        }
+        
+        return snapPoints
     }
 
     // Draws connecting lines for grand staves
@@ -422,34 +442,41 @@ class MusicSheet: UIView {
         remapCurrentMeasure(location: location)
         
         // START FOR SNAPPING
-        var closestPoint:CGPoint = snapPoints[0];
         
-        let x2:CGFloat = location.x - snapPoints[0].x
-        let y2:CGFloat = location.y - snapPoints[0].y
+        snapPoints = (GridSystem.sharedInstance?.getSnapPointsFromPoints(measurePoints: selectedMeasureCoord!))!
         
-        var currDistance:CGFloat = (x2 * x2) + (y2 * y2)
+        if snapPoints.count > 0 {
         
-        for i in 1...snapPoints.count-1 {
-            let x2:CGFloat = location.x - snapPoints[i].x
-            let y2:CGFloat = location.y - snapPoints[i].y
+            var closestPoint:CGPoint = snapPoints[0];
             
-            let potDistance = (x2 * x2) + (y2 * y2)
+            let x2:CGFloat = location.x - snapPoints[0].x
+            let y2:CGFloat = location.y - snapPoints[0].y
             
-            if (potDistance < currDistance) {
-                currDistance = potDistance
-                closestPoint = snapPoints[i]
+            var currDistance:CGFloat = (x2 * x2) + (y2 * y2)
+            
+            for i in 1...snapPoints.count-1 {
+                let x2:CGFloat = location.x - snapPoints[i].x
+                let y2:CGFloat = location.y - snapPoints[i].y
+                
+                let potDistance = (x2 * x2) + (y2 * y2)
+                
+                if (potDistance < currDistance) {
+                    currDistance = potDistance
+                    closestPoint = snapPoints[i]
+                }
             }
+            
+            let relXLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
+            
+            //print("NEAREST POINT: \(closestPoint)")
+            
+            curXCursorLocation = relXLocation
+            moveCursorX(location: relXLocation)
+            
+            curYCursorLocation = closestPoint
+            moveCursorY(location: closestPoint)
+            
         }
-        
-        let relXLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
-        
-        //print("NEAREST POINT: \(closestPoint)")
-        
-        curXCursorLocation = relXLocation
-        moveCursorX(location: relXLocation)
-        
-        curYCursorLocation = closestPoint
-        moveCursorY(location: closestPoint)
         
         // END FOR SNAPPING
     }
@@ -463,10 +490,7 @@ class MusicSheet: UIView {
             if r.contains(location) {
                 print("MEASURE #\(index) TAPPED")
                 
-                selectedMeasure = (GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: measureCoord))!
-                
-                print(selectedMeasure.clef)
-                
+                selectedMeasureCoord = measureCoord
                 break
             }
         }

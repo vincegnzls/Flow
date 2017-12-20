@@ -14,6 +14,7 @@ class GridSystem {
     static var sharedInstance:GridSystem?
     private var measureMap = [MeasurePoints: Measure]()
     private var weightsMap = [MeasurePoints: [CGPoint]]()
+    private var snapPointsMap = [MeasurePoints: [CGPoint]]()
     private var usedWeights = [CGPoint]()
     
     init() {
@@ -28,8 +29,16 @@ class GridSystem {
         return weightsMap[measurePoints]
     }
     
+    public func getSnapPointsFromPoints(measurePoints:MeasurePoints) -> [CGPoint]? {
+        return snapPointsMap[measurePoints]
+    }
+    
     public func assignMeasureToPoints(measurePoints:MeasurePoints, measure:Measure) {
         measureMap[measurePoints] = measure
+    }
+    
+    public func assignSnapPointsToPoints(measurePoints:MeasurePoints, snapPoint:[CGPoint]) {
+        snapPointsMap[measurePoints] = snapPoint
     }
     
     struct MeasurePoints : Hashable {
