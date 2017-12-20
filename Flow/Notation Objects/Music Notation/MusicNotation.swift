@@ -12,13 +12,20 @@ class MusicNotation {
     // MARK: Properties
     var screenCoordinates: CGPoint?
     var gridCoordinates: GridCoordinates?
+    var type: RestNoteType {
+        didSet {
+            self.setImage()
+        }
+    }
     var image: UIImage?
     var imageView: UIImageView?
     
     init(screenCoordinates: CGPoint? = nil,
-         gridCoordinates: GridCoordinates? = nil) {
+         gridCoordinates: GridCoordinates? = nil,
+         type: RestNoteType) {
         self.screenCoordinates = screenCoordinates
         self.gridCoordinates = gridCoordinates
+        self.type = type
         
         self.setImage()
     }

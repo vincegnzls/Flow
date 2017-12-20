@@ -9,15 +9,12 @@
 import UIKit
 
 class Rest: MusicNotation {
-    // MARK: Properties
-    var type: RestNoteType
     
-    init(screenCoordinates: CGPoint? = nil,
-         gridCoordinates: GridCoordinates? = nil,
-         type: RestNoteType) {
-        self.type = type
-        super.init(screenCoordinates: screenCoordinates, gridCoordinates: gridCoordinates)
-    }
+//    init(screenCoordinates: CGPoint? = nil,
+//         gridCoordinates: GridCoordinates? = nil,
+//         type: RestNoteType) {
+//        super.init(screenCoordinates: screenCoordinates, gridCoordinates: gridCoordinates, type: type)
+//    }
     
     // Set the image based on the rest type
     override func setImage() {

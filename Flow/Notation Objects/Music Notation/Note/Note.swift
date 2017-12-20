@@ -10,10 +10,21 @@ import UIKit
 
 class Note: MusicNotation {
     // MARK: Properties
-    var pitch: Pitch
-    var type: RestNoteType
-    var accidental: Accidental?
-    var clef: Clef
+    var pitch: Pitch {
+        didSet {
+            self.setImage()
+        }
+    }
+    var accidental: Accidental? {
+        didSet {
+            self.setImage()
+        }
+    }
+    var clef: Clef {
+        didSet {
+            self.setImage()
+        }
+    }
     
     init(screenCoordinates: CGPoint? = nil,
          gridCoordinates: GridCoordinates? = nil,
@@ -22,10 +33,9 @@ class Note: MusicNotation {
          accidental: Accidental? = nil,
          clef: Clef) {
         self.pitch = pitch
-        self.type = type
         self.accidental = accidental
         self.clef = clef
-        super.init(screenCoordinates: screenCoordinates, gridCoordinates: gridCoordinates)
+        super.init(screenCoordinates: screenCoordinates, gridCoordinates: gridCoordinates, type: type)
     }
     
     // Set the image based on the note type and location in the staff

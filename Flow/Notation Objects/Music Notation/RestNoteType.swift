@@ -82,4 +82,51 @@ enum RestNoteType {
             }
         }
     }
+    
+    func toString() -> String {
+        switch self {
+        case .sixtyFourth:      return "64th"
+        case .thirtySecond:     return "32nd"
+        case .sixteenth:        return "16th"
+        case .eighth:           return "eighth"
+        case .quarter:          return "quarter"
+        case .half:             return "half"
+        case .whole:            return "whole"
+        }
+    }
+    
+    static func convert(_ type: String) -> RestNoteType{
+        switch type {
+        case "64th": return .sixtyFourth
+        case "32nd": return .thirtySecond
+        case "16th": return .sixteenth
+        case "eighth": return .eighth
+        //case "quarter": return .quarter
+        case "half": return .half
+        case "whole": return .whole
+        default: return .quarter
+        }
+    }
+    
+    func getDivision() -> Int {
+        switch self {
+        case .eighth:           return 2
+        case .sixteenth:        return 4
+        case .thirtySecond:     return 8
+        case .sixtyFourth:      return 16
+        default:                return 1
+        }
+    }
+    
+    func getDuration(divisions: Int) -> Int {
+        switch self {
+        case .sixtyFourth: return divisions / 16
+        case .thirtySecond: return divisions / 8
+        case .sixteenth: return divisions / 4
+        case .eighth: return divisions / 2
+        case .quarter: return divisions
+        case .half: return divisions * 2
+        case .whole: return divisions * 4
+        }
+    }
 }
