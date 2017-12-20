@@ -72,10 +72,19 @@ class FileHandler {
         
         // Loop through measures
         for (index, measure) in composition.measures.enumerated() {
-            let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(index)"])
+            let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(index + 1)"])
             
             // Set attributes
             let attributesElement = measureElement.addChild(name: "attributes")
+            
+            // Calculate divisions
+            var divisions = 1
+            for notation in measure.notationObjects {
+                divisions = max(notation.type.getDivision(), divisions)
+            }
+            
+            // Set divisions
+            attributesElement.addChild(name: "divisions", value: "\(divisions)")
             
             // Key signature
             let keyElement = attributesElement.addChild(name: "key")
@@ -92,6 +101,22 @@ class FileHandler {
             clefElement.addChild(name: "line", value: "\(measure.clef.getStandardLine())")
             
             // Add notes and/or rests
+            for notation in measure.notationObjects {
+                let notationElement = measureElement.addChild(name: "note")
+                
+                // Add necessary elements depending on note or rest
+                if let note = notation as? Note {
+                    let pitchElement = notationElement.addChild(name: "pitch")
+                    pitchElement.addChild(name: "step", value: note.pitch.step.toString())
+                    pitchElement.addChild(name: "octave", value: "\(note.pitch.octave)")
+                } else if notation is Rest {
+                    notationElement.addChild(name: "rest")
+                }
+                
+                // Set duration and type
+                notationElement.addChild(name: "duration", value: "\(notation.type.getDuration(divisions: divisions))")
+                notationElement.addChild(name: "type", value: notation.type.toString())
+            }
         }
         
         // Get string format of xml
@@ -113,18 +138,57 @@ class FileHandler {
     }
     
     func convertMusicXMLtoComposition(_ xml: String) -> Composition {
+        let composition = Composition()
         // Perform conversion here
         do {
             let xml = try AEXMLDocument(xml: xml)
             
-            print(xml.root.name)
-            for child in xml.root.children {
-                print(child.name)
+            let measureElements = xml.root["part"].children
+            
+            var measures = [Measure]()
+            
+            for measureElement in measureElements {
+                // Get attributes
+                let keySignature = KeySignature(rawValue: Int(measureElement["attributes"]["key"]["fifths"].string)!)
+                let timeSignature = TimeSignature(beats: Int(measureElement["attributes"]["time"]["beats"].string)!,
+                                                  beatType: Int(measureElement["attributes"]["time"]["beat-type"].string)!)
+                let clef = Clef(rawValue: measureElement["attributes"]["clef"]["sign"].string)
+                
+                let measure = Measure(keySignature: keySignature!,
+                                      timeSignature: timeSignature,
+                                      clef: clef!)
+//                print(measure.keySignature.toString())
+//                print("beats: \(measure.timeSignature.beats)")
+//                print(measure.clef.rawValue)
+                
+                // Get notes and/or rests
+                if let notationElements = measureElement["note"].all {
+                    for notationElement in notationElements {
+                        //let notation = MusicNotation(type: RestNoteType.convert(notationElement["type"].string))
+                        let type = RestNoteType.convert(notationElement["type"].string)
+                        
+                        if let step = notationElement["pitch"]["step"].value {
+                            let pitch = Pitch(step: Step.convert(step),
+                                               octave: Int(notationElement["pitch"]["octave"].string)!)
+                            let note = Note(pitch: pitch, type: type, clef: measure.clef)
+                            
+//                            print(note.pitch.step.toString())
+//                            print("\(note.pitch.octave)")
+                            measure.notationObjects.append(note)
+                        } else {
+                            let rest = Rest(type: type)
+                            measure.notationObjects.append(rest)
+                        }
+                    }
+                }
+                
+                measures.append(measure)
             }
+            
         } catch {
             print("\(error)")
         }
-        return Composition()
+        return composition
     }
     
     private func retrieveCompositionList() {
