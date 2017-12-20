@@ -33,7 +33,13 @@ class MusicSheet: UIView {
     private var curYCursorLocation = CGPoint(x: 0, y: 0)
     private var curXCursorLocation = CGPoint(x: 0, y: 0)
     
+    // used for connecting a grand staff
     private var measureXDivs = Set<CGFloat>()
+    
+    // used for tracking coordinates of measures
+    private var measureCoords = [GridSystem.MeasurePoints]()
+    
+    private var selectedMeasure:Measure = Measure()
     private var grid = [Measure]()
     
     private var endX: CGFloat {
@@ -51,6 +57,9 @@ class MusicSheet: UIView {
     }
     
     private func setup() {
+        
+        GridSystem.init()
+        
         startY += sheetYOffset
         startYConnection += sheetYOffset
         
@@ -208,6 +217,16 @@ class MusicSheet: UIView {
         
         curSpace -= lineSpace // THIS IS NECESSARY FOR ADJUSTING THE LEFT AND RIGHT LINES
         
+        let measureCoord:GridSystem.MeasurePoints =
+            GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startY), lowerRightPoint: CGPoint(x: endX, y: startY-curSpace))
+        
+        measureCoords.append(measureCoord)
+        
+        // TODO change this when each measure contains a default rest at start
+        grid.append(Measure())
+        
+        GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
+        
         //draw line before measure
         if withLeftLine {
             bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
@@ -223,6 +242,42 @@ class MusicSheet: UIView {
         bezierPath.stroke()
         
         measureXDivs.insert(endX)
+        
+    }
+    
+    // Initializes the Grid System
+    private func initMeasureGrid (startX:CGFloat, endX:CGFloat, startY:CGFloat) -> [CGPoint] {
+        
+        // init padding for left and right
+        let paddingLeftRight:CGFloat = 20
+        
+        // TODO IMPLEMENT TIME SIGNATURE PARAMETER; DELETE THIS AFTER DOING TODO
+        let topNumber:Int = 4
+        let bottomNumber:Int = 4
+        
+        // init array of points
+        var points = [CGPoint]()
+        
+        // init current x with respect to padding
+        var currX = startX + paddingLeftRight
+        
+        // calculate the maximum 64 notes per measure
+        let maximum64th = (64/bottomNumber) * topNumber
+        
+        // calculate distance between two points
+        let distance:CGFloat = ((endX - paddingLeftRight) - currX) / CGFloat(maximum64th)
+        
+        // create points tantamount to maximum number of 64th notes
+        for i in 1...maximum64th {
+            points.append(CGPoint(x: currX, y: startY/2))
+            
+            print(i)
+            print(CGPoint(x: currX, y: startY/2))
+            
+            currX += distance
+        }
+        
+        return points
         
     }
 
@@ -362,8 +417,11 @@ class MusicSheet: UIView {
         let touch = touches.first!
         let location = touch.location(in: self)
         
-        print("LOCATION TAPPED: \(location)")
+        //print("LOCATION TAPPED: \(location)")
         
+        remapCurrentMeasure(location: location)
+        
+        // START FOR SNAPPING
         var closestPoint:CGPoint = snapPoints[0];
         
         let x2:CGFloat = location.x - snapPoints[0].x
@@ -385,13 +443,34 @@ class MusicSheet: UIView {
         
         let relXLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
         
-        print("NEAREST POINT: \(closestPoint)")
+        //print("NEAREST POINT: \(closestPoint)")
         
         curXCursorLocation = relXLocation
         moveCursorX(location: relXLocation)
         
         curYCursorLocation = closestPoint
         moveCursorY(location: closestPoint)
+        
+        // END FOR SNAPPING
+    }
+    
+    private func remapCurrentMeasure (location:CGPoint) {
+        
+        for (index, measureCoord) in measureCoords.enumerated() {
+            let r:CGRect = CGRect(x: measureCoord.upperLeftPoint.x, y: measureCoord.upperLeftPoint.y, width: measureCoord.lowerRightPoint.x - measureCoord.upperLeftPoint.x, height: measureCoord.lowerRightPoint.y - measureCoord.upperLeftPoint.y)
+            
+            //  LOCATION IS IN MEASURE
+            if r.contains(location) {
+                print("MEASURE #\(index) TAPPED")
+                
+                selectedMeasure = (GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: measureCoord))!
+                
+                print(selectedMeasure.clef)
+                
+                break
+            }
+        }
+        
     }
     
     func onDeleteKeyPressed() {
