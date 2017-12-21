@@ -35,7 +35,7 @@ class Note: MusicNotation {
         self.pitch = pitch
         self.accidental = accidental
         self.clef = clef
-        super.init(screenCoordinates: screenCoordinates, gridCoordinates: gridCoordinates, type: type)
+        super.init(screenCoordinates: screenCoordinates, type: type)
     }
     
     // Set the image based on the note type and location in the staff
