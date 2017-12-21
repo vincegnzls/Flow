@@ -144,7 +144,7 @@ class MusicSheet: UIView {
         
         drawClefLabel(startX: startX, startY: startY, clefType: clefType)
         
-        // TODO implement switch case for time sig
+        // TODO: implement switch case for time sig
         let upperTimeSig = UIImage(named:"numeral-4")
         let lowerTimeSig = UIImage(named:"numeral-4")
         
@@ -224,10 +224,11 @@ class MusicSheet: UIView {
         
         measureCoords.append(measureCoord)
         
-        // TODO change this when each measure contains a default rest at start
+        // TODO: change this when each measure contains a default rest at start
         grid.append(Measure())
         
         GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
+        // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
         GridSystem.sharedInstance?.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: createSnapPoints(initialX: startX + 20, initialY: startY-curSpace))
         
         //draw line before measure
@@ -254,7 +255,7 @@ class MusicSheet: UIView {
         // init padding for left and right
         let paddingLeftRight:CGFloat = 20
         
-        // TODO IMPLEMENT TIME SIGNATURE PARAMETER; DELETE THIS AFTER DOING TODO
+        // TODO: IMPLEMENT TIME SIGNATURE PARAMETER; DELETE THIS AFTER DOING TODO
         let topNumber:Int = 4
         let bottomNumber:Int = 4
         
@@ -493,6 +494,10 @@ class MusicSheet: UIView {
                 print("MEASURE #\(index) TAPPED")
                 
                 selectedMeasureCoord = measureCoord
+                
+                if let measure = GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: selectedMeasureCoord!) {
+                    print("MEASURE CONTAINS: \(measure.notationObjects)")
+                }
                 break
             }
         }
@@ -519,8 +524,23 @@ class MusicSheet: UIView {
         let restNoteType:RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
         let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
         
-        print(restNoteType.toString())
-        print(isRest)
+        if selectedMeasureCoord != nil {
+        
+            if isRest {
+                if let measure:Measure = GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: selectedMeasureCoord!) {
+                    let rest:Rest = Rest(type: restNoteType)
+                    measure.addNoteInMeasure(musicNotation: rest)
+                }
+                
+            } else {
+                if let measure:Measure = GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: selectedMeasureCoord!) {
+                    // TODO: locate cursor y for knowing pitch and adjust screen coordinates
+                    let note:Note = Note(pitch:Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
+                    measure.addNoteInMeasure(musicNotation: note)
+                }
+            }
+            
+        }
     
     }
 }

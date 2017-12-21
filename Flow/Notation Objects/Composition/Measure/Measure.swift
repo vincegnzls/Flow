@@ -25,4 +25,8 @@ class Measure {
         self.notationObjects = notationObjects
         self.bounds = Bounds()
     }
+    
+    public func addNoteInMeasure (musicNotation:MusicNotation) {
+        notationObjects.append(musicNotation)
+    }
 }
