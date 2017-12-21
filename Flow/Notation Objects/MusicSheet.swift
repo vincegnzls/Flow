@@ -85,6 +85,8 @@ class MusicSheet: UIView {
                                               observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
         EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
+        EventBroadcaster.instance.addObserver(event: EventNames.NOTATION_KEY_PRESSED,
+                                              observer: Observer(id: "MusicSheet.onNoteKeyPressed", function: self.onNoteKeyPressed))
     }
     
     override func draw(_ rect: CGRect) {
@@ -272,9 +274,6 @@ class MusicSheet: UIView {
         for i in 1...maximum64th {
             points.append(CGPoint(x: currX, y: startY/2))
             
-            print(i)
-            print(CGPoint(x: currX, y: startY/2))
-            
             currX += distance
         }
         
@@ -288,7 +287,6 @@ class MusicSheet: UIView {
         var currSnapPoint:CGPoint = CGPoint(x: initialX, y: initialY)
         
         for i in 1...9 {
-            print(currSnapPoint)
             snapPoints.append(currSnapPoint)
             
             if i % 2 == 0 {
@@ -443,7 +441,9 @@ class MusicSheet: UIView {
         
         // START FOR SNAPPING
         
-        snapPoints = (GridSystem.sharedInstance?.getSnapPointsFromPoints(measurePoints: selectedMeasureCoord!))!
+        if selectedMeasureCoord != nil {
+            snapPoints = (GridSystem.sharedInstance?.getSnapPointsFromPoints(measurePoints: selectedMeasureCoord!))!
+        }
         
         if snapPoints.count > 0 {
         
@@ -484,7 +484,9 @@ class MusicSheet: UIView {
     private func remapCurrentMeasure (location:CGPoint) {
         
         for (index, measureCoord) in measureCoords.enumerated() {
-            let r:CGRect = CGRect(x: measureCoord.upperLeftPoint.x, y: measureCoord.upperLeftPoint.y, width: measureCoord.lowerRightPoint.x - measureCoord.upperLeftPoint.x, height: measureCoord.lowerRightPoint.y - measureCoord.upperLeftPoint.y)
+            let r:CGRect = CGRect(x: measureCoord.upperLeftPoint.x, y: measureCoord.upperLeftPoint.y,
+                                  width: measureCoord.lowerRightPoint.x - measureCoord.upperLeftPoint.x,
+                                  height: measureCoord.lowerRightPoint.y - measureCoord.upperLeftPoint.y)
             
             //  LOCATION IS IN MEASURE
             if r.contains(location) {
@@ -511,5 +513,14 @@ class MusicSheet: UIView {
         else {
             print("tag not found")
         }
+    }
+    
+    func onNoteKeyPressed(params: Parameters) {
+        let restNoteType:RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
+        let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
+        
+        print(restNoteType.toString())
+        print(isRest)
+    
     }
 }
