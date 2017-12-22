@@ -11,14 +11,14 @@ import Foundation
 class Composition {
     // Holds information about the composition
     var compositionInfo: CompositionInfo
-    var measures: [Measure]
+    var staffList: [Staff]
 
-    init(compositionInfo: CompositionInfo = CompositionInfo(), measures: [Measure] = []) {
+    init(compositionInfo: CompositionInfo = CompositionInfo(), staffList: [Staff]) {
         self.compositionInfo = compositionInfo
-        self.measures = measures
+        self.staffList = staffList
     }
 
-    public func getMeasures () -> [Measure] {
-        return self.measures
+    public func getStaffList () -> [Staff] {
+        return self.staffList
     }
 }

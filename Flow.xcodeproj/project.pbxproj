@@ -192,7 +192,6 @@
 				8696A8AA1FD4EB4300EB81BD /* Composition */,
 				863374771FD3279F003D7936 /* Music Notation */,
 				61EC34951F8A7C4200A4A5D6 /* Line.swift */,
-				613EE8D41F98EB5F004FD009 /* Staff.swift */,
 				612D07A51FD2C6780006BD0E /* MusicSheet.swift */,
 				610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */,
 				610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */,
@@ -234,6 +233,14 @@
 				61370E221F82A1CB002B6A09 /* Info.plist */,
 			);
 			path = Flow;
+			sourceTree = "<group>";
+		};
+		61D516851FED4E9700DBF573 /* Staff */ = {
+			isa = PBXGroup;
+			children = (
+				613EE8D41F98EB5F004FD009 /* Staff.swift */,
+			);
+			path = Staff;
 			sourceTree = "<group>";
 		};
 		861B3DD01FDC1D2A003FE0A5 /* Event Broadcasting */ = {
@@ -305,6 +312,7 @@
 		8696A8AA1FD4EB4300EB81BD /* Composition */ = {
 			isa = PBXGroup;
 			children = (
+				61D516851FED4E9700DBF573 /* Staff */,
 				8696A8AF1FD4F19500EB81BD /* Measure */,
 				8696A8A51FD4E8E800EB81BD /* Composition.swift */,
 				8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */,
