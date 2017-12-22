@@ -12,9 +12,13 @@ class Composition {
     // Holds information about the composition
     var compositionInfo: CompositionInfo
     var measures: [Measure]
-    
+
     init(compositionInfo: CompositionInfo = CompositionInfo(), measures: [Measure] = []) {
         self.compositionInfo = compositionInfo
         self.measures = measures
+    }
+
+    public func getMeasures () -> [Measure] {
+        return self.measures
     }
 }

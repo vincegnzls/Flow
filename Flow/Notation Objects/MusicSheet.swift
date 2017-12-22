@@ -26,6 +26,8 @@ class MusicSheet: UIView {
     private let grandStaffSpace:CGFloat = 560 // change * 2 of staff space
     private var grandStaffIndex:CGFloat = 0
     private var staffIndex:CGFloat = -1
+
+    private let NUM_MEASURES_PER_STAFF = 2
     
     private let yCursor = CAShapeLayer() // Horizontal cursor
     private let xCursor = CAShapeLayer() // Vertical cursor
@@ -40,7 +42,7 @@ class MusicSheet: UIView {
     private var measureCoords = [GridSystem.MeasurePoints]()
     
     private var selectedMeasureCoord:GridSystem.MeasurePoints?
-    private var grid = [Measure]()
+    private var grid:[Measure]?
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -63,51 +65,74 @@ class MusicSheet: UIView {
         startY += sheetYOffset
         startYConnection += sheetYOffset
         
-        // TO REMOVE IN FUTURE (FOR TESTING)
-        /*
-        var currSnapPoint:CGPoint = CGPoint(x: 264.5, y: 140.5)
-        
-        for i in 1...9 {
-            snapPoints.append(currSnapPoint)
-            
-            if i % 2 == 0 {
-                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 16.5)
-            } else {
-                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 13.5)
-            }
-        }
-        */
-        // END REMOVE
-        
         setupCursor()
         
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
         EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
-        EventBroadcaster.instance.addObserver(event: EventNames.NOTATION_KEY_PRESSED,
-                                              observer: Observer(id: "MusicSheet.onNoteKeyPressed", function: self.onNoteKeyPressed))
+        EventBroadcaster.instance.addObserver(event: EventNames.VIEW_FINISH_LOADING,
+                observer: Observer(id: "MusicSheet.onCompositionLoad", function: self.onCompositionLoad))
+        EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_UPDATE,
+                                              observer: Observer(id: "MusicSheet.updateMeasureDraw", function: self.updateMeasureDraw))
+    }
+
+    func onCompositionLoad (params: Parameters) {
+        grid = params.get(key: KeyNames.MEASURES_ARRAY) as! [Measure]
     }
     
     override func draw(_ rect: CGRect) {
-        setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: true)
-        setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false)
-        setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false)
+        if (grid!.count > 0) {
+            let numStaves = grid!.count / (NUM_MEASURES_PER_STAFF * 2) // times 2 for grand staves
+
+            var measureSplices = [[Measure]]()
+
+            var startIndex = 0
+            for i in 0...numStaves-1 {
+                measureSplices.append([Measure]())
+                for _ in 1...(NUM_MEASURES_PER_STAFF*2) {
+
+                    measureSplices[i].append(grid![startIndex])
+                    startIndex += 1
+                }
+            }
+
+            // TODO: fix this if there are changing time signatures and key signatures between measure splices
+            setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: true, measures: measureSplices[0])
+
+            for i in 1...measureSplices.count-1 {
+                setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false, measures: measureSplices[i])
+            }
+        }
     }
     
     //Setup a grand staff
-    private func setupGrandStaff(startX:CGFloat, startY:CGFloat, withTimeSig:Bool) {
+    private func setupGrandStaff(startX:CGFloat, startY:CGFloat, withTimeSig:Bool, measures:[Measure]) {
+
+        let lowerStaffStart = measures.count/2
+
+        var upperStaffMeasures = [Measure]()
+        var lowerStaffMeasures = [Measure]()
+
+        for i in 0...lowerStaffStart-1 {
+            upperStaffMeasures.append(grid![i])
+        }
+
+        for i in lowerStaffStart...measures.count-1 {
+            lowerStaffMeasures.append(grid![i])
+        }
+
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.G, numMeasures:2, withTimeSig: withTimeSig)
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: upperStaffMeasures[0].clef, measures:upperStaffMeasures, withTimeSig: withTimeSig)
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: Clef.F, numMeasures:2, withTimeSig: withTimeSig)
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: lowerStaffMeasures[0].clef, measures:lowerStaffMeasures, withTimeSig: withTimeSig)
         drawStaffConnection(startX: lefRightPadding, startY: startYConnection + grandStaffSpace * grandStaffIndex)
         
         grandStaffIndex += 1
     }
     
     // Draws a staff
-    private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, numMeasures:CGFloat, withTimeSig:Bool) {
+    private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, measures:[Measure], withTimeSig:Bool) {
         // Handles adding of clef based on parameter
         if withTimeSig {
             drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType)
@@ -125,15 +150,19 @@ class MusicSheet: UIView {
         }
 
         // Track distance for each measure to be printed
-        let distance:CGFloat = (endX-startMeasure)/numMeasures
+        let distance:CGFloat = (endX-startMeasure)/CGFloat(measures.count)
     
         var modStartX:CGFloat = startMeasure
-        for i in 1...Int(numMeasures) {
-            if i == 1 {
-                drawMeasure(startX: modStartX, endX:modStartX+distance, startY: startY, withLeftLine: false)
+        for i in 0...measures.count-1 {
+            var measureLocation:GridSystem.MeasurePoints?
+            if i == 0 {
+                measureLocation = drawMeasure(startX: modStartX, endX:modStartX+distance, startY: startY, withLeftLine: false)
+
             } else {
-                drawMeasure(startX: modStartX, endX: modStartX+distance, startY: startY)
+                measureLocation = drawMeasure(startX: modStartX, endX: modStartX+distance, startY: startY)
             }
+
+            GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureLocation!, measure: measures[i])
             
             modStartX = modStartX + distance
         }
@@ -200,7 +229,7 @@ class MusicSheet: UIView {
     }
     
     // Draws a measure
-    private func drawMeasure(startX:CGFloat, endX:CGFloat, startY:CGFloat, withLeftLine:Bool = true) {
+    private func drawMeasure(startX:CGFloat, endX:CGFloat, startY:CGFloat, withLeftLine:Bool = true) -> GridSystem.MeasurePoints {
         
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
@@ -218,16 +247,14 @@ class MusicSheet: UIView {
         }
         
         curSpace -= lineSpace // THIS IS NECESSARY FOR ADJUSTING THE LEFT AND RIGHT LINES
-        
+
+        // get upper left point and lower right point of measure to keep track of location
         let measureCoord:GridSystem.MeasurePoints =
             GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startY), lowerRightPoint: CGPoint(x: endX, y: startY-curSpace))
         
         measureCoords.append(measureCoord)
         
-        // TODO: change this when each measure contains a default rest at start
-        grid.append(Measure())
-        
-        GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
+        //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
         // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
         GridSystem.sharedInstance?.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: createSnapPoints(initialX: startX + 20, initialY: startY-curSpace))
         
@@ -246,7 +273,8 @@ class MusicSheet: UIView {
         bezierPath.stroke()
         
         measureXDivs.insert(endX)
-        
+
+        return measureCoord
     }
     
     // Initializes the Grid System
@@ -442,8 +470,9 @@ class MusicSheet: UIView {
         
         // START FOR SNAPPING
         
-        if selectedMeasureCoord != nil {
-            snapPoints = (GridSystem.sharedInstance?.getSnapPointsFromPoints(measurePoints: selectedMeasureCoord!))!
+        if GridSystem.sharedInstance?.selectedMeasureCoord != nil {
+            snapPoints = (GridSystem.sharedInstance?.getSnapPointsFromPoints(
+                    measurePoints: (GridSystem.sharedInstance?.selectedMeasureCoord)!))!
         }
         
         if snapPoints.count > 0 {
@@ -493,10 +522,11 @@ class MusicSheet: UIView {
             if r.contains(location) {
                 print("MEASURE #\(index) TAPPED")
                 
-                selectedMeasureCoord = measureCoord
+                GridSystem.sharedInstance?.selectedMeasureCoord = measureCoord
                 
-                if let measure = GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: selectedMeasureCoord!) {
+                if let measure = GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: measureCoord) {
                     print("MEASURE CONTAINS: \(measure.notationObjects)")
+                    print("MEASURE HAS: \(measure.clef)")
                 }
                 break
             }
@@ -519,28 +549,9 @@ class MusicSheet: UIView {
             print("tag not found")
         }
     }
-    
-    func onNoteKeyPressed(params: Parameters) {
-        let restNoteType:RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
-        let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
-        
-        if selectedMeasureCoord != nil {
-        
-            if isRest {
-                if let measure:Measure = GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: selectedMeasureCoord!) {
-                    let rest:Rest = Rest(type: restNoteType)
-                    measure.addNoteInMeasure(musicNotation: rest)
-                }
-                
-            } else {
-                if let measure:Measure = GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: selectedMeasureCoord!) {
-                    // TODO: locate cursor y for knowing pitch and adjust screen coordinates
-                    let note:Note = Note(pitch:Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
-                    measure.addNoteInMeasure(musicNotation: note)
-                }
-            }
-            
-        }
-    
+
+    func updateMeasureDraw(params: Parameters) {
+        // TODO: update view here
+        print("VIEW SHOULD UPDATE NOW !!!")
     }
 }
