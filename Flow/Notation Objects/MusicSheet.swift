@@ -59,9 +59,6 @@ class MusicSheet: UIView {
     }
     
     private func setup() {
-        
-        _ = GridSystem.init() // init grid system singleton
-        
         startY += sheetYOffset
         startYConnection += sheetYOffset
         
@@ -162,7 +159,7 @@ class MusicSheet: UIView {
                 measureLocation = drawMeasure(startX: modStartX, endX: modStartX+distance, startY: startY)
             }
 
-            GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureLocation!, measure: measures[i])
+            GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation!, measure: measures[i])
             
             modStartX = modStartX + distance
         }
@@ -256,7 +253,7 @@ class MusicSheet: UIView {
         
         //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
         // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
-        GridSystem.sharedInstance?.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: createSnapPoints(initialX: startX + 20, initialY: startY-curSpace))
+        GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: createSnapPoints(initialX: startX + 20, initialY: startY-curSpace))
         
         //draw line before measure
         if withLeftLine {
@@ -470,9 +467,9 @@ class MusicSheet: UIView {
         
         // START FOR SNAPPING
         
-        if GridSystem.sharedInstance?.selectedMeasureCoord != nil {
-            snapPoints = (GridSystem.sharedInstance?.getSnapPointsFromPoints(
-                    measurePoints: (GridSystem.sharedInstance?.selectedMeasureCoord)!))!
+        if GridSystem.instance.selectedMeasureCoord != nil {
+            snapPoints = (GridSystem.instance.getSnapPointsFromPoints(
+                    measurePoints: (GridSystem.instance.selectedMeasureCoord)!))!
         }
         
         if snapPoints.count > 0 {
@@ -522,9 +519,9 @@ class MusicSheet: UIView {
             if r.contains(location) {
                 print("MEASURE #\(index) TAPPED")
                 
-                GridSystem.sharedInstance?.selectedMeasureCoord = measureCoord
+                GridSystem.instance.selectedMeasureCoord = measureCoord
                 
-                if let measure = GridSystem.sharedInstance?.getMeasureFromPoints(measurePoints: measureCoord) {
+                if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
                     print("MEASURE CONTAINS: \(measure.notationObjects)")
                     print("MEASURE HAS: \(measure.clef)")
                 }

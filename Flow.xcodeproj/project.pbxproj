@@ -25,6 +25,11 @@
 		61EBB0321FE695B60015F7C2 /* KeySignatureDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
 		7ADDE1311FEA29FD0065523E /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADDE1301FEA29FD0065523E /* GridSystem.swift */; };
+		8618F0741FED3D0400DF8A10 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8618F0731FED3D0400DF8A10 /* Action.swift */; };
+		8618F0761FED3D4600DF8A10 /* AddAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8618F0751FED3D4600DF8A10 /* AddAction.swift */; };
+		8618F0781FED3D8C00DF8A10 /* EditAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8618F0771FED3D8C00DF8A10 /* EditAction.swift */; };
+		8618F07A1FED3DB400DF8A10 /* DeleteAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8618F0791FED3DB400DF8A10 /* DeleteAction.swift */; };
+		8618F07C1FED406500DF8A10 /* UndoRedo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8618F07B1FED406500DF8A10 /* UndoRedo.swift */; };
 		861B3DD21FDC1D5F003FE0A5 /* EventBroadcaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD11FDC1D5F003FE0A5 /* EventBroadcaster.swift */; };
 		861B3DD41FDC1E0E003FE0A5 /* Parameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD31FDC1E0E003FE0A5 /* Parameters.swift */; };
 		861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD51FDC1E24003FE0A5 /* EventNames.swift */; };
@@ -103,6 +108,11 @@
 		61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureDesignable.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		7ADDE1301FEA29FD0065523E /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
+		8618F0731FED3D0400DF8A10 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		8618F0751FED3D4600DF8A10 /* AddAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAction.swift; sourceTree = "<group>"; };
+		8618F0771FED3D8C00DF8A10 /* EditAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAction.swift; sourceTree = "<group>"; };
+		8618F0791FED3DB400DF8A10 /* DeleteAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAction.swift; sourceTree = "<group>"; };
+		8618F07B1FED406500DF8A10 /* UndoRedo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoRedo.swift; sourceTree = "<group>"; };
 		861B3DD11FDC1D5F003FE0A5 /* EventBroadcaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBroadcaster.swift; sourceTree = "<group>"; };
 		861B3DD31FDC1E0E003FE0A5 /* Parameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameters.swift; sourceTree = "<group>"; };
 		861B3DD51FDC1E24003FE0A5 /* EventNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNames.swift; sourceTree = "<group>"; };
@@ -189,6 +199,7 @@
 		612909FC1F89FFFC0094F9B7 /* Notation Objects */ = {
 			isa = PBXGroup;
 			children = (
+				8618F0721FED3CF000DF8A10 /* Action */,
 				8696A8AA1FD4EB4300EB81BD /* Composition */,
 				863374771FD3279F003D7936 /* Music Notation */,
 				61EC34951F8A7C4200A4A5D6 /* Line.swift */,
@@ -234,6 +245,17 @@
 				61370E221F82A1CB002B6A09 /* Info.plist */,
 			);
 			path = Flow;
+			sourceTree = "<group>";
+		};
+		8618F0721FED3CF000DF8A10 /* Action */ = {
+			isa = PBXGroup;
+			children = (
+				8618F0731FED3D0400DF8A10 /* Action.swift */,
+				8618F0751FED3D4600DF8A10 /* AddAction.swift */,
+				8618F0771FED3D8C00DF8A10 /* EditAction.swift */,
+				8618F0791FED3DB400DF8A10 /* DeleteAction.swift */,
+			);
+			path = Action;
 			sourceTree = "<group>";
 		};
 		861B3DD01FDC1D2A003FE0A5 /* Event Broadcasting */ = {
@@ -290,6 +312,7 @@
 				864CE5B01FD330DA001FF059 /* GridCoordinates.swift */,
 				6135C82A1FDEC35000AF9EA9 /* Bounds.swift */,
 				86B8EFED1FEAC30500DD834E /* Clipboard.swift */,
+				8618F07B1FED406500DF8A10 /* UndoRedo.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -515,6 +538,7 @@
 				861B3DD41FDC1E0E003FE0A5 /* Parameters.swift in Sources */,
 				86B8EFEC1FEAA5E600DD834E /* Step.swift in Sources */,
 				8696A8BC1FD5898200EB81BD /* Element.swift in Sources */,
+				8618F07C1FED406500DF8A10 /* UndoRedo.swift in Sources */,
 				8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */,
 				8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */,
 				864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */,
@@ -536,13 +560,17 @@
 				863374811FD32849003D7936 /* MusicNotation.swift in Sources */,
 				8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */,
 				864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */,
+				8618F0761FED3D4600DF8A10 /* AddAction.swift in Sources */,
 				8696A8C11FD5898200EB81BD /* Document.swift in Sources */,
 				86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */,
+				8618F07A1FED3DB400DF8A10 /* DeleteAction.swift in Sources */,
+				8618F0741FED3D0400DF8A10 /* Action.swift in Sources */,
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				8696A8C01FD5898200EB81BD /* Parser.swift in Sources */,
 				861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */,
 				611BFCA11FE67948001511B2 /* TimeSignaturePopupDesignable.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
+				8618F0781FED3D8C00DF8A10 /* EditAction.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
 			);

@@ -11,7 +11,7 @@ import UIKit
 
 class GridSystem {
     
-    static var sharedInstance:GridSystem?
+    static let instance = GridSystem()
 
     public var selectedMeasureCoord:MeasurePoints?
     private var measureMap = [MeasurePoints: Measure]()
@@ -19,8 +19,8 @@ class GridSystem {
     private var snapPointsMap = [MeasurePoints: [CGPoint]]()
     private var usedWeights = [CGPoint]()
     
-    init() {
-        GridSystem.sharedInstance = self
+    private init() {
+        //GridSystem.sharedInstance = self
     }
     
     public func getMeasureFromPoints(measurePoints:MeasurePoints) -> Measure? {

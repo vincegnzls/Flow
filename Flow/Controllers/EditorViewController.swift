@@ -89,18 +89,18 @@ class EditorViewController: UIViewController {
 
         // TODO: instantiate here the AddCommand
 
-        if GridSystem.sharedInstance?.selectedMeasureCoord! != nil {
+        if GridSystem.instance.selectedMeasureCoord! != nil {
 
             if isRest {
-                if let measure:Measure = GridSystem.sharedInstance?.getMeasureFromPoints(
-                        measurePoints: (GridSystem.sharedInstance?.selectedMeasureCoord)!) {
+                if let measure:Measure = GridSystem.instance.getMeasureFromPoints(
+                        measurePoints: (GridSystem.instance.selectedMeasureCoord)!) {
                     let rest:Rest = Rest(type: restNoteType)
                     measure.addNoteInMeasure(musicNotation: rest)
                 }
 
             } else {
-                if let measure:Measure = GridSystem.sharedInstance?.getMeasureFromPoints(
-                        measurePoints: (GridSystem.sharedInstance?.selectedMeasureCoord)!) {
+                if let measure:Measure = GridSystem.instance.getMeasureFromPoints(
+                        measurePoints: (GridSystem.instance.selectedMeasureCoord)!) {
                     // TODO: locate cursor y for knowing pitch and adjust screen coordinates
                     let note:Note = Note(pitch:Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
                     measure.addNoteInMeasure(musicNotation: note)
