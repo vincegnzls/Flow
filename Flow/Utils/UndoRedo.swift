@@ -7,3 +7,26 @@
 //
 
 import Foundation
+
+class UndoRedo {
+    
+    // MARK: Shared instance
+    static let instance = UndoRedo()
+    
+    // MARK: Properties
+    var undoStack: [Action]
+    var redoStack: [Action]
+    
+    private init() {
+        self.undoStack = []
+        self.redoStack = []
+    }
+    
+    func undo() {
+        
+    }
+    
+    func redo() {
+        
+    }
+}
