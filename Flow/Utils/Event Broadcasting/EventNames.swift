@@ -7,6 +7,10 @@
 //
 
 struct EventNames {
+    static let VIEW_FINISH_LOADING = "VIEW_FINISH_LOADING"
+    static let MEASURE_UPDATE = "MEASURE_UPDATE"
+
+    static let NOTATION_KEY_PRESSED = "NOTATION_KEY_PRESSED"
     static let ARROW_KEY_PRESSED = "ARROW_KEY_PRESSED"
     static let DELETE_KEY_PRESSED = "DELETE_KEY_PRESSED"
 }

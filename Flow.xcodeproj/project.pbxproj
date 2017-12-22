@@ -24,6 +24,7 @@
 		61B1316B1FE1513900ADCDF0 /* ButtonEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */; };
 		61EBB0321FE695B60015F7C2 /* KeySignatureDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
+		7ADDE1311FEA29FD0065523E /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADDE1301FEA29FD0065523E /* GridSystem.swift */; };
 		861B3DD21FDC1D5F003FE0A5 /* EventBroadcaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD11FDC1D5F003FE0A5 /* EventBroadcaster.swift */; };
 		861B3DD41FDC1E0E003FE0A5 /* Parameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD31FDC1E0E003FE0A5 /* Parameters.swift */; };
 		861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD51FDC1E24003FE0A5 /* EventNames.swift */; };
@@ -101,6 +102,7 @@
 		61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEffect.swift; sourceTree = "<group>"; };
 		61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureDesignable.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		7ADDE1301FEA29FD0065523E /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		861B3DD11FDC1D5F003FE0A5 /* EventBroadcaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBroadcaster.swift; sourceTree = "<group>"; };
 		861B3DD31FDC1E0E003FE0A5 /* Parameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameters.swift; sourceTree = "<group>"; };
 		861B3DD51FDC1E24003FE0A5 /* EventNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNames.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 				612D07A51FD2C6780006BD0E /* MusicSheet.swift */,
 				610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */,
 				610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */,
+				7ADDE1301FEA29FD0065523E /* GridSystem.swift */,
 			);
 			path = "Notation Objects";
 			sourceTree = "<group>";
@@ -498,6 +501,7 @@
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
 				861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */,
 				86A0287C1FD97C3500305C0C /* NotationControlsView.swift in Sources */,
+				7ADDE1311FEA29FD0065523E /* GridSystem.swift in Sources */,
 				61370E191F82A1CB002B6A09 /* EditorViewController.swift in Sources */,
 				86A9B27E1FDD0324007EB37C /* ArrowKey.swift in Sources */,
 				861B3DD21FDC1D5F003FE0A5 /* EventBroadcaster.swift in Sources */,
@@ -707,7 +711,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4HW4U7R3UV;
+				DEVELOPMENT_TEAM = 4XKYMS9BR8;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -726,7 +730,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4HW4U7R3UV;
+				DEVELOPMENT_TEAM = 4XKYMS9BR8;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -745,6 +749,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = FlowTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = musicg.FlowTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -761,6 +766,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = FlowTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = musicg.FlowTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -7,6 +7,9 @@
 //
 
 struct KeyNames {
+    static let MEASURES_ARRAY = "MEASURES_ARRAY"
+    static let NOTE_KEY_TYPE = "RESTNOTE_KEY_TYPE"
+    static let IS_REST_KEY = "IS_REST_KEY"
     static let ARROW_KEY_DIRECTION = "ARROW_KEY_DIRECTION"
     static let DELETE_KEY = "DELETE_KEY"
 }

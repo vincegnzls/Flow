@@ -75,11 +75,7 @@ enum RestNoteType {
                 return UIImage(named: "half-down")!
             }
         case .whole:
-            if isUpwards {
-                return UIImage(named: "whole-up")!
-            } else {
-                return UIImage(named: "whole-down")!
-            }
+            return UIImage(named: "whole-head")!
         }
     }
     
