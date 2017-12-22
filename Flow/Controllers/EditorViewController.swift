@@ -87,6 +87,8 @@ class EditorViewController: UIViewController {
         let restNoteType:RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
         let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
 
+        // TODO: instantiate here the AddCommand
+
         if GridSystem.sharedInstance?.selectedMeasureCoord! != nil {
 
             if isRest {
