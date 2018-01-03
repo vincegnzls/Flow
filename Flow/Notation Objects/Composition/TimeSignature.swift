@@ -16,4 +16,8 @@ struct TimeSignature {
         self.beats = beats
         self.beatType = beatType
     }
+    
+    func getMaxBeatValue() -> Float {
+        return Float(self.beats / self.beatType)
+    }
 }
