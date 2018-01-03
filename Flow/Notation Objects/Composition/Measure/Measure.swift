@@ -14,6 +14,7 @@ class Measure {
     var clef: Clef
     var notationObjects: [MusicNotation]
     var bounds: Bounds
+    var curBeatValue: Float
     
     init(keySignature: KeySignature = .c,
          timeSignature: TimeSignature = TimeSignature(),
@@ -24,9 +25,27 @@ class Measure {
         self.clef = clef
         self.notationObjects = notationObjects
         self.bounds = Bounds()
+        self.curBeatValue = 0
     }
     
-    public func addNoteInMeasure (musicNotation:MusicNotation) {
-        notationObjects.append(musicNotation)
+    public func addNoteInMeasure (musicNotation: MusicNotation) {
+        
+        if(isAddNoteValid(musicNotation: musicNotation)) {
+            
+            self.curBeatValue += musicNotation.type.getBeatValue()
+            notationObjects.append(musicNotation)
+            
+        } else {
+            
+            print("INVALID ADD NOTE")
+            
+        }
+        
+    }
+    
+    public func isAddNoteValid (musicNotation: MusicNotation) -> Bool {
+        
+        return self.curBeatValue <= self.timeSignature.getMaxBeatValue()
+            
     }
 }

@@ -41,8 +41,9 @@ class MusicSheet: UIView {
     // used for tracking coordinates of measures
     private var measureCoords = [GridSystem.MeasurePoints]()
     
-    private var selectedMeasureCoord:GridSystem.MeasurePoints?
-    private var grid:[Measure]?
+    private var selectedMeasureCoord: GridSystem.MeasurePoints?
+    
+    private var composition: Composition
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
