@@ -8,12 +8,12 @@
 
 import Foundation
 
-class UndoRedo {
+class UndoRedoManager {
     // MARK: Constants
     private static let MAX_ACTIONS = 10
     
     // MARK: Shared instance
-    static let instance = UndoRedo()
+    static let instance = UndoRedoManager()
     
     // MARK: Properties
     var undoStack: [Action]
@@ -42,7 +42,7 @@ class UndoRedo {
         self.undoStack.append(action)
         
         // Limit number of actions stored to save memory
-        if self.undoStack.count > UndoRedo.MAX_ACTIONS {
+        if self.undoStack.count > UndoRedoManager.MAX_ACTIONS {
             self.undoStack.removeFirst()
         }
     }
@@ -51,7 +51,7 @@ class UndoRedo {
         self.redoStack.append(action)
         
         // Limit number of actions stored to save memory
-        if self.redoStack.count > UndoRedo.MAX_ACTIONS {
+        if self.redoStack.count > UndoRedoManager.MAX_ACTIONS {
             self.redoStack.removeFirst()
         }
     }
