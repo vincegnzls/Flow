@@ -39,7 +39,7 @@ class ControlsView: UIView {
 //        self.layer.shadowRadius = 5
     }
     
-    @objc func draggedView(_ sender:UIPanGestureRecognizer){
+    @objc func draggedView(_ sender:UIPanGestureRecognizer) {
         if let superview = self.superview {
             superview.bringSubview(toFront: self)
             
