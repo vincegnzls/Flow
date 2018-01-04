@@ -9,15 +9,21 @@
 import UIKit
 import AVFoundation
 
-class StartMenuViewController: UIViewController {
+class StartMenuViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
-    var audioPlayer:AVAudioPlayer!
+    @IBOutlet weak var pickerView: UIPickerView!
 
+    var audioPlayer:AVAudioPlayer!
+    
+    let notes = ["a1-mf", "a2-mf", "a3-mf", "b0-mf", "b1-mf", "b2-mf"]
+    
+    var url = Bundle.main.url(forResource: "a1-mf", withExtension: "mp3")
+    
     override func viewDidLoad() {
+        pickerView.delegate = self
+        pickerView.dataSource = self
         super.viewDidLoad()
         
-        let url = Bundle.main.url(forResource: "a3-mf", withExtension: "mp3")
-
         do{
             audioPlayer = try AVAudioPlayer(contentsOf: url!)
             audioPlayer.prepareToPlay()
@@ -30,7 +36,32 @@ class StartMenuViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int{
+        return 1
+    }
+    
 
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+        return notes.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return notes[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        url = Bundle.main.url(forResource: notes[row], withExtension: "mp3")
+        
+        do{
+            audioPlayer = try AVAudioPlayer(contentsOf: url!)
+            audioPlayer.prepareToPlay()
+        }catch let error as NSError{
+            print(error.debugDescription)
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -39,8 +70,6 @@ class StartMenuViewController: UIViewController {
     @IBAction func playPressed(_ sender: UIButton) {
         audioPlayer.currentTime = 0
         audioPlayer.play()
-        
-
     }
     
     

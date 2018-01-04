@@ -59,9 +59,13 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="2DB-Ug-KK3"/>
                     </view>
                     <navigationItem key="navigationItem" title="Start Menu" id="0l2-Ep-9cc"/>
+                    <connections>
+                        <outlet property="pickerView" destination="1LH-VL-v5m" id="b6e-ev-uZB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eqb-Xg-VFP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
