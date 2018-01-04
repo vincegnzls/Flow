@@ -43,7 +43,7 @@ class MusicSheet: UIView {
     
     private var selectedMeasureCoord: GridSystem.MeasurePoints?
     
-    private var composition: Composition
+    private var composition: Composition?
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -76,29 +76,31 @@ class MusicSheet: UIView {
     }
 
     func onCompositionLoad (params: Parameters) {
-        grid = params.get(key: KeyNames.MEASURES_ARRAY) as! [Measure]
+        composition = params.get(key: KeyNames.COMPOSITION) as! Composition
     }
     
     override func draw(_ rect: CGRect) {
-        if (grid!.count > 0) {
-            let numStaves = grid!.count / (NUM_MEASURES_PER_STAFF * 2) // times 2 for grand staves
-
+        if (composition!.getNumberOfStaffs() > 0) {
             var measureSplices = [[Measure]]()
 
-            var startIndex = 0
-            for i in 0...numStaves-1 {
-                measureSplices.append([Measure]())
-                for _ in 1...(NUM_MEASURES_PER_STAFF*2) {
+            // compute number of staff divisions
+            let numStaffDivs = composition!.getNumberOfMeasures() / (NUM_MEASURES_PER_STAFF * composition!.getNumberOfStaffs())
 
-                    measureSplices[i].append(grid![startIndex])
-                    startIndex += 1
+            var startIndex = 0
+            for i in 0..<numStaffDivs {
+
+                for k in 0..<composition!.getNumberOfStaffs() {
+                    measureSplices[i].append(contentsOf: Array(composition!.staffList[k].measures[startIndex...startIndex + NUM_MEASURES_PER_STAFF]))
                 }
+
+                startIndex += NUM_MEASURES_PER_STAFF
+
             }
 
             // TODO: fix this if there are changing time signatures and key signatures between measure splices
             setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: true, measures: measureSplices[0])
 
-            for i in 1...measureSplices.count-1 {
+            for i in 1..<measureSplices.count {
                 setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false, measures: measureSplices[i])
             }
         }
@@ -113,11 +115,11 @@ class MusicSheet: UIView {
         var lowerStaffMeasures = [Measure]()
 
         for i in 0...lowerStaffStart-1 {
-            upperStaffMeasures.append(grid![i])
+            upperStaffMeasures.append(measures[i])
         }
 
         for i in lowerStaffStart...measures.count-1 {
-            lowerStaffMeasures.append(grid![i])
+            lowerStaffMeasures.append(measures[i])
         }
 
         staffIndex += 1

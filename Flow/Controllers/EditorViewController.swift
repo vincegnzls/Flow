@@ -22,16 +22,26 @@ class EditorViewController: UIViewController {
         // TODO: change this to load an existing composition if did not create a new comp
         // TODO: inline number of measures per staff also
         // CREATES A NEW COMPOSITION WITH DEFAULT LAYOUT OF 12 MEASURES, 3 GRAND STAVES, AND 2 MEASURES PER STAFF
-        var measures = [Measure]()
+        var measuresForG = [Measure]()
+        var measuresForF = [Measure]()
 
-        for i in 1...12 {
-            if i%3 == 0 || i%4 == 0 {
-                measures.append(Measure(clef: Clef.F))
-            } else {
-                measures.append(Measure())
-            }
+        for _  in 1...6 {
+            measuresForG.append(Measure())
         }
-        composition = Composition(measures: measures)
+
+        for _ in 1...6 {
+            measuresForF.append(Measure(clef: Clef.F))
+        }
+
+        let GStaff = Staff(measures: measuresForG)
+        let FStaff = Staff(measures: measuresForF)
+
+        var staffArr = [Staff]()
+
+        staffArr.append(GStaff)
+        staffArr.append(FStaff)
+
+        composition = Composition(staffList: staffArr)
         // END OF CREATION
 
         // init
@@ -45,7 +55,7 @@ class EditorViewController: UIViewController {
         super.viewDidLoad()
 
         let params = Parameters()
-        params.put(key: KeyNames.MEASURES_ARRAY, value: self.composition!.getMeasures())
+        params.put(key: KeyNames.COMPOSITION, value: self.composition!)
 
         EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
 
@@ -63,6 +73,8 @@ class EditorViewController: UIViewController {
     
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
 
+        // TODO: inline this with self instance of composition
+
         // FOR TESTING PURPOSES ONLY
         let measure = Measure(keySignature: KeySignature.c,
                               timeSignature: TimeSignature(),
@@ -74,12 +86,13 @@ class EditorViewController: UIViewController {
         
         var measures = [Measure]()
         measures.append(measure)
-        let comp = Composition(measures: measures)
-        let test = FileHandler.instance.convertCompositionToMusicXML(comp)
+
+        //let comp = Composition(measures: measures)
+        //let test = FileHandler.instance.convertCompositionToMusicXML(comp)
         
-        print("\(test)")
+        //print("\(test)")
         
-        FileHandler.instance.convertMusicXMLtoComposition(test)
+        //FileHandler.instance.convertMusicXMLtoComposition(test)
     }
 
     func onNoteKeyPressed (params:Parameters) {
