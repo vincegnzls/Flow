@@ -10,9 +10,23 @@ import UIKit
 import AVFoundation
 
 class StartMenuViewController: UIViewController {
+    
+    var audioPlayer:AVAudioPlayer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let url = Bundle.main.url(forResource: "a3-mf", withExtension: "mp3")
+
+        do{
+            audioPlayer = try AVAudioPlayer(contentsOf: url!)
+            audioPlayer.prepareToPlay()
+            audioPlayer.currentTime = 0
+        }catch let error as NSError{
+            print(error.debugDescription)
+        }
+
+        
 
         // Do any additional setup after loading the view.
     }
@@ -22,19 +36,15 @@ class StartMenuViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func playSound(_ sender: UIButton) {
-        
-        var alertSound = NSURL(fileURLWithPath: Bundle.mainBundle().pathForResource("a1-mf",ofType: "mp3")!)
-        
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
-        AVAudioSession.sharedInstance().setActive(true, error: nil)
-        
-        var error: NSError?
-        audioPlayer = AVAudioPlayer(contentsOfURL: alertSound, error: &error)
-        audioPlayer.prepareToPlay()
+    @IBAction func playPressed(_ sender: UIButton) {
+        audioPlayer.currentTime = 0
         audioPlayer.play()
+        
+
     }
     
+    
+
     /*
     // MARK: - Navigation
 
