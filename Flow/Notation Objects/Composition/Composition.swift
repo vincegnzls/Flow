@@ -13,13 +13,9 @@ class Composition {
     var compositionInfo: CompositionInfo
     var staffList: [Staff]
 
-    init(compositionInfo: CompositionInfo = CompositionInfo(), staffList: [Staff]) {
+    init(compositionInfo: CompositionInfo = CompositionInfo(), staffList: [Staff] = []) {
         self.compositionInfo = compositionInfo
         self.staffList = staffList
-    }
-
-    public func getStaffList () -> [Staff] {
-        return self.staffList
     }
 
     public func isEnsembleStaff () -> Bool {
