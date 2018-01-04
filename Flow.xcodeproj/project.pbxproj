@@ -92,6 +92,7 @@
 		14DEE86B1FF6E21400A52E96 /* b3-mf.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 14DEE8161FF6E21300A52E96 /* b3-mf.mp3 */; };
 		14DEE86C1FF6E21400A52E96 /* c7-mf.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 14DEE8171FF6E21300A52E96 /* c7-mf.mp3 */; };
 		14DEE86D1FF6E21400A52E96 /* gb6-mf.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 14DEE8181FF6E21400A52E96 /* gb6-mf.mp3 */; };
+		14DEE86F1FF71B8600A52E96 /* SoundEffectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DEE86E1FF71B8600A52E96 /* SoundEffectViewController.swift */; };
 		610ECE341FE6DAE9009CC0F2 /* TimeSignaturePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE331FE6DAE9009CC0F2 /* TimeSignaturePicker.swift */; };
 		610ECE361FE787EA009CC0F2 /* KeySignaturePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE351FE787EA009CC0F2 /* KeySignaturePicker.swift */; };
 		610ECE381FE7C58E009CC0F2 /* KeySignatureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */; };
@@ -256,6 +257,7 @@
 		14DEE8161FF6E21300A52E96 /* b3-mf.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "b3-mf.mp3"; path = "../../../../Library/Mobile Documents/com~apple~CloudDocs/.Trash/piano-notes/b3-mf.mp3"; sourceTree = "<group>"; };
 		14DEE8171FF6E21300A52E96 /* c7-mf.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "c7-mf.mp3"; path = "../../../../Library/Mobile Documents/com~apple~CloudDocs/.Trash/piano-notes/c7-mf.mp3"; sourceTree = "<group>"; };
 		14DEE8181FF6E21400A52E96 /* gb6-mf.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "gb6-mf.mp3"; path = "../../../../Library/Mobile Documents/com~apple~CloudDocs/.Trash/piano-notes/gb6-mf.mp3"; sourceTree = "<group>"; };
+		14DEE86E1FF71B8600A52E96 /* SoundEffectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEffectViewController.swift; sourceTree = "<group>"; };
 		610ECE331FE6DAE9009CC0F2 /* TimeSignaturePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignaturePicker.swift; sourceTree = "<group>"; };
 		610ECE351FE787EA009CC0F2 /* KeySignaturePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignaturePicker.swift; sourceTree = "<group>"; };
 		610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureModel.swift; sourceTree = "<group>"; };
@@ -445,6 +447,7 @@
 				86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */,
 				611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */,
 				61370E181F82A1CB002B6A09 /* EditorViewController.swift */,
+				14DEE86E1FF71B8600A52E96 /* SoundEffectViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -913,6 +916,7 @@
 				86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */,
 				8618F07A1FED3DB400DF8A10 /* DeleteAction.swift in Sources */,
 				8618F0741FED3D0400DF8A10 /* Action.swift in Sources */,
+				14DEE86F1FF71B8600A52E96 /* SoundEffectViewController.swift in Sources */,
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				8696A8C01FD5898200EB81BD /* Parser.swift in Sources */,
 				861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */,

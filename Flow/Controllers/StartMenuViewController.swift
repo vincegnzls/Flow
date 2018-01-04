@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class StartMenuViewController: UIViewController {
 
@@ -21,7 +22,19 @@ class StartMenuViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    @IBAction func playSound(_ sender: UIButton) {
+        
+        var alertSound = NSURL(fileURLWithPath: Bundle.mainBundle().pathForResource("a1-mf",ofType: "mp3")!)
+        
+        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
+        AVAudioSession.sharedInstance().setActive(true, error: nil)
+        
+        var error: NSError?
+        audioPlayer = AVAudioPlayer(contentsOfURL: alertSound, error: &error)
+        audioPlayer.prepareToPlay()
+        audioPlayer.play()
+    }
+    
     /*
     // MARK: - Navigation
 

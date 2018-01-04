@@ -43,15 +43,26 @@
                                     <segue destination="ldS-Qo-c4z" kind="show" id="cr9-tM-n2r"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h3S-Mz-9Vq">
+                                <rect key="frame" x="415" y="153" width="282" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Play Sound"/>
+                                <connections>
+                                    <action selector="playSound:" destination="dfI-mq-vOZ" eventType="touchUpInside" id="iUz-8Q-hTq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="2DB-Ug-KK3"/>
                     </view>
                     <navigationItem key="navigationItem" title="Start Menu" id="0l2-Ep-9cc"/>
+                    <connections>
+                        <outlet property="playSound" destination="h3S-Mz-9Vq" id="rhz-KX-6T6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eqb-Xg-VFP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1347" y="131"/>
+            <point key="canvasLocation" x="1346.7625899280577" y="130.93525179856115"/>
         </scene>
         <!--Editor-->
         <scene sceneID="ZHK-WR-61c">
@@ -545,7 +556,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2W-99-FM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="87U-aK-pku" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2801" y="130"/>
+            <point key="canvasLocation" x="2800.8992805755397" y="129.49640287769785"/>
         </scene>
         <!--Time Signature View Controller-->
         <scene sceneID="haZ-5N-Hbc">
