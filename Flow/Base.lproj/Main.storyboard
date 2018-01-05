@@ -335,7 +335,7 @@
                                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qeS-gz-Hqc" userLabel="Eighth" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                                 <rect key="frame" x="7" y="8" width="30" height="30"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="quarter-up"/>
+                                                                <state key="normal" image="eighth-up"/>
                                                                 <connections>
                                                                     <action selector="eighthNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="6rQ-3j-wya"/>
                                                                 </connections>
@@ -694,6 +694,7 @@
         <image name="cut-icon" width="50" height="50"/>
         <image name="double-sharp" width="9" height="9"/>
         <image name="eighth-rest" width="22" height="57"/>
+        <image name="eighth-up" width="22" height="40"/>
         <image name="flat" width="8" height="39"/>
         <image name="half-rest" width="22" height="57"/>
         <image name="half-up" width="12" height="40"/>
