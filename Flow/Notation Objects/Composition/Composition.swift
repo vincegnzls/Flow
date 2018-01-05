@@ -12,27 +12,24 @@ class Composition {
     // Holds information about the composition
     var compositionInfo: CompositionInfo
     var staffList: [Staff]
+    var isEnsembleStaff: Bool {
+        return self.staffList.count > 1
+    }
+    var numStaves: Int {
+        return self.staffList.count
+    }
+    var numMeasures: Int {
+        var measureNum = 0
+        
+        for staff in staffList {
+            measureNum += staff.measures.count
+        }
+        
+        return measureNum
+    }
 
     init(compositionInfo: CompositionInfo = CompositionInfo(), staffList: [Staff] = []) {
         self.compositionInfo = compositionInfo
         self.staffList = staffList
-    }
-
-    public func isEnsembleStaff () -> Bool {
-        return self.staffList.count > 1
-    }
-
-    public func getNumberOfStaffs () -> Int {
-        return staffList.count
-    }
-
-    public func getNumberOfMeasures () -> Int {
-        var measureNum = 0
-
-        for i in 0..<staffList.count {
-            measureNum += staffList[i].measures.count
-        }
-
-        return measureNum
     }
 }
