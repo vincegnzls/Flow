@@ -100,6 +100,10 @@ class EditorViewController: UIViewController {
         let restNoteType: RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
         let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
 
+        let note: MusicNotation
+
+        let parameters = Parameters()
+
         // check if there is a selected measure coord
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
 
@@ -107,7 +111,6 @@ class EditorViewController: UIViewController {
             if let measure: Measure = GridSystem.instance.getMeasureFromPoints(
                     measurePoints: measureCoord) {
 
-                let note: MusicNotation
 
                 // determine if rest or note
                 if isRest {
@@ -117,6 +120,8 @@ class EditorViewController: UIViewController {
                     note = Note(pitch: Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
                 }
 
+                parameters.put(key: KeyNames.NOTE_DETAILS, value: note)
+
                 // instantiate add action
                 let addAction = AddAction()
                 addAction.setMeasure(measure: measure)
@@ -124,10 +129,6 @@ class EditorViewController: UIViewController {
 
                 addAction.execute()
             }
-
-            let parameters = Parameters()
-            parameters.put(key: KeyNames.NOTE_DETAILS, value: restNoteType)
-            parameters.put(key: KeyNames.IS_REST_KEY, value: isRest)
 
             EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE, params: parameters)
 

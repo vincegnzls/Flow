@@ -99,17 +99,17 @@ class MusicSheet: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        if (composition!.numStaves > 0) {
+        if let composition = composition {
             var measureSplices = [[Measure]]()
 
             // compute number of staff divisions
-            let numStaffDivs = composition!.numMeasures / (NUM_MEASURES_PER_STAFF * composition!.numStaves)
+            let numStaffDivs = composition.numMeasures / (NUM_MEASURES_PER_STAFF * composition.numStaves)
 
             var startIndex = 0
             for i in 0..<numStaffDivs {
                 measureSplices.append([Measure]())
-                for k in 0..<composition!.numStaves {
-                    measureSplices[i].append(contentsOf: Array(composition!.staffList[k].measures[startIndex...startIndex + (NUM_MEASURES_PER_STAFF-1)]))
+                for k in 0..<composition.numStaves {
+                    measureSplices[i].append(contentsOf: Array(composition.staffList[k].measures[startIndex...startIndex + (NUM_MEASURES_PER_STAFF-1)]))
                 }
 
                 startIndex += NUM_MEASURES_PER_STAFF
@@ -515,42 +515,40 @@ class MusicSheet: UIView {
         
         // START FOR SNAPPING
         
-        if GridSystem.instance.selectedMeasureCoord != nil {
-            snapPoints = (GridSystem.instance.getSnapPointsFromPoints(
-                    measurePoints: (GridSystem.instance.selectedMeasureCoord)!))!
-        }
-        
-        if snapPoints.count > 0 {
-        
-            var closestPoint:CGPoint = snapPoints[0];
-            
-            let x2:CGFloat = location.x - snapPoints[0].x
-            let y2:CGFloat = location.y - snapPoints[0].y
-            
-            var currDistance:CGFloat = (x2 * x2) + (y2 * y2)
-            
-            for i in 1...snapPoints.count-1 {
-                let x2:CGFloat = location.x - snapPoints[i].x
-                let y2:CGFloat = location.y - snapPoints[i].y
-                
-                let potDistance = (x2 * x2) + (y2 * y2)
-                
-                if (potDistance < currDistance) {
-                    currDistance = potDistance
-                    closestPoint = snapPoints[i]
+        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+
+            if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoord) {
+
+                var closestPoint: CGPoint = snapPoints[0];
+
+                let x2: CGFloat = location.x - snapPoints[0].x
+                let y2: CGFloat = location.y - snapPoints[0].y
+
+                var currDistance: CGFloat = (x2 * x2) + (y2 * y2)
+
+                for i in 1...snapPoints.count - 1 {
+                    let x2: CGFloat = location.x - snapPoints[i].x
+                    let y2: CGFloat = location.y - snapPoints[i].y
+
+                    let potDistance = (x2 * x2) + (y2 * y2)
+
+                    if (potDistance < currDistance) {
+                        currDistance = potDistance
+                        closestPoint = snapPoints[i]
+                    }
                 }
+
+                let relXLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
+
+                //print("NEAREST POINT: \(closestPoint)")
+
+                curXCursorLocation = relXLocation
+                moveCursorX(location: relXLocation)
+
+                curYCursorLocation = closestPoint
+                moveCursorY(location: closestPoint)
+
             }
-            
-            let relXLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
-            
-            //print("NEAREST POINT: \(closestPoint)")
-            
-            curXCursorLocation = relXLocation
-            moveCursorX(location: relXLocation)
-            
-            curYCursorLocation = closestPoint
-            moveCursorY(location: closestPoint)
-            
         }
         
         // END FOR SNAPPING
@@ -598,6 +596,11 @@ class MusicSheet: UIView {
     func updateMeasureDraw(params: Parameters) {
         // TODO: update view here
         print("VIEW SHOULD UPDATE NOW !!!")
+
+        let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
+        notation.screenCoordinates = curYCursorLocation
+
+        self.addMusicNotation(note: notation)
     }
     
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
