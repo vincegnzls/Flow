@@ -41,8 +41,23 @@ class MusicSheet: UIView {
     // used for tracking coordinates of measures
     private var measureCoords = [GridSystem.MeasurePoints]()
     
+    // variables for highlighting
+    private var highlightingStartPoint: CGPoint? {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    private var highlightingEndPoint: CGPoint? {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    private var hasHighlight = false
+    
     private var selectedMeasureCoord:GridSystem.MeasurePoints?
-    private var grid:[Measure]?
+    
+    private var composition: Composition?
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -72,34 +87,60 @@ class MusicSheet: UIView {
                 observer: Observer(id: "MusicSheet.onCompositionLoad", function: self.onCompositionLoad))
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_UPDATE,
                                               observer: Observer(id: "MusicSheet.updateMeasureDraw", function: self.updateMeasureDraw))
+        
+        // Set up pan gesture for dragging
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
+        panGesture.minimumNumberOfTouches = 2
+        self.addGestureRecognizer(panGesture)
     }
 
     func onCompositionLoad (params: Parameters) {
-        grid = params.get(key: KeyNames.MEASURES_ARRAY) as! [Measure]
+        composition = params.get(key: KeyNames.COMPOSITION) as! Composition
     }
     
     override func draw(_ rect: CGRect) {
-        if (grid!.count > 0) {
-            let numStaves = grid!.count / (NUM_MEASURES_PER_STAFF * 2) // times 2 for grand staves
-
+        if (composition!.getNumberOfStaffs() > 0) {
             var measureSplices = [[Measure]]()
 
-            var startIndex = 0
-            for i in 0...numStaves-1 {
-                measureSplices.append([Measure]())
-                for _ in 1...(NUM_MEASURES_PER_STAFF*2) {
+            // compute number of staff divisions
+            let numStaffDivs = composition!.getNumberOfMeasures() / (NUM_MEASURES_PER_STAFF * composition!.getNumberOfStaffs())
 
-                    measureSplices[i].append(grid![startIndex])
-                    startIndex += 1
+            var startIndex = 0
+            for i in 0..<numStaffDivs {
+                measureSplices.append([Measure]())
+                for k in 0..<composition!.getNumberOfStaffs() {
+                    measureSplices[i].append(contentsOf: Array(composition!.staffList[k].measures[startIndex...startIndex + (NUM_MEASURES_PER_STAFF-1)]))
                 }
+
+                startIndex += NUM_MEASURES_PER_STAFF
+
             }
 
             // TODO: fix this if there are changing time signatures and key signatures between measure splices
             setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: true, measures: measureSplices[0])
 
-            for i in 1...measureSplices.count-1 {
+            for i in 1..<measureSplices.count {
                 setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false, measures: measureSplices[i])
             }
+        }
+        
+        var path: UIBezierPath?
+        if let startPoint = self.highlightingStartPoint, let endPoint = self.highlightingEndPoint {
+            path = UIBezierPath(rect: CGRect(x: min(startPoint.x, endPoint.x),
+                                                 y: min(startPoint.y, endPoint.y),
+                                                 width: fabs(startPoint.x - endPoint.x),
+                                                 height: fabs(startPoint.y - endPoint.y)))
+            // Fill
+            let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
+            highlightColor.setFill()
+            path!.fill()
+            
+            // Stroke
+            path!.lineWidth = 0
+            
+            path!.stroke()
+        } else {
+            path = nil
         }
     }
     
@@ -112,11 +153,11 @@ class MusicSheet: UIView {
         var lowerStaffMeasures = [Measure]()
 
         for i in 0...lowerStaffStart-1 {
-            upperStaffMeasures.append(grid![i])
+            upperStaffMeasures.append(measures[i])
         }
 
         for i in lowerStaffStart...measures.count-1 {
-            lowerStaffMeasures.append(grid![i])
+            lowerStaffMeasures.append(measures[i])
         }
 
         staffIndex += 1
@@ -463,6 +504,13 @@ class MusicSheet: UIView {
         
         //print("LOCATION TAPPED: \(location)")
         
+        if self.hasHighlight {
+            self.highlightingStartPoint = nil
+            self.highlightingEndPoint = nil
+            self.hasHighlight = false
+            return
+        }
+        
         remapCurrentMeasure(location: location)
         
         // START FOR SNAPPING
@@ -550,5 +598,19 @@ class MusicSheet: UIView {
     func updateMeasureDraw(params: Parameters) {
         // TODO: update view here
         print("VIEW SHOULD UPDATE NOW !!!")
+    }
+    
+    @objc func draggedView(_ sender:UIPanGestureRecognizer) {
+        if sender.state == UIGestureRecognizerState.began {
+            var locationOfBeganTap = sender.location(in: self)
+            self.highlightingStartPoint = locationOfBeganTap
+            self.highlightingEndPoint = locationOfBeganTap
+            
+        } else if sender.state == UIGestureRecognizerState.ended {
+            self.highlightingEndPoint = sender.location(in: self)
+            self.hasHighlight = true
+        } else{
+            self.highlightingEndPoint = sender.location(in: self)
+        }
     }
 }
