@@ -107,9 +107,9 @@ class MusicSheet: UIView {
 
             var startIndex = 0
             for i in 0..<numStaffDivs {
-
+                measureSplices.append([Measure]())
                 for k in 0..<composition!.getNumberOfStaffs() {
-                    measureSplices[i].append(contentsOf: Array(composition!.staffList[k].measures[startIndex...startIndex + NUM_MEASURES_PER_STAFF]))
+                    measureSplices[i].append(contentsOf: Array(composition!.staffList[k].measures[startIndex...startIndex + (NUM_MEASURES_PER_STAFF-1)]))
                 }
 
                 startIndex += NUM_MEASURES_PER_STAFF
