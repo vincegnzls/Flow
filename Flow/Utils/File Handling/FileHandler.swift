@@ -71,6 +71,56 @@ class FileHandler {
         let partElement = scoreElement.addChild(name: "part", attributes: ["id": "P1"])
         
         // Loop through measures
+        for i in 0..<composition.numMeasures {
+            for (index, staff) in composition.staffList.enumerated() {
+                let measure = staff.measures[i]
+                let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(i + index + 1)"])
+                
+                // Set attributes
+                let attributesElement = measureElement.addChild(name: "attributes")
+                
+                // Calculate divisions
+                var divisions = 1
+                for notation in measure.notationObjects {
+                    divisions = max(notation.type.getDivision(), divisions)
+                }
+                
+                // Set divisions
+                attributesElement.addChild(name: "divisions", value: "\(divisions)")
+                
+                // Key signature
+                let keyElement = attributesElement.addChild(name: "key")
+                keyElement.addChild(name: "fifths", value: "\(measure.keySignature.rawValue)")
+                
+                // Time signature
+                let timeSignatureElement = attributesElement.addChild(name: "time")
+                timeSignatureElement.addChild(name: "beats", value: "\(measure.timeSignature.beats)")
+                timeSignatureElement.addChild(name: "beat-type", value: "\(measure.timeSignature.beatType)")
+                
+                // Clef
+                let clefElement = attributesElement.addChild(name: "clef")
+                clefElement.addChild(name: "sign", value: measure.clef.rawValue)
+                clefElement.addChild(name: "line", value: "\(measure.clef.getStandardLine())")
+                
+                // Add notes and/or rests
+                for notation in measure.notationObjects {
+                    let notationElement = measureElement.addChild(name: "note")
+                    
+                    // Add necessary elements depending on note or rest
+                    if let note = notation as? Note {
+                        let pitchElement = notationElement.addChild(name: "pitch")
+                        pitchElement.addChild(name: "step", value: note.pitch.step.toString())
+                        pitchElement.addChild(name: "octave", value: "\(note.pitch.octave)")
+                    } else if notation is Rest {
+                        notationElement.addChild(name: "rest")
+                    }
+                    
+                    // Set duration and type
+                    notationElement.addChild(name: "duration", value: "\(notation.type.getDuration(divisions: divisions))")
+                    notationElement.addChild(name: "type", value: notation.type.toString())
+                }
+            }
+        }
         /*for (index, measure) in composition.measures.enumerated() {
             let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(index + 1)"])
             
