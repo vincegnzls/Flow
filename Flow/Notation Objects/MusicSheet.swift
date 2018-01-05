@@ -99,16 +99,16 @@ class MusicSheet: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        if (composition!.getNumberOfStaffs() > 0) {
+        if (composition!.numStaves > 0) {
             var measureSplices = [[Measure]]()
 
             // compute number of staff divisions
-            let numStaffDivs = composition!.getNumberOfMeasures() / (NUM_MEASURES_PER_STAFF * composition!.getNumberOfStaffs())
+            let numStaffDivs = composition!.numMeasures / (NUM_MEASURES_PER_STAFF * composition!.numStaves)
 
             var startIndex = 0
             for i in 0..<numStaffDivs {
                 measureSplices.append([Measure]())
-                for k in 0..<composition!.getNumberOfStaffs() {
+                for k in 0..<composition!.numStaves {
                     measureSplices[i].append(contentsOf: Array(composition!.staffList[k].measures[startIndex...startIndex + (NUM_MEASURES_PER_STAFF-1)]))
                 }
 
