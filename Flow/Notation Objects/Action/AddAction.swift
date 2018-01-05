@@ -9,9 +9,12 @@
 import Foundation
 
 class AddAction: Action {
-    
+
+    private var measure:Measure?
+    private var note:MusicNotation?
+
     func execute() {
-        
+        measure!.addNoteInMeasure(musicNotation: note!)
     }
     
     func undo() {
@@ -20,6 +23,14 @@ class AddAction: Action {
     
     func redo() {
         
+    }
+
+    func setMeasure(measure:Measure) {
+        self.measure = measure
+    }
+
+    func setNote(note:MusicNotation) {
+        self.note = note
     }
     
     
