@@ -97,28 +97,39 @@ class EditorViewController: UIViewController {
 
     func onNoteKeyPressed (params:Parameters) {
 
-        let restNoteType:RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
+        let restNoteType: RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
         let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
 
-        // TODO: instantiate here the AddCommand
+        // check if there is a selected measure coord
+        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
 
-        if GridSystem.instance.selectedMeasureCoord! != nil {
+            // check if there is a corresponding measure for the measure coordinate
+            if let measure: Measure = GridSystem.instance.getMeasureFromPoints(
+                    measurePoints: measureCoord) {
 
-            if isRest {
-                if let measure:Measure = GridSystem.instance.getMeasureFromPoints(
-                        measurePoints: (GridSystem.instance.selectedMeasureCoord)!) {
-                    let rest:Rest = Rest(type: restNoteType)
-                    measure.addNoteInMeasure(musicNotation: rest)
+                let note: MusicNotation
+
+                // determine if rest or note
+                if isRest {
+                    note = Rest(type: restNoteType)
+                } else {
+                    // TODO: determine what is the correct pitch from the cursor's location
+                    note = Note(pitch: Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
                 }
 
-            } else {
-                if let measure:Measure = GridSystem.instance.getMeasureFromPoints(
-                        measurePoints: (GridSystem.instance.selectedMeasureCoord)!) {
-                    // TODO: locate cursor y for knowing pitch and adjust screen coordinates
-                    let note:Note = Note(pitch:Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
-                    measure.addNoteInMeasure(musicNotation: note)
-                }
+                // instantiate add action
+                let addAction = AddAction()
+                addAction.setMeasure(measure: measure)
+                addAction.setNote(note: note)
+
+                addAction.execute()
             }
+
+            let parameters = Parameters()
+            parameters.put(key: KeyNames.NOTE_DETAILS, value: restNoteType)
+            parameters.put(key: KeyNames.IS_REST_KEY, value: isRest)
+
+            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE, params: parameters)
 
         }
 
