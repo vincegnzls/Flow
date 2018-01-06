@@ -506,6 +506,33 @@
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="EighthNote" destination="qeS-gz-Hqc" id="1Jf-Q2-FBe"/>
+                                            <outlet property="EighthRest" destination="qbc-VC-iba" id="cT9-Jk-1Uk"/>
+                                            <outlet property="HalfNote" destination="4IZ-GA-Tpx" id="4IW-06-GMS"/>
+                                            <outlet property="HalfRest" destination="jVO-bM-fp7" id="d9g-GK-Ur3"/>
+                                            <outlet property="QuarterRest" destination="YlV-zN-zu5" id="1bQ-g1-Mcd"/>
+                                            <outlet property="SixteenthNote" destination="cQ1-VV-w2b" id="z3a-3N-ySX"/>
+                                            <outlet property="SixteenthRest" destination="tBu-S8-pTk" id="rRU-DA-hOn"/>
+                                            <outlet property="SixtyFourthNote" destination="3n8-Ks-d0d" id="Mxx-BB-R41"/>
+                                            <outlet property="SixtyFourthRest" destination="Myg-SJ-NMA" id="L07-qR-EUm"/>
+                                            <outlet property="ThirtySecondNote" destination="WJ1-0u-QjL" id="QoP-US-wca"/>
+                                            <outlet property="ThirtySecondRest" destination="jMs-tt-I5c" id="yU9-3a-EG3"/>
+                                            <outlet property="eighthNote" destination="qeS-gz-Hqc" id="WBJ-Ul-DeH"/>
+                                            <outlet property="eighthRest" destination="qbc-VC-iba" id="GCL-mp-nbj"/>
+                                            <outlet property="halfNote" destination="4IZ-GA-Tpx" id="KLy-bS-Q7e"/>
+                                            <outlet property="halfRest" destination="jVO-bM-fp7" id="qHu-Tm-UKm"/>
+                                            <outlet property="quarterNote" destination="zVj-SJ-LAn" id="v6E-kZ-3qZ"/>
+                                            <outlet property="quarterRest" destination="YlV-zN-zu5" id="TlZ-gJ-mPN"/>
+                                            <outlet property="sixteenthNote" destination="cQ1-VV-w2b" id="qWU-bX-GrW"/>
+                                            <outlet property="sixteenthRest" destination="tBu-S8-pTk" id="xvi-zd-8UN"/>
+                                            <outlet property="sixtyFourthNote" destination="3n8-Ks-d0d" id="bGA-8x-bbt"/>
+                                            <outlet property="sixtyFourthRest" destination="Myg-SJ-NMA" id="jYh-RN-GzN"/>
+                                            <outlet property="thirtySecondNote" destination="WJ1-0u-QjL" id="R6v-Sa-sDf"/>
+                                            <outlet property="thirtySecondRest" destination="jMs-tt-I5c" id="yNp-CP-uff"/>
+                                            <outlet property="wholeNote" destination="SQg-3f-nGu" id="6q1-qI-aNQ"/>
+                                            <outlet property="wholeRest" destination="SQg-3f-nGu" id="Lbd-fU-BSn"/>
+                                        </connections>
                                     </view>
                                 </subviews>
                             </view>
