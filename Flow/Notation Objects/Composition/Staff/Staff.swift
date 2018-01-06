@@ -12,8 +12,11 @@ class Staff {
 
     var measures: [Measure]
     
-    init(measures: [Measure]) {
+    init(measures: [Measure] = []) {
         self.measures = measures
     }
 
+    func addMeasure(_ measure: Measure) {
+        self.measures.append(measure)
+    }
 }

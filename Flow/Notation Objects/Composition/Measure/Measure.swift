@@ -28,7 +28,7 @@ class Measure {
         self.curBeatValue = 0
     }
     
-    public func addNoteInMeasure (musicNotation: MusicNotation) {
+    public func addNoteInMeasure (_ musicNotation: MusicNotation) {
         
         if(isAddNoteValid(musicNotation: musicNotation)) {
             

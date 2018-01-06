@@ -118,9 +118,7 @@ class EditorViewController: UIViewController {
                 }
 
                 // instantiate add action
-                let addAction = AddAction()
-                addAction.setMeasure(measure: measure)
-                addAction.setNote(note: note)
+                let addAction = AddAction(measure: measure, note: note)
 
                 addAction.execute()
             }
