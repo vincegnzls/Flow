@@ -8,7 +8,6 @@
 
 import UIKit
 
-@IBDesignable
 class MusicSheet: UIView {
     
     // TO REMOVE LATER ON; USED FOR TESTING PURPOSES ONLY
