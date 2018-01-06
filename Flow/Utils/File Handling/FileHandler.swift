@@ -71,7 +71,7 @@ class FileHandler {
         let partElement = scoreElement.addChild(name: "part", attributes: ["id": "P1"])
         
         // Loop through measures
-        for (index, measure) in composition.measures.enumerated() {
+        /*for (index, measure) in composition.measures.enumerated() {
             let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(index + 1)"])
             
             // Set attributes
@@ -117,7 +117,7 @@ class FileHandler {
                 notationElement.addChild(name: "duration", value: "\(notation.type.getDuration(divisions: divisions))")
                 notationElement.addChild(name: "type", value: notation.type.toString())
             }
-        }
+        }*/
         
         // Get string format of xml
         var xmlString = xml.xml
