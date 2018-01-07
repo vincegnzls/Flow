@@ -8,7 +8,6 @@
 
 import UIKit
 
-@IBDesignable
 class MusicSheet: UIView {
     
     // TO REMOVE LATER ON; USED FOR TESTING PURPOSES ONLY
@@ -95,7 +94,7 @@ class MusicSheet: UIView {
     }
 
     func onCompositionLoad (params: Parameters) {
-        composition = params.get(key: KeyNames.COMPOSITION) as! Composition
+        composition = params.get(key: KeyNames.COMPOSITION) as? Composition
     }
     
     override func draw(_ rect: CGRect) {
@@ -338,7 +337,7 @@ class MusicSheet: UIView {
         let distance:CGFloat = ((endX - paddingLeftRight) - currX) / CGFloat(maximum64th)
         
         // create points tantamount to maximum number of 64th notes
-        for i in 1...maximum64th {
+        for _ in 1...maximum64th {
             points.append(CGPoint(x: currX, y: startY/2))
             
             currX += distance
@@ -602,7 +601,7 @@ class MusicSheet: UIView {
     
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
-            var locationOfBeganTap = sender.location(in: self)
+            let locationOfBeganTap = sender.location(in: self)
             self.highlightingStartPoint = locationOfBeganTap
             self.highlightingEndPoint = locationOfBeganTap
             

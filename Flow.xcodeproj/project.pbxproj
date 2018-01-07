@@ -12,7 +12,6 @@
 		610ECE381FE7C58E009CC0F2 /* KeySignatureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */; };
 		610ECE3A1FE7CC9F009CC0F2 /* KeySignatureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */; };
 		611BFC9E1FE678C2001511B2 /* TimeSignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */; };
-		611BFCA11FE67948001511B2 /* TimeSignaturePopupDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */; };
 		612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612D07A51FD2C6780006BD0E /* MusicSheet.swift */; };
 		6135C82B1FDEC35000AF9EA9 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135C82A1FDEC35000AF9EA9 /* Bounds.swift */; };
 		61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61370E161F82A1CB002B6A09 /* AppDelegate.swift */; };
@@ -38,6 +37,7 @@
 		861B3DDA1FDC20E2003FE0A5 /* KeyNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */; };
 		861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DDD1FDC43C5003FE0A5 /* Observer.swift */; };
 		861F781A1FD6E12A00C51BD2 /* CompositionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */; };
+		8632C97C2000877B00D69CB4 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8632C97B2000877B00D69CB4 /* Converter.swift */; };
 		863374811FD32849003D7936 /* MusicNotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863374801FD32849003D7936 /* MusicNotation.swift */; };
 		864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A11FD32FC3001FF059 /* RestNoteType.swift */; };
 		864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A31FD32FD6001FF059 /* Rest.swift */; };
@@ -92,7 +92,6 @@
 		610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureModel.swift; sourceTree = "<group>"; };
 		610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureData.swift; sourceTree = "<group>"; };
 		611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignatureViewController.swift; sourceTree = "<group>"; };
-		611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignaturePopupDesignable.swift; sourceTree = "<group>"; };
 		612D07A51FD2C6780006BD0E /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 		6135C82A1FDEC35000AF9EA9 /* Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
 		61370E131F82A1CB002B6A09 /* Flow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +121,7 @@
 		861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyNames.swift; sourceTree = "<group>"; };
 		861B3DDD1FDC43C5003FE0A5 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionInfo.swift; sourceTree = "<group>"; };
+		8632C97B2000877B00D69CB4 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		863374801FD32849003D7936 /* MusicNotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotation.swift; sourceTree = "<group>"; };
 		864CE5A11FD32FC3001FF059 /* RestNoteType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestNoteType.swift; sourceTree = "<group>"; };
 		864CE5A31FD32FD6001FF059 /* Rest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rest.swift; sourceTree = "<group>"; };
@@ -192,7 +192,6 @@
 		611BFC9F1FE67928001511B2 /* IBDesignables */ = {
 			isa = PBXGroup;
 			children = (
-				611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */,
 				61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */,
 			);
 			path = IBDesignables;
@@ -254,14 +253,6 @@
 				613EE8D41F98EB5F004FD009 /* Staff.swift */,
 			);
 			path = Staff;
-			sourceTree = "<group>";
-		};
-		860ACC441FFCA28B00A86D50 /* Highlight */ = {
-			isa = PBXGroup;
-			children = (
-				860ACC451FFCA2B000A86D50 /* RectHighlightView.swift */,
-			);
-			path = Highlight;
 			sourceTree = "<group>";
 		};
 		8618F0721FED3CF000DF8A10 /* Action */ = {
@@ -339,6 +330,7 @@
 			isa = PBXGroup;
 			children = (
 				8696A8A81FD4EA5800EB81BD /* FileHandler.swift */,
+				8632C97B2000877B00D69CB4 /* Converter.swift */,
 			);
 			path = "File Handling";
 			sourceTree = "<group>";
@@ -556,6 +548,7 @@
 				612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */,
 				861B3DD41FDC1E0E003FE0A5 /* Parameters.swift in Sources */,
 				86B8EFEC1FEAA5E600DD834E /* Step.swift in Sources */,
+				8632C97C2000877B00D69CB4 /* Converter.swift in Sources */,
 				8696A8BC1FD5898200EB81BD /* Element.swift in Sources */,
 				8618F07C1FED406500DF8A10 /* UndoRedoManager.swift in Sources */,
 				8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */,
@@ -588,7 +581,6 @@
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				8696A8C01FD5898200EB81BD /* Parser.swift in Sources */,
 				861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */,
-				611BFCA11FE67948001511B2 /* TimeSignaturePopupDesignable.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
 				8618F0781FED3D8C00DF8A10 /* EditAction.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
