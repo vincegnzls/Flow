@@ -15,7 +15,7 @@ class Measure {
     var notationObjects: [MusicNotation]
     var bounds: Bounds
     var curBeatValue: Float
-    var validNotes: [MusicNotation]
+    var validNotes: [RestNoteType]
     
     init(keySignature: KeySignature = .c,
          timeSignature: TimeSignature = TimeSignature(),
@@ -27,22 +27,20 @@ class Measure {
         self.notationObjects = notationObjects
         self.bounds = Bounds()
         self.curBeatValue = 0
-        self.validNotes = [MusicNotation]()
-        
-        initValidNotes()
+        self.validNotes = [RestNoteType]()
     }
     
     public func addNoteInMeasure (_ musicNotation: MusicNotation) {
         
         print("ADD NOTE")
         
-        if(isAddNoteValid(musicNotation: musicNotation)) {
+        if(isAddNoteValid(musicNotation: musicNotation.type)) {
             print("ADD NOTE VALID")
         
             self.curBeatValue += musicNotation.type.getBeatValue()
             notationObjects.append(musicNotation)
             
-            updateValidNotes(validNotes: getValidNotes()) // update valid notes in notation controls after adding note
+            updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls after adding note
             
         } else {
             
@@ -52,70 +50,33 @@ class Measure {
         
     }
     
-    public func initValidNotes() {
-        self.validNotes.append(MusicNotation(type: RestNoteType.whole))
-        self.validNotes.append(MusicNotation(type: RestNoteType.half))
-        self.validNotes.append(MusicNotation(type: RestNoteType.quarter))
-        self.validNotes.append(MusicNotation(type: RestNoteType.eighth))
-        self.validNotes.append(MusicNotation(type: RestNoteType.sixteenth))
-        self.validNotes.append(MusicNotation(type: RestNoteType.thirtySecond))
-        self.validNotes.append(MusicNotation(type: RestNoteType.sixtyFourth))
-    }
-    
-    public func getValidNotes() -> [MusicNotation] {
+    public func getInvalidNotes() -> [RestNoteType] {
         
-        if RestNoteType.whole.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
-            validNotes[0].valid = false
-        } else {
-            validNotes[0].valid = true
-        }
-        if RestNoteType.half.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
-             validNotes[1].valid = false
-        } else {
-            validNotes[1].valid = true
-        }
-        if RestNoteType.quarter.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
-            validNotes[2].valid = false
-        } else {
-            validNotes[2].valid = true
-        }
-        if RestNoteType.eighth.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
-            validNotes[3].valid = false
-        } else {
-            validNotes[3].valid = false
-        }
-        if RestNoteType.sixteenth.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
-            validNotes[4].valid = false
-        } else {
-            validNotes[4].valid = true
-        }
-        if RestNoteType.thirtySecond.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
-            validNotes[5].valid = false
-        } else {
-            validNotes[5].valid = true
-        }
-        if RestNoteType.sixtyFourth.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
-            validNotes[6].valid = false
-        } else {
-            validNotes[6].valid = true
+        var invalidNotes = [RestNoteType]()
+        
+        for note in RestNoteType.types {
+            if note.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
+                invalidNotes.append(note)
+            }
         }
         
-        return validNotes
+        return invalidNotes
+        
     }
     
     // send event to notation controls
-    public func updateValidNotes(validNotes: [MusicNotation]) {
+    public func updateInvalidNotes(invalidNotes: [RestNoteType]) {
         
         let params = Parameters()
         
-        params.put(key: KeyNames.VALID_NOTES, value: validNotes)
-        EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_VALID_NOTES, params: params)
+        params.put(key: KeyNames.INVALID_NOTES, value: invalidNotes)
+        EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_NOTES, params: params)
         
     }
     
-    public func isAddNoteValid (musicNotation: MusicNotation) -> Bool {
+    public func isAddNoteValid (musicNotation: RestNoteType) -> Bool {
         
-        return self.curBeatValue + musicNotation.type.getBeatValue() <= self.timeSignature.getMaxBeatValue()
+        return self.curBeatValue + musicNotation.getBeatValue() <= self.timeSignature.getMaxBeatValue()
             
     }
     

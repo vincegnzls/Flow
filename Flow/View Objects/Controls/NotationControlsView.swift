@@ -48,8 +48,8 @@ class NotationControlsView: UIView {
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 5
         
-        EventBroadcaster.instance.addObserver(event: EventNames.UPDATE_VALID_NOTES,
-                                              observer: Observer(id: "NotationControls.updateValidNotes", function: self.updateValidNotes))
+        EventBroadcaster.instance.addObserver(event: EventNames.UPDATE_INVALID_NOTES,
+                                              observer: Observer(id: "NotationControls.updateInvalidNotes", function: self.updateInvalidNotes))
     }
     
     @IBAction func wholeNote(_ sender: ButtonEffect) {
@@ -139,59 +139,40 @@ class NotationControlsView: UIView {
         EventBroadcaster.instance.postEvent(event: EventNames.NOTATION_KEY_PRESSED, params: params)
     }
     
-    func updateValidNotes(params: Parameters) {
-        let validNotes:[MusicNotation] = params.get(key: KeyNames.VALID_NOTES) as! [MusicNotation]
+    func toggleNoteButtons(note: RestNoteType, isEnabled: Bool) {
+        if note == RestNoteType.whole {
+            wholeNote.isEnabled = isEnabled
+            wholeRest.isEnabled = isEnabled
+        } else if note == RestNoteType.half {
+            halfNote.isEnabled = isEnabled
+            halfRest.isEnabled = isEnabled
+        } else if note == RestNoteType.quarter {
+            quarterNote.isEnabled = isEnabled
+            quarterRest.isEnabled = isEnabled
+        } else if note == RestNoteType.eighth {
+            eighthNote.isEnabled = isEnabled
+            eighthRest.isEnabled = isEnabled
+        } else if note == RestNoteType.sixteenth {
+            sixteenthNote.isEnabled = isEnabled
+            sixteenthRest.isEnabled = isEnabled
+        } else if note == RestNoteType.thirtySecond {
+            thirtySecondNote.isEnabled = isEnabled
+            thirtySecondRest.isEnabled = isEnabled
+        } else if note == RestNoteType.sixtyFourth {
+            sixtyFourthNote.isEnabled = isEnabled
+            sixtyFourthRest.isEnabled = isEnabled
+        }
+    }
+    
+    func updateInvalidNotes(params: Parameters) {
+        let invalidNotes:[RestNoteType] = params.get(key: KeyNames.INVALID_NOTES) as! [RestNoteType]
         
-        for note in validNotes {
-            
-            if note.valid {
-                if note.type == RestNoteType.whole {
-                    wholeNote.isEnabled = true
-                    wholeRest.isEnabled = true
-                } else if note.type == RestNoteType.half {
-                    halfNote.isEnabled = true
-                    halfRest.isEnabled = true
-                } else if note.type == RestNoteType.quarter {
-                    quarterNote.isEnabled = true
-                    quarterRest.isEnabled = true
-                } else if note.type == RestNoteType.eighth {
-                    eighthNote.isEnabled = true
-                    eighthRest.isEnabled = true
-                } else if note.type == RestNoteType.sixteenth {
-                    sixteenthNote.isEnabled = true
-                    sixteenthRest.isEnabled = true
-                } else if note.type == RestNoteType.thirtySecond {
-                    thirtySecondNote.isEnabled = true
-                    thirtySecondRest.isEnabled = true
-                } else if note.type == RestNoteType.sixtyFourth {
-                    sixtyFourthNote.isEnabled = true
-                    sixtyFourthRest.isEnabled = true
-                }
+        for note in RestNoteType.types {
+            if invalidNotes.contains(note) {
+                toggleNoteButtons(note: note, isEnabled: false)
             } else {
-                if note.type == RestNoteType.whole {
-                    wholeNote.isEnabled = false
-                    wholeRest.isEnabled = false
-                } else if note.type == RestNoteType.half {
-                    halfNote.isEnabled = false
-                    halfRest.isEnabled = false
-                } else if note.type == RestNoteType.quarter {
-                    quarterNote.isEnabled = false
-                    quarterRest.isEnabled = false
-                } else if note.type == RestNoteType.eighth {
-                    eighthNote.isEnabled = false
-                    eighthRest.isEnabled = false
-                } else if note.type == RestNoteType.sixteenth {
-                    sixteenthNote.isEnabled = false
-                    sixteenthRest.isEnabled = false
-                } else if note.type == RestNoteType.thirtySecond {
-                    thirtySecondNote.isEnabled = false
-                    thirtySecondRest.isEnabled = false
-                } else if note.type == RestNoteType.sixtyFourth {
-                    sixtyFourthNote.isEnabled = false
-                    sixtyFourthRest.isEnabled = false
-                }
+                toggleNoteButtons(note: note, isEnabled: true)
             }
-            
         }
     }
     
