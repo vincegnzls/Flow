@@ -507,31 +507,20 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
-                                            <outlet property="EighthNote" destination="qeS-gz-Hqc" id="1Jf-Q2-FBe"/>
-                                            <outlet property="EighthRest" destination="qbc-VC-iba" id="cT9-Jk-1Uk"/>
-                                            <outlet property="HalfNote" destination="4IZ-GA-Tpx" id="4IW-06-GMS"/>
-                                            <outlet property="HalfRest" destination="jVO-bM-fp7" id="d9g-GK-Ur3"/>
-                                            <outlet property="QuarterRest" destination="YlV-zN-zu5" id="1bQ-g1-Mcd"/>
-                                            <outlet property="SixteenthNote" destination="cQ1-VV-w2b" id="z3a-3N-ySX"/>
-                                            <outlet property="SixteenthRest" destination="tBu-S8-pTk" id="rRU-DA-hOn"/>
-                                            <outlet property="SixtyFourthNote" destination="3n8-Ks-d0d" id="Mxx-BB-R41"/>
-                                            <outlet property="SixtyFourthRest" destination="Myg-SJ-NMA" id="L07-qR-EUm"/>
-                                            <outlet property="ThirtySecondNote" destination="WJ1-0u-QjL" id="QoP-US-wca"/>
-                                            <outlet property="ThirtySecondRest" destination="jMs-tt-I5c" id="yU9-3a-EG3"/>
-                                            <outlet property="eighthNote" destination="qeS-gz-Hqc" id="WBJ-Ul-DeH"/>
-                                            <outlet property="eighthRest" destination="qbc-VC-iba" id="GCL-mp-nbj"/>
-                                            <outlet property="halfNote" destination="4IZ-GA-Tpx" id="KLy-bS-Q7e"/>
-                                            <outlet property="halfRest" destination="jVO-bM-fp7" id="qHu-Tm-UKm"/>
-                                            <outlet property="quarterNote" destination="zVj-SJ-LAn" id="v6E-kZ-3qZ"/>
-                                            <outlet property="quarterRest" destination="YlV-zN-zu5" id="TlZ-gJ-mPN"/>
-                                            <outlet property="sixteenthNote" destination="cQ1-VV-w2b" id="qWU-bX-GrW"/>
-                                            <outlet property="sixteenthRest" destination="tBu-S8-pTk" id="xvi-zd-8UN"/>
-                                            <outlet property="sixtyFourthNote" destination="3n8-Ks-d0d" id="bGA-8x-bbt"/>
-                                            <outlet property="sixtyFourthRest" destination="Myg-SJ-NMA" id="jYh-RN-GzN"/>
-                                            <outlet property="thirtySecondNote" destination="WJ1-0u-QjL" id="R6v-Sa-sDf"/>
-                                            <outlet property="thirtySecondRest" destination="jMs-tt-I5c" id="yNp-CP-uff"/>
-                                            <outlet property="wholeNote" destination="Da8-dd-NHg" id="YDV-5p-2ma"/>
-                                            <outlet property="wholeRest" destination="SQg-3f-nGu" id="Lbd-fU-BSn"/>
+                                            <outlet property="eighthNote" destination="qeS-gz-Hqc" id="VEc-c6-s79"/>
+                                            <outlet property="eighthRest" destination="qbc-VC-iba" id="dco-le-OM4"/>
+                                            <outlet property="halfNote" destination="4IZ-GA-Tpx" id="Adi-Oq-xy2"/>
+                                            <outlet property="halfRest" destination="jVO-bM-fp7" id="eJ5-3k-oQV"/>
+                                            <outlet property="quarterNote" destination="zVj-SJ-LAn" id="HtC-Kj-8Mm"/>
+                                            <outlet property="quarterRest" destination="YlV-zN-zu5" id="jnQ-Mv-qca"/>
+                                            <outlet property="sixteenthNote" destination="cQ1-VV-w2b" id="txO-FQ-lB5"/>
+                                            <outlet property="sixteenthRest" destination="tBu-S8-pTk" id="Qom-aZ-wZ3"/>
+                                            <outlet property="sixtyFourthNote" destination="3n8-Ks-d0d" id="czs-HG-dQk"/>
+                                            <outlet property="sixtyFourthRest" destination="Myg-SJ-NMA" id="dxL-Lh-3xZ"/>
+                                            <outlet property="thirtySecondNote" destination="WJ1-0u-QjL" id="VD2-Hw-iLr"/>
+                                            <outlet property="thirtySecondRest" destination="jMs-tt-I5c" id="fbN-ka-WiQ"/>
+                                            <outlet property="wholeNote" destination="Da8-dd-NHg" id="dHT-d4-hk4"/>
+                                            <outlet property="wholeRest" destination="SQg-3f-nGu" id="hot-or-se6"/>
                                         </connections>
                                     </view>
                                 </subviews>
@@ -624,14 +613,14 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Number of Beats:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4gt-QU-C0q">
-                                            <rect key="frame" x="115" y="92" width="203" height="21"/>
+                                            <rect key="frame" x="114" y="92" width="203" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cMO-fH-QBP" userLabel="N Beats">
-                                            <rect key="frame" x="129" y="121" width="176" height="30"/>
+                                            <rect key="frame" x="128" y="121" width="176" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="32"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -645,7 +634,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YxG-qy-psA" userLabel="N Duration">
-                                            <rect key="frame" x="129" y="225" width="176" height="30"/>
+                                            <rect key="frame" x="128" y="225" width="176" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="32"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
