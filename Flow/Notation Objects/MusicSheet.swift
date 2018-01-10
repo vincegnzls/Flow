@@ -41,18 +41,9 @@ class MusicSheet: UIView {
     private var measureCoords = [GridSystem.MeasurePoints]()
     
     // variables for highlighting
-    private var highlightingStartPoint: CGPoint? {
-        didSet {
-            self.setNeedsDisplay()
-        }
-    }
-    private var highlightingEndPoint: CGPoint? {
-        didSet {
-            self.setNeedsDisplay()
-        }
-    }
-    
     private var hasHighlight = false
+    
+    private let highlightRect = HighlightRect()
     
     private var selectedMeasureCoord:GridSystem.MeasurePoints?
     
@@ -77,6 +68,7 @@ class MusicSheet: UIView {
         startYConnection += sheetYOffset
         
         setupCursor()
+        self.layer.addSublayer(self.highlightRect)
         
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
@@ -123,24 +115,24 @@ class MusicSheet: UIView {
             }
         }
         
-        var path: UIBezierPath?
-        if let startPoint = self.highlightingStartPoint, let endPoint = self.highlightingEndPoint {
-            path = UIBezierPath(rect: CGRect(x: min(startPoint.x, endPoint.x),
-                                                 y: min(startPoint.y, endPoint.y),
-                                                 width: fabs(startPoint.x - endPoint.x),
-                                                 height: fabs(startPoint.y - endPoint.y)))
-            // Fill
-            let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
-            highlightColor.setFill()
-            path!.fill()
-            
-            // Stroke
-            path!.lineWidth = 0
-            
-            path!.stroke()
-        } else {
-            path = nil
-        }
+//        var path: UIBezierPath?
+//        if let startPoint = self.highlightingStartPoint, let endPoint = self.highlightingEndPoint {
+//            path = UIBezierPath(rect: CGRect(x: min(startPoint.x, endPoint.x),
+//                                                 y: min(startPoint.y, endPoint.y),
+//                                                 width: fabs(startPoint.x - endPoint.x),
+//                                                 height: fabs(startPoint.y - endPoint.y)))
+//            // Fill
+//            let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
+//            highlightColor.setFill()
+//            path!.fill()
+//            
+//            // Stroke
+//            path!.lineWidth = 0
+//            
+//            path!.stroke()
+//        } else {
+//            path = nil
+//        }
     }
     
     //Setup a grand staff
@@ -503,10 +495,9 @@ class MusicSheet: UIView {
         
         //print("LOCATION TAPPED: \(location)")
         
-        if self.hasHighlight {
-            self.highlightingStartPoint = nil
-            self.highlightingEndPoint = nil
-            self.hasHighlight = false
+        if self.highlightRect.isVisible {
+            self.highlightRect.highlightingStartPoint = nil
+            self.highlightRect.highlightingEndPoint = nil
             return
         }
         
@@ -602,14 +593,14 @@ class MusicSheet: UIView {
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
             let locationOfBeganTap = sender.location(in: self)
-            self.highlightingStartPoint = locationOfBeganTap
-            self.highlightingEndPoint = locationOfBeganTap
+            self.highlightRect.highlightingStartPoint = locationOfBeganTap
+            self.highlightRect.highlightingEndPoint = locationOfBeganTap
             
         } else if sender.state == UIGestureRecognizerState.ended {
-            self.highlightingEndPoint = sender.location(in: self)
-            self.hasHighlight = true
+            self.highlightRect.highlightingEndPoint = sender.location(in: self)
+            //self.hasHighlight = true
         } else{
-            self.highlightingEndPoint = sender.location(in: self)
+            self.highlightRect.highlightingEndPoint = sender.location(in: self)
         }
     }
 }
