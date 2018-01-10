@@ -40,9 +40,6 @@ class MusicSheet: UIView {
     // used for tracking coordinates of measures
     private var measureCoords = [GridSystem.MeasurePoints]()
     
-    // variables for highlighting
-    private var hasHighlight = false
-    
     private let highlightRect = HighlightRect()
     
     private var selectedMeasureCoord:GridSystem.MeasurePoints?
@@ -114,25 +111,6 @@ class MusicSheet: UIView {
                 setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false, measures: measureSplices[i])
             }
         }
-        
-//        var path: UIBezierPath?
-//        if let startPoint = self.highlightingStartPoint, let endPoint = self.highlightingEndPoint {
-//            path = UIBezierPath(rect: CGRect(x: min(startPoint.x, endPoint.x),
-//                                                 y: min(startPoint.y, endPoint.y),
-//                                                 width: fabs(startPoint.x - endPoint.x),
-//                                                 height: fabs(startPoint.y - endPoint.y)))
-//            // Fill
-//            let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
-//            highlightColor.setFill()
-//            path!.fill()
-//            
-//            // Stroke
-//            path!.lineWidth = 0
-//            
-//            path!.stroke()
-//        } else {
-//            path = nil
-//        }
     }
     
     //Setup a grand staff
@@ -598,7 +576,6 @@ class MusicSheet: UIView {
             
         } else if sender.state == UIGestureRecognizerState.ended {
             self.highlightRect.highlightingEndPoint = sender.location(in: self)
-            //self.hasHighlight = true
         } else{
             self.highlightRect.highlightingEndPoint = sender.location(in: self)
         }
