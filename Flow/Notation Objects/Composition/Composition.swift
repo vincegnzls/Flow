@@ -32,4 +32,8 @@ class Composition {
         self.compositionInfo = compositionInfo
         self.staffList = staffList
     }
+    
+    func addStaff(_ staff: Staff) {
+        self.staffList.append(staff)
+    }
 }

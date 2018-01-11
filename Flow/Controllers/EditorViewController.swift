@@ -11,7 +11,6 @@ import UIKit
 class EditorViewController: UIViewController {
     
     @IBOutlet weak var musicSheet: MusicSheet!
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var height: NSLayoutConstraint!
     @IBOutlet weak var menuBar: MenuBar!
 
@@ -123,9 +122,7 @@ class EditorViewController: UIViewController {
                 parameters.put(key: KeyNames.NOTE_DETAILS, value: note)
 
                 // instantiate add action
-                let addAction = AddAction()
-                addAction.setMeasure(measure: measure)
-                addAction.setNote(note: note)
+                let addAction = AddAction(measure: measure, note: note)
 
                 addAction.execute()
             }

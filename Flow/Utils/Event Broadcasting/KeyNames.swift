@@ -13,4 +13,5 @@ struct KeyNames {
     static let NOTE_DETAILS = "NOTE_DETAILS"
     static let ARROW_KEY_DIRECTION = "ARROW_KEY_DIRECTION"
     static let DELETE_KEY = "DELETE_KEY"
+    static let INVALID_NOTES = "INVALID_NOTES"
 }
