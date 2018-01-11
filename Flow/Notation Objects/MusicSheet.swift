@@ -281,6 +281,9 @@ class MusicSheet: UIView {
         
         measureXDivs.insert(endX)
 
+        GridSystem.instance.assignWeightsToPoints(measurePoints: measureCoord,
+                weights: initMeasureGrid(startX: startX, endX: endX, startY: startY-curSpace))
+
         return measureCoord
     }
     
@@ -307,8 +310,14 @@ class MusicSheet: UIView {
         let distance:CGFloat = ((endX - paddingLeftRight) - currX) / CGFloat(maximum64th)
         
         // create points tantamount to maximum number of 64th notes
-        for _ in 1...maximum64th {
-            points.append(CGPoint(x: currX, y: startY/2))
+        for i in 1...maximum64th {
+            points.append(CGPoint(x: currX, y: startY))
+
+            /*let note = MusicNotation(type: .whole)
+            note.screenCoordinates = CGPoint(x: currX, y: startY)
+            note.image = UIImage(named: "whole-head")
+
+            addMusicNotation(note: note)*/
             
             currX += distance
         }
@@ -562,9 +571,6 @@ class MusicSheet: UIView {
     }
 
     func updateMeasureDraw(params: Parameters) {
-        // TODO: update view here
-        print("VIEW SHOULD UPDATE NOW !!!")
-
         let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
         notation.screenCoordinates = curYCursorLocation
 
