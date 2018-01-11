@@ -14,6 +14,7 @@ class GridSystem {
     static let instance = GridSystem()
 
     public var selectedMeasureCoord:MeasurePoints?
+    public var selectedCoord:CGPoint?
     private var measureMap = [MeasurePoints: Measure]()
     private var weightsMap = [MeasurePoints: [CGPoint]]()
     private var snapPointsMap = [MeasurePoints: [CGPoint]]()
@@ -43,8 +44,35 @@ class GridSystem {
         snapPointsMap[measurePoints] = snapPoint
     }
 
+    public func addMoreSnapPointsToPoints(measurePoints:MeasurePoints, snapPoints:[CGPoint]) {
+        if var snapPointsFromMap = snapPointsMap[measurePoints] {
+            snapPointsFromMap.append(contentsOf: snapPoints)
+            snapPointsMap[measurePoints] = snapPointsFromMap
+        } else {
+            assignSnapPointsToPoints(measurePoints: measurePoints, snapPoint: snapPoints)
+        }
+    }
+
     public func assignWeightsToPoints(measurePoints:MeasurePoints, weights:[CGPoint]) {
         weightsMap[measurePoints] = weights
+    }
+
+    public static func createSnapPoints (initialX: CGFloat, initialY: CGFloat) -> [CGPoint] {
+        var snapPoints = [CGPoint]()
+
+        var currSnapPoint:CGPoint = CGPoint(x: initialX, y: initialY)
+
+        for i in 1...9 {
+            snapPoints.append(currSnapPoint)
+
+            if i % 2 == 0 {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 16.5)
+            } else {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 13.5)
+            }
+        }
+
+        return snapPoints
     }
     
     struct MeasurePoints : Hashable {

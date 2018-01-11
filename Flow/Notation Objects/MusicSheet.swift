@@ -263,7 +263,7 @@ class MusicSheet: UIView {
         
         //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
         // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
-        GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: createSnapPoints(initialX: startX + 20, initialY: startY-curSpace))
+        GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: GridSystem.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace))
         
         //draw line before measure
         if withLeftLine {
@@ -318,30 +318,16 @@ class MusicSheet: UIView {
             note.image = UIImage(named: "whole-head")
 
             addMusicNotation(note: note)*/
+
+            // for testing
+            /*GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoords[measureCoords.count-1],
+                    snapPoints: GridSystem.createSnapPoints(initialX: currX, initialY: startY))*/
             
             currX += distance
         }
         
         return points
         
-    }
-    
-    private func createSnapPoints (initialX: CGFloat, initialY: CGFloat) -> [CGPoint] {
-        var snapPoints = [CGPoint]()
-        
-        var currSnapPoint:CGPoint = CGPoint(x: initialX, y: initialY)
-        
-        for i in 1...9 {
-            snapPoints.append(currSnapPoint)
-            
-            if i % 2 == 0 {
-                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 16.5)
-            } else {
-                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 13.5)
-            }
-        }
-        
-        return snapPoints
     }
 
     // Draws connecting lines for grand staves
@@ -573,6 +559,8 @@ class MusicSheet: UIView {
     func updateMeasureDraw(params: Parameters) {
         let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
         notation.screenCoordinates = curYCursorLocation
+
+
 
         self.addMusicNotation(note: notation)
     }
