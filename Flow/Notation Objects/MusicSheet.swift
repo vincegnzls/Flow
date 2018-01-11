@@ -50,6 +50,8 @@ class MusicSheet: UIView {
         return bounds.width - lefRightPadding
     }
     
+    private var selectedNotations: [MusicNotation] = []
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
@@ -483,8 +485,16 @@ class MusicSheet: UIView {
         //print("LOCATION TAPPED: \(location)")
         
         if self.highlightRect.isVisible {
+            // Remove highlight
             self.highlightRect.highlightingStartPoint = nil
             self.highlightRect.highlightingEndPoint = nil
+            
+            // Remove selected notes
+            for note in selectedNotations {
+                note.isSelected = false
+            }
+            self.selectedNotations.removeAll()
+            
             return
         }
         
@@ -597,10 +607,9 @@ class MusicSheet: UIView {
             for notation in allNotations {
                 if let coor = notation.screenCoordinates {
                     let rect = self.highlightRect.rect
-                    print("notation: (\(coor.x), \(coor.y)")
-                    print("rect: (\(rect.origin.x), \(rect.origin.y)")
                     if rect.contains(coor) {
-                        print("found notation")
+                        notation.isSelected = true
+                        self.selectedNotations.append(notation)
                     }
                 }
             }
