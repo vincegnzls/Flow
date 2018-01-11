@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "8th-down-10.png",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "8th-down-10.png"
     },
     {
       "idiom" : "universal",
-      "filename" : "8th-down-20.png",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "8th-down-20.png"
     },
     {
       "idiom" : "universal",
-      "filename" : "eighth-down-30.png",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "eighth-down-30.png"
     }
   ],
   "info" : {

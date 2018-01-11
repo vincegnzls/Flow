@@ -8,6 +8,7 @@
 
 import UIKit
 
+@IBDesignable
 class MusicSheet: UIView {
     
     // TO REMOVE LATER ON; USED FOR TESTING PURPOSES ONLY
@@ -40,11 +41,22 @@ class MusicSheet: UIView {
     // used for tracking coordinates of measures
     private var measureCoords = [GridSystem.MeasurePoints]()
     
-    private let highlightRect = HighlightRect()
+    // variables for highlighting
+    private var highlightingStartPoint: CGPoint? {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    private var highlightingEndPoint: CGPoint? {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    private var hasHighlight = false
     
     private var selectedMeasureCoord:GridSystem.MeasurePoints?
-    
-    private var composition: Composition?
+    private var grid:[Measure]?
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -65,7 +77,6 @@ class MusicSheet: UIView {
         startYConnection += sheetYOffset
         
         setupCursor()
-        self.layer.addSublayer(self.highlightRect)
         
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
@@ -83,33 +94,50 @@ class MusicSheet: UIView {
     }
 
     func onCompositionLoad (params: Parameters) {
-        composition = params.get(key: KeyNames.COMPOSITION) as? Composition
+        grid = params.get(key: KeyNames.MEASURES_ARRAY) as! [Measure]
     }
     
     override func draw(_ rect: CGRect) {
-        if (composition!.numStaves > 0) {
+        if (grid!.count > 0) {
+            let numStaves = grid!.count / (NUM_MEASURES_PER_STAFF * 2) // times 2 for grand staves
+
             var measureSplices = [[Measure]]()
 
-            // compute number of staff divisions
-            let numStaffDivs = composition!.numMeasures / (NUM_MEASURES_PER_STAFF * composition!.numStaves)
-
             var startIndex = 0
-            for i in 0..<numStaffDivs {
+            for i in 0...numStaves-1 {
                 measureSplices.append([Measure]())
-                for k in 0..<composition!.numStaves {
-                    measureSplices[i].append(contentsOf: Array(composition!.staffList[k].measures[startIndex...startIndex + (NUM_MEASURES_PER_STAFF-1)]))
+                for _ in 1...(NUM_MEASURES_PER_STAFF*2) {
+
+                    measureSplices[i].append(grid![startIndex])
+                    startIndex += 1
                 }
-
-                startIndex += NUM_MEASURES_PER_STAFF
-
             }
 
             // TODO: fix this if there are changing time signatures and key signatures between measure splices
             setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: true, measures: measureSplices[0])
 
-            for i in 1..<measureSplices.count {
+            for i in 1...measureSplices.count-1 {
                 setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false, measures: measureSplices[i])
             }
+        }
+        
+        var path: UIBezierPath?
+        if let startPoint = self.highlightingStartPoint, let endPoint = self.highlightingEndPoint {
+            path = UIBezierPath(rect: CGRect(x: min(startPoint.x, endPoint.x),
+                                                 y: min(startPoint.y, endPoint.y),
+                                                 width: fabs(startPoint.x - endPoint.x),
+                                                 height: fabs(startPoint.y - endPoint.y)))
+            // Fill
+            let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
+            highlightColor.setFill()
+            path!.fill()
+            
+            // Stroke
+            path!.lineWidth = 0
+            
+            path!.stroke()
+        } else {
+            path = nil
         }
     }
     
@@ -122,11 +150,11 @@ class MusicSheet: UIView {
         var lowerStaffMeasures = [Measure]()
 
         for i in 0...lowerStaffStart-1 {
-            upperStaffMeasures.append(measures[i])
+            upperStaffMeasures.append(grid![i])
         }
 
         for i in lowerStaffStart...measures.count-1 {
-            lowerStaffMeasures.append(measures[i])
+            lowerStaffMeasures.append(grid![i])
         }
 
         staffIndex += 1
@@ -307,7 +335,7 @@ class MusicSheet: UIView {
         let distance:CGFloat = ((endX - paddingLeftRight) - currX) / CGFloat(maximum64th)
         
         // create points tantamount to maximum number of 64th notes
-        for _ in 1...maximum64th {
+        for i in 1...maximum64th {
             points.append(CGPoint(x: currX, y: startY/2))
             
             currX += distance
@@ -473,9 +501,10 @@ class MusicSheet: UIView {
         
         //print("LOCATION TAPPED: \(location)")
         
-        if self.highlightRect.isVisible {
-            self.highlightRect.highlightingStartPoint = nil
-            self.highlightRect.highlightingEndPoint = nil
+        if self.hasHighlight {
+            self.highlightingStartPoint = nil
+            self.highlightingEndPoint = nil
+            self.hasHighlight = false
             return
         }
         
@@ -570,14 +599,15 @@ class MusicSheet: UIView {
     
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
-            let locationOfBeganTap = sender.location(in: self)
-            self.highlightRect.highlightingStartPoint = locationOfBeganTap
-            self.highlightRect.highlightingEndPoint = locationOfBeganTap
+            var locationOfBeganTap = sender.location(in: self)
+            self.highlightingStartPoint = locationOfBeganTap
+            self.highlightingEndPoint = locationOfBeganTap
             
         } else if sender.state == UIGestureRecognizerState.ended {
-            self.highlightRect.highlightingEndPoint = sender.location(in: self)
+            self.highlightingEndPoint = sender.location(in: self)
+            self.hasHighlight = true
         } else{
-            self.highlightRect.highlightingEndPoint = sender.location(in: self)
+            self.highlightingEndPoint = sender.location(in: self)
         }
     }
 }

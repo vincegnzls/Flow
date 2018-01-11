@@ -14,8 +14,6 @@ class Measure {
     var clef: Clef
     var notationObjects: [MusicNotation]
     var bounds: Bounds
-    var curBeatValue: Float
-    var validNotes: [RestNoteType]
     
     init(keySignature: KeySignature = .c,
          timeSignature: TimeSignature = TimeSignature(),
@@ -26,59 +24,9 @@ class Measure {
         self.clef = clef
         self.notationObjects = notationObjects
         self.bounds = Bounds()
-        self.curBeatValue = 0
-        self.validNotes = [RestNoteType]()
     }
     
-    public func addNoteInMeasure (_ musicNotation: MusicNotation) {
-        
-        print("ADD NOTE")
-        
-        if(isAddNoteValid(musicNotation: musicNotation.type)) {
-            print("ADD NOTE VALID")
-        
-            self.curBeatValue += musicNotation.type.getBeatValue()
-            notationObjects.append(musicNotation)
-            
-            updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls after adding note
-            
-        } else {
-            
-            print("INVALID ADD NOTE")
-            
-        }
-        
+    public func addNoteInMeasure (musicNotation:MusicNotation) {
+        notationObjects.append(musicNotation)
     }
-    
-    public func getInvalidNotes() -> [RestNoteType] {
-        
-        var invalidNotes = [RestNoteType]()
-        
-        for note in RestNoteType.types {
-            if note.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
-                invalidNotes.append(note)
-            }
-        }
-        
-        return invalidNotes
-        
-    }
-    
-    // send event to notation controls
-    public func updateInvalidNotes(invalidNotes: [RestNoteType]) {
-        
-        let params = Parameters()
-        
-        params.put(key: KeyNames.INVALID_NOTES, value: invalidNotes)
-        EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_NOTES, params: params)
-        
-    }
-    
-    public func isAddNoteValid (musicNotation: RestNoteType) -> Bool {
-        
-        return self.curBeatValue + musicNotation.getBeatValue() <= self.timeSignature.getMaxBeatValue()
-            
-    }
-    
-    
 }

@@ -11,6 +11,7 @@ import UIKit
 class EditorViewController: UIViewController {
     
     @IBOutlet weak var musicSheet: MusicSheet!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var height: NSLayoutConstraint!
     @IBOutlet weak var menuBar: MenuBar!
 
@@ -21,26 +22,16 @@ class EditorViewController: UIViewController {
         // TODO: change this to load an existing composition if did not create a new comp
         // TODO: inline number of measures per staff also
         // CREATES A NEW COMPOSITION WITH DEFAULT LAYOUT OF 12 MEASURES, 3 GRAND STAVES, AND 2 MEASURES PER STAFF
-        var measuresForG = [Measure]()
-        var measuresForF = [Measure]()
+        var measures = [Measure]()
 
-        for _  in 1...6 {
-            measuresForG.append(Measure())
+        for i in 1...12 {
+            if i%3 == 0 || i%4 == 0 {
+                measures.append(Measure(clef: Clef.F))
+            } else {
+                measures.append(Measure())
+            }
         }
-
-        for _ in 1...6 {
-            measuresForF.append(Measure(clef: Clef.F))
-        }
-
-        let GStaff = Staff(measures: measuresForG)
-        let FStaff = Staff(measures: measuresForF)
-
-        var staffArr = [Staff]()
-
-        staffArr.append(GStaff)
-        staffArr.append(FStaff)
-
-        composition = Composition(staffList: staffArr)
+        composition = Composition(measures: measures)
         // END OF CREATION
 
         // init
@@ -54,7 +45,7 @@ class EditorViewController: UIViewController {
         super.viewDidLoad()
 
         let params = Parameters()
-        params.put(key: KeyNames.COMPOSITION, value: self.composition!)
+        params.put(key: KeyNames.MEASURES_ARRAY, value: self.composition!.getMeasures())
 
         EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
 
@@ -72,8 +63,6 @@ class EditorViewController: UIViewController {
     
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
 
-        // TODO: inline this with self instance of composition
-
         // FOR TESTING PURPOSES ONLY
         let measure = Measure(keySignature: KeySignature.c,
                               timeSignature: TimeSignature(),
@@ -85,48 +74,38 @@ class EditorViewController: UIViewController {
         
         var measures = [Measure]()
         measures.append(measure)
-
-        //let comp = Composition(measures: measures)
-        //let test = FileHandler.instance.convertCompositionToMusicXML(comp)
+        let comp = Composition(measures: measures)
+        let test = FileHandler.instance.convertCompositionToMusicXML(comp)
         
-        //print("\(test)")
+        print("\(test)")
         
-        //FileHandler.instance.convertMusicXMLtoComposition(test)
+        FileHandler.instance.convertMusicXMLtoComposition(test)
     }
 
     func onNoteKeyPressed (params:Parameters) {
 
-        let restNoteType: RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
+        let restNoteType:RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
         let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
 
-        // check if there is a selected measure coord
-        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+        // TODO: instantiate here the AddCommand
 
-            // check if there is a corresponding measure for the measure coordinate
-            if let measure: Measure = GridSystem.instance.getMeasureFromPoints(
-                    measurePoints: measureCoord) {
+        if GridSystem.instance.selectedMeasureCoord! != nil {
 
-                let note: MusicNotation
-
-                // determine if rest or note
-                if isRest {
-                    note = Rest(type: restNoteType)
-                } else {
-                    // TODO: determine what is the correct pitch from the cursor's location
-                    note = Note(pitch: Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
+            if isRest {
+                if let measure:Measure = GridSystem.instance.getMeasureFromPoints(
+                        measurePoints: (GridSystem.instance.selectedMeasureCoord)!) {
+                    let rest:Rest = Rest(type: restNoteType)
+                    measure.addNoteInMeasure(musicNotation: rest)
                 }
 
-                // instantiate add action
-                let addAction = AddAction(measure: measure, note: note)
-
-                addAction.execute()
+            } else {
+                if let measure:Measure = GridSystem.instance.getMeasureFromPoints(
+                        measurePoints: (GridSystem.instance.selectedMeasureCoord)!) {
+                    // TODO: locate cursor y for knowing pitch and adjust screen coordinates
+                    let note:Note = Note(pitch:Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
+                    measure.addNoteInMeasure(musicNotation: note)
+                }
             }
-
-            let parameters = Parameters()
-            parameters.put(key: KeyNames.NOTE_DETAILS, value: restNoteType)
-            parameters.put(key: KeyNames.IS_REST_KEY, value: isRest)
-
-            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE, params: parameters)
 
         }
 
