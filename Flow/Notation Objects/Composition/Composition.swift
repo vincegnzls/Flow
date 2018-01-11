@@ -27,7 +27,17 @@ class Composition {
         
         return measureNum
     }
-
+    var all: [MusicNotation] {
+        var notations = [MusicNotation]()
+        
+        for staff in staffList {
+            for measure in staff.measures {
+                notations.append(contentsOf: measure.notationObjects)
+            }
+        }
+        return notations
+    }
+    
     init(compositionInfo: CompositionInfo = CompositionInfo(), staffList: [Staff] = []) {
         self.compositionInfo = compositionInfo
         self.staffList = staffList

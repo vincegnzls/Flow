@@ -579,5 +579,22 @@ class MusicSheet: UIView {
         } else{
             self.highlightRect.highlightingEndPoint = sender.location(in: self)
         }
+        
+        self.checkPointsInRect()
+    }
+    
+    private func checkPointsInRect() {
+        if let allNotations = composition?.all {
+            for notation in allNotations {
+                if let coor = notation.screenCoordinates {
+                    let rect = self.highlightRect.rect
+                    print("notation: (\(coor.x), \(coor.y)")
+                    print("rect: (\(rect.origin.x), \(rect.origin.y)")
+                    if rect.contains(coor) {
+                        print("found notation")
+                    }
+                }
+            }
+        }
     }
 }
