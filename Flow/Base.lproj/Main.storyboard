@@ -220,7 +220,7 @@
                                         </subviews>
                                     </view>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLW-3Y-Rf2" customClass="NotationControlsView" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="38" width="315" height="125"/>
+                                        <rect key="frame" x="-4" y="38" width="315" height="125"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yvv-DJ-7yL" userLabel="NotesView">
@@ -353,7 +353,7 @@
                                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qeS-gz-Hqc" userLabel="Eighth" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                                 <rect key="frame" x="7" y="8" width="30" height="30"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="eighth-up"/>
+                                                                <state key="normal" image="quarter-up"/>
                                                                 <connections>
                                                                     <action selector="eighthNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="6rQ-3j-wya"/>
                                                                 </connections>
@@ -524,22 +524,6 @@
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <connections>
-                                            <outlet property="eighthNote" destination="qeS-gz-Hqc" id="VEc-c6-s79"/>
-                                            <outlet property="eighthRest" destination="qbc-VC-iba" id="dco-le-OM4"/>
-                                            <outlet property="halfNote" destination="4IZ-GA-Tpx" id="Adi-Oq-xy2"/>
-                                            <outlet property="halfRest" destination="jVO-bM-fp7" id="eJ5-3k-oQV"/>
-                                            <outlet property="quarterNote" destination="zVj-SJ-LAn" id="HtC-Kj-8Mm"/>
-                                            <outlet property="quarterRest" destination="YlV-zN-zu5" id="jnQ-Mv-qca"/>
-                                            <outlet property="sixteenthNote" destination="cQ1-VV-w2b" id="txO-FQ-lB5"/>
-                                            <outlet property="sixteenthRest" destination="tBu-S8-pTk" id="Qom-aZ-wZ3"/>
-                                            <outlet property="sixtyFourthNote" destination="3n8-Ks-d0d" id="czs-HG-dQk"/>
-                                            <outlet property="sixtyFourthRest" destination="Myg-SJ-NMA" id="dxL-Lh-3xZ"/>
-                                            <outlet property="thirtySecondNote" destination="WJ1-0u-QjL" id="VD2-Hw-iLr"/>
-                                            <outlet property="thirtySecondRest" destination="jMs-tt-I5c" id="fbN-ka-WiQ"/>
-                                            <outlet property="wholeNote" destination="Da8-dd-NHg" id="dHT-d4-hk4"/>
-                                            <outlet property="wholeRest" destination="SQg-3f-nGu" id="hot-or-se6"/>
-                                        </connections>
                                     </view>
                                 </subviews>
                             </view>
@@ -573,6 +557,7 @@
                         <outlet property="height" destination="xo5-Y1-ev2" id="n6n-09-Ew5"/>
                         <outlet property="menuBar" destination="VHe-OH-6BV" id="EC9-aQ-TAh"/>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
+                        <outlet property="titleLabel" destination="xo5-Y1-ev2" id="VJJ-Uf-rI9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2W-99-FM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -597,7 +582,7 @@
                                         <action selector="onDismissPopup:" destination="cUa-Ia-SFW" eventType="touchUpInside" id="g3u-TE-v7m"/>
                                     </connections>
                                 </button>
-                                <view alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wag-AV-1Qd">
+                                <view alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wag-AV-1Qd" customClass="TimeSignaturePopupDesignable" customModule="Flow" customModuleProvider="target">
                                     <rect key="frame" x="156" y="242" width="800" height="350"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -630,14 +615,14 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Number of Beats:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4gt-QU-C0q">
-                                            <rect key="frame" x="114" y="92" width="203" height="21"/>
+                                            <rect key="frame" x="117" y="92" width="203" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cMO-fH-QBP" userLabel="N Beats">
-                                            <rect key="frame" x="128" y="121" width="176" height="30"/>
+                                            <rect key="frame" x="131" y="121" width="176" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="32"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -651,7 +636,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YxG-qy-psA" userLabel="N Duration">
-                                            <rect key="frame" x="128" y="225" width="176" height="30"/>
+                                            <rect key="frame" x="131" y="225" width="176" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="32"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -727,7 +712,6 @@
         <image name="cut-icon" width="50" height="50"/>
         <image name="double-sharp" width="9" height="9"/>
         <image name="eighth-rest" width="22" height="57"/>
-        <image name="eighth-up" width="22" height="40"/>
         <image name="flat" width="8" height="39"/>
         <image name="half-rest" width="22" height="57"/>
         <image name="half-up" width="12" height="40"/>

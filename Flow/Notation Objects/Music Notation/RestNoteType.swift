@@ -8,7 +8,6 @@
 import UIKit
 
 enum RestNoteType {
-    
     case
         sixtyFourth,
         thirtySecond,
@@ -17,8 +16,6 @@ enum RestNoteType {
         quarter,
         half,
         whole
-    
-    static let types = [whole, half, quarter, eighth, sixteenth, thirtySecond, sixtyFourth]
     
     func getRestImage() -> UIImage {
         switch self {
@@ -128,17 +125,4 @@ enum RestNoteType {
         case .whole: return divisions * 4
         }
     }
-    
-    func getBeatValue() -> Float {
-        switch self {
-        case .sixtyFourth: return 0.015625
-        case .thirtySecond: return 0.03125
-        case .sixteenth: return 0.0625
-        case .eighth: return 0.125
-        case .quarter: return 0.25
-        case .half: return 0.5
-        case .whole: return 1.0
-        }
-    }
-    
 }

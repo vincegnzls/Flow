@@ -97,6 +97,7 @@
 		610ECE381FE7C58E009CC0F2 /* KeySignatureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */; };
 		610ECE3A1FE7CC9F009CC0F2 /* KeySignatureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */; };
 		611BFC9E1FE678C2001511B2 /* TimeSignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */; };
+		611BFCA11FE67948001511B2 /* TimeSignaturePopupDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */; };
 		612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612D07A51FD2C6780006BD0E /* MusicSheet.swift */; };
 		6135C82B1FDEC35000AF9EA9 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135C82A1FDEC35000AF9EA9 /* Bounds.swift */; };
 		61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61370E161F82A1CB002B6A09 /* AppDelegate.swift */; };
@@ -122,7 +123,6 @@
 		861B3DDA1FDC20E2003FE0A5 /* KeyNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */; };
 		861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DDD1FDC43C5003FE0A5 /* Observer.swift */; };
 		861F781A1FD6E12A00C51BD2 /* CompositionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */; };
-		8632C97C2000877B00D69CB4 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8632C97B2000877B00D69CB4 /* Converter.swift */; };
 		863374811FD32849003D7936 /* MusicNotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863374801FD32849003D7936 /* MusicNotation.swift */; };
 		864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A11FD32FC3001FF059 /* RestNoteType.swift */; };
 		864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A31FD32FD6001FF059 /* Rest.swift */; };
@@ -131,7 +131,6 @@
 		864CE5AC1FD33076001FF059 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5AB1FD33076001FF059 /* Note.swift */; };
 		864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B01FD330DA001FF059 /* GridCoordinates.swift */; };
 		864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B21FD355E8001FF059 /* SWXMLHash.swift */; };
-		865B22CA20050477009D0D11 /* HighlightRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865B22C920050477009D0D11 /* HighlightRect.swift */; };
 		8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A51FD4E8E800EB81BD /* Composition.swift */; };
 		8696A8A91FD4EA5800EB81BD /* FileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A81FD4EA5800EB81BD /* FileHandler.swift */; };
 		8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */; };
@@ -263,6 +262,7 @@
 		610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureModel.swift; sourceTree = "<group>"; };
 		610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureData.swift; sourceTree = "<group>"; };
 		611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignatureViewController.swift; sourceTree = "<group>"; };
+		611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignaturePopupDesignable.swift; sourceTree = "<group>"; };
 		612D07A51FD2C6780006BD0E /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 		6135C82A1FDEC35000AF9EA9 /* Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
 		61370E131F82A1CB002B6A09 /* Flow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -292,7 +292,6 @@
 		861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyNames.swift; sourceTree = "<group>"; };
 		861B3DDD1FDC43C5003FE0A5 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionInfo.swift; sourceTree = "<group>"; };
-		8632C97B2000877B00D69CB4 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		863374801FD32849003D7936 /* MusicNotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotation.swift; sourceTree = "<group>"; };
 		864CE5A11FD32FC3001FF059 /* RestNoteType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestNoteType.swift; sourceTree = "<group>"; };
 		864CE5A31FD32FD6001FF059 /* Rest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rest.swift; sourceTree = "<group>"; };
@@ -301,7 +300,6 @@
 		864CE5AB1FD33076001FF059 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		864CE5B01FD330DA001FF059 /* GridCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCoordinates.swift; sourceTree = "<group>"; };
 		864CE5B21FD355E8001FF059 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
-		865B22C920050477009D0D11 /* HighlightRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightRect.swift; sourceTree = "<group>"; };
 		8696A8A51FD4E8E800EB81BD /* Composition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Composition.swift; sourceTree = "<group>"; };
 		8696A8A81FD4EA5800EB81BD /* FileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandler.swift; sourceTree = "<group>"; };
 		8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignature.swift; sourceTree = "<group>"; };
@@ -456,6 +454,7 @@
 		611BFC9F1FE67928001511B2 /* IBDesignables */ = {
 			isa = PBXGroup;
 			children = (
+				611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */,
 				61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */,
 			);
 			path = IBDesignables;
@@ -468,6 +467,7 @@
 				8696A8AA1FD4EB4300EB81BD /* Composition */,
 				863374771FD3279F003D7936 /* Music Notation */,
 				61EC34951F8A7C4200A4A5D6 /* Line.swift */,
+				613EE8D41F98EB5F004FD009 /* Staff.swift */,
 				612D07A51FD2C6780006BD0E /* MusicSheet.swift */,
 				610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */,
 				610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */,
@@ -510,14 +510,6 @@
 				61370E221F82A1CB002B6A09 /* Info.plist */,
 			);
 			path = Flow;
-			sourceTree = "<group>";
-		};
-		61D516851FED4E9700DBF573 /* Staff */ = {
-			isa = PBXGroup;
-			children = (
-				613EE8D41F98EB5F004FD009 /* Staff.swift */,
-			);
-			path = Staff;
 			sourceTree = "<group>";
 		};
 		8618F0721FED3CF000DF8A10 /* Action */ = {
@@ -595,7 +587,6 @@
 			isa = PBXGroup;
 			children = (
 				8696A8A81FD4EA5800EB81BD /* FileHandler.swift */,
-				8632C97B2000877B00D69CB4 /* Converter.swift */,
 			);
 			path = "File Handling";
 			sourceTree = "<group>";
@@ -603,7 +594,6 @@
 		8696A8AA1FD4EB4300EB81BD /* Composition */ = {
 			isa = PBXGroup;
 			children = (
-				61D516851FED4E9700DBF573 /* Staff */,
 				8696A8AF1FD4F19500EB81BD /* Measure */,
 				8696A8A51FD4E8E800EB81BD /* Composition.swift */,
 				8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */,
@@ -644,7 +634,6 @@
 				869F3C601FD8FCC900CC236F /* Controls */,
 				86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */,
 				610ECE331FE6DAE9009CC0F2 /* TimeSignaturePicker.swift */,
-				865B22C920050477009D0D11 /* HighlightRect.swift */,
 			);
 			path = "View Objects";
 			sourceTree = "<group>";
@@ -899,10 +888,8 @@
 				612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */,
 				861B3DD41FDC1E0E003FE0A5 /* Parameters.swift in Sources */,
 				86B8EFEC1FEAA5E600DD834E /* Step.swift in Sources */,
-				8632C97C2000877B00D69CB4 /* Converter.swift in Sources */,
 				8696A8BC1FD5898200EB81BD /* Element.swift in Sources */,
 				8618F07C1FED406500DF8A10 /* UndoRedoManager.swift in Sources */,
-				865B22CA20050477009D0D11 /* HighlightRect.swift in Sources */,
 				8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */,
 				8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */,
 				864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */,
@@ -933,6 +920,7 @@
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				8696A8C01FD5898200EB81BD /* Parser.swift in Sources */,
 				861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */,
+				611BFCA11FE67948001511B2 /* TimeSignaturePopupDesignable.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
 				8618F0781FED3D8C00DF8A10 /* EditAction.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
@@ -1103,7 +1091,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4HW4U7R3UV;
+				DEVELOPMENT_TEAM = 6D826ZAQ87;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1122,7 +1110,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4HW4U7R3UV;
+				DEVELOPMENT_TEAM = 6D826ZAQ87;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
