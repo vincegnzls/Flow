@@ -42,6 +42,10 @@ class GridSystem {
     public func assignSnapPointsToPoints(measurePoints:MeasurePoints, snapPoint:[CGPoint]) {
         snapPointsMap[measurePoints] = snapPoint
     }
+
+    public func assignWeightsToPoints(measurePoints:MeasurePoints, weights:[CGPoint]) {
+        weightsMap[measurePoints] = weights
+    }
     
     struct MeasurePoints : Hashable {
         var upperLeftPoint:CGPoint
