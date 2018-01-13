@@ -10,12 +10,6 @@ import UIKit
 
 class MusicSheet: UIView {
     
-    // TO REMOVE LATER ON; USED FOR TESTING PURPOSES ONLY
-    
-    private var snapPoints = [CGPoint]()
-    
-    // END OF REMOVE LATER
-    
     private let sheetYOffset:CGFloat = 60
     private let lineSpace:CGFloat = 30 // Spaces between lines in staff
     private let staffSpace:CGFloat = 280 // Spaces between staff
@@ -322,8 +316,8 @@ class MusicSheet: UIView {
             addMusicNotation(note: note)*/
 
             // for testing
-            /*GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoords[measureCoords.count-1],
-                    snapPoints: GridSystem.createSnapPoints(initialX: currX, initialY: startY))*/
+            GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoords[measureCoords.count-1],
+                    snapPoints: GridSystem.createSnapPoints(initialX: currX, initialY: startY))
             
             currX += distance
         }
@@ -417,11 +411,11 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.left {
             
-            let note = MusicNotation(type: .whole)
+            /*let note = MusicNotation(type: .whole)
             note.screenCoordinates = curYCursorLocation
             note.image = UIImage(named: "whole-head")
             
-            addMusicNotation(note: note)
+            addMusicNotation(note: note)*/
             
             curXCursorLocation.x -= 40
             curYCursorLocation.x = curXCursorLocation.x
@@ -430,16 +424,19 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.right {
             
-            let note = MusicNotation(type: .whole)
+            /*let note = MusicNotation(type: .whole)
             note.screenCoordinates = curYCursorLocation
             note.image = UIImage(named: "whole-head")
             
-            addMusicNotation(note: note)
+            addMusicNotation(note: note)*/
+
+            let nextPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: curYCursorLocation)
             
-            curXCursorLocation.x += 40
-            curYCursorLocation.x = curXCursorLocation.x
+            curXCursorLocation.x = nextPoint.x
+            curYCursorLocation.x = nextPoint.x
+            
             moveCursorX(location: curXCursorLocation)
-            moveCursorY(location: curYCursorLocation)
+            moveCursorY(location: nextPoint)
             
         }
         
@@ -513,13 +510,13 @@ class MusicSheet: UIView {
 
                 let relXLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
 
-                //print("NEAREST POINT: \(closestPoint)")
-
                 curXCursorLocation = relXLocation
                 moveCursorX(location: relXLocation)
 
                 curYCursorLocation = closestPoint
                 moveCursorY(location: closestPoint)
+
+                GridSystem.instance.selectedCoord = closestPoint
 
             }
         }
@@ -568,9 +565,9 @@ class MusicSheet: UIView {
 
     func updateMeasureDraw(params: Parameters) {
         let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
-        notation.screenCoordinates = curYCursorLocation
+        let notePlacement = GridSystem.instance.getNotePlacement(notation: notation)
 
-
+        notation.screenCoordinates = notePlacement
 
         self.addMusicNotation(note: notation)
     }

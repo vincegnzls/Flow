@@ -52,9 +52,55 @@ class GridSystem {
             assignSnapPointsToPoints(measurePoints: measurePoints, snapPoint: snapPoints)
         }
     }
-
     public func assignWeightsToPoints(measurePoints:MeasurePoints, weights:[CGPoint]) {
         weightsMap[measurePoints] = weights
+    }
+
+    public func getRightXSnapPoint(currentPoint: CGPoint) -> CGPoint {
+        if let measureCoord = selectedMeasureCoord {
+
+            var nearestPoint:CGPoint?
+            var leastDistance:CGFloat?
+            if let snapPoints = snapPointsMap[measureCoord] {
+
+                for snapPoint in snapPoints {
+                    
+                    if (snapPoint.y == currentPoint.y) {
+
+                        if let nearPoint = nearestPoint {
+
+                            if (snapPoint.x < nearPoint.x) {
+                                nearestPoint = snapPoint
+                            }
+
+                        } else if (snapPoint.x > currentPoint.x) {
+                            nearestPoint = snapPoint
+                        } else {
+                            // TODO: Create something for entering the cursor to the next below or upwards
+                            nearestPoint = currentPoint
+                        }
+
+                    }
+                }
+
+                return nearestPoint!
+
+            }
+        }
+
+        return CGPoint(x: -1, y: -1)
+    }
+
+    public func getLeftXSnapPoint(relativeY: CGFloat)/* -> CGPoint */{
+
+    }
+
+    public func getUpYSnapPoint(relativeX: CGFloat)/* -> CGPoint */{
+
+    }
+
+    public func getDownYSnapPoint(relativeX: CGFloat)/* -> CGPoint */{
+
     }
 
     public static func createSnapPoints (initialX: CGFloat, initialY: CGFloat) -> [CGPoint] {
@@ -73,6 +119,53 @@ class GridSystem {
         }
 
         return snapPoints
+    }
+
+    public func getNotePlacement (notation: MusicNotation) -> CGPoint {
+
+        if let measureCoord = selectedMeasureCoord {
+
+            if let weights = weightsMap[measureCoord] {
+
+                // for 4/4
+                let maximum64s = GridSystem.getMaximum64s(timeSig: TimeSignature())
+
+                if let coord = selectedCoord {
+
+                    if var currIndex = weights.index(of: CGPoint(x:coord.x, y:measureCoord.lowerRightPoint.y)) {
+
+                        if currIndex > 1 {
+                            currIndex = currIndex - 1
+                        }
+
+                        switch notation.type {
+                        case .sixtyFourth:
+                            return CGPoint(x: coord.x, y: coord.y - 30)
+                        case .thirtySecond:
+                            return CGPoint(x: (weights[currIndex + (maximum64s / 32 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                        case .sixteenth:
+                            return CGPoint(x: (weights[currIndex + (maximum64s / 16 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                        case .eighth:
+                            return CGPoint(x: (weights[currIndex + (maximum64s / 8 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                        case .quarter:
+                            return CGPoint(x: (weights[currIndex + (maximum64s / 4 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                        case .half:
+                            return CGPoint(x: (weights[currIndex + (maximum64s / 2 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                        case .whole:
+                            return CGPoint(x: (weights[currIndex + (maximum64s / 1 - 1)].x + weights[currIndex].x) / 2, y: coord.y)
+                        }
+
+                    }
+                }
+
+            }
+        }
+
+        return CGPoint(x: -1, y: -1)
+    }
+
+    public static func getMaximum64s (timeSig: TimeSignature) -> Int {
+        return (64/timeSig.beatType) * timeSig.beats
     }
     
     struct MeasurePoints : Hashable {
