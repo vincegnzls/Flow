@@ -18,7 +18,6 @@ class GridSystem {
     private var measureMap = [MeasurePoints: Measure]()
     private var weightsMap = [MeasurePoints: [CGPoint]]()
     private var snapPointsMap = [MeasurePoints: [CGPoint]]()
-    private var usedWeights = [CGPoint]()
     
     private init() {
         //GridSystem.sharedInstance = self
@@ -121,7 +120,7 @@ class GridSystem {
         return snapPoints
     }
 
-    public func getNotePlacement (notation: MusicNotation) -> CGPoint {
+    public func getNotePlacement (notation: MusicNotation) -> (CGPoint, CGPoint) {
 
         if let measureCoord = selectedMeasureCoord {
 
@@ -140,19 +139,31 @@ class GridSystem {
 
                         switch notation.type {
                         case .sixtyFourth:
-                            return CGPoint(x: coord.x, y: coord.y - 30)
+                            return (CGPoint(x: coord.x, y: coord.y - 30), weights[currIndex+1])
                         case .thirtySecond:
-                            return CGPoint(x: (weights[currIndex + (maximum64s / 32 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                            let endPoint = weights[currIndex + (maximum64s / 32 - 1)]
+
+                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
                         case .sixteenth:
-                            return CGPoint(x: (weights[currIndex + (maximum64s / 16 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                            let endPoint = weights[currIndex + (maximum64s / 16 - 1)]
+
+                            return (CGPoint(x: endPoint.x + weights[currIndex].x / 2, y: coord.y - 30), endPoint)
                         case .eighth:
-                            return CGPoint(x: (weights[currIndex + (maximum64s / 8 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                            let endPoint = weights[currIndex + (maximum64s / 8 - 1)]
+
+                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
                         case .quarter:
-                            return CGPoint(x: (weights[currIndex + (maximum64s / 4 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                            let endPoint = weights[currIndex + (maximum64s / 4 - 1)]
+
+                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
                         case .half:
-                            return CGPoint(x: (weights[currIndex + (maximum64s / 2 - 1)].x + weights[currIndex].x) / 2, y: coord.y - 30)
+                            let endPoint = weights[currIndex + (maximum64s / 2 - 1)]
+
+                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
                         case .whole:
-                            return CGPoint(x: (weights[currIndex + (maximum64s / 1 - 1)].x + weights[currIndex].x) / 2, y: coord.y)
+                            let endPoint = weights[currIndex + (maximum64s - 1)]
+
+                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y), endPoint)
                         }
 
                     }
@@ -161,7 +172,7 @@ class GridSystem {
             }
         }
 
-        return CGPoint(x: -1, y: -1)
+        return (CGPoint(x: -1, y: -1), CGPoint(x: -1, y: -1))
     }
 
     public static func getMaximum64s (timeSig: TimeSignature) -> Int {
