@@ -13,7 +13,14 @@ class GridSystem {
     
     static let instance = GridSystem()
 
-    public var selectedMeasureCoord:MeasurePoints?
+    public var selectedMeasureCoord:MeasurePoints? {
+        didSet {
+            if (oldValue != selectedMeasureCoord) {
+                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED)
+                print ("Measure switched!")
+            }
+        }
+    }
     public var selectedCoord:CGPoint?
     private var measureMap = [MeasurePoints: Measure]()
     private var weightsMap = [MeasurePoints: [CGPoint]]()
