@@ -22,6 +22,7 @@ class HighlightRect: CAShapeLayer {
             self.update()
         }
     }
+    var rect = CGRect()
     
     override init() {
         super.init()
@@ -39,8 +40,7 @@ class HighlightRect: CAShapeLayer {
     }
     
     private func setup() {
-        let rect = CGRect()
-        self.path = CGPath(rect: rect, transform: nil)
+        self.path = CGPath(rect: self.rect, transform: nil)
         
         // Fill
         let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
@@ -71,15 +71,16 @@ class HighlightRect: CAShapeLayer {
     
     private func update() {
         if let startPoint = self.highlightingStartPoint, let endPoint = self.highlightingEndPoint {
-            let rect = CGRect(x: min(startPoint.x, endPoint.x),
+            self.rect = CGRect(x: min(startPoint.x, endPoint.x),
                               y: min(startPoint.y, endPoint.y),
                               width: fabs(startPoint.x - endPoint.x),
                               height: fabs(startPoint.y - endPoint.y))
             
-            self.path = CGPath(rect: rect, transform: nil)
+            self.path = CGPath(rect: self.rect, transform: nil)
             self.isVisible = true
         } else {
-            self.path = CGPath(rect: CGRect(), transform: nil)
+            self.rect = CGRect()
+            self.path = CGPath(rect: self.rect, transform: nil)
             self.isVisible = false
         }
     }
