@@ -116,7 +116,11 @@ class EditorViewController: UIViewController {
                     note = Rest(type: restNoteType)
                 } else {
                     // TODO: determine what is the correct pitch from the cursor's location
-                    note = Note(pitch: Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
+                    if let coord = GridSystem.instance.selectedCoord {
+                        note = Note(pitch: GridSystem.instance.getPitchFromY(y: coord.y), type: restNoteType, clef: measure.clef)
+                    } else {
+                        note = Note(pitch: Pitch(step: Step.G, octave: 5), type: restNoteType, clef: measure.clef)
+                    }
                 }
 
                 parameters.put(key: KeyNames.NOTE_DETAILS, value: note)

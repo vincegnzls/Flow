@@ -159,10 +159,10 @@ class MusicSheet: UIView {
         for i in 0...measures.count-1 {
             var measureLocation:GridSystem.MeasurePoints?
             if i == 0 {
-                measureLocation = drawMeasure(startX: modStartX, endX:modStartX+distance, startY: startY, withLeftLine: false)
+                measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX:modStartX+distance, startY: startY, withLeftLine: false)
 
             } else {
-                measureLocation = drawMeasure(startX: modStartX, endX: modStartX+distance, startY: startY)
+                measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
             }
 
             GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation!, measure: measures[i])
@@ -232,7 +232,7 @@ class MusicSheet: UIView {
     }
     
     // Draws a measure
-    private func drawMeasure(startX:CGFloat, endX:CGFloat, startY:CGFloat, withLeftLine:Bool = true) -> GridSystem.MeasurePoints {
+    private func drawMeasure(measure: Measure, startX:CGFloat, endX:CGFloat, startY:CGFloat, withLeftLine:Bool = true) -> GridSystem.MeasurePoints {
         
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
@@ -259,7 +259,7 @@ class MusicSheet: UIView {
         
         //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
         // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
-        GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: GridSystem.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace))
+        GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: GridSystem.instance.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace, clef: measure.clef))
         
         //draw line before measure
         if withLeftLine {
@@ -518,6 +518,8 @@ class MusicSheet: UIView {
 
                 GridSystem.instance.selectedCoord = closestPoint
 
+                print("PITCH: \(GridSystem.instance.getPitchFromY(y: closestPoint.y).step.toString())")
+
             }
         }
         
@@ -571,17 +573,28 @@ class MusicSheet: UIView {
 
         self.addMusicNotation(note: notation)
 
-        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: GridSystem.instance.selectedMeasureCoord!,
-                snapPoints: GridSystem.createSnapPoints(initialX: notePlacement.0.x, initialY: GridSystem.instance.selectedMeasureCoord!.lowerRightPoint.y))
+        if let coord = GridSystem.instance.selectedMeasureCoord {
 
-        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: GridSystem.instance.selectedMeasureCoord!,
-                snapPoints: GridSystem.createSnapPoints(initialX: notePlacement.1.x,
-                        initialY: GridSystem.instance.selectedMeasureCoord!.lowerRightPoint.y))
+            if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: coord) {
 
-        GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
+                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: GridSystem.instance.selectedMeasureCoord!,
+                        snapPoints: GridSystem.instance.createSnapPoints(
+                                initialX: notePlacement.0.x, initialY: GridSystem.instance.selectedMeasureCoord!.lowerRightPoint.y,
+                                clef: measure.clef))
 
-        moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
-        moveCursorY(location: GridSystem.instance.selectedCoord!)
+                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: GridSystem.instance.selectedMeasureCoord!,
+                        snapPoints: GridSystem.instance.createSnapPoints(initialX: notePlacement.1.x,
+                                initialY: GridSystem.instance.selectedMeasureCoord!.lowerRightPoint.y,
+                                clef: measure.clef))
+
+                GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
+
+                moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
+                moveCursorY(location: GridSystem.instance.selectedCoord!)
+
+            }
+
+        }
     }
     
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {

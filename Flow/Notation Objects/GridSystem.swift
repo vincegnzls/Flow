@@ -25,9 +25,38 @@ class GridSystem {
     private var measureMap = [MeasurePoints: Measure]()
     private var weightsMap = [MeasurePoints: [CGPoint]]()
     private var snapPointsMap = [MeasurePoints: [CGPoint]]()
+    private var YPitchMap = [CGFloat: Pitch]()
+    private var gClefPitches = [Pitch]()
+    private var fClefPitches = [Pitch]()
     
     private init() {
         //GridSystem.sharedInstance = self
+
+        initClefPitches()
+    }
+
+    private func initClefPitches() {
+
+        gClefPitches.append(Pitch(step: Step.F, octave: 5))
+        gClefPitches.append(Pitch(step: Step.E, octave: 5))
+        gClefPitches.append(Pitch(step: Step.D, octave: 5))
+        gClefPitches.append(Pitch(step: Step.C, octave: 5))
+        gClefPitches.append(Pitch(step: Step.B, octave: 4))
+        gClefPitches.append(Pitch(step: Step.A, octave: 4))
+        gClefPitches.append(Pitch(step: Step.G, octave: 4))
+        gClefPitches.append(Pitch(step: Step.F, octave: 4))
+        gClefPitches.append(Pitch(step: Step.E, octave: 4))
+
+        fClefPitches.append(Pitch(step: Step.A, octave: 3))
+        fClefPitches.append(Pitch(step: Step.G, octave: 3))
+        fClefPitches.append(Pitch(step: Step.F, octave: 3))
+        fClefPitches.append(Pitch(step: Step.E, octave: 3))
+        fClefPitches.append(Pitch(step: Step.D, octave: 3))
+        fClefPitches.append(Pitch(step: Step.C, octave: 3))
+        fClefPitches.append(Pitch(step: Step.B, octave: 2))
+        fClefPitches.append(Pitch(step: Step.A, octave: 2))
+        fClefPitches.append(Pitch(step: Step.G, octave: 2))
+
     }
     
     public func getMeasureFromPoints(measurePoints:MeasurePoints) -> Measure? {
@@ -60,6 +89,14 @@ class GridSystem {
     }
     public func assignWeightsToPoints(measurePoints:MeasurePoints, weights:[CGPoint]) {
         weightsMap[measurePoints] = weights
+    }
+
+    public func assignYtoPitch(y: CGFloat, pitch: Pitch) {
+        YPitchMap[y] = pitch
+    }
+
+    public func getPitchFromY(y: CGFloat) -> Pitch {
+        return YPitchMap[y]!
     }
 
     public func getRightXSnapPoint(currentPoint: CGPoint) -> CGPoint {
@@ -109,13 +146,23 @@ class GridSystem {
 
     }
 
-    public static func createSnapPoints (initialX: CGFloat, initialY: CGFloat) -> [CGPoint] {
+    public func createSnapPoints (initialX: CGFloat, initialY: CGFloat, clef:Clef) -> [CGPoint] {
         var snapPoints = [CGPoint]()
 
         var currSnapPoint:CGPoint = CGPoint(x: initialX, y: initialY)
 
+        var pitchArray = [Pitch]()
+
+        switch clef {
+            case .G:
+                pitchArray = gClefPitches
+            case .F:
+                pitchArray = fClefPitches
+        }
+
         for i in 1...9 {
             snapPoints.append(currSnapPoint)
+            YPitchMap[currSnapPoint.y] = pitchArray[i-1]
 
             if i % 2 == 0 {
                 currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 16.5)
@@ -129,6 +176,12 @@ class GridSystem {
 
     public func getNotePlacement (notation: MusicNotation) -> (CGPoint, CGPoint) {
 
+        var isUpwards = true
+
+        if let note = notation as? Note {
+            isUpwards = note.isUpwards
+        }
+
         if let measureCoord = selectedMeasureCoord {
 
             if let weights = weightsMap[measureCoord] {
@@ -140,36 +193,41 @@ class GridSystem {
 
                     if var currIndex = weights.index(of: CGPoint(x:coord.x, y:measureCoord.lowerRightPoint.y)) {
 
-                        if currIndex > 1 {
+                        print(currIndex)
+
+                        /*if currIndex > 1 {
                             currIndex = currIndex - 1
-                        }
+                        }*/
+
+                        print(currIndex)
+
+                        var endPoint:CGPoint
 
                         switch notation.type {
                         case .sixtyFourth:
-                            return (CGPoint(x: coord.x, y: coord.y - 30), weights[currIndex+1])
+                            if isUpwards {
+                                return (CGPoint(x: coord.x, y: coord.y - 30), weights[currIndex + 1])
+                            } else {
+                                return (CGPoint(x: coord.x, y: coord.y), weights[currIndex + 1])
+                            }
                         case .thirtySecond:
-                            let endPoint = weights[currIndex + (maximum64s / 32 - 1)]
-
-                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
+                            endPoint = weights[currIndex + (maximum64s / 32 - 1)]
                         case .sixteenth:
-                            let endPoint = weights[currIndex + (maximum64s / 16 - 1)]
-
-                            return (CGPoint(x: endPoint.x + weights[currIndex].x / 2, y: coord.y - 30), endPoint)
+                            endPoint = weights[currIndex + (maximum64s / 16 - 1)]
                         case .eighth:
-                            let endPoint = weights[currIndex + (maximum64s / 8 - 1)]
-
-                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
+                            endPoint = weights[currIndex + (maximum64s / 8 - 1)]
                         case .quarter:
-                            let endPoint = weights[currIndex + (maximum64s / 4 - 1)]
-
-                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
+                            endPoint = weights[currIndex + (maximum64s / 4 - 1)]
                         case .half:
-                            let endPoint = weights[currIndex + (maximum64s / 2 - 1)]
-
-                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
+                            endPoint = weights[currIndex + (maximum64s / 2 - 1)]
                         case .whole:
-                            let endPoint = weights[currIndex + (maximum64s - 1)]
+                            endPoint = weights[currIndex + (maximum64s - 1)]
+                        }
 
+
+                        if isUpwards {
+                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
+                        } else {
                             return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y), endPoint)
                         }
 
