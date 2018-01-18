@@ -34,6 +34,17 @@ class GridSystem {
 
         initClefPitches()
     }
+    
+    public func reset() {
+        selectedMeasureCoord = nil
+        selectedCoord = CGPoint(x: -1, y: -1)
+        measureMap.removeAll()
+        weightsMap.removeAll()
+        snapPointsMap.removeAll()
+        YPitchMap.removeAll()
+        
+        print("Grid System reset!")
+    }
 
     private func initClefPitches() {
 
@@ -190,16 +201,8 @@ class GridSystem {
                 let maximum64s = GridSystem.getMaximum64s(timeSig: TimeSignature())
 
                 if let coord = selectedCoord {
-
-                    if var currIndex = weights.index(of: CGPoint(x:coord.x, y:measureCoord.lowerRightPoint.y)) {
-
-                        print(currIndex)
-
-                        /*if currIndex > 1 {
-                            currIndex = currIndex - 1
-                        }*/
-
-                        print(currIndex)
+                    
+                    if let currIndex = weights.index(of: CGPoint(x:coord.x, y:measureCoord.lowerRightPoint.y)) {
 
                         var endPoint:CGPoint
 
