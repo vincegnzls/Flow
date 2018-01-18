@@ -54,6 +54,14 @@ class Measure {
         
     }
     
+    public func deleteNoteInMeasure(_ musicNotation: MusicNotation) {
+        
+        if let index = notationObjects.index(where: {$0 === musicNotation}) {
+            notationObjects.remove(at: index)
+        }
+        
+    }
+    
     public func getInvalidNotes() -> [RestNoteType] {
         
         var invalidNotes = [RestNoteType]()

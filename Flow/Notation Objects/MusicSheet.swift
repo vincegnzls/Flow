@@ -646,4 +646,8 @@ class MusicSheet: UIView {
             }
         }
     }
+    
+    public func getSelectedNotes() -> [MusicNotation] {
+        return self.selectedNotations
+    }
 }
