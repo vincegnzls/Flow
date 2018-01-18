@@ -16,6 +16,10 @@ class Measure {
     var bounds: Bounds
     var curBeatValue: Float
     var validNotes: [RestNoteType]
+
+    var isFull: Bool {
+        return self.curBeatValue == self.timeSignature.getMaxBeatValue()
+    }
     
     init(keySignature: KeySignature = .c,
          timeSignature: TimeSignature = TimeSignature(),
@@ -77,8 +81,7 @@ class Measure {
     public func isAddNoteValid (musicNotation: RestNoteType) -> Bool {
         
         return self.curBeatValue + musicNotation.getBeatValue() <= self.timeSignature.getMaxBeatValue()
-            
+
     }
-    
     
 }

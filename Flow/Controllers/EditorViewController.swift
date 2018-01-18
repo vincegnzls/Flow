@@ -17,6 +17,8 @@ class EditorViewController: UIViewController {
     private let composition: Composition?
 
     required init?(coder aDecoder: NSCoder) {
+        
+        GridSystem.instance.reset()
 
         // TODO: change this to load an existing composition if did not create a new comp
         // TODO: inline number of measures per staff also
@@ -46,6 +48,7 @@ class EditorViewController: UIViewController {
         // init
         super.init(coder: aDecoder)
 
+        EventBroadcaster.instance.removeObservers(event: EventNames.NOTATION_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.NOTATION_KEY_PRESSED,
                 observer: Observer(id: "EditorViewController", function: self.onNoteKeyPressed))
     }

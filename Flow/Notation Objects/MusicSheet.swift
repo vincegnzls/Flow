@@ -69,8 +69,10 @@ class MusicSheet: UIView {
                                               observer: Observer(id: "MusicSheet.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
         EventBroadcaster.instance.addObserver(event: EventNames.VIEW_FINISH_LOADING,
                 observer: Observer(id: "MusicSheet.onCompositionLoad", function: self.onCompositionLoad))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.MEASURE_UPDATE)
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_UPDATE,
-                                              observer: Observer(id: "MusicSheet.updateMeasureDraw", function: self.updateMeasureDraw))
+                                              observer:  Observer(id: "MusicSheet.updateMeasureDraw", function: self.updateMeasureDraw))
         
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -587,10 +589,29 @@ class MusicSheet: UIView {
                                 initialY: GridSystem.instance.selectedMeasureCoord!.lowerRightPoint.y,
                                 clef: measure.clef))
 
-                GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
 
-                moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
-                moveCursorY(location: GridSystem.instance.selectedCoord!)
+                if measure.isFull {
+                    if let currIndex = measureCoords.index(of: coord) {
+                        GridSystem.instance.selectedMeasureCoord = measureCoords[currIndex + 1]
+
+                        print(measureCoords[currIndex + 1])
+
+                        if let newSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoords[currIndex + 1]) {
+                            if let relSnapIndex = newSnapPoints.index(where: {$0.y == curYCursorLocation.y}) {
+                                GridSystem.instance.selectedCoord = newSnapPoints[relSnapIndex]
+
+                                moveCursorX(location: CGPoint(x: newSnapPoints[relSnapIndex].x, y: curXCursorLocation.y))
+                                moveCursorY(location: newSnapPoints[relSnapIndex])
+                            }
+                        }
+
+                    }
+                } else {
+                    GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
+                    
+                    moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
+                    moveCursorY(location: GridSystem.instance.selectedCoord!)
+                }
 
             }
 
