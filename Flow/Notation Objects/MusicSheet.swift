@@ -413,24 +413,12 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.left {
             
-            /*let note = MusicNotation(type: .whole)
-            note.screenCoordinates = curYCursorLocation
-            note.image = UIImage(named: "whole-head")
-            
-            addMusicNotation(note: note)*/
-            
             curXCursorLocation.x -= 40
             curYCursorLocation.x = curXCursorLocation.x
             moveCursorX(location: curXCursorLocation)
             moveCursorY(location: curYCursorLocation)
             
         } else if direction == ArrowKey.right {
-            
-            /*let note = MusicNotation(type: .whole)
-            note.screenCoordinates = curYCursorLocation
-            note.image = UIImage(named: "whole-head")
-            
-            addMusicNotation(note: note)*/
 
             let nextPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: curYCursorLocation)
             
@@ -456,10 +444,12 @@ class MusicSheet: UIView {
     
     public func moveCursorY(location: CGPoint) {
         yCursor.position = location
+        curYCursorLocation = location
     }
     
     public func moveCursorX(location: CGPoint) {
         xCursor.position = location
+        curXCursorLocation = location
     }
     
     // used for
@@ -592,17 +582,33 @@ class MusicSheet: UIView {
 
                 if measure.isFull {
                     if let currIndex = measureCoords.index(of: coord) {
-                        GridSystem.instance.selectedMeasureCoord = measureCoords[currIndex + 1]
-
-                        print(measureCoords[currIndex + 1])
-
-                        if let newSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoords[currIndex + 1]) {
-                            if let relSnapIndex = newSnapPoints.index(where: {$0.y == curYCursorLocation.y}) {
-                                GridSystem.instance.selectedCoord = newSnapPoints[relSnapIndex]
-
-                                moveCursorX(location: CGPoint(x: newSnapPoints[relSnapIndex].x, y: curXCursorLocation.y))
-                                moveCursorY(location: newSnapPoints[relSnapIndex])
+                        
+                        // get previous snap points
+                        let prevSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: coord)
+                        
+                        // get current index of previous snap points
+                        if let prevSnapIndex = prevSnapPoints?.index(where: {$0.y == curYCursorLocation.y}) {
+                            
+                            var indexJump = 0
+                            
+                            // for jumping to relative measure with the same clef
+                            if currIndex % NUM_MEASURES_PER_STAFF == NUM_MEASURES_PER_STAFF-1 {
+                                indexJump = currIndex + NUM_MEASURES_PER_STAFF + 1
+                            } else {
+                                indexJump = currIndex+1
                             }
+                            
+                            // get new snap points from next measure
+                            if let newSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoords[indexJump]) {
+                                
+                                GridSystem.instance.selectedMeasureCoord = measureCoords[indexJump]
+                                GridSystem.instance.selectedCoord = newSnapPoints[prevSnapIndex]
+                                
+                                //moveCursorX(location: CGPoint)
+                                moveCursorY(location: newSnapPoints[prevSnapIndex])
+                
+                            }
+                            
                         }
 
                     }
