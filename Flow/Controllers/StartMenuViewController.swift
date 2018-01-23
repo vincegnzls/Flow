@@ -16,12 +16,17 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
     // MARK: Outlets
     @IBOutlet weak var menu: UIView!
     @IBOutlet weak var tableView: UITableView!
+
+    private var compositions = [CompositionInfo]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupMenuShadow()
         self.setupTable()
+
+        let info = CompositionInfo(name: "Composition 1")
+        self.compositions.append(info)
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,7 +50,7 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
         self.tableView.dataSource = self
         self.tableView.delegate = self
 
-        self.tableView.register(CompositionTableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
+        //self.tableView.register(CompositionTableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
         self.tableView.separatorStyle = .none
     }
     
@@ -56,20 +61,27 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return self.compositions.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("I'm here")
         guard let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as? CompositionTableViewCell else {
             fatalError("The dequeued cell is not an instance of " + self.cellIdentifier)
         }
 
+        let composition = compositions[indexPath.row]
+        cell.view1.titleLabel.text = composition.name
+        cell.view1.lastEditedLabel.text = "date"
+
+        cell.view2.titleLabel.text = composition.name + " test"
         //cell.column1.text = "1" // fill in your value for column 1 (e.g. from an array)
         //cell.column2.text = "2" // fill in your value for column 2
         
         return cell
     }
+
     /*
     // Override to support conditional editing of the table view.
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
