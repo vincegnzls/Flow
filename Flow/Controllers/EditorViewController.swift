@@ -27,7 +27,13 @@ class EditorViewController: UIViewController {
         var measuresForF = [Measure]()
 
         for _  in 1...6 {
-            measuresForG.append(Measure())
+            let measure = Measure()
+
+            // dummy data
+            measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .quarter, clef: measure.clef))
+            measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
+
+            measuresForG.append(measure)
         }
 
         for _ in 1...6 {

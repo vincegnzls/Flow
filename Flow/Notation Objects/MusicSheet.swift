@@ -261,7 +261,8 @@ class MusicSheet: UIView {
         
         //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
         // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
-        GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: GridSystem.instance.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace, clef: measure.clef))
+        let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace, clef: measure.clef)
+        GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
         
         //draw line before measure
         if withLeftLine {
@@ -279,8 +280,52 @@ class MusicSheet: UIView {
         
         measureXDivs.insert(endX)
 
+        let measureWeights = initMeasureGrid(startX: startX, endX: endX, startY: startY-curSpace)
         GridSystem.instance.assignWeightsToPoints(measurePoints: measureCoord,
-                weights: initMeasureGrid(startX: startX, endX: endX, startY: startY-curSpace))
+                weights: measureWeights)
+
+        if measure.clef == .G {
+            print(measure.notationObjects.count)
+        }
+
+        var points:[CGPoint]?
+
+        if measure.notationObjects.count > 0 {
+
+            // add all notes existing in the measure
+            for note in measure.notationObjects {
+
+                let coordinates:(CGPoint, CGPoint)?
+
+                if let newSnapPoints = points {
+                    coordinates = GridSystem.instance.getNotePlacement(
+                            notation: note, clef: measure.clef, snapPoints: newSnapPoints, weights: measureWeights)
+                } else {
+                    coordinates = GridSystem.instance.getNotePlacement(
+                            notation: note, clef: measure.clef, snapPoints: snapPoints, weights: measureWeights)
+                }
+
+                if let coordinates = coordinates {
+
+                    note.screenCoordinates = coordinates.0
+
+                    points = GridSystem.instance.createSnapPoints(
+                            initialX: coordinates.1.x, initialY: coordinates.1.y, clef: measure.clef)
+
+                    if let points = points {
+                        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord, snapPoints: points)
+                    }
+
+                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
+                            snapPoints: GridSystem.instance.createSnapPoints(
+                                    initialX: coordinates.0.x, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef))
+
+                    self.addMusicNotation(note: note)
+
+                }
+            }
+
+        }
 
         return measureCoord
     }
@@ -473,45 +518,65 @@ class MusicSheet: UIView {
             return
         }
         
+        let prevMeasureIndex:Int
+        
+        // used for moving the xCursor
+        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+            if let index = measureCoords.index(of: measureCoord) {
+                prevMeasureIndex = index
+            }
+        }
+        
         remapCurrentMeasure(location: location)
         
         // START FOR SNAPPING
         
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+            
+            if let currMeasureIndex = measureCoords.index(of: measureCoord) {
 
-            if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoord) {
+                if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoord) {
 
-                var closestPoint: CGPoint = snapPoints[0];
+                    var closestPoint: CGPoint = snapPoints[0];
 
-                let x2: CGFloat = location.x - snapPoints[0].x
-                let y2: CGFloat = location.y - snapPoints[0].y
+                    let x2: CGFloat = location.x - snapPoints[0].x
+                    let y2: CGFloat = location.y - snapPoints[0].y
 
-                var currDistance: CGFloat = (x2 * x2) + (y2 * y2)
+                    var currDistance: CGFloat = (x2 * x2) + (y2 * y2)
 
-                for i in 1...snapPoints.count - 1 {
-                    let x2: CGFloat = location.x - snapPoints[i].x
-                    let y2: CGFloat = location.y - snapPoints[i].y
+                    for i in 1...snapPoints.count - 1 {
+                        let x2: CGFloat = location.x - snapPoints[i].x
+                        let y2: CGFloat = location.y - snapPoints[i].y
 
-                    let potDistance = (x2 * x2) + (y2 * y2)
+                        let potDistance = (x2 * x2) + (y2 * y2)
 
-                    if (potDistance < currDistance) {
-                        currDistance = potDistance
-                        closestPoint = snapPoints[i]
+                        if (potDistance < currDistance) {
+                            currDistance = potDistance
+                            closestPoint = snapPoints[i]
+                        }
                     }
+
+                    let newXCurLocation:CGPoint
+                    
+                    // TODO: fix hardcoded offset for newXCurLocation AKA the "-30"
+                    // TODO: fix ==0
+                    if currMeasureIndex % (NUM_MEASURES_PER_STAFF * NUM_MEASURES_PER_STAFF) == 0 {
+                        newXCurLocation = CGPoint(x: closestPoint.x, y: measureCoord.lowerRightPoint.y - 30)
+                    } else {
+                        newXCurLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
+                    }
+                    
+                    curXCursorLocation = newXCurLocation
+                    moveCursorX(location: newXCurLocation)
+
+                    curYCursorLocation = closestPoint
+                    moveCursorY(location: closestPoint)
+
+                    GridSystem.instance.selectedCoord = closestPoint
+
+                    print("PITCH: \(GridSystem.instance.getPitchFromY(y: closestPoint.y).step.toString())")
+
                 }
-
-                let relXLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
-
-                curXCursorLocation = relXLocation
-                moveCursorX(location: relXLocation)
-
-                curYCursorLocation = closestPoint
-                moveCursorY(location: closestPoint)
-
-                GridSystem.instance.selectedCoord = closestPoint
-
-                print("PITCH: \(GridSystem.instance.getPitchFromY(y: closestPoint.y).step.toString())")
-
             }
         }
         
@@ -527,14 +592,14 @@ class MusicSheet: UIView {
             
             //  LOCATION IS IN MEASURE
             if r.contains(location) {
-                print("MEASURE #\(index) TAPPED")
+                //print("MEASURE #\(index) TAPPED")
                 
                 GridSystem.instance.selectedMeasureCoord = measureCoord
                 
-                if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
+                /*if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
                     print("MEASURE CONTAINS: \(measure.notationObjects)")
                     print("MEASURE HAS: \(measure.clef)")
-                }
+                }*/
                 break
             }
         }
@@ -569,14 +634,14 @@ class MusicSheet: UIView {
 
             if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: coord) {
 
-                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: GridSystem.instance.selectedMeasureCoord!,
+                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
                         snapPoints: GridSystem.instance.createSnapPoints(
-                                initialX: notePlacement.0.x, initialY: GridSystem.instance.selectedMeasureCoord!.lowerRightPoint.y,
+                                initialX: notePlacement.0.x, initialY: coord.lowerRightPoint.y,
                                 clef: measure.clef))
 
-                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: GridSystem.instance.selectedMeasureCoord!,
+                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
                         snapPoints: GridSystem.instance.createSnapPoints(initialX: notePlacement.1.x,
-                                initialY: GridSystem.instance.selectedMeasureCoord!.lowerRightPoint.y,
+                                initialY: coord.lowerRightPoint.y,
                                 clef: measure.clef))
 
 
@@ -589,7 +654,7 @@ class MusicSheet: UIView {
                         // get current index of previous snap points
                         if let prevSnapIndex = prevSnapPoints?.index(where: {$0.y == curYCursorLocation.y}) {
                             
-                            var indexJump = 0
+                            let indexJump:Int
                             
                             // for jumping to relative measure with the same clef
                             if currIndex % NUM_MEASURES_PER_STAFF == NUM_MEASURES_PER_STAFF-1 {
@@ -604,7 +669,9 @@ class MusicSheet: UIView {
                                 GridSystem.instance.selectedMeasureCoord = measureCoords[indexJump]
                                 GridSystem.instance.selectedCoord = newSnapPoints[prevSnapIndex]
                                 
-                                //moveCursorX(location: CGPoint)
+                                // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
+                                moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
+                                                              y: measureCoords[indexJump].lowerRightPoint.y - 30))
                                 moveCursorY(location: newSnapPoints[prevSnapIndex])
                 
                             }

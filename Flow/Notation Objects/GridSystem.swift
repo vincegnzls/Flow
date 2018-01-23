@@ -227,8 +227,7 @@ class GridSystem {
                             endPoint = weights[currIndex + (maximum64s - 1)]
                         }
 
-
-                        if isUpwards {
+                        if isUpwards && notation.type != .whole {
                             return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
                         } else {
                             return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y), endPoint)
@@ -243,8 +242,92 @@ class GridSystem {
         return (CGPoint(x: -1, y: -1), CGPoint(x: -1, y: -1))
     }
 
+    // THIS IS FOR RELOADING THE WHOLE COMPOSITION
+    public func getNotePlacement (notation: MusicNotation, clef: Clef, snapPoints: [CGPoint], weights: [CGPoint]) -> (CGPoint, CGPoint) {
+
+        var pitchToPointMap = [Pitch: CGPoint]()
+        let pitches = getPitches(clef: clef)
+
+        var isUpwards = true
+
+        if let note = notation as? Note {
+
+            print("first step")
+
+            isUpwards = note.isUpwards
+
+            for i in 0..<snapPoints.count {
+                print(pitches[i])
+                pitchToPointMap[pitches[i]] = snapPoints[i]
+            }
+
+            var endPoint: CGPoint
+
+            print(note.pitch)
+
+            if let corresPoint = pitchToPointMap[note.pitch] {
+
+                print("second step")
+
+                if let currIndex = weights.index(where: { $0.x == snapPoints[0].x }) {
+
+                    print("third step")
+
+                    // TODO : get time signature
+                    let maximum64s = GridSystem.getMaximum64s(timeSig: TimeSignature())
+
+                    switch notation.type {
+                    case .sixtyFourth:
+                        if isUpwards {
+                            return (CGPoint(x: corresPoint.x, y: corresPoint.y - 30), weights[currIndex + 1])
+                        } else {
+                            return (CGPoint(x: corresPoint.x, y: corresPoint.y), weights[currIndex + 1])
+                        }
+                    case .thirtySecond:
+                        endPoint = weights[currIndex + (maximum64s / 32 - 1)]
+                    case .sixteenth:
+                        endPoint = weights[currIndex + (maximum64s / 16 - 1)]
+                    case .eighth:
+                        endPoint = weights[currIndex + (maximum64s / 8 - 1)]
+                    case .quarter:
+                        endPoint = weights[currIndex + (maximum64s / 4 - 1)]
+                    case .half:
+                        endPoint = weights[currIndex + (maximum64s / 2 - 1)]
+                    case .whole:
+                        endPoint = weights[currIndex + (maximum64s - 1)]
+                    }
+
+                    if isUpwards && notation.type != .whole {
+                        return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: corresPoint.y - 30), endPoint)
+                    } else {
+                        return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: corresPoint.y), endPoint)
+                    }
+
+                }
+
+            }
+
+        } else { // for rest
+
+        }
+
+
+        return (CGPoint(x: -1, y: -1), CGPoint(x: -1, y: -1))
+
+    }
+
     public static func getMaximum64s (timeSig: TimeSignature) -> Int {
         return (64/timeSig.beatType) * timeSig.beats
+    }
+
+    public func getPitches (clef: Clef) -> [Pitch] {
+
+        if clef == .F {
+            return fClefPitches
+        } else {
+            return gClefPitches
+        }
+
     }
     
     struct MeasurePoints : Hashable {
