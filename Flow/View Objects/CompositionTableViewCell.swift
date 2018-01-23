@@ -7,6 +7,10 @@ import UIKit
 
 class CompositionTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var view1: CompositionInfoView!
+    @IBOutlet weak var view2: CompositionInfoView!
+    @IBOutlet weak var view3: CompositionInfoView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -69,53 +69,27 @@
                                             <rect key="frame" x="0.0" y="0.0" width="1112" height="199.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="100" translatesAutoresizingMaskIntoConstraints="NO" id="on7-od-dsT">
-                                                    <rect key="frame" x="96" y="24" width="920" height="150"/>
-                                                    <subviews>
-                                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Q4-OV-1Ls" customClass="CompositionInfoView" customModule="Flow" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="240" height="150"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iqT-9y-T1Z">
-                                                                    <rect key="frame" x="8" y="8" width="224" height="47"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="26"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Last Edited" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wTp-Hu-1JQ">
-                                                                    <rect key="frame" x="8" y="65" width="133" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <connections>
-                                                                <outlet property="lastEditedLabel" destination="wTp-Hu-1JQ" id="jQU-9d-KoN"/>
-                                                                <outlet property="titleLabel" destination="iqT-9y-T1Z" id="nOl-NJ-3Lt"/>
-                                                            </connections>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8sg-W8-M5m" customClass="CompositionInfoView" customModule="Flow" customModuleProvider="target">
-                                                            <rect key="frame" x="340" y="0.0" width="240" height="150"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Qd-ct-KLJ" customClass="CompositionInfoView" customModule="Flow" customModuleProvider="target">
-                                                            <rect key="frame" x="680" y="0.0" width="240" height="150"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </view>
-                                                    </subviews>
-                                                </stackView>
+                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Q4-OV-1Ls" customClass="CompositionInfoView" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="436" y="24" width="240" height="150"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
+                                                <view contentMode="scaleToFill" fixedFrame="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Qd-ct-KLJ" customClass="CompositionInfoView" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="778" y="24" width="240" height="150"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
+                                                <view contentMode="scaleToFill" fixedFrame="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8sg-W8-M5m" customClass="CompositionInfoView" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="55" y="24" width="240" height="150"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="on7-od-dsT" firstAttribute="centerY" secondItem="sNV-e3-tFZ" secondAttribute="centerY" id="7pL-aM-6v6"/>
-                                                <constraint firstItem="on7-od-dsT" firstAttribute="centerX" secondItem="sNV-e3-tFZ" secondAttribute="centerX" id="f2E-VB-ynj"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="view1" destination="7Q4-OV-1Ls" id="cwD-Im-4WU"/>
-                                            <outlet property="view2" destination="8sg-W8-M5m" id="g3I-cW-fHQ"/>
-                                            <outlet property="view3" destination="0Qd-ct-KLJ" id="pcc-lg-BPv"/>
+                                            <outlet property="view1" destination="7Q4-OV-1Ls" id="ciM-mo-zu5"/>
+                                            <outlet property="view2" destination="8sg-W8-M5m" id="YdG-Yo-nx7"/>
+                                            <outlet property="view3" destination="0Qd-ct-KLJ" id="5En-Ge-vr4"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

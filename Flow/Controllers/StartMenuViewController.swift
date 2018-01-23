@@ -72,10 +72,10 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
         }
 
         let composition = compositions[indexPath.row]
-        cell.view1.titleLabel.text = composition.name
+        cell.view1.nameLabel.text = composition.name
         cell.view1.lastEditedLabel.text = "date"
 
-        cell.view2.titleLabel.text = composition.name + " test"
+        cell.view2.nameLabel.text = composition.name + " test"
         //cell.column1.text = "1" // fill in your value for column 1 (e.g. from an array)
         //cell.column2.text = "2" // fill in your value for column 2
         
