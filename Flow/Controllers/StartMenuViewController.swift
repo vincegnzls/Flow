@@ -8,12 +8,16 @@
 
 import UIKit
 
-class StartMenuViewController: UIViewController {
+class StartMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet weak var menu: UIView!
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        self.setupMenuShadow()
+        self.setupTable()
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,15 +25,19 @@ class StartMenuViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    private func setupMenuShadow() {
+        if self.menu != nil {
+            self.menu.layer.shadowColor = UIColor.black.cgColor
+            self.menu.layer.shadowOpacity = 0.1
+            self.menu.layer.shadowOffset = CGSize.zero
+            self.menu.layer.shadowRadius = 5
+            self.menu.layer.shadowPath = UIBezierPath(rect: self.menu.bounds).cgPath
+        }
     }
-    */
+    
+    private func setupTable() {
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+    }
 
 }
