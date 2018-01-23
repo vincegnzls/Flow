@@ -12,6 +12,7 @@
 		610ECE381FE7C58E009CC0F2 /* KeySignatureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */; };
 		610ECE3A1FE7CC9F009CC0F2 /* KeySignatureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */; };
 		611BFC9E1FE678C2001511B2 /* TimeSignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */; };
+		61266B7828BD9BC94920F385 /* CompositionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61266A38BF3434D745ED8A2D /* CompositionTableViewCell.swift */; };
 		612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612D07A51FD2C6780006BD0E /* MusicSheet.swift */; };
 		6135C82B1FDEC35000AF9EA9 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135C82A1FDEC35000AF9EA9 /* Bounds.swift */; };
 		61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61370E161F82A1CB002B6A09 /* AppDelegate.swift */; };
@@ -93,6 +94,7 @@
 		610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureModel.swift; sourceTree = "<group>"; };
 		610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureData.swift; sourceTree = "<group>"; };
 		611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignatureViewController.swift; sourceTree = "<group>"; };
+		61266A38BF3434D745ED8A2D /* CompositionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionTableViewCell.swift; sourceTree = "<group>"; };
 		612D07A51FD2C6780006BD0E /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 		6135C82A1FDEC35000AF9EA9 /* Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
 		61370E131F82A1CB002B6A09 /* Flow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -382,6 +384,7 @@
 				86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */,
 				610ECE331FE6DAE9009CC0F2 /* TimeSignaturePicker.swift */,
 				865B22C920050477009D0D11 /* HighlightRect.swift */,
+				61266A38BF3434D745ED8A2D /* CompositionTableViewCell.swift */,
 			);
 			path = "View Objects";
 			sourceTree = "<group>";
@@ -589,6 +592,7 @@
 				8618F0781FED3D8C00DF8A10 /* EditAction.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
+				61266B7828BD9BC94920F385 /* CompositionTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

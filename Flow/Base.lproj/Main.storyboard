@@ -59,15 +59,26 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="m3r-cJ-Z92">
-                                <rect key="frame" x="0.0" y="64" width="1112" height="710"/>
+                                <rect key="frame" x="0.0" y="64" width="1112" height="705"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="2P0-Bk-Szb" customClass="CompositionTableViewCell" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="1112" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2P0-Bk-Szb" id="sNV-e3-tFZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="1112" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                        <accessibility key="accessibilityConfiguration" identifier="CompositionTableViewCell"/>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="2DB-Ug-KK3" firstAttribute="trailing" secondItem="4Dd-JO-83n" secondAttribute="trailing" id="4JB-0v-WdT"/>
                             <constraint firstItem="2DB-Ug-KK3" firstAttribute="trailing" secondItem="m3r-cJ-Z92" secondAttribute="trailing" id="DdS-JW-Epq"/>
-                            <constraint firstItem="4Dd-JO-83n" firstAttribute="top" secondItem="m3r-cJ-Z92" secondAttribute="bottom" id="Kcz-LX-orR"/>
+                            <constraint firstItem="4Dd-JO-83n" firstAttribute="top" secondItem="m3r-cJ-Z92" secondAttribute="bottom" constant="5" id="Z6O-6p-xJw"/>
                             <constraint firstItem="m3r-cJ-Z92" firstAttribute="top" secondItem="2DB-Ug-KK3" secondAttribute="top" id="dWV-dd-lsG"/>
                             <constraint firstItem="4Dd-JO-83n" firstAttribute="leading" secondItem="2DB-Ug-KK3" secondAttribute="leading" id="fmm-21-IFP"/>
                             <constraint firstItem="4Dd-JO-83n" firstAttribute="bottom" secondItem="2DB-Ug-KK3" secondAttribute="bottom" id="lbe-CL-tzl"/>

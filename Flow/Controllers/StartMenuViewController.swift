@@ -10,6 +10,10 @@ import UIKit
 
 class StartMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    // MARK: Constants
+    private let cellIdentifier = "CompositionTableViewCell"
+
+    // MARK: Outlets
     @IBOutlet weak var menu: UIView!
     @IBOutlet weak var tableView: UITableView!
     
@@ -25,6 +29,8 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: Setup methods
+    
     private func setupMenuShadow() {
         if self.menu != nil {
             self.menu.layer.shadowColor = UIColor.black.cgColor
@@ -38,6 +44,43 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
     private func setupTable() {
         self.tableView.dataSource = self
         self.tableView.delegate = self
-    }
 
+        self.tableView.register(CompositionTableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
+        self.tableView.separatorStyle = .none
+    }
+    
+    // MARK: Table view data source
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as? CompositionTableViewCell else {
+            fatalError("The dequeued cell is not an instance of " + self.cellIdentifier)
+        }
+
+        //cell.column1.text = "1" // fill in your value for column 1 (e.g. from an array)
+        //cell.column2.text = "2" // fill in your value for column 2
+        
+        return cell
+    }
+    /*
+    // Override to support conditional editing of the table view.
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+    
+    
+    // Override to support editing the table view.
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+    }
+    */
 }
