@@ -22,9 +22,22 @@ class GridSystem {
         }
     }
     public var selectedCoord:CGPoint?
+    public var currentStaffIndex:Int? {
+        didSet {
+            if (oldValue != currentStaffIndex) {
+                print (oldValue)
+                print (currentStaffIndex)
+                EventBroadcaster.instance.postEvent(event: EventNames.STAFF_SWITCHED)
+                print ("Staff switched!")
+            }
+        }
+    }
+
     private var measureMap = [MeasurePoints: Measure]()
     private var weightsMap = [MeasurePoints: [CGPoint]]()
     private var snapPointsMap = [MeasurePoints: [CGPoint]]()
+    public var measurePointsInStaff = [[MeasurePoints]]() // array index reflects staff number
+
     private var YPitchMap = [CGFloat: Pitch]()
     private var gClefPitches = [Pitch]()
     private var fClefPitches = [Pitch]()
@@ -38,6 +51,7 @@ class GridSystem {
     public func reset() {
         selectedMeasureCoord = nil
         selectedCoord = CGPoint(x: -1, y: -1)
+        measurePointsInStaff.removeAll()
         measureMap.removeAll()
         weightsMap.removeAll()
         snapPointsMap.removeAll()
@@ -88,6 +102,40 @@ class GridSystem {
     
     public func assignSnapPointsToPoints(measurePoints:MeasurePoints, snapPoint:[CGPoint]) {
         snapPointsMap[measurePoints] = snapPoint
+    }
+
+    public func createNewMeasurePointsArray() {
+        measurePointsInStaff.append([MeasurePoints]())
+    }
+
+    public func appendMeasurePointToLatestArray(measurePoints: MeasurePoints) {
+        if !measurePointsInStaff.isEmpty {
+            measurePointsInStaff[measurePointsInStaff.count - 1].append(measurePoints)
+        }
+    }
+
+    public func getStaffIndexFromMeasurePoint(measurePoints: MeasurePoints) -> Int {
+        var index = 0
+
+        for measurePointsArray in measurePointsInStaff {
+            if let foundIndex = measurePointsArray.index(of: measurePoints) {
+                return index
+            }
+            index += 1
+        }
+
+        return -1
+    }
+
+    public func getFirstMeasurePointFromStaff(measurePoints: MeasurePoints) -> MeasurePoints {
+
+        if let index = currentStaffIndex {
+            let array = measurePointsInStaff[index]
+            return array[0]
+        }
+
+        return MeasurePoints(upperLeftPoint: CGPoint(x: -1, y: -1), lowerRightPoint: CGPoint(x: -1, y: -1))
+
     }
 
     public func addMoreSnapPointsToPoints(measurePoints:MeasurePoints, snapPoints:[CGPoint]) {

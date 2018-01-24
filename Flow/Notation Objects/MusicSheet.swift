@@ -36,8 +36,6 @@ class MusicSheet: UIView {
     
     private let highlightRect = HighlightRect()
     
-    private var selectedMeasureCoord:GridSystem.MeasurePoints?
-    
     private var composition: Composition?
     
     private var endX: CGFloat {
@@ -69,7 +67,9 @@ class MusicSheet: UIView {
                                               observer: Observer(id: "MusicSheet.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
         EventBroadcaster.instance.addObserver(event: EventNames.VIEW_FINISH_LOADING,
                 observer: Observer(id: "MusicSheet.onCompositionLoad", function: self.onCompositionLoad))
-        
+        EventBroadcaster.instance.addObserver(event: EventNames.STAFF_SWITCHED,
+                observer: Observer(id: "MusicSheet.onStaffSwitch", function: self.onStaffChange))
+
         EventBroadcaster.instance.removeObservers(event: EventNames.MEASURE_UPDATE)
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_UPDATE,
                                               observer:  Observer(id: "MusicSheet.updateMeasureDraw", function: self.updateMeasureDraw))
@@ -95,7 +95,8 @@ class MusicSheet: UIView {
             for i in 0..<numStaffDivs {
                 measureSplices.append([Measure]())
                 for k in 0..<composition.numStaves {
-                    measureSplices[i].append(contentsOf: Array(composition.staffList[k].measures[startIndex...startIndex + (NUM_MEASURES_PER_STAFF-1)]))
+                    measureSplices[i].append(
+                            contentsOf: Array(composition.staffList[k].measures[startIndex...startIndex + (NUM_MEASURES_PER_STAFF-1)]))
                 }
 
                 startIndex += NUM_MEASURES_PER_STAFF
@@ -114,6 +115,8 @@ class MusicSheet: UIView {
     //Setup a grand staff
     private func setupGrandStaff(startX:CGFloat, startY:CGFloat, withTimeSig:Bool, measures:[Measure]) {
 
+        GridSystem.instance.createNewMeasurePointsArray()
+
         let lowerStaffStart = measures.count/2
 
         var upperStaffMeasures = [Measure]()
@@ -128,9 +131,14 @@ class MusicSheet: UIView {
         }
 
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: upperStaffMeasures[0].clef, measures:upperStaffMeasures, withTimeSig: withTimeSig)
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex,
+                clefType: upperStaffMeasures[0].clef, measures:upperStaffMeasures, withTimeSig: withTimeSig)
+
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, clefType: lowerStaffMeasures[0].clef, measures:lowerStaffMeasures, withTimeSig: withTimeSig)
+
+        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex,
+                clefType: lowerStaffMeasures[0].clef, measures:lowerStaffMeasures, withTimeSig: withTimeSig)
+
         drawStaffConnection(startX: lefRightPadding, startY: startYConnection + grandStaffSpace * grandStaffIndex)
         
         grandStaffIndex += 1
@@ -138,7 +146,9 @@ class MusicSheet: UIView {
     
     // Draws a staff
     private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, measures:[Measure], withTimeSig:Bool) {
+
         // Handles adding of clef based on parameter
+        // TODO: SHIFT THIS TO BE DRAWN PER MEASURE
         if withTimeSig {
             drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType)
         } else {
@@ -156,18 +166,26 @@ class MusicSheet: UIView {
 
         // Track distance for each measure to be printed
         let distance:CGFloat = (endX-startMeasure)/CGFloat(measures.count)
-    
+
+        // Start drawing the measures
         var modStartX:CGFloat = startMeasure
+        var measureLocation:GridSystem.MeasurePoints?
+
         for i in 0...measures.count-1 {
-            var measureLocation:GridSystem.MeasurePoints?
+
             if i == 0 {
-                measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX:modStartX+distance, startY: startY, withLeftLine: false)
+                measureLocation = drawMeasure(
+                        measure: measures[i], startX: modStartX, endX:modStartX+distance, startY: startY, withLeftLine: false)
 
             } else {
-                measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
+                measureLocation = drawMeasure(
+                        measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
             }
 
-            GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation!, measure: measures[i])
+            if let measureLocation = measureLocation {
+                GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation, measure: measures[i])
+                GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measureLocation)
+            }
             
             modStartX = modStartX + distance
         }
@@ -517,8 +535,8 @@ class MusicSheet: UIView {
             
             return
         }
-        
-        let prevMeasureIndex:Int
+
+        var prevMeasureIndex:Int?
         
         // used for moving the xCursor
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
@@ -556,15 +574,7 @@ class MusicSheet: UIView {
                         }
                     }
 
-                    let newXCurLocation:CGPoint
-                    
-                    // TODO: fix hardcoded offset for newXCurLocation AKA the "-30"
-                    // TODO: fix ==0
-                    if currMeasureIndex % (NUM_MEASURES_PER_STAFF * NUM_MEASURES_PER_STAFF) == 0 {
-                        newXCurLocation = CGPoint(x: closestPoint.x, y: measureCoord.lowerRightPoint.y - 30)
-                    } else {
-                        newXCurLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
-                    }
+                    let newXCurLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
                     
                     curXCursorLocation = newXCurLocation
                     moveCursorX(location: newXCurLocation)
@@ -578,6 +588,9 @@ class MusicSheet: UIView {
 
                 }
             }
+
+            GridSystem.instance.currentStaffIndex =
+                    GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: measureCoord)
         }
         
         // END FOR SNAPPING
@@ -620,6 +633,23 @@ class MusicSheet: UIView {
         else {
             print("tag not found")
         }
+    }
+
+    func onStaffChange() {
+
+        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+
+            if let coord = GridSystem.instance.selectedCoord {
+
+                let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord)
+
+                curXCursorLocation = CGPoint(x: curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30)
+                moveCursorX(location: curXCursorLocation)
+
+            }
+
+        }
+
     }
 
     func updateMeasureDraw(params: Parameters) {
