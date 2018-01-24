@@ -7,9 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -60,57 +58,43 @@
                                     <constraint firstItem="TYM-3a-dQk" firstAttribute="centerY" secondItem="4Dd-JO-83n" secondAttribute="centerY" id="rKZ-j1-apX"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="200" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="m3r-cJ-Z92">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="m3r-cJ-Z92">
                                 <rect key="frame" x="0.0" y="64" width="1112" height="705"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CompositionTableViewCell" rowHeight="200" id="2P0-Bk-Szb" customClass="CompositionTableViewCell" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="1112" height="200"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CompositionTableViewCell" rowHeight="100" id="2P0-Bk-Szb" customClass="CompositionTableViewCell" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="1112" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2P0-Bk-Szb" id="sNV-e3-tFZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="1112" height="199.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1112" height="99.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="center" distribution="equalSpacing" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="eVH-aQ-wrI">
-                                                    <rect key="frame" x="35" y="31" width="1042" height="150"/>
-                                                    <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Q4-OV-1Ls" customClass="CompositionInfoView" customModule="Flow" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="250" height="150"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="250" id="WJA-ez-9Ww"/>
-                                                                <constraint firstAttribute="height" constant="150" id="bB0-RQ-wey"/>
-                                                            </constraints>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8sg-W8-M5m" customClass="CompositionInfoView" customModule="Flow" customModuleProvider="target">
-                                                            <rect key="frame" x="396" y="0.0" width="250" height="150"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="250" id="TA3-7o-oFT"/>
-                                                                <constraint firstAttribute="height" constant="150" id="V0i-nP-uq8"/>
-                                                            </constraints>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Qd-ct-KLJ" customClass="CompositionInfoView" customModule="Flow" customModuleProvider="target">
-                                                            <rect key="frame" x="792" y="0.0" width="250" height="150"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="150" id="2oA-dr-C0y"/>
-                                                                <constraint firstAttribute="width" constant="250" id="3De-vz-Har"/>
-                                                            </constraints>
-                                                        </view>
-                                                    </subviews>
-                                                </stackView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Composition Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="mPk-e0-fCA">
+                                                    <rect key="frame" x="15" y="19" width="230" height="31.5"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Last Edited: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ufJ-IZ-sew">
+                                                    <rect key="frame" x="322" y="26" width="230" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Last Edited Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FAH-e3-AwP">
+                                                    <rect key="frame" x="322" y="58" width="230" height="19.5"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="eVH-aQ-wrI" firstAttribute="leading" secondItem="sNV-e3-tFZ" secondAttribute="leadingMargin" constant="20" id="2p4-rK-VfT"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="eVH-aQ-wrI" secondAttribute="trailing" constant="20" id="BDv-j5-ECm"/>
-                                                <constraint firstItem="eVH-aQ-wrI" firstAttribute="top" secondItem="sNV-e3-tFZ" secondAttribute="topMargin" constant="20" id="HxI-66-kA2"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="view1" destination="7Q4-OV-1Ls" id="ciM-mo-zu5"/>
-                                            <outlet property="view2" destination="8sg-W8-M5m" id="YdG-Yo-nx7"/>
-                                            <outlet property="view3" destination="0Qd-ct-KLJ" id="5En-Ge-vr4"/>
+                                            <outlet property="lastEditedLabel" destination="FAH-e3-AwP" id="Dl5-tw-E4N"/>
+                                            <outlet property="nameLabel" destination="mPk-e0-fCA" id="2nC-hy-adw"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

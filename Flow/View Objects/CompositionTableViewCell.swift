@@ -7,9 +7,12 @@ import UIKit
 
 class CompositionTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var view1: CompositionInfoView!
+    /*@IBOutlet weak var view1: CompositionInfoView!
     @IBOutlet weak var view2: CompositionInfoView!
-    @IBOutlet weak var view3: CompositionInfoView!
+    @IBOutlet weak var view3: CompositionInfoView!*/
+    
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var lastEditedLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

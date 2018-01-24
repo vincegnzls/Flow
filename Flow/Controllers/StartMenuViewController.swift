@@ -55,7 +55,7 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
         self.tableView.delegate = self
 
         //self.tableView.register(CompositionTableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
-        self.tableView.separatorStyle = .none
+        //self.tableView.separatorStyle = .none
     }
     
     // MARK: Table view data source
@@ -74,7 +74,11 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
             fatalError("The dequeued cell is not an instance of " + self.cellIdentifier)
         }
 
-        print ("I'm here")
+        let composition = self.compositions[indexPath.row]
+        cell.nameLabel.text = composition.name
+        cell.lastEditedLabel.text = composition.lastEditedString
+
+        /*print ("I'm here")
         if self.compIndex < self.compositions.count {
             let composition = compositions[compIndex]
             cell.view1.nameLabel.text = composition.name
@@ -96,12 +100,11 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
                 cell.view3.lastEditedLabel.text = composition.lastEditedString
             }
         } else {
-            cell.is
             cell.isHidden = true
             if indexPath.row == self.compositions.count - 1 {
                 self.compIndex = 0
             }
-        }
+        }*/
 
         /*let index = compIndex
         let composition = compositions[index]
