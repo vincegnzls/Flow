@@ -16,7 +16,17 @@ class SoundManager{
     
     var resName = "a1-mf"
     
+    var playbackRate = 1.0
+    
     func playSound(_ note: Note){
+        
+        switch note.type.toString(){
+        case "sixtyFourth": playbackRate = 45
+        default:
+            playbackRate = 1.0
+            break
+        }
+        
         
         switch note.pitch.step.toString(){
         case "C":
@@ -120,6 +130,7 @@ class SoundManager{
         
         do{
             audioPlayer = try AVAudioPlayer(contentsOf: url!)
+            audioPlayer.enableRate = true
             audioPlayer.prepareToPlay()
             audioPlayer.currentTime = 0
         }catch let error as NSError{            print(error.debugDescription)
