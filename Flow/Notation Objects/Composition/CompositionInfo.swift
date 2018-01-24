@@ -12,6 +12,10 @@ struct CompositionInfo: Codable {
     var name: String
     var lastEdited: Date
     var id: String
+
+    var lastEditedString: String {
+        return lastEdited.toString(withFormat: "EEEE, MMM d, yyyy")
+    }
     
     init(name: String = "Untitled", lastEdited: Date = Date(), id: String = UUID().uuidString) {
         self.name = name

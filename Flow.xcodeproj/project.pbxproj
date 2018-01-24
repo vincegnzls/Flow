@@ -12,6 +12,7 @@
 		610ECE381FE7C58E009CC0F2 /* KeySignatureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */; };
 		610ECE3A1FE7CC9F009CC0F2 /* KeySignatureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */; };
 		611BFC9E1FE678C2001511B2 /* TimeSignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */; };
+		6126673B1A86CCDDBCEF573A /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6126669108703D46E1FBE33D /* DateExtension.swift */; };
 		61266B7828BD9BC94920F385 /* CompositionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61266A38BF3434D745ED8A2D /* CompositionTableViewCell.swift */; };
 		612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612D07A51FD2C6780006BD0E /* MusicSheet.swift */; };
 		6135C82B1FDEC35000AF9EA9 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135C82A1FDEC35000AF9EA9 /* Bounds.swift */; };
@@ -96,6 +97,7 @@
 		610ECE371FE7C58E009CC0F2 /* KeySignatureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureModel.swift; sourceTree = "<group>"; };
 		610ECE391FE7CC9F009CC0F2 /* KeySignatureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureData.swift; sourceTree = "<group>"; };
 		611BFC9D1FE678C2001511B2 /* TimeSignatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignatureViewController.swift; sourceTree = "<group>"; };
+		6126669108703D46E1FBE33D /* DateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		61266A38BF3434D745ED8A2D /* CompositionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionTableViewCell.swift; sourceTree = "<group>"; };
 		612D07A51FD2C6780006BD0E /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
 		6135C82A1FDEC35000AF9EA9 /* Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 				6135C82A1FDEC35000AF9EA9 /* Bounds.swift */,
 				86B8EFED1FEAC30500DD834E /* Clipboard.swift */,
 				8618F07B1FED406500DF8A10 /* UndoRedoManager.swift */,
+				6126669108703D46E1FBE33D /* DateExtension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -601,6 +604,7 @@
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
 				61266B7828BD9BC94920F385 /* CompositionTableViewCell.swift in Sources */,
+				6126673B1A86CCDDBCEF573A /* DateExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
