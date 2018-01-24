@@ -128,16 +128,33 @@ class EditorViewController: UIViewController {
 
                 parameters.put(key: KeyNames.NOTE_DETAILS, value: note)
 
-                // instantiate add action
-                let addAction = AddAction(measure: measure, note: note)
+                if musicSheet.getSelectedNotes().count > 0 {
+                    //edit selected notes
+                    
+                    editSelectedNotes(newNote: note)
+                    
+                } else {
+                    // instantiate add action
+                    let addAction = AddAction(measure: measure, note: note)
 
-                addAction.execute()
+                    addAction.execute()
+                }
             }
 
             EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE, params: parameters)
 
         }
 
+    }
+    
+    func editSelectedNotes(newNote: MusicNotation) {
+        for oldNote in musicSheet.getSelectedNotes() {
+            if let measure = composition?.getMeasureOfNote(note: oldNote) {
+                let editAction = EditAction(measure: measure, oldNote: oldNote, newNote: newNote)
+                
+                editAction.execute()
+            }
+        }
     }
     
     func onDeleteKeyPressed () {

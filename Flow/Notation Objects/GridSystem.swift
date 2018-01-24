@@ -16,7 +16,16 @@ class GridSystem {
     public var selectedMeasureCoord:MeasurePoints? {
         didSet {
             if (oldValue != selectedMeasureCoord) {
-                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED)
+                
+                if let measureCoord = selectedMeasureCoord {
+                    if let newMeasure = getMeasureFromPoints(measurePoints: measureCoord) {
+                        let params:Parameters = Parameters()
+                        params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
+                        
+                        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                    }
+                }
+                
                 print ("Measure switched!")
             }
         }

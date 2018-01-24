@@ -10,8 +10,18 @@ import Foundation
 
 class EditAction: Action {
     
+    var measure:Measure
+    var oldNote:MusicNotation
+    var newNote:MusicNotation
+    
+    init(measure: Measure, oldNote: MusicNotation, newNote: MusicNotation) {
+        self.measure = measure
+        self.oldNote = oldNote
+        self.newNote = newNote
+    }
+    
     func execute() {
-        
+        measure.editNoteInMeasure(oldNote, newNote)
     }
     
     func undo() {
@@ -21,6 +31,5 @@ class EditAction: Action {
     func redo() {
         
     }
-    
     
 }

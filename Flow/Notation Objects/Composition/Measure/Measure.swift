@@ -62,6 +62,12 @@ class Measure {
         
     }
     
+    public func editNoteInMeasure(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
+        if let index = notationObjects.index(where: {$0 === oldNote}) {
+            notationObjects[index] = newNote
+        }
+    }
+    
     public func getInvalidNotes() -> [RestNoteType] {
         
         var invalidNotes = [RestNoteType]()
