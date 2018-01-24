@@ -38,6 +38,7 @@
 		861B3DD81FDC1E48003FE0A5 /* ObserverList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD71FDC1E48003FE0A5 /* ObserverList.swift */; };
 		861B3DDA1FDC20E2003FE0A5 /* KeyNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */; };
 		861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861B3DDD1FDC43C5003FE0A5 /* Observer.swift */; };
+		861F36812018C90E0047A1DA /* CompositionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F36802018C90E0047A1DA /* CompositionCollectionViewCell.swift */; };
 		861F781A1FD6E12A00C51BD2 /* CompositionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */; };
 		8632C97C2000877B00D69CB4 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8632C97B2000877B00D69CB4 /* Converter.swift */; };
 		863374811FD32849003D7936 /* MusicNotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863374801FD32849003D7936 /* MusicNotation.swift */; };
@@ -127,6 +128,7 @@
 		861B3DD71FDC1E48003FE0A5 /* ObserverList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverList.swift; sourceTree = "<group>"; };
 		861B3DD91FDC20E2003FE0A5 /* KeyNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyNames.swift; sourceTree = "<group>"; };
 		861B3DDD1FDC43C5003FE0A5 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
+		861F36802018C90E0047A1DA /* CompositionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionCollectionViewCell.swift; sourceTree = "<group>"; };
 		861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionInfo.swift; sourceTree = "<group>"; };
 		8632C97B2000877B00D69CB4 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		863374801FD32849003D7936 /* MusicNotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotation.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 		869F3C5D1FD8FBA400CC236F /* View Objects */ = {
 			isa = PBXGroup;
 			children = (
+				861F36802018C90E0047A1DA /* CompositionCollectionViewCell.swift */,
 				610ECE351FE787EA009CC0F2 /* KeySignaturePicker.swift */,
 				61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */,
 				869F3C601FD8FCC900CC236F /* Controls */,
@@ -562,6 +565,7 @@
 				8696A8B11FD4F1A800EB81BD /* Measure.swift in Sources */,
 				8696A8B31FD4F52600EB81BD /* Clef.swift in Sources */,
 				612D07A61FD2C6780006BD0E /* MusicSheet.swift in Sources */,
+				861F36812018C90E0047A1DA /* CompositionCollectionViewCell.swift in Sources */,
 				861B3DD41FDC1E0E003FE0A5 /* Parameters.swift in Sources */,
 				86B8EFEC1FEAA5E600DD834E /* Step.swift in Sources */,
 				8632C97C2000877B00D69CB4 /* Converter.swift in Sources */,
