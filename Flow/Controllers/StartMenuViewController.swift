@@ -17,7 +17,9 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
     @IBOutlet weak var menu: UIView!
     @IBOutlet weak var tableView: UITableView!
 
+    // MARK: Properties
     private var compositions = [CompositionInfo]()
+    private var compIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +27,10 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
         self.setupMenuShadow()
         self.setupTable()
 
-        let info = CompositionInfo(name: "Composition 1")
-        self.compositions.append(info)
+        for i in 1..<5 {
+            self.compositions.append(CompositionInfo(name: "Composition \(i)"))
+            //self.compositions.append(CompositionInfo(name:"Composition 2"))
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,19 +70,48 @@ class StartMenuViewController: UIViewController, UITableViewDataSource, UITableV
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("I'm here")
         guard let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as? CompositionTableViewCell else {
             fatalError("The dequeued cell is not an instance of " + self.cellIdentifier)
         }
 
-        let composition = compositions[indexPath.row]
+        print ("I'm here")
+        if self.compIndex < self.compositions.count {
+            let composition = compositions[compIndex]
+            cell.view1.nameLabel.text = composition.name
+            cell.view1.lastEditedLabel.text = composition.lastEditedString
+
+            self.compIndex += 1
+
+            if self.compIndex < self.compositions.count {
+                let composition = compositions[self.compIndex]
+                cell.view2.nameLabel.text = composition.name
+                cell.view2.lastEditedLabel.text = composition.lastEditedString
+            }
+
+            self.compIndex += 1
+
+            if self.compIndex < self.compositions.count {
+                let composition = compositions[self.compIndex]
+                cell.view3.nameLabel.text = composition.name
+                cell.view3.lastEditedLabel.text = composition.lastEditedString
+            }
+        } else {
+            cell.is
+            cell.isHidden = true
+            if indexPath.row == self.compositions.count - 1 {
+                self.compIndex = 0
+            }
+        }
+
+        /*let index = compIndex
+        let composition = compositions[index]
         cell.view1.nameLabel.text = composition.name
         cell.view1.lastEditedLabel.text = composition.lastEditedString
 
         cell.view2.nameLabel.text = composition.name + " test"
         cell.view3.nameLabel.text = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog."
         //cell.column1.text = "1" // fill in your value for column 1 (e.g. from an array)
-        //cell.column2.text = "2" // fill in your value for column 2
+        //cell.column2.text = "2" // fill in your value for column 2*/
         
         return cell
     }
