@@ -46,4 +46,16 @@ class Composition {
     func addStaff(_ staff: Staff) {
         self.staffList.append(staff)
     }
+    
+    func getMeasureOfNote(note: MusicNotation) -> Measure? {
+        for staff in staffList {
+            for measure in staff.measures {
+                if let _ = measure.notationObjects.index(where: {$0 === note}) {
+                    return measure
+                }
+            }
+        }
+        
+        return nil
+    }
 }

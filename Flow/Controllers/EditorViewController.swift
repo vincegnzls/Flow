@@ -145,5 +145,19 @@ class EditorViewController: UIViewController {
         }
 
     }
+    
+    func onDeleteKeyPressed () {
+        let selectedNotes = musicSheet.getSelectedNotes()
+        
+        for note in selectedNotes {
+            if let measure = composition?.getMeasureOfNote(note: note) {
+                
+                let delAction = DeleteAction(measure: measure, note: note)
+                
+                delAction.execute()
+                
+            }
+        }
+    }
 }
 
