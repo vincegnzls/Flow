@@ -10,16 +10,21 @@ import Foundation
 
 class DeleteAction: Action {
     
-    var measure:Measure
-    var note:MusicNotation
+    var composition: Composition
+    var notes:[MusicNotation]
     
-    init(measure: Measure, note: MusicNotation) {
-        self.measure = measure
-        self.note = note
+    init(composition: Composition, notes: [MusicNotation]) {
+        self.composition = composition
+        self.notes = notes
     }
     
     func execute() {
-        measure.deleteNoteInMeasure(note)
+        
+        for note in self.notes {
+            if let measure = self.composition.getMeasureOfNote(note: note) {
+                measure.deleteNoteInMeasure(note)
+            }
+        }
     }
     
     func undo() {

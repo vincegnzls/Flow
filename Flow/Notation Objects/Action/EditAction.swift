@@ -10,18 +10,22 @@ import Foundation
 
 class EditAction: Action {
     
-    var measure:Measure
-    var oldNote:MusicNotation
+    var composition: Composition
+    var oldNotes:[MusicNotation]
     var newNote:MusicNotation
     
-    init(measure: Measure, oldNote: MusicNotation, newNote: MusicNotation) {
-        self.measure = measure
-        self.oldNote = oldNote
+    init(composition: Composition, oldNotes: [MusicNotation], newNote: MusicNotation) {
+        self.composition = composition
+        self.oldNotes = oldNotes
         self.newNote = newNote
     }
     
     func execute() {
-        measure.editNoteInMeasure(oldNote, newNote)
+        for oldNote in oldNotes {
+            if let measure = composition.getMeasureOfNote(note: oldNote){
+                measure.editNoteInMeasure(oldNote, newNote)
+            }
+        }
     }
     
     func undo() {
