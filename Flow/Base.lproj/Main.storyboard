@@ -28,7 +28,7 @@
             </objects>
             <point key="canvasLocation" x="-155" y="131"/>
         </scene>
-        <!--Start Menu-->
+        <!--Your Compositions-->
         <scene sceneID="KA9-Fa-yBN">
             <objects>
                 <viewController id="dfI-mq-vOZ" customClass="StartMenuViewController" customModule="Flow" customModuleProvider="target" sceneMemberID="viewController">
@@ -55,6 +55,9 @@
                                         <rect key="frame" x="372" y="15" width="97" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Change View"/>
+                                        <connections>
+                                            <action selector="tapChangeView:" destination="dfI-mq-vOZ" eventType="touchUpInside" id="Ntx-Pa-mHR"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -77,14 +80,14 @@
                                             <inset key="sectionInset" minX="20" minY="10" maxX="20" maxY="20"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CompositionCell" id="X6u-9N-ovJ" customClass="CompositionCollectionViewCell" customModule="Flow" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CompositionCollectionViewCell" id="X6u-9N-ovJ" customClass="CompositionCollectionViewCell" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="10" width="300" height="200"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                                     <rect key="frame" x="0.0" y="0.0" width="300" height="200"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Composition Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="B6I-9M-6Qh">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Composition Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B6I-9M-6Qh">
                                                             <rect key="frame" x="18" y="28" width="358" height="121"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="26"/>
                                                             <nil key="textColor"/>
@@ -126,17 +129,57 @@
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="g8R-FX-vJY">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="g8R-FX-vJY">
                                         <rect key="frame" x="8" y="8" width="1096" height="689"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="UaL-Sn-YJ1">
-                                                <rect key="frame" x="0.0" y="28" width="1096" height="44"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CompositionTableViewCell" rowHeight="75" id="UaL-Sn-YJ1" customClass="CompositionTableViewCell" customModule="Flow" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="28" width="1096" height="75"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UaL-Sn-YJ1" id="lTF-8f-wrI">
-                                                    <rect key="frame" x="0.0" y="0.0" width="1096" height="43.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="1096" height="74.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Sda-9z-Q7m">
+                                                            <rect key="frame" x="681" y="17" width="200" height="40.5"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Edited: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5l9-Jo-Hti">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="74" height="16"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="13"/>
+                                                                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date Last Edited" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TM7-Ae-ZBD">
+                                                                    <rect key="frame" x="0.0" y="21" width="118" height="19.5"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="16"/>
+                                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="200" id="5Z1-8f-0Zj"/>
+                                                            </constraints>
+                                                        </stackView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Composition Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zqy-75-84O">
+                                                            <rect key="frame" x="25" y="21" width="626" height="33"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="Sda-9z-Q7m" firstAttribute="leading" secondItem="Zqy-75-84O" secondAttribute="trailing" constant="30" id="53x-Wa-05N"/>
+                                                        <constraint firstAttribute="trailingMargin" secondItem="Sda-9z-Q7m" secondAttribute="trailing" constant="200" id="ATM-7k-Kpb"/>
+                                                        <constraint firstItem="Zqy-75-84O" firstAttribute="top" secondItem="lTF-8f-wrI" secondAttribute="topMargin" constant="10" id="Bce-AE-CH3"/>
+                                                        <constraint firstItem="Sda-9z-Q7m" firstAttribute="centerY" secondItem="lTF-8f-wrI" secondAttribute="centerY" id="GpO-lh-3W5"/>
+                                                        <constraint firstItem="Zqy-75-84O" firstAttribute="leading" secondItem="lTF-8f-wrI" secondAttribute="leadingMargin" constant="10" id="Kcy-wk-EJw"/>
+                                                        <constraint firstAttribute="bottomMargin" secondItem="Zqy-75-84O" secondAttribute="bottom" constant="10" id="fxb-KC-KND"/>
+                                                    </constraints>
                                                 </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="lastEditedLabel" destination="TM7-Ae-ZBD" id="Xh6-VR-LCH"/>
+                                                    <outlet property="nameLabel" destination="Zqy-75-84O" id="oDc-47-25a"/>
+                                                </connections>
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
@@ -166,10 +209,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2DB-Ug-KK3"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Start Menu" id="0l2-Ep-9cc"/>
+                    <navigationItem key="navigationItem" title="Your Compositions" id="0l2-Ep-9cc"/>
                     <connections>
                         <outlet property="collectionView" destination="FMb-5Y-qyJ" id="UqJ-qy-wZQ"/>
                         <outlet property="menu" destination="4Dd-JO-83n" id="Kag-Dr-GOD"/>
+                        <outlet property="tableView" destination="g8R-FX-vJY" id="r55-fd-eUZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eqb-Xg-VFP" userLabel="First Responder" sceneMemberID="firstResponder"/>

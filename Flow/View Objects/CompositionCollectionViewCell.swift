@@ -10,6 +10,8 @@ import UIKit
 
 class CompositionCollectionViewCell: UICollectionViewCell {
 
+    static let cellIdentifier = "CompositionCollectionViewCell"
+
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var lastEditedLabel: UILabel!
 
@@ -29,7 +31,5 @@ class CompositionCollectionViewCell: UICollectionViewCell {
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 5
         self.layer.masksToBounds = false
-
-
     }
 }

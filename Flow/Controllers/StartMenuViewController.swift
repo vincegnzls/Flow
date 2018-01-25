@@ -8,29 +8,29 @@
 
 import UIKit
 
-class StartMenuViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
-
-    // MARK: Constants
-    private let cellIdentifier = "CompositionCell"
+class StartMenuViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
+        UITableViewDataSource, UITableViewDelegate {
 
     // MARK: Outlets
     @IBOutlet weak var menu: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var tableView: UITableView!
     
     // MARK: Properties
     private var compositions = [CompositionInfo]()
-    private var compIndex = 0
+    private var isTableViewShowing = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupMenuShadow()
-        self.setupTable()
+        self.setupLists()
 
         for i in 1..<5 {
             self.compositions.append(CompositionInfo(name: "Composition \(i)"))
             //self.compositions.append(CompositionInfo(name:"Composition 2"))
         }
+        self.compositions.append(CompositionInfo(name: "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog."))
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,10 +50,12 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         }
     }
     
-    private func setupTable() {
+    private func setupLists() {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
 
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
         //self.tableView.register(CompositionTableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
         //self.tableView.separatorStyle = .none
     }
@@ -68,9 +70,9 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         // get a reference to our storyboard cell
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellIdentifier, for: indexPath as IndexPath) as?
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CompositionCollectionViewCell.cellIdentifier, for: indexPath as IndexPath) as?
             CompositionCollectionViewCell else {
-                fatalError("The dequeued cell is not an instance of \(self.cellIdentifier)")
+                fatalError("The dequeued cell is not an instance of \(CompositionCollectionViewCell.cellIdentifier)")
              }
 
         let composition = self.compositions[indexPath.row]
@@ -89,4 +91,48 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         // handle tap events
         print("You selected cell #\(indexPath.item)!")
     }
+
+    // MARK: TableViewSource protocol
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.compositions.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CompositionTableViewCell.cellIdentifier, for: indexPath) as? CompositionTableViewCell
+                else {
+                    fatalError("The dequeued cell is not an instance of \(CompositionTableViewCell.cellIdentifier)")
+                }
+
+        let composition = self.compositions[indexPath.row]
+        cell.nameLabel.text = composition.name
+        cell.lastEditedLabel.text = composition.lastEditedString
+
+        return cell
+    }
+
+    // MARK: IBActions
+    @IBAction func tapChangeView(_ sender: UIButton) {
+        if (self.isTableViewShowing) {
+            // Hide list
+            UIView.transition(from: self.tableView,
+                    to: self.collectionView,
+                    duration: 0.5,
+                    options: [.transitionFlipFromLeft, .showHideTransitionViews],
+                    completion:nil)
+        } else {
+            // Show List
+            UIView.transition(from: self.collectionView,
+            to: self.tableView,
+            duration: 0.5,
+            options: [.transitionFlipFromRight, .showHideTransitionViews],
+            completion: nil)
+        }
+
+        self.isTableViewShowing = !self.isTableViewShowing
+    }
+    
 }
