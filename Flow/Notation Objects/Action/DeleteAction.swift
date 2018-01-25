@@ -17,7 +17,7 @@ class DeleteAction: Action {
         self.measure = measure
         self.note = note
     }
-    
+
     func execute() {
         measure.deleteNoteInMeasure(note)
     }

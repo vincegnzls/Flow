@@ -25,8 +25,6 @@ class GridSystem {
     public var currentStaffIndex:Int? {
         didSet {
             if (oldValue != currentStaffIndex) {
-                print (oldValue)
-                print (currentStaffIndex)
                 EventBroadcaster.instance.postEvent(event: EventNames.STAFF_SWITCHED)
                 print ("Staff switched!")
             }
@@ -300,8 +298,6 @@ class GridSystem {
 
         if let note = notation as? Note {
 
-            print("first step")
-
             isUpwards = note.isUpwards
 
             for i in 0..<snapPoints.count {
@@ -311,15 +307,9 @@ class GridSystem {
 
             var endPoint: CGPoint
 
-            print(note.pitch)
-
             if let corresPoint = pitchToPointMap[note.pitch] {
 
-                print("second step")
-
                 if let currIndex = weights.index(where: { $0.x == snapPoints[0].x }) {
-
-                    print("third step")
 
                     // TODO : get time signature
                     let maximum64s = GridSystem.getMaximum64s(timeSig: TimeSignature())
@@ -358,7 +348,6 @@ class GridSystem {
         } else { // for rest
 
         }
-
 
         return (CGPoint(x: -1, y: -1), CGPoint(x: -1, y: -1))
 

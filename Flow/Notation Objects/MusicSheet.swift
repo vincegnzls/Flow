@@ -36,7 +36,7 @@ class MusicSheet: UIView {
     
     private let highlightRect = HighlightRect()
     
-    private var composition: Composition?
+    public var composition: Composition?
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -63,8 +63,8 @@ class MusicSheet: UIView {
         
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
-        EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
-                                              observer: Observer(id: "MusicSheet.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
+        /*EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
+                                              observer: Observer(id: "MusicSheet.onDeleteKeyPressed", function: self.onDeleteKeyPressed))*/
         EventBroadcaster.instance.addObserver(event: EventNames.VIEW_FINISH_LOADING,
                 observer: Observer(id: "MusicSheet.onCompositionLoad", function: self.onCompositionLoad))
         EventBroadcaster.instance.addObserver(event: EventNames.STAFF_SWITCHED,
@@ -73,6 +73,10 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.MEASURE_UPDATE)
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_UPDATE,
                                               observer:  Observer(id: "MusicSheet.updateMeasureDraw", function: self.updateMeasureDraw))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.ADD_NEW_NOTE)
+        EventBroadcaster.instance.addObserver(event: EventNames.ADD_NEW_NOTE,
+                observer: Observer(id: "MusicSheet.addNewNote", function: self.addNewNote))
         
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -81,7 +85,7 @@ class MusicSheet: UIView {
     }
 
     func onCompositionLoad (params: Parameters) {
-        composition = params.get(key: KeyNames.COMPOSITION) as? Composition
+        //composition = params.get(key: KeyNames.COMPOSITION) as? Composition
     }
     
     override func draw(_ rect: CGRect) {
@@ -652,7 +656,7 @@ class MusicSheet: UIView {
 
     }
 
-    func updateMeasureDraw(params: Parameters) {
+    func addNewNote(params: Parameters) {
         let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
         let notePlacement = GridSystem.instance.getNotePlacement(notation: notation)
 
@@ -677,7 +681,7 @@ class MusicSheet: UIView {
 
                 if measure.isFull {
                     if let currIndex = measureCoords.index(of: coord) {
-                        
+
                         // get previous snap points
                         let prevSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: coord)
                         
@@ -689,19 +693,24 @@ class MusicSheet: UIView {
                             // for jumping to relative measure with the same clef
                             if currIndex % NUM_MEASURES_PER_STAFF == NUM_MEASURES_PER_STAFF-1 {
                                 indexJump = currIndex + NUM_MEASURES_PER_STAFF + 1
+                                GridSystem.instance.currentStaffIndex =
+                                        GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: measureCoords[indexJump])
                             } else {
                                 indexJump = currIndex+1
                             }
                             
                             // get new snap points from next measure
                             if let newSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoords[indexJump]) {
-                                
+
                                 GridSystem.instance.selectedMeasureCoord = measureCoords[indexJump]
                                 GridSystem.instance.selectedCoord = newSnapPoints[prevSnapIndex]
+
+                                // get first measure points of the
+                                let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump])
                                 
                                 // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
                                 moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
-                                                              y: measureCoords[indexJump].lowerRightPoint.y - 30))
+                                                              y: firstMeasurePoints.lowerRightPoint.y - 30))
                                 moveCursorY(location: newSnapPoints[prevSnapIndex])
                 
                             }
@@ -719,6 +728,21 @@ class MusicSheet: UIView {
             }
 
         }
+
+    }
+
+    func updateMeasureDraw () {
+        grandStaffIndex = 0
+        startY = 200 + sheetYOffset
+        staffIndex = -1
+
+        for subview in self.subviews {
+            subview.removeFromSuperview()
+        }
+
+        self.setNeedsDisplay()
+
+        print("finished updating the view")
     }
     
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
