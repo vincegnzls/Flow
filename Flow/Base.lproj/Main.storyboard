@@ -73,6 +73,7 @@
                                     <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="FMb-5Y-qyJ">
                                         <rect key="frame" x="8" y="8" width="1096" height="689"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <gestureRecognizers/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="20" id="Sc3-nR-hFO">
                                             <size key="itemSize" width="300" height="200"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -108,6 +109,7 @@
                                                     </subviews>
                                                 </view>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstItem="URL-me-ESm" firstAttribute="top" secondItem="1Vf-Hj-b3c" secondAttribute="bottom" constant="5" id="7qm-kr-YHx"/>
                                                     <constraint firstAttribute="bottom" secondItem="URL-me-ESm" secondAttribute="bottom" constant="20" id="ECo-I4-mtb"/>
@@ -128,6 +130,9 @@
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="e2X-Wg-vE8" appends="YES" id="ZJO-rO-yyf"/>
+                                        </connections>
                                     </collectionView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="g8R-FX-vJY">
                                         <rect key="frame" x="8" y="8" width="1096" height="689"/>
@@ -217,6 +222,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eqb-Xg-VFP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="e2X-Wg-vE8">
+                    <connections>
+                        <action selector="longPressCompositionCollectionViewCell:" destination="dfI-mq-vOZ" id="yVp-3b-t1f"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1346.7625899280577" y="130.93525179856115"/>
         </scene>

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class StartMenuViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
         UITableViewDataSource, UITableViewDelegate {
@@ -30,7 +31,11 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             self.compositions.append(CompositionInfo(name: "Composition \(i)"))
             //self.compositions.append(CompositionInfo(name:"Composition 2"))
         }
-        self.compositions.append(CompositionInfo(name: "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog."))
+        self.compositions.append(CompositionInfo(name: "The quick brown fox jumps over the lazy dog. " +
+                "The quick brown fox jumps over the lazy dog. " +
+                "The quick brown fox jumps over the lazy dog."))
+
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -92,6 +97,29 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         print("You selected cell #\(indexPath.item)!")
     }
 
+    @IBAction func longPressCompositionCollectionViewCell(_ sender: UILongPressGestureRecognizer) {
+        if sender.state != .ended {
+            return
+        }
+
+        let p = sender.location(in: self.collectionView)
+
+        if let indexPath = self.collectionView.indexPathForItem(at: p) {
+            // get the cell at indexPath (the one you long pressed)
+            guard let cell = self.collectionView.cellForItem(at: indexPath) as? CompositionCollectionViewCell else {
+                fatalError("Error!")
+            }
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+            print("\(cell.nameLabel.text)")
+
+
+
+            // do stuff with the cell
+        } else {
+            print("Not a cell")
+        }
+    }
+
     // MARK: TableViewSource protocol
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -134,5 +162,4 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
 
         self.isTableViewShowing = !self.isTableViewShowing
     }
-    
 }
