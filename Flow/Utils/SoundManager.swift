@@ -16,14 +16,20 @@ class SoundManager{
     
     var resName = "a1-mf"
     
-    var playbackRate = 1.0
+    var playTime = 1000.0
     
     func playSound(_ note: Note){
         
         switch note.type.toString(){
-        case "sixtyFourth": playbackRate = 45
+        case "sixtyFourth": playTime = 75.0
+        case "thirtySecond" : playTime = 125.0
+        case "sixteenth" : playTime = 250.0
+        case "eigth" : playTime = 500.0
+        case "quarter" : playTime = 1000.0
+        case "half" : playTime = 2000.0
+        case "whole" : playTime = 4000.0
         default:
-            playbackRate = 1.0
+            playTime = 1000.0
             break
         }
         
@@ -130,13 +136,20 @@ class SoundManager{
         
         do{
             audioPlayer = try AVAudioPlayer(contentsOf: url!)
-            audioPlayer.enableRate = true
             audioPlayer.prepareToPlay()
             audioPlayer.currentTime = 0
         }catch let error as NSError{            print(error.debugDescription)
         }
         
         audioPlayer.play()
+        
+        if #available(iOS 10.0, *) {
+            Timer.scheduledTimer(withTimeInterval: playTime, repeats: false){
+                (timer) in self.audioPlayer.stop()
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
 }
 
