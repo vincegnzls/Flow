@@ -111,10 +111,25 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             }
             AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
             print("\(cell.nameLabel.text)")
-
-
-
             // do stuff with the cell
+
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+            alert.addAction(UIAlertAction(title: "Export", style: .default) { _ in
+                print("Export tapped")
+            })
+
+            alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+                print("delete tapped")
+            })
+
+            if let presenter = alert.popoverPresentationController {
+                presenter.sourceView = cell
+                presenter.sourceRect = cell.bounds
+            }
+
+            present(alert, animated: true)
+
         } else {
             print("Not a cell")
         }
