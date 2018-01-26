@@ -125,7 +125,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
                 fatalError("Error!")
             }
 
-            self.showAlertPopup(cell: cell)
+            self.showAlertPopup(cell: cell, index: indexPath)
         }
     }
 
@@ -168,21 +168,18 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
                 fatalError("Error!")
             }
 
-            self.showAlertPopup(cell: cell)
+            self.showAlertPopup(cell: cell, index: indexPath)
         }
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            print("delete")
-            /*meals.remove(at: indexPath.row)
-            saveMeals()
-            tableView.deleteRows(at: [indexPath], with: .fade)*/
+            self.showDeleteConfirmationAlert(index: indexPath)
         }
     }
 
-    private func showAlertPopup(cell: UIView) {
+    private func showAlertPopup(cell: UIView, index: IndexPath) {
 
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -192,7 +189,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         })
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
-            print("delete tapped")
+            self.showDeleteConfirmationAlert(index: index)
         })
 
         if let presenter = alert.popoverPresentationController {
@@ -201,6 +198,40 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         }
 
         present(alert, animated: true)
+    }
+
+    private func deleteItem(at index: IndexPath) {
+        print("deleting item with index: \(index.row)")
+        /*meals.remove(at: indexPath.row)
+            saveMeals()
+            tableView.deleteRows(at: [indexPath], with: .fade)*/
+
+        
+        //FileHandler.instance.deleteComposition(at: index.row)
+        self.compositions.remove(at: index.row)
+        self.tableView.deleteRows(at: [index], with: .fade)
+        self.collectionView.deleteItems(at: [index])
+    }
+
+    private func showDeleteConfirmationAlert(index: IndexPath) {
+        let dialogMessage = UIAlertController(title: "Confirm delete", message: "Are you sure you want to delete this?", preferredStyle: .alert)
+
+        // Create OK button with action handler
+        let delete = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) -> Void in
+            self.deleteItem(at: index)
+        })
+
+        // Create Cancel button with action handlder
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) -> Void in
+            print("Cancel button tapped")
+        }
+
+        //Add OK and Cancel button to dialog message
+        dialogMessage.addAction(delete)
+        dialogMessage.addAction(cancel)
+
+        // Present dialog message to user
+        self.present(dialogMessage, animated: true, completion: nil)
     }
     
     // MARK: IBActions
