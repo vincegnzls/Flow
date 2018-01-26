@@ -25,6 +25,7 @@
 		61B1316B1FE1513900ADCDF0 /* ButtonEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */; };
 		61EBB0321FE695B60015F7C2 /* KeySignatureDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
+		7A8D3F27201B845900692B66 /* Support Objects in Resources */ = {isa = PBXBuildFile; fileRef = 7A8D3F26201B845900692B66 /* Support Objects */; };
 		7ADDE1311FEA29FD0065523E /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADDE1301FEA29FD0065523E /* GridSystem.swift */; };
 		860ACC431FFCA25900A86D50 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860ACC421FFCA25900A86D50 /* SoundManager.swift */; };
 		8618F0741FED3D0400DF8A10 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8618F0731FED3D0400DF8A10 /* Action.swift */; };
@@ -112,6 +113,7 @@
 		61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEffect.swift; sourceTree = "<group>"; };
 		61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureDesignable.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		7A8D3F26201B845900692B66 /* Support Objects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Support Objects"; sourceTree = "<group>"; };
 		7ADDE1301FEA29FD0065523E /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		860ACC421FFCA25900A86D50 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		8618F0731FED3D0400DF8A10 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 		61370E151F82A1CB002B6A09 /* Flow */ = {
 			isa = PBXGroup;
 			children = (
+				7A8D3F26201B845900692B66 /* Support Objects */,
 				610ECE321FE6D9B5009CC0F2 /* Controllers */,
 				611BFC9F1FE67928001511B2 /* IBDesignables */,
 				864CE5AD1FD3308F001FF059 /* Utils */,
@@ -513,6 +516,7 @@
 				8696A8BF1FD5898200EB81BD /* Info.plist in Resources */,
 				61370E211F82A1CB002B6A09 /* LaunchScreen.storyboard in Resources */,
 				61370E1E1F82A1CB002B6A09 /* Assets.xcassets in Resources */,
+				7A8D3F27201B845900692B66 /* Support Objects in Resources */,
 				61370E1C1F82A1CB002B6A09 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -763,11 +767,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4HW4U7R3UV;
+				DEVELOPMENT_TEAM = 4XKYMS9BR8;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -782,11 +786,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4HW4U7R3UV;
+				DEVELOPMENT_TEAM = 4XKYMS9BR8;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

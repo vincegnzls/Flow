@@ -746,7 +746,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2W-99-FM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="87U-aK-pku" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2801" y="130"/>
+            <point key="canvasLocation" x="2800.8992805755397" y="129.49640287769785"/>
         </scene>
         <!--Time Signature View Controller-->
         <scene sceneID="haZ-5N-Hbc">

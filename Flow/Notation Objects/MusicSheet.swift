@@ -34,6 +34,8 @@ class MusicSheet: UIView {
     // used for tracking coordinates of measures
     private var measureCoords = [GridSystem.MeasurePoints]()
     
+    private var soundManager = SoundManager()
+    
     private let highlightRect = HighlightRect()
     
     public var composition: Composition?
@@ -647,6 +649,10 @@ class MusicSheet: UIView {
         notation.screenCoordinates = notePlacement.0
 
         self.addMusicNotation(note: notation)
+        
+        if let note = notation as? Note {
+            soundManager.playSound(note)
+        }
 
         if let coord = GridSystem.instance.selectedMeasureCoord {
 
