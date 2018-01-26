@@ -48,7 +48,6 @@
 		864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A91FD3301E001FF059 /* Accidental.swift */; };
 		864CE5AC1FD33076001FF059 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5AB1FD33076001FF059 /* Note.swift */; };
 		864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B01FD330DA001FF059 /* GridCoordinates.swift */; };
-		864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B21FD355E8001FF059 /* SWXMLHash.swift */; };
 		865B22CA20050477009D0D11 /* HighlightRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865B22C920050477009D0D11 /* HighlightRect.swift */; };
 		8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A51FD4E8E800EB81BD /* Composition.swift */; };
 		8696A8A91FD4EA5800EB81BD /* FileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A81FD4EA5800EB81BD /* FileHandler.swift */; };
@@ -71,8 +70,6 @@
 		86B8EFEE1FEAC30500DD834E /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B8EFED1FEAC30500DD834E /* Clipboard.swift */; };
 		86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */; };
 		86CCD7C31FDD783400A0FC8D /* StartMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */; };
-		86EAA90D201782A600ACD6EB /* CompositionInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86EAA90C201782A600ACD6EB /* CompositionInfoView.xib */; };
-		86EAA90F2017832400ACD6EB /* CompositionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86EAA90E2017832400ACD6EB /* CompositionInfoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,7 +135,6 @@
 		864CE5A91FD3301E001FF059 /* Accidental.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accidental.swift; sourceTree = "<group>"; };
 		864CE5AB1FD33076001FF059 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		864CE5B01FD330DA001FF059 /* GridCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCoordinates.swift; sourceTree = "<group>"; };
-		864CE5B21FD355E8001FF059 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
 		865B22C920050477009D0D11 /* HighlightRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightRect.swift; sourceTree = "<group>"; };
 		8696A8A51FD4E8E800EB81BD /* Composition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Composition.swift; sourceTree = "<group>"; };
 		8696A8A81FD4EA5800EB81BD /* FileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandler.swift; sourceTree = "<group>"; };
@@ -162,8 +158,6 @@
 		86B8EFED1FEAC30500DD834E /* Clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipboard.swift; sourceTree = "<group>"; };
 		86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenuViewController.swift; sourceTree = "<group>"; };
-		86EAA90C201782A600ACD6EB /* CompositionInfoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CompositionInfoView.xib; sourceTree = "<group>"; };
-		86EAA90E2017832400ACD6EB /* CompositionInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionInfoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -329,7 +323,6 @@
 				861B3DD01FDC1D2A003FE0A5 /* Event Broadcasting */,
 				8696A8B41FD5896F00EB81BD /* AEXML */,
 				8696A8A71FD4EA1000EB81BD /* File Handling */,
-				864CE5B21FD355E8001FF059 /* SWXMLHash.swift */,
 				864CE5B01FD330DA001FF059 /* GridCoordinates.swift */,
 				6135C82A1FDEC35000AF9EA9 /* Bounds.swift */,
 				86B8EFED1FEAC30500DD834E /* Clipboard.swift */,
@@ -395,8 +388,6 @@
 				610ECE331FE6DAE9009CC0F2 /* TimeSignaturePicker.swift */,
 				865B22C920050477009D0D11 /* HighlightRect.swift */,
 				61266A38BF3434D745ED8A2D /* CompositionTableViewCell.swift */,
-				86EAA90C201782A600ACD6EB /* CompositionInfoView.xib */,
-				86EAA90E2017832400ACD6EB /* CompositionInfoView.swift */,
 			);
 			path = "View Objects";
 			sourceTree = "<group>";
@@ -522,7 +513,6 @@
 				8696A8BF1FD5898200EB81BD /* Info.plist in Resources */,
 				61370E211F82A1CB002B6A09 /* LaunchScreen.storyboard in Resources */,
 				61370E1E1F82A1CB002B6A09 /* Assets.xcassets in Resources */,
-				86EAA90D201782A600ACD6EB /* CompositionInfoView.xib in Resources */,
 				61370E1C1F82A1CB002B6A09 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -569,7 +559,6 @@
 				861B3DD41FDC1E0E003FE0A5 /* Parameters.swift in Sources */,
 				86B8EFEC1FEAA5E600DD834E /* Step.swift in Sources */,
 				8632C97C2000877B00D69CB4 /* Converter.swift in Sources */,
-				86EAA90F2017832400ACD6EB /* CompositionInfoView.swift in Sources */,
 				8696A8BC1FD5898200EB81BD /* Element.swift in Sources */,
 				8618F07C1FED406500DF8A10 /* UndoRedoManager.swift in Sources */,
 				865B22CA20050477009D0D11 /* HighlightRect.swift in Sources */,
@@ -594,7 +583,6 @@
 				8696A8BD1FD5898200EB81BD /* Options.swift in Sources */,
 				863374811FD32849003D7936 /* MusicNotation.swift in Sources */,
 				8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */,
-				864CE5B31FD355E8001FF059 /* SWXMLHash.swift in Sources */,
 				8618F0761FED3D4600DF8A10 /* AddAction.swift in Sources */,
 				8696A8C11FD5898200EB81BD /* Document.swift in Sources */,
 				86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */,

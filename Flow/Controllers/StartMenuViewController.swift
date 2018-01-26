@@ -124,29 +124,8 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             guard let cell = self.collectionView.cellForItem(at: indexPath) as? CompositionCollectionViewCell else {
                 fatalError("Error!")
             }
-            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
-            print("\(cell.nameLabel.text)")
-            // do stuff with the cell
 
-            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-            alert.addAction(UIAlertAction(title: "Export", style: .default) { _ in
-                print("Export tapped")
-            })
-
-            alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
-                print("delete tapped")
-            })
-
-            if let presenter = alert.popoverPresentationController {
-                presenter.sourceView = cell
-                presenter.sourceRect = cell.bounds
-            }
-
-            present(alert, animated: true)
-
-        } else {
-            print("Not a cell")
+            self.showAlertPopup(cell: cell)
         }
     }
 
@@ -172,6 +151,48 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         return cell
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("selected row \(indexPath.row)")
+    }
+    
+    @IBAction func longPressCompositionTableViewCell(_ sender: UILongPressGestureRecognizer) {
+        if sender.state != .ended {
+            return
+        }
+
+        let p = sender.location(in: self.tableView)
+
+        if let indexPath = self.tableView.indexPathForRow(at: p) {
+            // get the cell at indexPath (the one you long pressed)
+            guard let cell = self.tableView.cellForRow(at: indexPath) as? CompositionTableViewCell else {
+                fatalError("Error!")
+            }
+
+            self.showAlertPopup(cell: cell)
+        }
+    }
+
+    private func showAlertPopup(cell: UIView) {
+
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        alert.addAction(UIAlertAction(title: "Export", style: .default) { _ in
+            print("Export tapped")
+        })
+
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+            print("delete tapped")
+        })
+
+        if let presenter = alert.popoverPresentationController {
+            presenter.sourceView = cell
+            presenter.sourceRect = cell.bounds
+        }
+
+        present(alert, animated: true)
+    }
+    
     // MARK: IBActions
     @IBAction func tapChangeView(_ sender: UIButton) {
         if (!self.isCollectionViewShowing) {

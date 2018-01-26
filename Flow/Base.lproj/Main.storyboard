@@ -137,6 +137,7 @@
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="g8R-FX-vJY">
                                         <rect key="frame" x="8" y="8" width="1096" height="689"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <gestureRecognizers/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CompositionTableViewCell" rowHeight="75" id="UaL-Sn-YJ1" customClass="CompositionTableViewCell" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="1096" height="75"/>
@@ -187,6 +188,9 @@
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="boP-eK-Ugp" appends="YES" id="21i-zN-xJc"/>
+                                        </connections>
                                     </tableView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -225,6 +229,11 @@
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="e2X-Wg-vE8">
                     <connections>
                         <action selector="longPressCompositionCollectionViewCell:" destination="dfI-mq-vOZ" id="yVp-3b-t1f"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="boP-eK-Ugp">
+                    <connections>
+                        <action selector="longPressCompositionTableViewCell:" destination="dfI-mq-vOZ" id="Zea-6t-6BE"/>
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
