@@ -147,17 +147,31 @@ class EditorViewController: UIViewController {
 
     }
     
+    func getNoteMeasures(notes: [MusicNotation]) -> [Measure] {
+        var measures = [Measure]()
+        
+        for note in notes {
+            if let measure = composition?.getMeasureOfNote(note: note) {
+                measures.append(measure)
+            }
+        }
+        
+        return measures
+    }
+    
     func editSelectedNotes(newNote: MusicNotation) {
         let oldNotes = musicSheet.getSelectedNotes()
+        let noteMeasures = getNoteMeasures(notes: oldNotes)
         
-        let editAction = EditAction(composition: self.composition!, oldNotes: oldNotes, newNote: newNote)
+        let editAction = EditAction(measures: noteMeasures, oldNotes: oldNotes, newNote: newNote)
         editAction.execute()
     }
     
     func onDeleteKeyPressed () {
         let selectedNotes = musicSheet.getSelectedNotes()
+        let noteMeasures = getNoteMeasures(notes: selectedNotes)
                 
-        let delAction = DeleteAction(composition: self.composition!, notes: selectedNotes)
+        let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
         delAction.execute()
     }
 }
