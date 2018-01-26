@@ -172,6 +172,16 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         }
     }
 
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            print("delete")
+            /*meals.remove(at: indexPath.row)
+            saveMeals()
+            tableView.deleteRows(at: [indexPath], with: .fade)*/
+        }
+    }
+
     private func showAlertPopup(cell: UIView) {
 
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
