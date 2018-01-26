@@ -17,7 +17,7 @@ class DeleteAction: Action {
         self.measures = measures
         self.notes = notes
     }
-    
+
     func execute() {
         
         for (note, measure) in zip(notes, measures) {

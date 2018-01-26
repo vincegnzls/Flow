@@ -31,9 +31,20 @@ class GridSystem {
         }
     }
     public var selectedCoord:CGPoint?
+    public var currentStaffIndex:Int? {
+        didSet {
+            if (oldValue != currentStaffIndex) {
+                EventBroadcaster.instance.postEvent(event: EventNames.STAFF_SWITCHED)
+                print ("Staff switched!")
+            }
+        }
+    }
+
     private var measureMap = [MeasurePoints: Measure]()
     private var weightsMap = [MeasurePoints: [CGPoint]]()
     private var snapPointsMap = [MeasurePoints: [CGPoint]]()
+    public var measurePointsInStaff = [[MeasurePoints]]() // array index reflects staff number
+
     private var YPitchMap = [CGFloat: Pitch]()
     private var gClefPitches = [Pitch]()
     private var fClefPitches = [Pitch]()
@@ -47,6 +58,7 @@ class GridSystem {
     public func reset() {
         selectedMeasureCoord = nil
         selectedCoord = CGPoint(x: -1, y: -1)
+        measurePointsInStaff.removeAll()
         measureMap.removeAll()
         weightsMap.removeAll()
         snapPointsMap.removeAll()
@@ -99,12 +111,62 @@ class GridSystem {
         snapPointsMap[measurePoints] = snapPoint
     }
 
+    public func createNewMeasurePointsArray() {
+        measurePointsInStaff.append([MeasurePoints]())
+    }
+
+    public func appendMeasurePointToLatestArray(measurePoints: MeasurePoints) {
+        if !measurePointsInStaff.isEmpty {
+            measurePointsInStaff[measurePointsInStaff.count - 1].append(measurePoints)
+        }
+    }
+
+    public func getStaffIndexFromMeasurePoint(measurePoints: MeasurePoints) -> Int {
+        var index = 0
+
+        for measurePointsArray in measurePointsInStaff {
+            if let foundIndex = measurePointsArray.index(of: measurePoints) {
+                return index
+            }
+            index += 1
+        }
+
+        return -1
+    }
+
+    public func getFirstMeasurePointFromStaff(measurePoints: MeasurePoints) -> MeasurePoints {
+
+        if let index = currentStaffIndex {
+            let array = measurePointsInStaff[index]
+            return array[0]
+        }
+
+        return MeasurePoints(upperLeftPoint: CGPoint(x: -1, y: -1), lowerRightPoint: CGPoint(x: -1, y: -1))
+
+    }
+
     public func addMoreSnapPointsToPoints(measurePoints:MeasurePoints, snapPoints:[CGPoint]) {
         if var snapPointsFromMap = snapPointsMap[measurePoints] {
             snapPointsFromMap.append(contentsOf: snapPoints)
             snapPointsMap[measurePoints] = snapPointsFromMap
         } else {
             assignSnapPointsToPoints(measurePoints: measurePoints, snapPoint: snapPoints)
+        }
+    }
+    
+    public func removeRelativeXSnapPoints(measurePoints:MeasurePoints, relativeX:CGFloat) {
+        if let snapPointsFromMap = snapPointsMap[measurePoints] {
+            
+            var pointsRemoved = [CGPoint]()
+            
+            for snapPoint in snapPointsFromMap {
+                if snapPoint.x == relativeX {
+                    pointsRemoved.append(snapPoint)
+                }
+            }
+            
+            snapPointsMap[measurePoints] = snapPointsFromMap.filter( {!pointsRemoved.contains($0)} )
+        
         }
     }
     public func assignWeightsToPoints(measurePoints:MeasurePoints, weights:[CGPoint]) {
@@ -122,31 +184,37 @@ class GridSystem {
     public func getRightXSnapPoint(currentPoint: CGPoint) -> CGPoint {
         if let measureCoord = selectedMeasureCoord {
 
-            var nearestPoint:CGPoint?
+            var nearestPoint:CGPoint = currentPoint
             var leastDistance:CGFloat?
             if let snapPoints = snapPointsMap[measureCoord] {
 
-                for snapPoint in snapPoints {
+                for (index, snapPoint) in snapPoints.enumerated() {
                     
-                    if (snapPoint.y == currentPoint.y) {
+                    if (snapPoint.y == currentPoint.y && snapPoint != currentPoint && snapPoint.x > currentPoint.x) {
+                        let x2: CGFloat = currentPoint.x - snapPoint.x
+                        let y2: CGFloat = currentPoint.y - snapPoint.y
+                        
+                        print(index)
+                        print(snapPoint)
 
-                        if let nearPoint = nearestPoint {
-
-                            if (snapPoint.x < nearPoint.x) {
+                        let potDistance = (x2 * x2) + (y2 * y2)
+                        print(potDistance)
+                        
+                        if let theDistance = leastDistance {
+                            if (potDistance < theDistance) {
+                                leastDistance = potDistance
                                 nearestPoint = snapPoint
                             }
-
-                        } else if (snapPoint.x > currentPoint.x) {
-                            nearestPoint = snapPoint
                         } else {
-                            // TODO: Create something for entering the cursor to the next below or upwards
-                            nearestPoint = currentPoint
+                            leastDistance = potDistance
+                            nearestPoint = snapPoint
                         }
 
                     }
+                    
                 }
 
-                return nearestPoint!
+                return nearestPoint
 
             }
         }
@@ -154,16 +222,127 @@ class GridSystem {
         return CGPoint(x: -1, y: -1)
     }
 
-    public func getLeftXSnapPoint(relativeY: CGFloat)/* -> CGPoint */{
-
+    public func getLeftXSnapPoint(currentPoint: CGPoint) -> CGPoint {
+        if let measureCoord = selectedMeasureCoord {
+            
+            var nearestPoint:CGPoint = currentPoint
+            var leastDistance:CGFloat?
+            if let snapPoints = snapPointsMap[measureCoord] {
+                
+                for (index, snapPoint) in snapPoints.enumerated() {
+                    
+                    if (snapPoint.y == currentPoint.y && snapPoint != currentPoint && snapPoint.x < currentPoint.x) {
+                        let x2: CGFloat = currentPoint.x - snapPoint.x
+                        let y2: CGFloat = currentPoint.y - snapPoint.y
+                        
+                        print(index)
+                        print(snapPoint)
+                        
+                        let potDistance = (x2 * x2) + (y2 * y2)
+                        print(potDistance)
+                        
+                        if let theDistance = leastDistance {
+                            if (potDistance < theDistance) {
+                                leastDistance = potDistance
+                                nearestPoint = snapPoint
+                            }
+                        } else {
+                            leastDistance = potDistance
+                            nearestPoint = snapPoint
+                        }
+                        
+                    }
+                    
+                }
+                
+                return nearestPoint
+                
+            }
+        }
+        
+        return CGPoint(x: -1, y: -1)
     }
 
-    public func getUpYSnapPoint(relativeX: CGFloat)/* -> CGPoint */{
-
+    public func getUpYSnapPoint(currentPoint: CGPoint) -> CGPoint {
+        if let measureCoord = selectedMeasureCoord {
+            
+            var nearestPoint:CGPoint = currentPoint
+            var leastDistance:CGFloat?
+            if let snapPoints = snapPointsMap[measureCoord] {
+                
+                for (index, snapPoint) in snapPoints.enumerated() {
+                    
+                    if (snapPoint.y < currentPoint.y && snapPoint != currentPoint && snapPoint.x == currentPoint.x) {
+                        let x2: CGFloat = currentPoint.x - snapPoint.x
+                        let y2: CGFloat = currentPoint.y - snapPoint.y
+                        
+                        print(index)
+                        print(snapPoint)
+                        
+                        let potDistance = (x2 * x2) + (y2 * y2)
+                        print(potDistance)
+                        
+                        if let theDistance = leastDistance {
+                            if (potDistance < theDistance) {
+                                leastDistance = potDistance
+                                nearestPoint = snapPoint
+                            }
+                        } else {
+                            leastDistance = potDistance
+                            nearestPoint = snapPoint
+                        }
+                        
+                    }
+                    
+                }
+                
+                return nearestPoint
+                
+            }
+        }
+        
+        return CGPoint(x: -1, y: -1)
     }
 
-    public func getDownYSnapPoint(relativeX: CGFloat)/* -> CGPoint */{
-
+    public func getDownYSnapPoint(currentPoint: CGPoint) -> CGPoint {
+        if let measureCoord = selectedMeasureCoord {
+            
+            var nearestPoint:CGPoint = currentPoint
+            var leastDistance:CGFloat?
+            if let snapPoints = snapPointsMap[measureCoord] {
+                
+                for (index, snapPoint) in snapPoints.enumerated() {
+                    
+                    if (snapPoint.y > currentPoint.y && snapPoint != currentPoint && snapPoint.x == currentPoint.x) {
+                        let x2: CGFloat = currentPoint.x - snapPoint.x
+                        let y2: CGFloat = currentPoint.y - snapPoint.y
+                        
+                        print(index)
+                        print(snapPoint)
+                        
+                        let potDistance = (x2 * x2) + (y2 * y2)
+                        print(potDistance)
+                        
+                        if let theDistance = leastDistance {
+                            if (potDistance < theDistance) {
+                                leastDistance = potDistance
+                                nearestPoint = snapPoint
+                            }
+                        } else {
+                            leastDistance = potDistance
+                            nearestPoint = snapPoint
+                        }
+                        
+                    }
+                    
+                }
+                
+                return nearestPoint
+                
+            }
+        }
+        
+        return CGPoint(x: -1, y: -1)
     }
 
     public func createSnapPoints (initialX: CGFloat, initialY: CGFloat, clef:Clef) -> [CGPoint] {
@@ -236,8 +415,11 @@ class GridSystem {
                             endPoint = weights[currIndex + (maximum64s - 1)]
                         }
 
+                        if notation is Rest {
+                            let middlePoint = (measureCoord.upperLeftPoint.y + measureCoord.lowerRightPoint.y) / 2
+                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: middlePoint-30 ), endPoint)
 
-                        if isUpwards {
+                        } else if isUpwards && notation.type != .whole {
                             return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
                         } else {
                             return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y), endPoint)
@@ -252,8 +434,83 @@ class GridSystem {
         return (CGPoint(x: -1, y: -1), CGPoint(x: -1, y: -1))
     }
 
+    // THIS IS FOR RELOADING THE WHOLE COMPOSITION
+    public func getNotePlacement (notation: MusicNotation, clef: Clef, snapPoints: [CGPoint], weights: [CGPoint]) -> (CGPoint, CGPoint) {
+
+        var pitchToPointMap = [Pitch: CGPoint]()
+        let pitches = getPitches(clef: clef)
+
+        var isUpwards = true
+
+        if let note = notation as? Note {
+
+            isUpwards = note.isUpwards
+
+            for i in 0..<snapPoints.count {
+                print(pitches[i])
+                pitchToPointMap[pitches[i]] = snapPoints[i]
+            }
+
+            var endPoint: CGPoint
+
+            if let corresPoint = pitchToPointMap[note.pitch] {
+
+                if let currIndex = weights.index(where: { $0.x == snapPoints[0].x }) {
+
+                    // TODO : get time signature
+                    let maximum64s = GridSystem.getMaximum64s(timeSig: TimeSignature())
+
+                    switch notation.type {
+                    case .sixtyFourth:
+                        if isUpwards {
+                            return (CGPoint(x: corresPoint.x, y: corresPoint.y - 30), weights[currIndex + 1])
+                        } else {
+                            return (CGPoint(x: corresPoint.x, y: corresPoint.y), weights[currIndex + 1])
+                        }
+                    case .thirtySecond:
+                        endPoint = weights[currIndex + (maximum64s / 32 - 1)]
+                    case .sixteenth:
+                        endPoint = weights[currIndex + (maximum64s / 16 - 1)]
+                    case .eighth:
+                        endPoint = weights[currIndex + (maximum64s / 8 - 1)]
+                    case .quarter:
+                        endPoint = weights[currIndex + (maximum64s / 4 - 1)]
+                    case .half:
+                        endPoint = weights[currIndex + (maximum64s / 2 - 1)]
+                    case .whole:
+                        endPoint = weights[currIndex + (maximum64s - 1)]
+                    }
+
+                    if isUpwards && notation.type != .whole {
+                        return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: corresPoint.y - 30), endPoint)
+                    } else {
+                        return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: corresPoint.y), endPoint)
+                    }
+
+                }
+
+            } else if notation is Rest {
+                // TODO: PLACING OF REST
+            }
+
+        }
+
+        return (CGPoint(x: -1, y: -1), CGPoint(x: -1, y: -1))
+
+    }
+
     public static func getMaximum64s (timeSig: TimeSignature) -> Int {
         return (64/timeSig.beatType) * timeSig.beats
+    }
+
+    public func getPitches (clef: Clef) -> [Pitch] {
+
+        if clef == .F {
+            return fClefPitches
+        } else {
+            return gClefPitches
+        }
+
     }
     
     struct MeasurePoints : Hashable {

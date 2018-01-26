@@ -27,7 +27,13 @@ class EditorViewController: UIViewController {
         var measuresForF = [Measure]()
 
         for _  in 1...6 {
-            measuresForG.append(Measure())
+            let measure = Measure()
+
+            // dummy data
+            measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .quarter, clef: measure.clef))
+            measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
+
+            measuresForG.append(measure)
         }
 
         for _ in 1...6 {
@@ -43,6 +49,7 @@ class EditorViewController: UIViewController {
         staffArr.append(FStaff)
 
         composition = Composition(staffList: staffArr)
+
         // END OF CREATION
 
         // init
@@ -50,18 +57,21 @@ class EditorViewController: UIViewController {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.NOTATION_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.NOTATION_KEY_PRESSED,
-                observer: Observer(id: "EditorViewController", function: self.onNoteKeyPressed))
+                observer: Observer(id: "EditorViewController.onNoteKeyPressed", function: self.onNoteKeyPressed))
+        EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
+                                              observer: Observer(id: "EditorViewController.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let params = Parameters()
-        params.put(key: KeyNames.COMPOSITION, value: self.composition!)
+        //params.put(key: KeyNames.COMPOSITION, value: self.composition!)
 
-        EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
+        //EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
 
         if musicSheet != nil {
+            musicSheet.composition = composition
            // musicSheet.addMusicNotation()
         }
         // Do any additional setup after loading the view, typically from a nib.
@@ -141,7 +151,7 @@ class EditorViewController: UIViewController {
                 }
             }
 
-            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE, params: parameters)
+            EventBroadcaster.instance.postEvent(event: EventNames.ADD_NEW_NOTE, params: parameters)
 
         }
 
@@ -173,6 +183,8 @@ class EditorViewController: UIViewController {
                 
         let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
         delAction.execute()
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }
 }
 
