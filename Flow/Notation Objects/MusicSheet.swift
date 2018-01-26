@@ -726,10 +726,19 @@ class MusicSheet: UIView {
                 // for jumping to relative measure with the same clef
                 if currIndex % NUM_MEASURES_PER_STAFF == NUM_MEASURES_PER_STAFF-1 {
                     indexJump = currIndex + NUM_MEASURES_PER_STAFF + 1
+                    
+                    if indexJump >= measureCoords.count {
+                        return
+                    }
+                    
                     GridSystem.instance.currentStaffIndex =
                         GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: measureCoords[indexJump])
                 } else {
                     indexJump = currIndex+1
+                    
+                    if indexJump >= measureCoords.count {
+                        return
+                    }
                 }
                 
                 // get new snap points from next measure
@@ -765,11 +774,24 @@ class MusicSheet: UIView {
                     
                     // for jumping to relative measure with the same clef
                     if currIndex % NUM_MEASURES_PER_STAFF == 0 {
-                        indexJump = currIndex - NUM_MEASURES_PER_STAFF + 1
+                        
+                        indexJump = currIndex - (NUM_MEASURES_PER_STAFF + 1)
+                        
+                        if indexJump < 0 {
+                            return
+                        }
+                        
                         GridSystem.instance.currentStaffIndex =
                             GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: measureCoords[indexJump])
+                        
                     } else {
+                        
                         indexJump = currIndex-1
+                        
+                        if indexJump < 0 {
+                            return
+                        }
+                        
                     }
                     
                     // get new snap points from next measure
