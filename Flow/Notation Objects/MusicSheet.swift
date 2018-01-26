@@ -467,41 +467,29 @@ class MusicSheet: UIView {
     
     func onArrowKeyPressed(params: Parameters) {
         let direction:ArrowKey = params.get(key: KeyNames.ARROW_KEY_DIRECTION) as! ArrowKey
+        var nextPoint:CGPoint = curYCursorLocation
         
         if direction == ArrowKey.up {
-            
-            curYCursorLocation.y -= 15
-            moveCursorY(location: curYCursorLocation)
-            
+            nextPoint = GridSystem.instance.getUpYSnapPoint(currentPoint: curYCursorLocation)
         } else if direction == ArrowKey.down {
-            
-            curYCursorLocation.y += 15
-            moveCursorY(location: curYCursorLocation)
-            
+            nextPoint = GridSystem.instance.getDownYSnapPoint(currentPoint: curYCursorLocation)
         } else if direction == ArrowKey.left {
-            
-            curXCursorLocation.x -= 40
-            curYCursorLocation.x = curXCursorLocation.x
-            moveCursorX(location: curXCursorLocation)
-            moveCursorY(location: curYCursorLocation)
-            
+            nextPoint = GridSystem.instance.getLeftXSnapPoint(currentPoint: curYCursorLocation)
         } else if direction == ArrowKey.right {
-
-            let nextPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: curYCursorLocation)
-            
-            curXCursorLocation.x = nextPoint.x
-            curYCursorLocation.x = nextPoint.x
-            
-            moveCursorX(location: curXCursorLocation)
-            moveCursorY(location: nextPoint)
-            
+            nextPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: curYCursorLocation)
         }
         
-        let xLocString = "CURSOR X LOCATION: (" + String(describing: curXCursorLocation.x) + ", " + String(describing: curXCursorLocation.y) + ")"
+        curXCursorLocation.x = nextPoint.x
+        curYCursorLocation.x = nextPoint.x
+        
+        moveCursorX(location: curXCursorLocation)
+        moveCursorY(location: nextPoint)
+        
+        /*let xLocString = "CURSOR X LOCATION: (" + String(describing: curXCursorLocation.x) + ", " + String(describing: curXCursorLocation.y) + ")"
         let yLocString = "CURSOR Y LOCATION: (" + String(describing: curYCursorLocation.x) + ", " + String(describing: curYCursorLocation.y) + ")"
         
         print(xLocString)
-        print(yLocString)
+        print(yLocString)*/
     }
     
     public func moveCursor(location: CGPoint) {
@@ -539,15 +527,6 @@ class MusicSheet: UIView {
             
             return
         }
-
-        var prevMeasureIndex:Int?
-        
-        // used for moving the xCursor
-        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
-            if let index = measureCoords.index(of: measureCoord) {
-                prevMeasureIndex = index
-            }
-        }
         
         remapCurrentMeasure(location: location)
         
@@ -566,15 +545,15 @@ class MusicSheet: UIView {
 
                     var currDistance: CGFloat = (x2 * x2) + (y2 * y2)
 
-                    for i in 1...snapPoints.count - 1 {
-                        let x2: CGFloat = location.x - snapPoints[i].x
-                        let y2: CGFloat = location.y - snapPoints[i].y
+                    for snapPoint in snapPoints {
+                        let x2: CGFloat = location.x - snapPoint.x
+                        let y2: CGFloat = location.y - snapPoint.y
 
                         let potDistance = (x2 * x2) + (y2 * y2)
 
                         if (potDistance < currDistance) {
                             currDistance = potDistance
-                            closestPoint = snapPoints[i]
+                            closestPoint = snapPoint
                         }
                     }
 
@@ -609,14 +588,9 @@ class MusicSheet: UIView {
             
             //  LOCATION IS IN MEASURE
             if r.contains(location) {
-                //print("MEASURE #\(index) TAPPED")
                 
                 GridSystem.instance.selectedMeasureCoord = measureCoord
-                
-                /*if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
-                    print("MEASURE CONTAINS: \(measure.notationObjects)")
-                    print("MEASURE HAS: \(measure.clef)")
-                }*/
+            
                 break
             }
         }
@@ -643,14 +617,10 @@ class MusicSheet: UIView {
 
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
 
-            if let coord = GridSystem.instance.selectedCoord {
+            let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord)
 
-                let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord)
-
-                curXCursorLocation = CGPoint(x: curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30)
-                moveCursorX(location: curXCursorLocation)
-
-            }
+            curXCursorLocation = CGPoint(x: curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30)
+            moveCursorX(location: curXCursorLocation)
 
         }
 

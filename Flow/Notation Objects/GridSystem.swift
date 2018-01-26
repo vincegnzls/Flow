@@ -159,31 +159,37 @@ class GridSystem {
     public func getRightXSnapPoint(currentPoint: CGPoint) -> CGPoint {
         if let measureCoord = selectedMeasureCoord {
 
-            var nearestPoint:CGPoint?
+            var nearestPoint:CGPoint = currentPoint
             var leastDistance:CGFloat?
             if let snapPoints = snapPointsMap[measureCoord] {
 
-                for snapPoint in snapPoints {
+                for (index, snapPoint) in snapPoints.enumerated() {
                     
-                    if (snapPoint.y == currentPoint.y) {
+                    if (snapPoint.y == currentPoint.y && snapPoint != currentPoint && snapPoint.x > currentPoint.x) {
+                        let x2: CGFloat = currentPoint.x - snapPoint.x
+                        let y2: CGFloat = currentPoint.y - snapPoint.y
+                        
+                        print(index)
+                        print(snapPoint)
 
-                        if let nearPoint = nearestPoint {
-
-                            if (snapPoint.x < nearPoint.x) {
+                        let potDistance = (x2 * x2) + (y2 * y2)
+                        print(potDistance)
+                        
+                        if let theDistance = leastDistance {
+                            if (potDistance < theDistance) {
+                                leastDistance = potDistance
                                 nearestPoint = snapPoint
                             }
-
-                        } else if (snapPoint.x > currentPoint.x) {
-                            nearestPoint = snapPoint
                         } else {
-                            // TODO: Create something for entering the cursor to the next below or upwards
-                            nearestPoint = currentPoint
+                            leastDistance = potDistance
+                            nearestPoint = snapPoint
                         }
 
                     }
+                    
                 }
 
-                return nearestPoint!
+                return nearestPoint
 
             }
         }
@@ -191,16 +197,127 @@ class GridSystem {
         return CGPoint(x: -1, y: -1)
     }
 
-    public func getLeftXSnapPoint(relativeY: CGFloat)/* -> CGPoint */{
-
+    public func getLeftXSnapPoint(currentPoint: CGPoint) -> CGPoint {
+        if let measureCoord = selectedMeasureCoord {
+            
+            var nearestPoint:CGPoint = currentPoint
+            var leastDistance:CGFloat?
+            if let snapPoints = snapPointsMap[measureCoord] {
+                
+                for (index, snapPoint) in snapPoints.enumerated() {
+                    
+                    if (snapPoint.y == currentPoint.y && snapPoint != currentPoint && snapPoint.x < currentPoint.x) {
+                        let x2: CGFloat = currentPoint.x - snapPoint.x
+                        let y2: CGFloat = currentPoint.y - snapPoint.y
+                        
+                        print(index)
+                        print(snapPoint)
+                        
+                        let potDistance = (x2 * x2) + (y2 * y2)
+                        print(potDistance)
+                        
+                        if let theDistance = leastDistance {
+                            if (potDistance < theDistance) {
+                                leastDistance = potDistance
+                                nearestPoint = snapPoint
+                            }
+                        } else {
+                            leastDistance = potDistance
+                            nearestPoint = snapPoint
+                        }
+                        
+                    }
+                    
+                }
+                
+                return nearestPoint
+                
+            }
+        }
+        
+        return CGPoint(x: -1, y: -1)
     }
 
-    public func getUpYSnapPoint(relativeX: CGFloat)/* -> CGPoint */{
-
+    public func getUpYSnapPoint(currentPoint: CGPoint) -> CGPoint {
+        if let measureCoord = selectedMeasureCoord {
+            
+            var nearestPoint:CGPoint = currentPoint
+            var leastDistance:CGFloat?
+            if let snapPoints = snapPointsMap[measureCoord] {
+                
+                for (index, snapPoint) in snapPoints.enumerated() {
+                    
+                    if (snapPoint.y < currentPoint.y && snapPoint != currentPoint && snapPoint.x == currentPoint.x) {
+                        let x2: CGFloat = currentPoint.x - snapPoint.x
+                        let y2: CGFloat = currentPoint.y - snapPoint.y
+                        
+                        print(index)
+                        print(snapPoint)
+                        
+                        let potDistance = (x2 * x2) + (y2 * y2)
+                        print(potDistance)
+                        
+                        if let theDistance = leastDistance {
+                            if (potDistance < theDistance) {
+                                leastDistance = potDistance
+                                nearestPoint = snapPoint
+                            }
+                        } else {
+                            leastDistance = potDistance
+                            nearestPoint = snapPoint
+                        }
+                        
+                    }
+                    
+                }
+                
+                return nearestPoint
+                
+            }
+        }
+        
+        return CGPoint(x: -1, y: -1)
     }
 
-    public func getDownYSnapPoint(relativeX: CGFloat)/* -> CGPoint */{
-
+    public func getDownYSnapPoint(currentPoint: CGPoint) -> CGPoint {
+        if let measureCoord = selectedMeasureCoord {
+            
+            var nearestPoint:CGPoint = currentPoint
+            var leastDistance:CGFloat?
+            if let snapPoints = snapPointsMap[measureCoord] {
+                
+                for (index, snapPoint) in snapPoints.enumerated() {
+                    
+                    if (snapPoint.y > currentPoint.y && snapPoint != currentPoint && snapPoint.x == currentPoint.x) {
+                        let x2: CGFloat = currentPoint.x - snapPoint.x
+                        let y2: CGFloat = currentPoint.y - snapPoint.y
+                        
+                        print(index)
+                        print(snapPoint)
+                        
+                        let potDistance = (x2 * x2) + (y2 * y2)
+                        print(potDistance)
+                        
+                        if let theDistance = leastDistance {
+                            if (potDistance < theDistance) {
+                                leastDistance = potDistance
+                                nearestPoint = snapPoint
+                            }
+                        } else {
+                            leastDistance = potDistance
+                            nearestPoint = snapPoint
+                        }
+                        
+                    }
+                    
+                }
+                
+                return nearestPoint
+                
+            }
+        }
+        
+        return CGPoint(x: -1, y: -1)
     }
 
     public func createSnapPoints (initialX: CGFloat, initialY: CGFloat, clef:Clef) -> [CGPoint] {
@@ -273,7 +390,11 @@ class GridSystem {
                             endPoint = weights[currIndex + (maximum64s - 1)]
                         }
 
-                        if isUpwards && notation.type != .whole {
+                        if notation is Rest {
+                            let middlePoint = (measureCoord.upperLeftPoint.y + measureCoord.lowerRightPoint.y) / 2
+                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: middlePoint-30 ), endPoint)
+
+                        } else if isUpwards && notation.type != .whole {
                             return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
                         } else {
                             return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y), endPoint)
@@ -343,9 +464,9 @@ class GridSystem {
 
                 }
 
+            } else if notation is Rest {
+                // TODO: PLACING OF REST
             }
-
-        } else { // for rest
 
         }
 
