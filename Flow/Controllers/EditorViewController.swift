@@ -183,6 +183,8 @@ class EditorViewController: UIViewController {
                 
         let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
         delAction.execute()
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }
 }
 
