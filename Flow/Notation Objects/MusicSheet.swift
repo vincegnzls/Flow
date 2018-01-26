@@ -310,22 +310,19 @@ class MusicSheet: UIView {
             print(measure.notationObjects.count)
         }
 
-        var points:[CGPoint]?
+        var points = snapPoints
 
         if measure.notationObjects.count > 0 {
+            
+            GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: points[0].x)
 
             // add all notes existing in the measure
-            for note in measure.notationObjects {
+            for (index, note) in measure.notationObjects.enumerated() {
 
                 let coordinates:(CGPoint, CGPoint)?
 
-                if let newSnapPoints = points {
-                    coordinates = GridSystem.instance.getNotePlacement(
-                            notation: note, clef: measure.clef, snapPoints: newSnapPoints, weights: measureWeights)
-                } else {
-                    coordinates = GridSystem.instance.getNotePlacement(
-                            notation: note, clef: measure.clef, snapPoints: snapPoints, weights: measureWeights)
-                }
+                coordinates = GridSystem.instance.getNotePlacement(
+                        notation: note, clef: measure.clef, snapPoints: points, weights: measureWeights)
 
                 if let coordinates = coordinates {
 
@@ -333,15 +330,16 @@ class MusicSheet: UIView {
 
                     points = GridSystem.instance.createSnapPoints(
                             initialX: coordinates.1.x, initialY: coordinates.1.y, clef: measure.clef)
-
-                    if let points = points {
-                        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord, snapPoints: points)
-                    }
+                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord, snapPoints: points)
 
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                             snapPoints: GridSystem.instance.createSnapPoints(
                                     initialX: coordinates.0.x, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef))
 
+                    if index != measure.notationObjects.count-1 {
+                        GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: coordinates.1.x)
+                    }
+                    
                     self.addMusicNotation(note: note)
 
                 }
@@ -377,16 +375,6 @@ class MusicSheet: UIView {
         // create points tantamount to maximum number of 64th notes
         for i in 1...maximum64th {
             points.append(CGPoint(x: currX, y: startY))
-
-            /*let note = MusicNotation(type: .whole)
-            note.screenCoordinates = CGPoint(x: currX, y: startY)
-            note.image = UIImage(named: "whole-head")
-
-            addMusicNotation(note: note)*/
-
-            // for testing
-            /*GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoords[measureCoords.count-1],
-                    snapPoints: GridSystem.createSnapPoints(initialX: currX, initialY: startY))*/
             
             currX += distance
         }
@@ -637,6 +625,8 @@ class MusicSheet: UIView {
         if let coord = GridSystem.instance.selectedMeasureCoord {
 
             if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: coord) {
+                
+                GridSystem.instance.removeRelativeXSnapPoints(measurePoints: coord, relativeX: curYCursorLocation.x)
 
                 GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
                         snapPoints: GridSystem.instance.createSnapPoints(

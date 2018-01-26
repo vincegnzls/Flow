@@ -144,6 +144,22 @@ class GridSystem {
             assignSnapPointsToPoints(measurePoints: measurePoints, snapPoint: snapPoints)
         }
     }
+    
+    public func removeRelativeXSnapPoints(measurePoints:MeasurePoints, relativeX:CGFloat) {
+        if let snapPointsFromMap = snapPointsMap[measurePoints] {
+            
+            var pointsRemoved = [CGPoint]()
+            
+            for snapPoint in snapPointsFromMap {
+                if snapPoint.x == relativeX {
+                    pointsRemoved.append(snapPoint)
+                }
+            }
+            
+            snapPointsMap[measurePoints] = snapPointsFromMap.filter( {!pointsRemoved.contains($0)} )
+        
+        }
+    }
     public func assignWeightsToPoints(measurePoints:MeasurePoints, weights:[CGPoint]) {
         weightsMap[measurePoints] = weights
     }
