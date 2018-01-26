@@ -31,5 +31,9 @@ class CompositionCollectionViewCell: UICollectionViewCell {
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 5
         self.layer.masksToBounds = false
+
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = self.tintColor.withAlphaComponent(0.2)
+        self.selectedBackgroundView = bgColorView
     }
 }
