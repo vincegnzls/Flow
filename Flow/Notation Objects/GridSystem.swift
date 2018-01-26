@@ -12,6 +12,8 @@ import UIKit
 class GridSystem {
     
     static let instance = GridSystem()
+    
+    static let NUMBER_OF_SNAPPOINTS_PER_COLUMN = 8
 
     public var selectedMeasureCoord:MeasurePoints? {
         didSet {
@@ -359,9 +361,9 @@ class GridSystem {
                 pitchArray = fClefPitches
         }
 
-        for i in 1...9 {
+        for i in 0...GridSystem.NUMBER_OF_SNAPPOINTS_PER_COLUMN {
             snapPoints.append(currSnapPoint)
-            YPitchMap[currSnapPoint.y] = pitchArray[i-1]
+            YPitchMap[currSnapPoint.y] = pitchArray[i]
 
             if i % 2 == 0 {
                 currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 16.5)
