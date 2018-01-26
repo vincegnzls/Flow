@@ -138,10 +138,17 @@ class EditorViewController: UIViewController {
 
                 parameters.put(key: KeyNames.NOTE_DETAILS, value: note)
 
-                // instantiate add action
-                let addAction = AddAction(measure: measure, note: note)
-                addAction.execute()
+                if musicSheet.getSelectedNotes().count > 0 {
+                    //edit selected notes
+                    
+                    editSelectedNotes(newNote: note)
+                    
+                } else {
+                    // instantiate add action
+                    let addAction = AddAction(measure: measure, note: note)
 
+                    addAction.execute()
+                }
             }
 
             EventBroadcaster.instance.postEvent(event: EventNames.ADD_NEW_NOTE, params: parameters)
@@ -150,20 +157,32 @@ class EditorViewController: UIViewController {
 
     }
     
-    func onDeleteKeyPressed () {
-        let selectedNotes = musicSheet.getSelectedNotes()
+    func getNoteMeasures(notes: [MusicNotation]) -> [Measure] {
+        var measures = [Measure]()
         
-        for note in selectedNotes {
+        for note in notes {
             if let measure = composition?.getMeasureOfNote(note: note) {
-                
-                let delAction = DeleteAction(measure: measure, note: note)
-                
-                delAction.execute()
-                print("executed delete action")
-                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
-                
+                measures.append(measure)
             }
         }
+        
+        return measures
+    }
+    
+    func editSelectedNotes(newNote: MusicNotation) {
+        let oldNotes = musicSheet.getSelectedNotes()
+        let noteMeasures = getNoteMeasures(notes: oldNotes)
+        
+        let editAction = EditAction(measures: noteMeasures, oldNotes: oldNotes, newNote: newNote)
+        editAction.execute()
+    }
+    
+    func onDeleteKeyPressed () {
+        let selectedNotes = musicSheet.getSelectedNotes()
+        let noteMeasures = getNoteMeasures(notes: selectedNotes)
+                
+        let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
+        delAction.execute()
     }
 }
 

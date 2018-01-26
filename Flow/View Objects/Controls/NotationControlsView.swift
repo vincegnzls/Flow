@@ -51,7 +51,7 @@ class NotationControlsView: UIView {
         EventBroadcaster.instance.addObserver(event: EventNames.UPDATE_INVALID_NOTES,
                                               observer: Observer(id: "NotationControls.updateInvalidNotes", function: self.updateInvalidNotes))
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_SWITCHED,
-                                              observer: Observer(id: "NotationControls.resetNoteButtons", function: self.resetNoteButtons))
+                                              observer: Observer(id: "NotationControls.measureSwitched", function: self.measureSwitched))
     }
     
     @IBAction func wholeNote(_ sender: ButtonEffect) {
@@ -166,21 +166,10 @@ class NotationControlsView: UIView {
         }
     }
     
-    func resetNoteButtons() {
-        wholeNote.isEnabled = true
-        wholeRest.isEnabled = true
-        halfNote.isEnabled = true
-        halfRest.isEnabled = true
-        quarterNote.isEnabled = true
-        quarterRest.isEnabled = true
-        eighthNote.isEnabled = true
-        eighthRest.isEnabled = true
-        sixteenthNote.isEnabled = true
-        sixteenthRest.isEnabled = true
-        thirtySecondNote.isEnabled = true
-        thirtySecondRest.isEnabled = true
-        sixtyFourthNote.isEnabled = true
-        sixtyFourthRest.isEnabled = true
+    func measureSwitched(params: Parameters) {
+        let measure:Measure = params.get(key: KeyNames.NEW_MEASURE) as! Measure
+        
+        measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes())
     }
     
     func updateInvalidNotes(params: Parameters) {

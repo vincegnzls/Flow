@@ -10,7 +10,21 @@ import Foundation
 
 class EditAction: Action {
     
+    var measures: [Measure]
+    var oldNotes:[MusicNotation]
+    var newNote:MusicNotation
+    
+    init(measures: [Measure], oldNotes: [MusicNotation], newNote: MusicNotation) {
+        self.measures = measures
+        self.oldNotes = oldNotes
+        self.newNote = newNote
+    }
+    
     func execute() {
+        
+        for (oldNote, measure) in zip(oldNotes, measures) {
+            measure.editNoteInMeasure(oldNote, newNote)
+        }
         
     }
     
@@ -21,6 +35,5 @@ class EditAction: Action {
     func redo() {
         
     }
-    
     
 }
