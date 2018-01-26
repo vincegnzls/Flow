@@ -138,7 +138,7 @@ class EditorViewController: UIViewController {
 
                 parameters.put(key: KeyNames.NOTE_DETAILS, value: note)
 
-                if musicSheet.getSelectedNotes().count > 0 {
+                if musicSheet.selectedNotations.count > 0 {
                     //edit selected notes
                     
                     editSelectedNotes(newNote: note)
@@ -170,7 +170,7 @@ class EditorViewController: UIViewController {
     }
     
     func editSelectedNotes(newNote: MusicNotation) {
-        let oldNotes = musicSheet.getSelectedNotes()
+        let oldNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: oldNotes)
         
         let editAction = EditAction(measures: noteMeasures, oldNotes: oldNotes, newNote: newNote)
@@ -180,7 +180,7 @@ class EditorViewController: UIViewController {
     }
     
     func onDeleteKeyPressed () {
-        let selectedNotes = musicSheet.getSelectedNotes()
+        let selectedNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: selectedNotes)
                 
         let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)

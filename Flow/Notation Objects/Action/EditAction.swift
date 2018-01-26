@@ -22,9 +22,11 @@ class EditAction: Action {
     
     func execute() {
         
-        for (oldNote, measure) in zip(oldNotes, measures) {
-            measure.editNoteInMeasure(oldNote, newNote)
+        for (note, measure) in zip(oldNotes, measures) {
+            measure.deleteNoteInMeasure(note)
         }
+        
+        measures[0].addNoteInMeasure(newNote)
         
     }
     

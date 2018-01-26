@@ -42,7 +42,24 @@ class MusicSheet: UIView {
         return bounds.width - lefRightPadding
     }
     
-    private var selectedNotations: [MusicNotation] = []
+    public var selectedNotations: [MusicNotation] = [] {
+        didSet {
+            print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
+            if selectedNotations.count == 0 {
+                if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+                    if let newMeasure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
+                        let params:Parameters = Parameters()
+                        params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
+                        
+                        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                    }
+                }
+            } else {
+                //print("ASASA")
+                selectedNotes()
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -718,6 +735,9 @@ class MusicSheet: UIView {
     }
     
     private func checkPointsInRect() {
+        
+        selectedNotations.removeAll()
+        
         if let allNotations = composition?.all {
             for notation in allNotations {
                 if let coor = notation.screenCoordinates {
@@ -731,7 +751,41 @@ class MusicSheet: UIView {
         }
     }
     
-    public func getSelectedNotes() -> [MusicNotation] {
-        return self.selectedNotations
+    public func selectedNotes() {
+        if let measure = composition?.getMeasureOfNote(note: selectedNotations[0]) {
+            var invalidNotes = [RestNoteType]()
+            
+            var totalBeats:Float = 0
+            
+            for note in selectedNotations {
+                totalBeats = totalBeats + note.type.getBeatValue()
+                print(note.type.getBeatValue())
+            }
+            
+            let netBeatValue = measure.curBeatValue - totalBeats
+            
+            //print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
+            print("CUR MES: " + String(measure.curBeatValue))
+            print("NET BEAT: " + String(netBeatValue))
+            
+            for noteType in RestNoteType.types {
+                if netBeatValue + noteType.getBeatValue() > measure.timeSignature.getMaxBeatValue() {
+                    invalidNotes.append(noteType)
+                }
+            }
+            
+            print("INVALID NOTES")
+            print("COUNT: " + String(invalidNotes.count))
+            
+            
+            for note in invalidNotes {
+                print(note.toString())
+            }
+            
+            let params = Parameters()
+            
+            params.put(key: KeyNames.INVALID_NOTES, value: invalidNotes)
+            EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_NOTES, params: params)
+        }
     }
 }
