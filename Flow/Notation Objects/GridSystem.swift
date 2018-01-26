@@ -12,6 +12,8 @@ import UIKit
 class GridSystem {
     
     static let instance = GridSystem()
+    
+    static let NUMBER_OF_SNAPPOINTS_PER_COLUMN = 8
 
     public var selectedMeasureCoord:MeasurePoints? {
         didSet {
