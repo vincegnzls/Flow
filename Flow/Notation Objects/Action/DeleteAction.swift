@@ -20,12 +20,10 @@ class DeleteAction: Action {
     
     func execute() {
         
-        var x = 0
-        
-        for note in self.notes {
-            measures[x].deleteNoteInMeasure(note)
-            x = x + 1
+        for (note, measure) in zip(notes, measures) {
+            measure.deleteNoteInMeasure(note)
         }
+        
     }
     
     func undo() {

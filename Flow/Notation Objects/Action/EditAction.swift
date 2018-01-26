@@ -22,12 +22,10 @@ class EditAction: Action {
     
     func execute() {
         
-        var x = 0
-        
-        for oldNote in oldNotes {
-            measures[x].editNoteInMeasure(oldNote, newNote)
-            x = x + 1
+        for (oldNote, measure) in zip(oldNotes, measures) {
+            measure.editNoteInMeasure(oldNote, newNote)
         }
+        
     }
     
     func undo() {
