@@ -125,7 +125,7 @@ class GridSystem {
         var index = 0
 
         for measurePointsArray in measurePointsInStaff {
-            if let foundIndex = measurePointsArray.index(of: measurePoints) {
+            if measurePointsArray.contains(measurePoints) {
                 return index
             }
             index += 1

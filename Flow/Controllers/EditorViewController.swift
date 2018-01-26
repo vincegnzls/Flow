@@ -65,14 +65,14 @@ class EditorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let params = Parameters()
+        //let params = Parameters()
         //params.put(key: KeyNames.COMPOSITION, value: self.composition!)
 
         //EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
 
         if musicSheet != nil {
+            // set composition in music sheet
             musicSheet.composition = composition
-           // musicSheet.addMusicNotation()
         }
         // Do any additional setup after loading the view, typically from a nib.
     }

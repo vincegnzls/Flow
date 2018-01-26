@@ -373,7 +373,7 @@ class MusicSheet: UIView {
         let distance:CGFloat = ((endX - paddingLeftRight) - currX) / CGFloat(maximum64th)
         
         // create points tantamount to maximum number of 64th notes
-        for i in 1...maximum64th {
+        for _ in 0..<maximum64th {
             points.append(CGPoint(x: currX, y: startY))
             
             currX += distance
@@ -523,43 +523,40 @@ class MusicSheet: UIView {
         // START FOR SNAPPING
         
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
-            
-            if let currMeasureIndex = measureCoords.index(of: measureCoord) {
 
-                if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoord) {
+            if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoord) {
 
-                    var closestPoint: CGPoint = snapPoints[0];
+                var closestPoint: CGPoint = snapPoints[0];
 
-                    let x2: CGFloat = location.x - snapPoints[0].x
-                    let y2: CGFloat = location.y - snapPoints[0].y
+                let x2: CGFloat = location.x - snapPoints[0].x
+                let y2: CGFloat = location.y - snapPoints[0].y
 
-                    var currDistance: CGFloat = (x2 * x2) + (y2 * y2)
+                var currDistance: CGFloat = (x2 * x2) + (y2 * y2)
 
-                    for snapPoint in snapPoints {
-                        let x2: CGFloat = location.x - snapPoint.x
-                        let y2: CGFloat = location.y - snapPoint.y
+                for snapPoint in snapPoints {
+                    let x2: CGFloat = location.x - snapPoint.x
+                    let y2: CGFloat = location.y - snapPoint.y
 
-                        let potDistance = (x2 * x2) + (y2 * y2)
+                    let potDistance = (x2 * x2) + (y2 * y2)
 
-                        if (potDistance < currDistance) {
-                            currDistance = potDistance
-                            closestPoint = snapPoint
-                        }
+                    if (potDistance < currDistance) {
+                        currDistance = potDistance
+                        closestPoint = snapPoint
                     }
-
-                    let newXCurLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
-                    
-                    curXCursorLocation = newXCurLocation
-                    moveCursorX(location: newXCurLocation)
-
-                    curYCursorLocation = closestPoint
-                    moveCursorY(location: closestPoint)
-
-                    GridSystem.instance.selectedCoord = closestPoint
-
-                    print("PITCH: \(GridSystem.instance.getPitchFromY(y: closestPoint.y).step.toString())")
-
                 }
+
+                let newXCurLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
+                
+                curXCursorLocation = newXCurLocation
+                moveCursorX(location: newXCurLocation)
+
+                curYCursorLocation = closestPoint
+                moveCursorY(location: closestPoint)
+
+                GridSystem.instance.selectedCoord = closestPoint
+
+                print("PITCH: \(GridSystem.instance.getPitchFromY(y: closestPoint.y).step.toString())")
+
             }
 
             GridSystem.instance.currentStaffIndex =
@@ -571,16 +568,14 @@ class MusicSheet: UIView {
     
     private func remapCurrentMeasure (location:CGPoint) {
         
-        for (index, measureCoord) in measureCoords.enumerated() {
+        for measureCoord in measureCoords {
             let r:CGRect = CGRect(x: measureCoord.upperLeftPoint.x, y: measureCoord.upperLeftPoint.y,
                                   width: measureCoord.lowerRightPoint.x - measureCoord.upperLeftPoint.x,
                                   height: measureCoord.lowerRightPoint.y - measureCoord.upperLeftPoint.y)
             
             //  LOCATION IS IN MEASURE
             if r.contains(location) {
-                
                 GridSystem.instance.selectedMeasureCoord = measureCoord
-            
                 break
             }
         }
