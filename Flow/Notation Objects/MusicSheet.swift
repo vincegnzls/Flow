@@ -754,6 +754,9 @@ class MusicSheet: UIView {
                     moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
                                                   y: firstMeasurePoints.lowerRightPoint.y - 30))
                     moveCursorY(location: newSnapPoints[prevSnapIndex])
+                    
+                    scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                    
                 }
                 
             }
@@ -810,10 +813,19 @@ class MusicSheet: UIView {
                         moveCursorX(location: CGPoint(x: newCoord.x,
                                                       y: firstMeasurePoints.lowerRightPoint.y - 30))
                         moveCursorY(location: newCoord)
+                        
+                        scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
                     }
                     
                 }
             }
+        }
+    }
+    
+    private func scrollMusicSheetToY (y: CGFloat) {
+        if let outerScrollView = self.superview as? UIScrollView {
+            outerScrollView.setContentOffset(
+                CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: true)
         }
     }
 
