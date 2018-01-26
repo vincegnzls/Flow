@@ -12,6 +12,11 @@ import AudioToolbox
 class StartMenuViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
         UITableViewDataSource, UITableViewDelegate {
 
+    // MARK: Constants
+    private struct Constants {
+        static let keyIsCollectionViewShowing = "IsCollectionViewShowing"
+    }
+
     // MARK: Outlets
     @IBOutlet weak var menu: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -19,10 +24,12 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
     
     // MARK: Properties
     private var compositions = [CompositionInfo]()
-    private var isTableViewShowing = true
+    private var isCollectionViewShowing = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.setupView()
         
         self.setupMenuShadow()
         self.setupLists()
@@ -34,8 +41,6 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         self.compositions.append(CompositionInfo(name: "The quick brown fox jumps over the lazy dog. " +
                 "The quick brown fox jumps over the lazy dog. " +
                 "The quick brown fox jumps over the lazy dog."))
-
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,7 +49,17 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
     }
     
     // MARK: Setup methods
-    
+
+    private func setupView() {
+        let defaults = UserDefaults.standard
+
+        self.isCollectionViewShowing = defaults.bool(forKey: Constants.keyIsCollectionViewShowing)
+        print(self.isCollectionViewShowing)
+
+        self.collectionView.isHidden = !self.isCollectionViewShowing
+        self.tableView.isHidden = self.isCollectionViewShowing
+    }
+
     private func setupMenuShadow() {
         if self.menu != nil {
             self.menu.layer.shadowColor = UIColor.black.cgColor
@@ -159,7 +174,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
 
     // MARK: IBActions
     @IBAction func tapChangeView(_ sender: UIButton) {
-        if (self.isTableViewShowing) {
+        if (!self.isCollectionViewShowing) {
             // Hide list
             UIView.transition(from: self.tableView,
                     to: self.collectionView,
@@ -175,6 +190,10 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             completion: nil)
         }
 
-        self.isTableViewShowing = !self.isTableViewShowing
+        self.isCollectionViewShowing = !self.isCollectionViewShowing
+
+        // Set preference to new view
+        let defaults = UserDefaults.standard
+        defaults.set(self.isCollectionViewShowing, forKey: Constants.keyIsCollectionViewShowing)
     }
 }
