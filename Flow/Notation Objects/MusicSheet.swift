@@ -473,6 +473,8 @@ class MusicSheet: UIView {
         moveCursorX(location: curXCursorLocation)
         moveCursorY(location: nextPoint)
         
+        GridSystem.instance.selectedCoord = curYCursorLocation
+        
         /*let xLocString = "CURSOR X LOCATION: (" + String(describing: curXCursorLocation.x) + ", " + String(describing: curXCursorLocation.y) + ")"
         let yLocString = "CURSOR Y LOCATION: (" + String(describing: curYCursorLocation.x) + ", " + String(describing: curYCursorLocation.y) + ")"
         
