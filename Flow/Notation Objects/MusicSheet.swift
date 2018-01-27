@@ -10,6 +10,8 @@ import UIKit
 
 class MusicSheet: UIView {
     
+    private let HIGHLIGHTED_NOTES_TAG = 2500
+    
     private let sheetYOffset:CGFloat = 60
     private let lineSpace:CGFloat = 30 // Spaces between lines in staff
     private let staffSpace:CGFloat = 280 // Spaces between staff
@@ -532,13 +534,14 @@ class MusicSheet: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: self)
-        
+
         //print("LOCATION TAPPED: \(location)")
         
-        if self.highlightRect.isVisible {
+        if selectedNotations.count > 0 {
             // Remove highlight
-            self.highlightRect.highlightingStartPoint = nil
-            self.highlightRect.highlightingEndPoint = nil
+            while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
+                highlightView.removeFromSuperview()
+            }
             
             // Remove selected notes
             for note in selectedNotations {
@@ -709,12 +712,11 @@ class MusicSheet: UIView {
             self.highlightRect.highlightingEndPoint = locationOfBeganTap
             
         } else if sender.state == UIGestureRecognizerState.ended {
-            self.highlightRect.highlightingEndPoint = sender.location(in: self)
-        } else{
+            self.checkPointsInRect()
+            self.highlightRect.highlightingEndPoint = nil
+        } else {
             self.highlightRect.highlightingEndPoint = sender.location(in: self)
         }
-        
-        self.checkPointsInRect()
     }
     
     private func checkPointsInRect() {
@@ -728,6 +730,16 @@ class MusicSheet: UIView {
                     if rect.contains(coor) {
                         notation.isSelected = true
                         self.selectedNotations.append(notation)
+                        
+                        let noteImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + 1.8, y: ((notation.screenCoordinates)?.y)! - 5, width: (notation.image?.size.width)!, height: (notation.image?.size.height)!))
+                        
+                        noteImageView.image = notation.image
+                        noteImageView.image = noteImageView.image!.withRenderingMode(.alwaysTemplate)
+                        noteImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                        noteImageView.tag = HIGHLIGHTED_NOTES_TAG
+                        
+                        self.addSubview(noteImageView)
+                        
                     }
                 }
             }
