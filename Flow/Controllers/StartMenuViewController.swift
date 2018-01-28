@@ -107,6 +107,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // handle tap events
         print("You selected cell #\(indexPath.item)!")
+        self.collectionView.deselectItem(at: indexPath, animated: true)
     }
 
     @IBAction func longPressCompositionCollectionViewCell(_ sender: UILongPressGestureRecognizer) {
@@ -150,6 +151,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("selected row \(indexPath.row)")
+        self.tableView.deselectRow(at: indexPath, animated: true)
     }
     
     @IBAction func longPressCompositionTableViewCell(_ sender: UILongPressGestureRecognizer) {
