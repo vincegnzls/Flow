@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "16th-up-10.png"
+      "filename" : "sixteenth-note.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "16th-up-20.png"
+      "filename" : "sixteenth-note-1.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "16th-up-30.png"
+      "filename" : "sixteenth-note-2.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

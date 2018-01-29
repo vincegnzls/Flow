@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "bass-clef-10.png"
+      "filename" : "f-clef-2.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "bass-clef-20.png"
+      "filename" : "f-clef-1.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "bass-clef-30.png"
+      "filename" : "f-clef.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

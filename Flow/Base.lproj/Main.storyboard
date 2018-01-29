@@ -881,32 +881,32 @@
         </scene>
     </scenes>
     <resources>
-        <image name="16th-rest" width="22" height="57"/>
-        <image name="16th-up" width="22" height="40"/>
-        <image name="32nd-rest" width="22" height="57"/>
-        <image name="32nd-up" width="22" height="46"/>
-        <image name="64th-rest" width="22" height="57"/>
-        <image name="64th-up" width="22" height="53"/>
+        <image name="16th-rest" width="33" height="72"/>
+        <image name="16th-up" width="43" height="81"/>
+        <image name="32nd-rest" width="38" height="96"/>
+        <image name="32nd-up" width="43" height="96"/>
+        <image name="64th-rest" width="42" height="121"/>
+        <image name="64th-up" width="43" height="110"/>
         <image name="controls-arrow-down" width="320" height="320"/>
         <image name="controls-arrow-left" width="320" height="320"/>
         <image name="controls-arrow-right" width="310" height="320"/>
         <image name="controls-arrow-up" width="320" height="320"/>
         <image name="copy-icon" width="50" height="50"/>
         <image name="cut-icon" width="50" height="50"/>
-        <image name="double-sharp" width="9" height="9"/>
-        <image name="eighth-rest" width="22" height="57"/>
-        <image name="eighth-up" width="22" height="40"/>
+        <image name="double-sharp" width="27" height="27"/>
+        <image name="eighth-rest" width="25" height="47"/>
+        <image name="eighth-up" width="43" height="81"/>
         <image name="flat" width="8" height="39"/>
-        <image name="half-rest" width="22" height="57"/>
-        <image name="half-up" width="12" height="40"/>
+        <image name="half-rest" width="38" height="25"/>
+        <image name="half-up" width="55" height="161"/>
         <image name="natural" width="6" height="26"/>
         <image name="paste-icon" width="50" height="50"/>
-        <image name="quarter-rest" width="22" height="57"/>
-        <image name="quarter-up" width="12" height="40"/>
+        <image name="quarter-rest" width="26" height="72"/>
+        <image name="quarter-up" width="28" height="81"/>
         <image name="redo-icon" width="50" height="50"/>
         <image name="sharp" width="8" height="26"/>
         <image name="undo-icon" width="50" height="50"/>
-        <image name="whole-head" width="16" height="10"/>
-        <image name="whole-rest" width="22" height="57"/>
+        <image name="whole-head" width="28" height="16"/>
+        <image name="whole-rest" width="38" height="25"/>
     </resources>
 </document>

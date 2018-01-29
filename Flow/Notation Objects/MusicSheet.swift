@@ -242,7 +242,7 @@ class MusicSheet: UIView {
         
         if clefType == .F {
             clef = UIImage(named:"bass-clef")
-            clefView = UIImageView(frame: CGRect(x: 110, y: 35 + startY - 200, width: 67.2, height: 192))
+            clefView = UIImageView(frame: CGRect(x: 110, y: 35 + startY - 152, width: 67.2, height: 77))
         }
         
         clefView.image = clef
