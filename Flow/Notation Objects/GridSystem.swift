@@ -136,14 +136,14 @@ class GridSystem {
         return -1
     }
 
-    public func getFirstMeasurePointFromStaff(measurePoints: MeasurePoints) -> MeasurePoints {
+    public func getFirstMeasurePointFromStaff(measurePoints: MeasurePoints) -> MeasurePoints? {
 
         if let index = currentStaffIndex {
             let array = measurePointsInStaff[index]
             return array[0]
         }
 
-        return MeasurePoints(upperLeftPoint: CGPoint(x: -1, y: -1), lowerRightPoint: CGPoint(x: -1, y: -1))
+        return nil
 
     }
 
@@ -183,7 +183,7 @@ class GridSystem {
         return YPitchMap[y]!
     }
 
-    public func getRightXSnapPoint(currentPoint: CGPoint) -> CGPoint {
+    public func getRightXSnapPoint(currentPoint: CGPoint) -> CGPoint? {
         if let measureCoord = selectedMeasureCoord {
 
             var nearestPoint:CGPoint = currentPoint
@@ -221,10 +221,10 @@ class GridSystem {
             }
         }
 
-        return CGPoint(x: -1, y: -1)
+        return nil
     }
 
-    public func getLeftXSnapPoint(currentPoint: CGPoint) -> CGPoint {
+    public func getLeftXSnapPoint(currentPoint: CGPoint) -> CGPoint? {
         if let measureCoord = selectedMeasureCoord {
             
             var nearestPoint:CGPoint = currentPoint
@@ -262,10 +262,10 @@ class GridSystem {
             }
         }
         
-        return CGPoint(x: -1, y: -1)
+        return nil
     }
 
-    public func getUpYSnapPoint(currentPoint: CGPoint) -> CGPoint {
+    public func getUpYSnapPoint(currentPoint: CGPoint) -> CGPoint? {
         if let measureCoord = selectedMeasureCoord {
             
             var nearestPoint:CGPoint = currentPoint
@@ -303,10 +303,10 @@ class GridSystem {
             }
         }
         
-        return CGPoint(x: -1, y: -1)
+        return nil
     }
 
-    public func getDownYSnapPoint(currentPoint: CGPoint) -> CGPoint {
+    public func getDownYSnapPoint(currentPoint: CGPoint) -> CGPoint? {
         if let measureCoord = selectedMeasureCoord {
             
             var nearestPoint:CGPoint = currentPoint
@@ -344,7 +344,7 @@ class GridSystem {
             }
         }
         
-        return CGPoint(x: -1, y: -1)
+        return nil
     }
 
     public func createSnapPoints (initialX: CGFloat, initialY: CGFloat, clef:Clef) -> [CGPoint] {
@@ -375,7 +375,7 @@ class GridSystem {
         return snapPoints
     }
 
-    public func getNotePlacement (notation: MusicNotation) -> (CGPoint, CGPoint) {
+    public func getNotePlacement (notation: MusicNotation) -> (CGPoint, CGPoint)? {
 
         var isUpwards = true
 
@@ -433,11 +433,11 @@ class GridSystem {
             }
         }
 
-        return (CGPoint(x: -1, y: -1), CGPoint(x: -1, y: -1))
+        return nil
     }
 
     // THIS IS FOR RELOADING THE WHOLE COMPOSITION
-    public func getNotePlacement (notation: MusicNotation, clef: Clef, snapPoints: [CGPoint], weights: [CGPoint]) -> (CGPoint, CGPoint) {
+    public func getNotePlacement (notation: MusicNotation, clef: Clef, snapPoints: [CGPoint], weights: [CGPoint]) -> (CGPoint, CGPoint)? {
 
         var pitchToPointMap = [Pitch: CGPoint]()
         let pitches = getPitches(clef: clef)
@@ -497,7 +497,7 @@ class GridSystem {
 
         }
 
-        return (CGPoint(x: -1, y: -1), CGPoint(x: -1, y: -1))
+        return nil
 
     }
 
