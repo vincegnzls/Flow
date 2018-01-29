@@ -19,4 +19,16 @@ class Clipboard {
     private init() {
         items = []
     }
+
+    func cut() {
+
+    }
+
+    func copy() {
+
+    }
+
+    func paste() {
+
+    }
 }
