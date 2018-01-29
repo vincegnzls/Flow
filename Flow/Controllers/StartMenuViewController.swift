@@ -98,9 +98,6 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         let composition = self.compositions[indexPath.row]
         cell.nameLabel.text = composition.name
         cell.lastEditedLabel.text = composition.lastEditedString
-        // Use the outlet in our custom class to get a reference to the UILabel in the cell
-        //cell.myLabel.text = self.items[indexPath.item]
-        //cell.backgroundColor = UIColor.cyan // make cell more visible in our example project
 
         return cell
     }
@@ -110,6 +107,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // handle tap events
         print("You selected cell #\(indexPath.item)!")
+        self.collectionView.deselectItem(at: indexPath, animated: true)
     }
 
     @IBAction func longPressCompositionCollectionViewCell(_ sender: UILongPressGestureRecognizer) {
@@ -153,6 +151,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("selected row \(indexPath.row)")
+        self.tableView.deselectRow(at: indexPath, animated: true)
     }
     
     @IBAction func longPressCompositionTableViewCell(_ sender: UILongPressGestureRecognizer) {
@@ -206,7 +205,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             saveMeals()
             tableView.deleteRows(at: [indexPath], with: .fade)*/
 
-        
+
         //FileHandler.instance.deleteComposition(at: index.row)
         self.compositions.remove(at: index.row)
         self.tableView.deleteRows(at: [index], with: .fade)

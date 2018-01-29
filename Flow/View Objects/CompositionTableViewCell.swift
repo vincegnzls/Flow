@@ -15,6 +15,10 @@ class CompositionTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = self.tintColor.withAlphaComponent(0.2)
+        self.selectedBackgroundView = bgColorView
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
