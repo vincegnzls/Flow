@@ -488,13 +488,37 @@ class MusicSheet: UIView {
         var nextPoint:CGPoint = curYCursorLocation
         
         if direction == ArrowKey.up {
-            nextPoint = GridSystem.instance.getUpYSnapPoint(currentPoint: curYCursorLocation)
+            
+            if let point = GridSystem.instance.getUpYSnapPoint(currentPoint: curYCursorLocation) {
+                nextPoint = point
+            } else {
+                return
+            }
+            
         } else if direction == ArrowKey.down {
-            nextPoint = GridSystem.instance.getDownYSnapPoint(currentPoint: curYCursorLocation)
+            
+            if let point = GridSystem.instance.getDownYSnapPoint(currentPoint: curYCursorLocation) {
+                nextPoint = point
+            } else {
+                return
+            }
+            
         } else if direction == ArrowKey.left {
-            nextPoint = GridSystem.instance.getLeftXSnapPoint(currentPoint: curYCursorLocation)
+            
+            if let point = GridSystem.instance.getLeftXSnapPoint(currentPoint: curYCursorLocation) {
+                nextPoint = point
+            } else {
+                return
+            }
+            
         } else if direction == ArrowKey.right {
-            nextPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: curYCursorLocation)
+            
+            if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: curYCursorLocation) {
+                nextPoint = point
+            } else {
+                return
+            }
+            
         }
         
         // go to next measure with the same clef
@@ -645,59 +669,60 @@ class MusicSheet: UIView {
 
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
 
-            let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord)
+            if let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord) {
 
-            curXCursorLocation = CGPoint(x: curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30)
-            moveCursorX(location: curXCursorLocation)
-
+                curXCursorLocation = CGPoint(x: curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30)
+                moveCursorX(location: curXCursorLocation)
+                
+            }
         }
 
     }
 
     func addNewNote(params: Parameters) {
         let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
-        let notePlacement = GridSystem.instance.getNotePlacement(notation: notation)
+        if let notePlacement = GridSystem.instance.getNotePlacement(notation: notation) {
 
-        notation.screenCoordinates = notePlacement.0
+            notation.screenCoordinates = notePlacement.0
 
-        self.addMusicNotation(note: notation)
-        
-        if let note = notation as? Note {
-            soundManager.playSound(note)
-        }
+            self.addMusicNotation(note: notation)
+            
+            if let note = notation as? Note {
+                soundManager.playSound(note)
+            }
 
-        if let coord = GridSystem.instance.selectedMeasureCoord {
+            if let coord = GridSystem.instance.selectedMeasureCoord {
 
-            if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: coord) {
-                
-                GridSystem.instance.removeRelativeXSnapPoints(measurePoints: coord, relativeX: curYCursorLocation.x)
-
-                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
-                        snapPoints: GridSystem.instance.createSnapPoints(
-                                initialX: notePlacement.0.x, initialY: coord.lowerRightPoint.y,
-                                clef: measure.clef))
-
-                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
-                        snapPoints: GridSystem.instance.createSnapPoints(initialX: notePlacement.1.x,
-                                initialY: coord.lowerRightPoint.y,
-                                clef: measure.clef))
-
-
-                if measure.isFull {
+                if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: coord) {
                     
-                    moveCursorsToNextMeasure(measurePoints: coord)
-                    
-                } else {
-                    GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
-                    
-                    moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
-                    moveCursorY(location: GridSystem.instance.selectedCoord!)
+                    GridSystem.instance.removeRelativeXSnapPoints(measurePoints: coord, relativeX: curYCursorLocation.x)
+
+                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
+                            snapPoints: GridSystem.instance.createSnapPoints(
+                                    initialX: notePlacement.0.x, initialY: coord.lowerRightPoint.y,
+                                    clef: measure.clef))
+
+                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
+                            snapPoints: GridSystem.instance.createSnapPoints(initialX: notePlacement.1.x,
+                                    initialY: coord.lowerRightPoint.y,
+                                    clef: measure.clef))
+
+
+                    if measure.isFull {
+                        
+                        moveCursorsToNextMeasure(measurePoints: coord)
+                        
+                    } else {
+                        GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
+                        
+                        moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
+                        moveCursorY(location: GridSystem.instance.selectedCoord!)
+                    }
+
                 }
 
             }
-
         }
-
     }
 
     func updateMeasureDraw () {
@@ -833,14 +858,15 @@ class MusicSheet: UIView {
                     GridSystem.instance.selectedCoord = newSnapPoints[prevSnapIndex]
                     
                     // get first measure points of the
-                    let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump])
+                    if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
                     
-                    // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
-                    moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
-                                                  y: firstMeasurePoints.lowerRightPoint.y - 30))
-                    moveCursorY(location: newSnapPoints[prevSnapIndex])
-                    
-                    scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                        // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
+                        moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
+                                                      y: firstMeasurePoints.lowerRightPoint.y - 30))
+                        moveCursorY(location: newSnapPoints[prevSnapIndex])
+                        
+                        scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                    }
                     
                 }
                 
@@ -892,14 +918,16 @@ class MusicSheet: UIView {
                         GridSystem.instance.selectedCoord = newCoord
                         
                         // get first measure points of the
-                        let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump])
-                        
-                        // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
-                        moveCursorX(location: CGPoint(x: newCoord.x,
-                                                      y: firstMeasurePoints.lowerRightPoint.y - 30))
-                        moveCursorY(location: newCoord)
-                        
-                        scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                        if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
+                            
+                            // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
+                            moveCursorX(location: CGPoint(x: newCoord.x,
+                                                          y: firstMeasurePoints.lowerRightPoint.y - 30))
+                            moveCursorY(location: newCoord)
+                            
+                            scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                            
+                        }
                     }
                     
                 }
