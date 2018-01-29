@@ -25,6 +25,7 @@ class Note: MusicNotation {
             self.setImage()
         }
     }
+    var isUpwards: Bool
     
     init(screenCoordinates: CGPoint? = nil,
          gridCoordinates: GridCoordinates? = nil,
@@ -35,12 +36,12 @@ class Note: MusicNotation {
         self.pitch = pitch
         self.accidental = accidental
         self.clef = clef
+        self.isUpwards = false
         super.init(screenCoordinates: screenCoordinates, type: type)
     }
     
     // Set the image based on the note type and location in the staff
     override func setImage() {
-        var isUpwards: Bool
         
         if clef == .G {
             isUpwards = pitch.octave < 5

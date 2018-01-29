@@ -71,4 +71,20 @@ class FileHandler {
             UserDefaults.standard.set(encoded, forKey: FileHandler.KEY_COMPOSITION_LIST)
         }
     }
+
+    func deleteComposition(at index: Int) {
+        let infoToDelete = self.compositions.remove(at: index)
+
+        // Get file url
+        let fileURL = documentsDirectory.appendingPathComponent(infoToDelete.id).appendingPathExtension("xml")
+
+        // delete composition
+        do {
+            try FileManager.default.removeItem(at: fileURL)
+        } catch let error as NSError {
+            print("Error: \(error.domain)")
+        }
+
+        self.saveCompositionList()
+    }
 }

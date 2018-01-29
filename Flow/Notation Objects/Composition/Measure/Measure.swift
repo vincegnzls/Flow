@@ -12,10 +12,20 @@ class Measure {
     var keySignature: KeySignature
     var timeSignature: TimeSignature
     var clef: Clef
-    var notationObjects: [MusicNotation]
+    var notationObjects: [MusicNotation] {
+        didSet{
+            print("SAAAAAAAAAAA")
+            curBeatValue = getTotalBeats()
+            updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls
+        }
+    }
     var bounds: Bounds
     var curBeatValue: Float
     var validNotes: [RestNoteType]
+
+    var isFull: Bool {
+        return self.curBeatValue == self.timeSignature.getMaxBeatValue()
+    }
     
     init(keySignature: KeySignature = .c,
          timeSignature: TimeSignature = TimeSignature(),
@@ -36,15 +46,32 @@ class Measure {
         
         if(isAddNoteValid(musicNotation: musicNotation.type)) {
             print("ADD NOTE VALID")
-        
-            self.curBeatValue += musicNotation.type.getBeatValue()
-            notationObjects.append(musicNotation)
             
-            updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls after adding note
+            notationObjects.append(musicNotation)
             
         } else {
             
             print("INVALID ADD NOTE")
+            
+        }
+        
+    }
+    
+    public func deleteNoteInMeasure(_ musicNotation: MusicNotation) {
+        
+        if let index = notationObjects.index(where: {$0 === musicNotation}) {
+            
+            notationObjects.remove(at: index)
+            
+        }
+        
+    }
+    
+    public func editNoteInMeasure(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
+        
+        if let index = notationObjects.index(where: {$0 === oldNote}) {
+            
+            notationObjects[index] = newNote
             
         }
         
@@ -77,8 +104,18 @@ class Measure {
     public func isAddNoteValid (musicNotation: RestNoteType) -> Bool {
         
         return self.curBeatValue + musicNotation.getBeatValue() <= self.timeSignature.getMaxBeatValue()
-            
+
     }
     
+    public func getTotalBeats() -> Float {
+        
+        var totalBeats: Float = 0
+        
+        for note in self.notationObjects {
+            totalBeats = totalBeats + note.type.getBeatValue()
+        }
+        
+        return totalBeats
+    }
     
 }

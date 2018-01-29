@@ -9,6 +9,9 @@
 struct EventNames {
     static let VIEW_FINISH_LOADING = "VIEW_FINISH_LOADING"
     static let MEASURE_UPDATE = "MEASURE_UPDATE"
+    static let ADD_NEW_NOTE = "ADD_NEW_NOTE"
+    static let MEASURE_SWITCHED = "MEASURE_SWITCHED"
+    static let STAFF_SWITCHED = "STAFF_SWITCHED"
 
     static let NOTATION_KEY_PRESSED = "NOTATION_KEY_PRESSED"
     static let ARROW_KEY_PRESSED = "ARROW_KEY_PRESSED"
