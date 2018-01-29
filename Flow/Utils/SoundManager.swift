@@ -2,7 +2,7 @@
 //  SoundManager.swift
 //  Flow
 //
-//  Created by Kevin Chan on 03/01/2018.
+//  Created by Kevin Chan ANFD MIGO DANCEL on 03/01/2018.
 //  Copyright © 2018 MusicG. All rights reserved.
 //
 
@@ -21,9 +21,9 @@ class SoundManager{
     func playSound(_ note: Note){
         
         switch note.type.toString(){
-        case "sixtyFourth": playTime = 75.0
-        case "thirtySecond" : playTime = 125.0
-        case "sixteenth" : playTime = 250.0
+        case "64th": playTime = 75.0
+        case "32nd" : playTime = 125.0
+        case "16th" : playTime = 250.0
         case "eigth" : playTime = 500.0
         case "quarter" : playTime = 1000.0
         case "half" : playTime = 2000.0
