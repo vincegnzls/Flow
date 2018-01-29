@@ -11,23 +11,22 @@ import Foundation
 class EditAction: Action {
     
     var measures: [Measure]
-    var oldNotes:[MusicNotation]
-    var newNote:MusicNotation
+    var oldNotations:[MusicNotation]
+    var newNotations:MusicNotation
     
-    init(measures: [Measure], oldNotes: [MusicNotation], newNote: MusicNotation) {
+    init(measures: [Measure], oldNotations: [MusicNotation], newNotations: MusicNotation) {
         self.measures = measures
-        self.oldNotes = oldNotes
-        self.newNote = newNote
+        self.oldNotations = oldNotations
+        self.newNotations = newNotations
     }
     
     func execute() {
         
-        for (note, measure) in zip(oldNotes, measures) {
-            measure.deleteNoteInMeasure(note)
+        for (notation, measure) in zip(oldNotations, measures) {
+            measure.deleteInMeasure(notation)
         }
         
-        measures[0].addNoteInMeasure(newNote)
-        
+        measures[0].addToMeasure(newNotations)
     }
     
     func undo() {

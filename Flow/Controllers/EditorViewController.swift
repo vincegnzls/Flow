@@ -145,7 +145,7 @@ class EditorViewController: UIViewController {
                     
                 } else {
                     // instantiate add action
-                    let addAction = AddAction(measure: measure, note: note)
+                    let addAction = AddAction(measure: measure, notation: note)
 
                     addAction.execute()
                     
@@ -173,7 +173,7 @@ class EditorViewController: UIViewController {
         let oldNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: oldNotes)
         
-        let editAction = EditAction(measures: noteMeasures, oldNotes: oldNotes, newNote: newNote)
+        let editAction = EditAction(measures: noteMeasures, oldNotations: oldNotes, newNotations: newNote)
         editAction.execute()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
@@ -183,7 +183,7 @@ class EditorViewController: UIViewController {
         let selectedNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: selectedNotes)
                 
-        let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
+        let delAction = DeleteAction(measures: noteMeasures, notations: selectedNotes)
         delAction.execute()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)

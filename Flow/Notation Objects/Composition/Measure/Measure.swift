@@ -9,6 +9,7 @@
 import Foundation
 
 class Measure {
+
     var keySignature: KeySignature
     var timeSignature: TimeSignature
     var clef: Clef
@@ -40,7 +41,7 @@ class Measure {
         self.validNotes = [RestNoteType]()
     }
     
-    public func addNoteInMeasure (_ musicNotation: MusicNotation) {
+    public func addToMeasure(_ musicNotation: MusicNotation) {
         
         print("ADD NOTE")
         
@@ -57,7 +58,7 @@ class Measure {
         
     }
     
-    public func deleteNoteInMeasure(_ musicNotation: MusicNotation) {
+    public func deleteInMeasure(_ musicNotation: MusicNotation) {
         
         if let index = notationObjects.index(where: {$0 === musicNotation}) {
             
@@ -67,7 +68,7 @@ class Measure {
         
     }
     
-    public func editNoteInMeasure(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
+    public func editInMeasure(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
         
         if let index = notationObjects.index(where: {$0 === oldNote}) {
             

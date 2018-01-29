@@ -11,17 +11,17 @@ import Foundation
 class DeleteAction: Action {
     
     var measures: [Measure]
-    var notes:[MusicNotation]
+    var notations:[MusicNotation]
     
-    init(measures: [Measure], notes: [MusicNotation]) {
+    init(measures: [Measure], notations: [MusicNotation]) {
         self.measures = measures
-        self.notes = notes
+        self.notations = notations
     }
 
     func execute() {
         
-        for (note, measure) in zip(notes, measures) {
-            measure.deleteNoteInMeasure(note)
+        for (note, measure) in zip(notations, measures) {
+            measure.deleteInMeasure(note)
         }
         
     }
