@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "flat-10.png"
+      "filename" : "flat-2.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "flat-20.png"
+      "filename" : "flat-1.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "flat-30.png"
+      "filename" : "flat.png",
+      "scale" : "3x"
     }
   ],
   "info" : {
