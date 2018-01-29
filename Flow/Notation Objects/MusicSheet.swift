@@ -307,6 +307,15 @@ class MusicSheet: UIView {
         let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace, clef: measure.clef)
         GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
         
+        // CHOOSE FIRST MEASURE COORD AS DEFAULT
+        if measureCoords.count == 1 {
+            GridSystem.instance.selectedMeasureCoord = measureCoord
+            GridSystem.instance.selectedCoord = snapPoints[0]
+            
+            moveCursorY(location: snapPoints[0])
+            moveCursorX(location: CGPoint(x: snapPoints[0].x, y: curXCursorLocation.y))
+        }
+        
         //draw line before measure
         if withLeftLine {
             bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
@@ -722,6 +731,10 @@ class MusicSheet: UIView {
     private func checkPointsInRect() {
         
         selectedNotations.removeAll()
+        
+        while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
+            highlightView.removeFromSuperview()
+        }
         
         if let allNotations = composition?.all {
             for notation in allNotations {
