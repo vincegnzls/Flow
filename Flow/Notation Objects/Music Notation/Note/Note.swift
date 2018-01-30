@@ -20,35 +20,31 @@ class Note: MusicNotation {
             self.setImage()
         }
     }
-    var clef: Clef {
-        didSet {
-            self.setImage()
-        }
-    }
     var isUpwards: Bool
     
     init(screenCoordinates: CGPoint? = nil,
          gridCoordinates: GridCoordinates? = nil,
          pitch: Pitch,
          type: RestNoteType,
-         accidental: Accidental? = nil,
-         clef: Clef) {
+         measure: Measure? = nil,
+         accidental: Accidental? = nil) {
         self.pitch = pitch
         self.accidental = accidental
-        self.clef = clef
-        self.isUpwards = false
-        super.init(screenCoordinates: screenCoordinates, type: type)
+        self.isUpwards = true
+        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
     }
     
     // Set the image based on the note type and location in the staff
     override func setImage() {
-        
-        if clef == .G {
-            isUpwards = pitch.octave < 5
-        } else {
-            isUpwards = pitch.octave < 2
+
+        if let clef = self.measure?.clef {
+            if clef == .G {
+                isUpwards = pitch.octave < 5
+            } else {
+                isUpwards = pitch.octave < 2
+            }
         }
-         
+
         self.image = type.getNoteImage(isUpwards: isUpwards)
     }
 }

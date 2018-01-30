@@ -47,7 +47,8 @@ class Measure {
         
         if(isAddNoteValid(musicNotation: musicNotation.type)) {
             print("ADD NOTE VALID")
-            
+
+            musicNotation.measure = self
             notationObjects.append(musicNotation)
             
         } else {
@@ -61,7 +62,8 @@ class Measure {
     public func deleteInMeasure(_ musicNotation: MusicNotation) {
         
         if let index = notationObjects.index(where: {$0 === musicNotation}) {
-            
+
+            musicNotation.measure = nil
             notationObjects.remove(at: index)
             
         }

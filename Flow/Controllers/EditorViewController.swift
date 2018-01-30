@@ -88,7 +88,7 @@ class EditorViewController: UIViewController {
         // TODO: inline this with self instance of composition
 
         // FOR TESTING PURPOSES ONLY
-        let measure = Measure(keySignature: KeySignature.c,
+        /*let measure = Measure(keySignature: KeySignature.c,
                               timeSignature: TimeSignature(),
                               clef: Clef.G)
         measure.notationObjects.append(Note(pitch: Pitch(step: Step.A, octave: 2),
@@ -97,7 +97,7 @@ class EditorViewController: UIViewController {
         measure.notationObjects.append(Rest(type: .half))
         
         var measures = [Measure]()
-        measures.append(measure)
+        measures.append(measure)*/
 
         //let comp = Composition(measures: measures)
         //let test = FileHandler.instance.convertCompositionToMusicXML(comp)
@@ -130,9 +130,9 @@ class EditorViewController: UIViewController {
                 } else {
                     // TODO: determine what is the correct pitch from the cursor's location
                     if let coord = GridSystem.instance.selectedCoord {
-                        note = Note(pitch: GridSystem.instance.getPitchFromY(y: coord.y), type: restNoteType, clef: measure.clef)
+                        note = Note(pitch: GridSystem.instance.getPitchFromY(y: coord.y), type: restNoteType)
                     } else {
-                        note = Note(pitch: Pitch(step: Step.G, octave: 5), type: restNoteType, clef: measure.clef)
+                        note = Note(pitch: Pitch(step: Step.G, octave: 5), type: restNoteType)
                     }
                 }
 
@@ -173,7 +173,7 @@ class EditorViewController: UIViewController {
         let oldNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: oldNotes)
         
-        let editAction = EditAction(measures: noteMeasures, oldNotations: oldNotes, newNotations: newNote)
+        let editAction = EditAction(oldNotations: oldNotes, newNotations: newNote)
         editAction.execute()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
@@ -183,7 +183,7 @@ class EditorViewController: UIViewController {
         let selectedNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: selectedNotes)
                 
-        let delAction = DeleteAction(measures: noteMeasures, notations: selectedNotes)
+        let delAction = DeleteAction(notations: selectedNotes)
         delAction.execute()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)

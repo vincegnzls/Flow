@@ -14,19 +14,27 @@ class EditAction: Action {
     var oldNotations:[MusicNotation]
     var newNotations:MusicNotation
     
-    init(measures: [Measure], oldNotations: [MusicNotation], newNotations: MusicNotation) {
-        self.measures = measures
+    init(oldNotations: [MusicNotation], newNotations: MusicNotation) {
+        self.measures = []
         self.oldNotations = oldNotations
         self.newNotations = newNotations
     }
     
     func execute() {
-        
-        for (notation, measure) in zip(oldNotations, measures) {
+
+        /*for (notation, measure) in zip(oldNotations, measures) {
             measure.deleteInMeasure(notation)
+        }*/
+
+        // Delete notes in measures
+        for notation in self.oldNotations {
+            if let measure = notation.measure {
+                self.measures.append(measure)
+                measure.deleteInMeasure(notation)
+            }
         }
         
-        measures[0].addToMeasure(newNotations)
+        self.measures[0].addToMeasure(newNotations)
     }
     
     func undo() {
