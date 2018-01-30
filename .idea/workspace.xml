@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3bfba8f3-e56f-46c1-88d5-57e490562ed9" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift" afterPath="$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift" />
-      <change beforePath="$PROJECT_DIR$/Flow/Notation Objects/Composition/Measure/Measure.swift" afterPath="$PROJECT_DIR$/Flow/Notation Objects/Composition/Measure/Measure.swift" />
-      <change beforePath="$PROJECT_DIR$/Flow/Notation Objects/Music Notation/MusicNotation.swift" afterPath="$PROJECT_DIR$/Flow/Notation Objects/Music Notation/MusicNotation.swift" />
-      <change beforePath="$PROJECT_DIR$/Flow/Notation Objects/Music Notation/Note/Note.swift" afterPath="$PROJECT_DIR$/Flow/Notation Objects/Music Notation/Note/Note.swift" />
-      <change beforePath="$PROJECT_DIR$/Flow/Utils/File Handling/Converter.swift" afterPath="$PROJECT_DIR$/Flow/Utils/File Handling/Converter.swift" />
+      <change beforePath="$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift" afterPath="$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift" />
     </list>
     <ignored path="$USER_HOME$/Library/Developer/Xcode/DerivedData/Flow-djtcecsqqkysovgztagwvivjmycl/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,31 +16,21 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="iphonesimulator_61263377-1E2D-434B-8135-F42BCC9D2AA8" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Measure.swift" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Measure.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Composition/Measure/Measure.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="65" column="39" lean-forward="false" selection-start-line="65" selection-start-column="39" selection-end-line="65" selection-end-column="39" />
+            <state relative-caret-position="1117">
+              <caret line="86" column="40" lean-forward="false" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DeleteAction.swift" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="26" lean-forward="false" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AddAction.swift" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AddAction.swift" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="34" lean-forward="false" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
+            <state relative-caret-position="294">
+              <caret line="29" column="61" lean-forward="false" selection-start-line="29" selection-start-column="61" selection-end-line="29" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -53,8 +39,18 @@
       <file leaf-file-name="MusicNotation.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Music Notation/MusicNotation.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2">
+            <state relative-caret-position="-100">
               <caret line="4" column="40" lean-forward="false" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Action.swift" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/Action.swift">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -63,8 +59,18 @@
       <file leaf-file-name="Note.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Music Notation/Note/Note.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
+            <state relative-caret-position="564">
               <caret line="39" column="16" lean-forward="false" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DeleteAction.swift" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="277">
+              <caret line="23" column="26" lean-forward="false" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -80,11 +86,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Pitch.swift" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Music Notation/Note/Pitch.swift">
+      <file leaf-file-name="EditAction.swift" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="408">
+              <caret line="24" column="64" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="64" />
               <folding />
             </state>
           </provider>
@@ -105,16 +111,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="222">
               <caret line="178" column="68" lean-forward="false" selection-start-line="178" selection-start-column="68" selection-end-line="178" selection-end-column="68" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Clipboard.swift" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Flow/Utils/Clipboard.swift">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -161,12 +157,12 @@
         <option value="$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift" />
         <option value="$PROJECT_DIR$/Flow/Notation Objects/MusicSheet.swift" />
         <option value="$PROJECT_DIR$/Flow/Utils/Clipboard.swift" />
-        <option value="$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift" />
         <option value="$PROJECT_DIR$/Flow/Notation Objects/Music Notation/MusicNotation.swift" />
         <option value="$PROJECT_DIR$/Flow/Notation Objects/Music Notation/Note/Note.swift" />
         <option value="$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift" />
         <option value="$PROJECT_DIR$/Flow/Utils/File Handling/Converter.swift" />
         <option value="$PROJECT_DIR$/Flow/Notation Objects/Composition/Measure/Measure.swift" />
+        <option value="$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift" />
       </list>
     </option>
   </component>
@@ -342,16 +338,15 @@
       <workItem from="1517147700058" duration="16000" />
       <workItem from="1517224704296" duration="2351000" />
       <workItem from="1517275422668" duration="197000" />
-      <workItem from="1517280943908" duration="963000" />
+      <workItem from="1517280943908" duration="1369000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36171000" />
+    <option name="totallyTimeSpent" value="36577000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1680" height="1028" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1922619" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -359,7 +354,7 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2761506" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32845187" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32845187" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -382,16 +377,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Flow/Controllers/StartMenuViewController.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#144#156#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Flow/View Objects/CompositionCollectionViewCell.swift">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
@@ -604,14 +589,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="46" lean-forward="false" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/GridSystem.swift">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-6381">
@@ -670,22 +647,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="26" lean-forward="false" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="34" lean-forward="false" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Music Notation/Note/Pitch.swift">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -698,14 +659,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Music Notation/MusicNotation.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2">
-          <caret line="4" column="40" lean-forward="false" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
           <folding />
         </state>
       </provider>
@@ -726,18 +679,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Composition/Measure/Measure.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1117">
+          <caret line="86" column="40" lean-forward="false" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Music Notation/Note/Note.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
+        <state relative-caret-position="564">
           <caret line="39" column="16" lean-forward="false" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Composition/Measure/Measure.swift">
+    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Music Notation/MusicNotation.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="65" column="39" lean-forward="false" selection-start-line="65" selection-start-column="39" selection-end-line="65" selection-end-column="39" />
+        <state relative-caret-position="-100">
+          <caret line="4" column="40" lean-forward="false" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/Action.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="23" column="26" lean-forward="false" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="64" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="29" column="61" lean-forward="false" selection-start-line="29" selection-start-column="61" selection-end-line="29" selection-end-column="61" />
           <folding />
         </state>
       </provider>
