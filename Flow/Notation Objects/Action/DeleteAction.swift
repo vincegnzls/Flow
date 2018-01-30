@@ -13,15 +13,21 @@ class DeleteAction: Action {
     var measures: [Measure]
     var notations:[MusicNotation]
     
-    init(measures: [Measure], notations: [MusicNotation]) {
-        self.measures = measures
+    init(notations: [MusicNotation]) {
+        self.measures = []
         self.notations = notations
     }
 
     func execute() {
         
-        for (note, measure) in zip(notations, measures) {
+        /*for (note, measure) in zip(notations, measures) {
             measure.deleteInMeasure(note)
+        }*/
+        for notation in self.notations {
+            if let measure = notation.measure {
+                measure.deleteInMeasure(notation)
+                self.measures.append(measure)
+            }
         }
         
     }

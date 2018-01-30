@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3bfba8f3-e56f-46c1-88d5-57e490562ed9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift" afterPath="$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift" />
+      <change beforePath="$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift" afterPath="$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift" />
+      <change beforePath="$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift" afterPath="$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift" />
+      <change beforePath="$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift" afterPath="$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift" />
     </list>
     <ignored path="$USER_HOME$/Library/Developer/Xcode/DerivedData/Flow-djtcecsqqkysovgztagwvivjmycl/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,7 +27,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AddAction.swift" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AddAction.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="294">
@@ -69,8 +70,8 @@
       <file leaf-file-name="DeleteAction.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="23" column="26" lean-forward="false" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+            <state relative-caret-position="192">
+              <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -89,18 +90,18 @@
       <file leaf-file-name="EditAction.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="64" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="64" />
+            <state relative-caret-position="476">
+              <caret line="28" column="35" lean-forward="false" selection-start-line="28" selection-start-column="35" selection-end-line="28" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EditorViewController.swift" pinned="false" current-in-tab="false">
+      <file leaf-file-name="EditorViewController.swift" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="134" column="93" lean-forward="false" selection-start-line="134" selection-start-column="93" selection-end-line="134" selection-end-column="93" />
+            <state relative-caret-position="710">
+              <caret line="185" column="37" lean-forward="false" selection-start-line="185" selection-start-column="37" selection-end-line="185" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -153,16 +154,16 @@
         <option value="$PROJECT_DIR$/Flow/View Objects/CompositionTableViewCell.swift" />
         <option value="$PROJECT_DIR$/Flow/View Objects/CompositionCollectionViewCell.swift" />
         <option value="$PROJECT_DIR$/Flow/Controllers/StartMenuViewController.swift" />
-        <option value="$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift" />
-        <option value="$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift" />
         <option value="$PROJECT_DIR$/Flow/Notation Objects/MusicSheet.swift" />
         <option value="$PROJECT_DIR$/Flow/Utils/Clipboard.swift" />
         <option value="$PROJECT_DIR$/Flow/Notation Objects/Music Notation/MusicNotation.swift" />
         <option value="$PROJECT_DIR$/Flow/Notation Objects/Music Notation/Note/Note.swift" />
-        <option value="$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift" />
         <option value="$PROJECT_DIR$/Flow/Utils/File Handling/Converter.swift" />
         <option value="$PROJECT_DIR$/Flow/Notation Objects/Composition/Measure/Measure.swift" />
         <option value="$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift" />
+        <option value="$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift" />
+        <option value="$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift" />
+        <option value="$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift" />
       </list>
     </option>
   </component>
@@ -338,15 +339,16 @@
       <workItem from="1517147700058" duration="16000" />
       <workItem from="1517224704296" duration="2351000" />
       <workItem from="1517275422668" duration="197000" />
-      <workItem from="1517280943908" duration="1369000" />
+      <workItem from="1517280943908" duration="1668000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36577000" />
+    <option name="totallyTimeSpent" value="36876000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1680" height="1028" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1922619" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -663,14 +665,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="134" column="93" lean-forward="false" selection-start-line="134" selection-start-column="93" selection-end-line="134" selection-end-column="93" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Flow/Utils/File Handling/Converter.swift">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="222">
@@ -711,26 +705,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="29" column="61" lean-forward="false" selection-start-line="29" selection-start-column="61" selection-end-line="29" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/DeleteAction.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="23" column="26" lean-forward="false" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+        <state relative-caret-position="192">
+          <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/EditAction.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="64" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="64" />
+        <state relative-caret-position="476">
+          <caret line="28" column="35" lean-forward="false" selection-start-line="28" selection-start-column="35" selection-end-line="28" selection-end-column="35" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Flow/Notation Objects/Action/AddAction.swift">
+    <entry file="file://$PROJECT_DIR$/Flow/Controllers/EditorViewController.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="29" column="61" lean-forward="false" selection-start-line="29" selection-start-column="61" selection-end-line="29" selection-end-column="61" />
+        <state relative-caret-position="710">
+          <caret line="185" column="37" lean-forward="false" selection-start-line="185" selection-start-column="37" selection-end-line="185" selection-end-column="37" />
           <folding />
         </state>
       </provider>
