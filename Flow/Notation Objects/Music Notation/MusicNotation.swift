@@ -19,12 +19,19 @@ class MusicNotation {
     var image: UIImage?
     var imageView: UIImageView?
     var isSelected: Bool
+    var measure: Measure? {
+        didSet {
+            self.setImage()
+        }
+    }
     
     init(screenCoordinates: CGPoint? = nil,
-         type: RestNoteType) {
+         type: RestNoteType,
+         measure: Measure? = nil) {
         self.screenCoordinates = screenCoordinates
         self.type = type
         self.isSelected = false
+        self.measure = measure
         self.setImage()
 
     }
