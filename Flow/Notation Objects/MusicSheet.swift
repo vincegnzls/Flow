@@ -544,7 +544,7 @@ class MusicSheet: UIView {
         let touch = touches.first!
         let location = touch.location(in: self)
 
-        //print("LOCATION TAPPED: \(location)")
+        print("LOCATION TAPPED: \(location)")
         
         if selectedNotations.count > 0 {
             // Remove highlight
