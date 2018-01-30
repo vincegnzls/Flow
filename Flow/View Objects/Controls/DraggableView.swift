@@ -2,14 +2,25 @@ import UIKit
 
 class DraggableView: UIView {
 
+    var keyTag: String {
+        return "DraggableView"
+    }
+
+    private struct Constants {
+        static let keyCenterX = "CenterX"
+        static let keyCenterY = "CenterY"
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupGestureRecognizer()
+        self.loadLocation()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.setupGestureRecognizer()
+        self.loadLocation()
     }
 
     private func setupGestureRecognizer() {
@@ -57,5 +68,31 @@ class DraggableView: UIView {
             sender.setTranslation(CGPoint.zero, in: superview)
         }
 
+        if sender.state == .ended {
+            print(center)
+
+            // Save preference
+            self.saveLocation()
+        }
+    }
+
+    private func saveLocation() {
+        let defaults = UserDefaults.standard
+        defaults.set(self.center.x, forKey: (self.keyTag + Constants.keyCenterX))
+        defaults.set(self.center.y, forKey: (self.keyTag + Constants.keyCenterY))
+    }
+
+    private func loadLocation() {
+        let defaults = UserDefaults.standard
+
+        let centerX = defaults.float(forKey: (self.keyTag + Constants.keyCenterX))
+        let centerY = defaults.float(forKey: (self.keyTag + Constants.keyCenterY))
+
+        print("(\(centerX), \(centerY))")
+
+        if (centerX != 0 && centerY != 0) {
+            self.center.x = CGFloat(centerX)
+            self.center.y = CGFloat(centerY)
+        }
     }
 }

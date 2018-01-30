@@ -10,6 +10,10 @@ import UIKit
 
 @IBDesignable
 class NotationControlsView: DraggableView {
+
+    override var keyTag: String {
+        return "NotationControlsView"
+    }
     
     @IBOutlet var wholeNote: UIButton!
     @IBOutlet var wholeRest: UIButton!

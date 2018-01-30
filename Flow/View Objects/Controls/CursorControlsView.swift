@@ -10,7 +10,11 @@ import UIKit
 
 @IBDesignable
 class CursorControlsView: DraggableView {
-    
+
+    override var keyTag: String {
+        return "CursorControlsView"
+    }
+
     private func animate(_ sender: UIButton) {
         sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         
