@@ -9,7 +9,7 @@
 import UIKit
 
 @IBDesignable
-class NotationControlsView: UIView {
+class NotationControlsView: DraggableView {
     
     @IBOutlet var wholeNote: UIButton!
     @IBOutlet var wholeRest: UIButton!

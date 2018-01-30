@@ -9,21 +9,7 @@
 import UIKit
 
 @IBDesignable
-class CursorControlsView: UIView {
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setup()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.setup()
-    }
-
-    private func setup() {
-
-    }
+class CursorControlsView: DraggableView {
     
     private func animate(_ sender: UIButton) {
         sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
