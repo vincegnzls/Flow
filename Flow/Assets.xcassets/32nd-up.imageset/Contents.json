@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "32nd_note.png",
+      "filename" : "32nd-note-up.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "32nd_note-1.png",
+      "filename" : "32nd-note-up-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "32nd_note-2.png",
+      "filename" : "32nd-note-up-2.png",
       "scale" : "3x"
     }
   ],

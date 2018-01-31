@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "quarter_rest-2.png",
+      "filename" : "quarter-rest.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "quarter_rest-1.png",
+      "filename" : "quarter-rest-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "quarter_rest.png",
+      "filename" : "quarter-rest-2.png",
       "scale" : "3x"
     }
   ],
