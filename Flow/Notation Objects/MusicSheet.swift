@@ -370,7 +370,7 @@ class MusicSheet: UIView {
                         GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: coordinates.1.x)
                     }
                     
-                    self.addMusicNotation(note: note)
+                    self.addMusicNotation(notation: note)
 
                 }
             }
@@ -439,15 +439,44 @@ class MusicSheet: UIView {
         self.addSubview(braceView)
     }
     
-    public func addMusicNotation(note: MusicNotation) {
-        print("ADD NOTE")
-        
-        let noteImageView = UIImageView(frame: CGRect(x: ((note.screenCoordinates)?.x)! + 1.8, y: ((note.screenCoordinates)?.y)! - 5, width: (note.image?.size.width)!, height: (note.image?.size.height)!))
-        
-        noteImageView.image = note.image
-        //noteImageView.tag = 1
-        
-        self.addSubview(noteImageView)
+    public func addMusicNotation(notation: MusicNotation) {
+        var xOffset: CGFloat
+        var yOffset: CGFloat
+
+        var notationImageView: UIImageView
+
+        if let note = notation as? Note {
+            if note.isUpwards {
+                xOffset = -30
+                yOffset = -30
+            } else {
+                xOffset = -35
+                yOffset = -17
+            }
+
+            notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + xOffset, y: ((notation.screenCoordinates)?.y)! + yOffset, width: (notation.image?.size.width)! + 15.0, height: (notation.image?.size.height)! + 15.0))
+
+            notationImageView.image = notation.image
+            //noteImageView.tag = 1
+
+            self.addSubview(notationImageView)
+        } else {
+
+            if notation.type == RestNoteType.whole {
+                xOffset = -30
+                yOffset = 0
+            } else {
+                xOffset = -30
+                yOffset = -10
+            }
+
+            notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + xOffset, y: ((notation.screenCoordinates)?.y)! + yOffset, width: (notation.image?.size.width)! + 15.0, height: (notation.image?.size.height)! + 15.0))
+
+            notationImageView.image = notation.image
+            //noteImageView.tag = 1
+
+            self.addSubview(notationImageView)
+        }
     }
     
     private func setupCursor() {
@@ -685,7 +714,7 @@ class MusicSheet: UIView {
 
             notation.screenCoordinates = notePlacement.0
 
-            self.addMusicNotation(note: notation)
+            self.addMusicNotation(notation: notation)
             
             if let note = notation as? Note {
                 soundManager.playSound(note)
