@@ -265,6 +265,368 @@
                                     <constraint firstAttribute="bottom" secondItem="bCt-Js-Xda" secondAttribute="bottom" id="ofv-bK-9Aw"/>
                                 </constraints>
                             </scrollView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLW-3Y-Rf2" customClass="NotationControlsView" customModule="Flow" customModuleProvider="target">
+                                <rect key="frame" x="600" y="600" width="315" height="125"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yvv-DJ-7yL" userLabel="NotesView">
+                                        <rect key="frame" x="0.0" y="0.0" width="315" height="90"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FZz-Li-OMB" userLabel="Whole">
+                                                <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Da8-dd-NHg" userLabel="Whole" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="2" y="2" width="40" height="40"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="whole-head"/>
+                                                        <connections>
+                                                            <action selector="wholeNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="ZiK-Uj-PPa"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uar-2G-Tub" userLabel="Whole-Rest">
+                                                <rect key="frame" x="0.0" y="45" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SQg-3f-nGu" userLabel="Whole-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="2" y="2" width="40" height="40"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="whole-rest"/>
+                                                        <connections>
+                                                            <action selector="wholeRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="mMa-mj-nte"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fdK-LJ-VrE" userLabel="Half">
+                                                <rect key="frame" x="45" y="0.0" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4IZ-GA-Tpx" userLabel="Half" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="half-up"/>
+                                                        <connections>
+                                                            <action selector="halfNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="Osh-vY-8ew"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="srq-wi-ysX" userLabel="Half-Rest">
+                                                <rect key="frame" x="45" y="45" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jVO-bM-fp7" userLabel="Half-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="7" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="half-rest"/>
+                                                        <connections>
+                                                            <action selector="halfRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="ATz-OF-Zuz"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-aZ-qLz" userLabel="Quarter">
+                                                <rect key="frame" x="90" y="0.0" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zVj-SJ-LAn" userLabel="Quarter" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="quarter-up"/>
+                                                        <connections>
+                                                            <action selector="quarterNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="aPD-Us-7fi"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xAH-cb-nLe" userLabel="Quarter-Rest">
+                                                <rect key="frame" x="90" y="45" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YlV-zN-zu5" userLabel="Quarter-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="quarter-rest"/>
+                                                        <connections>
+                                                            <action selector="quarterRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="7FM-XV-6KV"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bbb-Xv-2nf" userLabel="Eighth">
+                                                <rect key="frame" x="135" y="0.0" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qeS-gz-Hqc" userLabel="Eighth" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="7" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="eighth-up"/>
+                                                        <connections>
+                                                            <action selector="eighthNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="6rQ-3j-wya"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XnN-G5-SDZ" userLabel="Eighth-Rest">
+                                                <rect key="frame" x="135" y="45" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qbc-VC-iba" userLabel="Eighth-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="7" y="7" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="eighth-rest"/>
+                                                        <connections>
+                                                            <action selector="eighthRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="z1Y-v5-dhb"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bjR-IP-WXM" userLabel="16th">
+                                                <rect key="frame" x="180" y="0.0" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cQ1-VV-w2b" userLabel="16th" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="16th-up"/>
+                                                        <connections>
+                                                            <action selector="sixteenthNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="8mM-b9-5lj"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TSC-SY-toV" userLabel="16th-Rest">
+                                                <rect key="frame" x="180" y="45" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tBu-S8-pTk" userLabel="16th-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="7" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="16th-rest"/>
+                                                        <connections>
+                                                            <action selector="sixteenthRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="dsb-W6-OBj"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yL5-Ku-0aT" userLabel="32nd">
+                                                <rect key="frame" x="225" y="0.0" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WJ1-0u-QjL" userLabel="32nd" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="7" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="32nd-up"/>
+                                                        <connections>
+                                                            <action selector="thirtySecondNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="l6f-tS-c4t"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3vd-lB-sWC" userLabel="32nd-Rest">
+                                                <rect key="frame" x="225" y="45" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jMs-tt-I5c" userLabel="32nd-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="7" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="32nd-rest"/>
+                                                        <connections>
+                                                            <action selector="thirtySecondRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="rPK-nc-0cA"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ST4-Ke-fqW" userLabel="64th">
+                                                <rect key="frame" x="270" y="0.0" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3n8-Ks-d0d" userLabel="64th" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="7" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="64th-up"/>
+                                                        <connections>
+                                                            <action selector="sixtyFourthNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="e0O-BX-5f5"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="83o-kA-nnJ" userLabel="64th-Rest">
+                                                <rect key="frame" x="270" y="45" width="45" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Myg-SJ-NMA" userLabel="64th-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="7" y="8" width="30" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <state key="normal" image="64th-rest"/>
+                                                        <connections>
+                                                            <action selector="sixtyFourthRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="zjt-x9-mkx"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qos-Jd-pgr">
+                                        <rect key="frame" x="0.0" y="90" width="315" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Delete"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="deleteNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="zG3-BC-F6e"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="eighthNote" destination="qeS-gz-Hqc" id="VEc-c6-s79"/>
+                                    <outlet property="eighthRest" destination="qbc-VC-iba" id="dco-le-OM4"/>
+                                    <outlet property="halfNote" destination="4IZ-GA-Tpx" id="Adi-Oq-xy2"/>
+                                    <outlet property="halfRest" destination="jVO-bM-fp7" id="eJ5-3k-oQV"/>
+                                    <outlet property="quarterNote" destination="zVj-SJ-LAn" id="HtC-Kj-8Mm"/>
+                                    <outlet property="quarterRest" destination="YlV-zN-zu5" id="jnQ-Mv-qca"/>
+                                    <outlet property="sixteenthNote" destination="cQ1-VV-w2b" id="txO-FQ-lB5"/>
+                                    <outlet property="sixteenthRest" destination="tBu-S8-pTk" id="Qom-aZ-wZ3"/>
+                                    <outlet property="sixtyFourthNote" destination="3n8-Ks-d0d" id="czs-HG-dQk"/>
+                                    <outlet property="sixtyFourthRest" destination="Myg-SJ-NMA" id="dxL-Lh-3xZ"/>
+                                    <outlet property="thirtySecondNote" destination="WJ1-0u-QjL" id="VD2-Hw-iLr"/>
+                                    <outlet property="thirtySecondRest" destination="jMs-tt-I5c" id="fbN-ka-WiQ"/>
+                                    <outlet property="wholeNote" destination="Da8-dd-NHg" id="dHT-d4-hk4"/>
+                                    <outlet property="wholeRest" destination="SQg-3f-nGu" id="hot-or-se6"/>
+                                </connections>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x7c-ta-wj1" customClass="CursorControlsView" customModule="Flow" customModuleProvider="target">
+                                <rect key="frame" x="456" y="317" width="200" height="200"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zt0-BY-37g">
+                                        <rect key="frame" x="65" y="135" width="70" height="70"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Down" image="controls-arrow-down"/>
+                                        <connections>
+                                            <action selector="tapDownArrowKey:" destination="87U-aK-pku" eventType="touchUpInside" id="0RC-6U-ctz"/>
+                                            <action selector="tapDownArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="awk-J5-KMB"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Opm-cW-adW">
+                                        <rect key="frame" x="135" y="65" width="70" height="70"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Right" image="controls-arrow-right"/>
+                                        <connections>
+                                            <action selector="tapRightArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="VtA-Ko-IkX"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bt9-Bg-dg0">
+                                        <rect key="frame" x="-4" y="65" width="70" height="70"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Left" image="controls-arrow-left"/>
+                                        <connections>
+                                            <action selector="tapLeftArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="iag-av-SY7"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvu-kk-ULo">
+                                        <rect key="frame" x="65" y="-5" width="70" height="70"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Up" image="controls-arrow-up"/>
+                                        <connections>
+                                            <action selector="tapUpArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="AJV-BY-Ja0"/>
+                                            <action selector="tapUpArrowKey:" destination="87U-aK-pku" eventType="touchUpInside" id="t0c-az-e2X"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VHe-OH-6BV" userLabel="Menu" customClass="MenuBar" customModule="Flow" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="1112" height="60"/>
                                 <subviews>
@@ -342,374 +704,6 @@
                                 <connections>
                                     <outlet property="compositionTitleButton" destination="atk-1G-Xla" id="HjF-pT-jZ9"/>
                                 </connections>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DaO-LK-FvT" customClass="ControlsView" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="590" y="630" width="515" height="200"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x7c-ta-wj1" customClass="CursorControlsView" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="319" y="0.0" width="200" height="200"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zt0-BY-37g">
-                                                <rect key="frame" x="65" y="135" width="70" height="70"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Down" image="controls-arrow-down"/>
-                                                <connections>
-                                                    <action selector="tapDownArrowKey:" destination="87U-aK-pku" eventType="touchUpInside" id="0RC-6U-ctz"/>
-                                                    <action selector="tapDownArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="awk-J5-KMB"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Opm-cW-adW">
-                                                <rect key="frame" x="135" y="65" width="70" height="70"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Right" image="controls-arrow-right"/>
-                                                <connections>
-                                                    <action selector="tapRightArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="VtA-Ko-IkX"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bt9-Bg-dg0">
-                                                <rect key="frame" x="-4" y="65" width="70" height="70"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Left" image="controls-arrow-left"/>
-                                                <connections>
-                                                    <action selector="tapLeftArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="iag-av-SY7"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvu-kk-ULo">
-                                                <rect key="frame" x="65" y="-5" width="70" height="70"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Up" image="controls-arrow-up"/>
-                                                <connections>
-                                                    <action selector="tapUpArrowKey:" destination="x7c-ta-wj1" eventType="touchUpInside" id="AJV-BY-Ja0"/>
-                                                    <action selector="tapUpArrowKey:" destination="87U-aK-pku" eventType="touchUpInside" id="t0c-az-e2X"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLW-3Y-Rf2" customClass="NotationControlsView" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="38" width="315" height="125"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yvv-DJ-7yL" userLabel="NotesView">
-                                                <rect key="frame" x="0.0" y="0.0" width="315" height="90"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <subviews>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FZz-Li-OMB" userLabel="Whole">
-                                                        <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Da8-dd-NHg" userLabel="Whole" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="2" y="2" width="40" height="40"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="whole-head"/>
-                                                                <connections>
-                                                                    <action selector="wholeNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="ZiK-Uj-PPa"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uar-2G-Tub" userLabel="Whole-Rest">
-                                                        <rect key="frame" x="0.0" y="45" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SQg-3f-nGu" userLabel="Whole-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="2" y="2" width="40" height="40"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="whole-rest"/>
-                                                                <connections>
-                                                                    <action selector="wholeRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="mMa-mj-nte"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fdK-LJ-VrE" userLabel="Half">
-                                                        <rect key="frame" x="45" y="0.0" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4IZ-GA-Tpx" userLabel="Half" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="8" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="half-up"/>
-                                                                <connections>
-                                                                    <action selector="halfNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="Osh-vY-8ew"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="srq-wi-ysX" userLabel="Half-Rest">
-                                                        <rect key="frame" x="45" y="45" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jVO-bM-fp7" userLabel="Half-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="8" y="7" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="half-rest"/>
-                                                                <connections>
-                                                                    <action selector="halfRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="ATz-OF-Zuz"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-aZ-qLz" userLabel="Quarter">
-                                                        <rect key="frame" x="90" y="0.0" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zVj-SJ-LAn" userLabel="Quarter" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="8" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="quarter-up"/>
-                                                                <connections>
-                                                                    <action selector="quarterNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="aPD-Us-7fi"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xAH-cb-nLe" userLabel="Quarter-Rest">
-                                                        <rect key="frame" x="90" y="45" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YlV-zN-zu5" userLabel="Quarter-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="8" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="quarter-rest"/>
-                                                                <connections>
-                                                                    <action selector="quarterRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="7FM-XV-6KV"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bbb-Xv-2nf" userLabel="Eighth">
-                                                        <rect key="frame" x="135" y="0.0" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qeS-gz-Hqc" userLabel="Eighth" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="7" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="eighth-up"/>
-                                                                <connections>
-                                                                    <action selector="eighthNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="6rQ-3j-wya"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XnN-G5-SDZ" userLabel="Eighth-Rest">
-                                                        <rect key="frame" x="135" y="45" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qbc-VC-iba" userLabel="Eighth-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="7" y="7" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="eighth-rest"/>
-                                                                <connections>
-                                                                    <action selector="eighthRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="z1Y-v5-dhb"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bjR-IP-WXM" userLabel="16th">
-                                                        <rect key="frame" x="180" y="0.0" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cQ1-VV-w2b" userLabel="16th" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="8" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="16th-up"/>
-                                                                <connections>
-                                                                    <action selector="sixteenthNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="8mM-b9-5lj"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TSC-SY-toV" userLabel="16th-Rest">
-                                                        <rect key="frame" x="180" y="45" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tBu-S8-pTk" userLabel="16th-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="7" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="16th-rest"/>
-                                                                <connections>
-                                                                    <action selector="sixteenthRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="dsb-W6-OBj"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yL5-Ku-0aT" userLabel="32nd">
-                                                        <rect key="frame" x="225" y="0.0" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WJ1-0u-QjL" userLabel="32nd" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="7" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="32nd-up"/>
-                                                                <connections>
-                                                                    <action selector="thirtySecondNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="l6f-tS-c4t"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3vd-lB-sWC" userLabel="32nd-Rest">
-                                                        <rect key="frame" x="225" y="45" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jMs-tt-I5c" userLabel="32nd-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="7" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="32nd-rest"/>
-                                                                <connections>
-                                                                    <action selector="thirtySecondRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="rPK-nc-0cA"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ST4-Ke-fqW" userLabel="64th">
-                                                        <rect key="frame" x="270" y="0.0" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3n8-Ks-d0d" userLabel="64th" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="7" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="64th-up"/>
-                                                                <connections>
-                                                                    <action selector="sixtyFourthNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="e0O-BX-5f5"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="83o-kA-nnJ" userLabel="64th-Rest">
-                                                        <rect key="frame" x="270" y="45" width="45" height="45"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Myg-SJ-NMA" userLabel="64th-Rest" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="7" y="8" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <state key="normal" image="64th-rest"/>
-                                                                <connections>
-                                                                    <action selector="sixtyFourthRest:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="zjt-x9-mkx"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </view>
-                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qos-Jd-pgr">
-                                                <rect key="frame" x="0.0" y="90" width="315" height="35"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Delete"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                        <integer key="value" value="1"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="deleteNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="zG3-BC-F6e"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <connections>
-                                            <outlet property="eighthNote" destination="qeS-gz-Hqc" id="VEc-c6-s79"/>
-                                            <outlet property="eighthRest" destination="qbc-VC-iba" id="dco-le-OM4"/>
-                                            <outlet property="halfNote" destination="4IZ-GA-Tpx" id="Adi-Oq-xy2"/>
-                                            <outlet property="halfRest" destination="jVO-bM-fp7" id="eJ5-3k-oQV"/>
-                                            <outlet property="quarterNote" destination="zVj-SJ-LAn" id="HtC-Kj-8Mm"/>
-                                            <outlet property="quarterRest" destination="YlV-zN-zu5" id="jnQ-Mv-qca"/>
-                                            <outlet property="sixteenthNote" destination="cQ1-VV-w2b" id="txO-FQ-lB5"/>
-                                            <outlet property="sixteenthRest" destination="tBu-S8-pTk" id="Qom-aZ-wZ3"/>
-                                            <outlet property="sixtyFourthNote" destination="3n8-Ks-d0d" id="czs-HG-dQk"/>
-                                            <outlet property="sixtyFourthRest" destination="Myg-SJ-NMA" id="dxL-Lh-3xZ"/>
-                                            <outlet property="thirtySecondNote" destination="WJ1-0u-QjL" id="VD2-Hw-iLr"/>
-                                            <outlet property="thirtySecondRest" destination="jMs-tt-I5c" id="fbN-ka-WiQ"/>
-                                            <outlet property="wholeNote" destination="Da8-dd-NHg" id="dHT-d4-hk4"/>
-                                            <outlet property="wholeRest" destination="SQg-3f-nGu" id="hot-or-se6"/>
-                                        </connections>
-                                    </view>
-                                </subviews>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
