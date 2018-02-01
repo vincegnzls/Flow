@@ -883,7 +883,6 @@
         <!--View Controller-->
         <scene sceneID="jhg-fo-nVg">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="L5a-nL-fH1" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="QDj-wm-ksl" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SI1-s0-3nr">
                         <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
@@ -892,6 +891,7 @@
                         <viewLayoutGuide key="safeArea" id="cPb-N0-8BT"/>
                     </view>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L5a-nL-fH1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
     </scenes>

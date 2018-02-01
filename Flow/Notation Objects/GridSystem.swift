@@ -347,7 +347,7 @@ class GridSystem {
         return nil
     }
 
-    public func createSnapPoints (initialX: CGFloat, initialY: CGFloat, clef:Clef) -> [CGPoint] {
+    public func createSnapPoints (initialX: CGFloat, initialY: CGFloat, clef:Clef, lineSpace: CGFloat) -> [CGPoint] {
         var snapPoints = [CGPoint]()
 
         var currSnapPoint:CGPoint = CGPoint(x: initialX, y: initialY)
@@ -366,9 +366,9 @@ class GridSystem {
             YPitchMap[currSnapPoint.y] = pitchArray[i]
 
             if i % 2 == 0 {
-                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 16.5)
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + lineSpace/2 + 1.5)
             } else {
-                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + 13.5)
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + lineSpace/2 - 1.5)
             }
         }
 
@@ -398,11 +398,7 @@ class GridSystem {
 
                         switch notation.type {
                         case .sixtyFourth:
-                            if isUpwards {
-                                return (CGPoint(x: coord.x, y: coord.y - 30), weights[currIndex + 1])
-                            } else {
-                                return (CGPoint(x: coord.x, y: coord.y), weights[currIndex + 1])
-                            }
+                            return (CGPoint(x: coord.x, y: coord.y), weights[currIndex + 1])
                         case .thirtySecond:
                             endPoint = weights[currIndex + (maximum64s / 32 - 1)]
                         case .sixteenth:
@@ -421,8 +417,6 @@ class GridSystem {
                             let middlePoint = (measureCoord.upperLeftPoint.y + measureCoord.lowerRightPoint.y) / 2
                             return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: middlePoint-30 ), endPoint)
 
-                        } else if isUpwards && notation.type != .whole {
-                            return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y - 30), endPoint)
                         } else {
                             return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: coord.y), endPoint)
                         }
@@ -464,11 +458,7 @@ class GridSystem {
 
                     switch notation.type {
                     case .sixtyFourth:
-                        if isUpwards {
-                            return (CGPoint(x: corresPoint.x, y: corresPoint.y - 30), weights[currIndex + 1])
-                        } else {
-                            return (CGPoint(x: corresPoint.x, y: corresPoint.y), weights[currIndex + 1])
-                        }
+                        return (CGPoint(x: corresPoint.x, y: corresPoint.y), weights[currIndex + 1])
                     case .thirtySecond:
                         endPoint = weights[currIndex + (maximum64s / 32 - 1)]
                     case .sixteenth:
@@ -483,11 +473,7 @@ class GridSystem {
                         endPoint = weights[currIndex + (maximum64s - 1)]
                     }
 
-                    if isUpwards && notation.type != .whole {
-                        return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: corresPoint.y - 30), endPoint)
-                    } else {
-                        return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: corresPoint.y), endPoint)
-                    }
+                    return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: corresPoint.y), endPoint)
 
                 }
 
