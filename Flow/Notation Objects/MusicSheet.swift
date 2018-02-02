@@ -451,41 +451,8 @@ class MusicSheet: UIView {
 
         var notationImageView: UIImageView
 
-        /*if let note = notation as? Note {
-            if note.isUpwards {
-                xOffset = -30
-                yOffset = -30
-            } else {
-                xOffset = -35
-                yOffset = -17
-            }
-
-            notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + xOffset, y: ((notation.screenCoordinates)?.y)! + yOffset, width: (notation.image?.size.width)! + 15.0, height: (notation.image?.size.height)! + 15.0))
-
-            notationImageView.image = notation.image
-            //noteImageView.tag = 1
-
-            self.addSubview(notationImageView)
-        } else {
-
-            if notation.type == RestNoteType.whole {
-                xOffset = -30
-                yOffset = 0
-            } else {
-                xOffset = -30
-                yOffset = -10
-            }
-
-            notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + xOffset, y: ((notation.screenCoordinates)?.y)! + yOffset, width: (notation.image?.size.width)! + 15.0, height: (notation.image?.size.height)! + 15.0))
-
-            notationImageView.image = notation.image
-            //noteImageView.tag = 1
-
-            self.addSubview(notationImageView)
-        }*/
-        
         notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
-        
+
         notationImageView.image = notation.image
         //noteImageView.tag = 1
         
@@ -981,6 +948,32 @@ class MusicSheet: UIView {
             outerScrollView.setContentOffset(
                 CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: true)
         }
+    }
+
+    public func getNotesBeatValue(notes: [MusicNotation]) -> Float{
+        var curBeatValue: Float = 0
+
+        for note in notes {
+            curBeatValue = curBeatValue + note.type.getBeatValue()
+        }
+
+        return curBeatValue
+    }
+
+    public func beamMeasure(measure: Measure) {
+
+        var curGroup = [MusicNotation]()
+
+        for note in measure.notationObjects {
+
+            if note.type.getBeatValue() >= RestNoteType.eighth.getBeatValue() {
+
+            }
+
+            //insert rendering of beaming
+        }
+
+
     }
 
 }
