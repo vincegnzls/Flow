@@ -40,4 +40,9 @@ class MusicNotation {
     func setImage() {
         // Do nothing
     }
+
+
+    func duplicate() -> MusicNotation {
+        return MusicNotation(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure)
+    }
 }

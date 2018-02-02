@@ -11,10 +11,10 @@ import Foundation
 class EditAction: Action {
     
     var measures: [Measure]
-    var oldNotations:[MusicNotation]
-    var newNotations:MusicNotation
+    var oldNotations: [MusicNotation]
+    var newNotations: [MusicNotation]
     
-    init(oldNotations: [MusicNotation], newNotations: MusicNotation) {
+    init(oldNotations: [MusicNotation], newNotations: [MusicNotation]) {
         self.measures = []
         self.oldNotations = oldNotations
         self.newNotations = newNotations
@@ -34,7 +34,23 @@ class EditAction: Action {
             }
         }
         
-        self.measures[0].addToMeasure(newNotations)
+        self.measures[0].addToMeasure(newNotations[0])
+
+        /*for notation in newNotations {
+            if !measures[measureIndex].isAddNoteValid(musicNotation: item.type) {
+                measureIndex += 1
+                noteIndex = 0
+            }
+
+            if measureIndex >= measures.count {
+                break
+            }
+
+
+            let measure = measures[measureIndex]
+            measure
+
+        }*/
     }
     
     func undo() {

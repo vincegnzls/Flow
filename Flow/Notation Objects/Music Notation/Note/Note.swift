@@ -23,7 +23,6 @@ class Note: MusicNotation {
     var isUpwards: Bool
     
     init(screenCoordinates: CGPoint? = nil,
-         gridCoordinates: GridCoordinates? = nil,
          pitch: Pitch,
          type: RestNoteType,
          measure: Measure? = nil,
@@ -46,5 +45,9 @@ class Note: MusicNotation {
         }
 
         self.image = type.getNoteImage(isUpwards: isUpwards)
+    }
+
+    override func duplicate() -> MusicNotation {
+        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental)
     }
 }

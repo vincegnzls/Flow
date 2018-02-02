@@ -173,7 +173,7 @@ class EditorViewController: UIViewController {
         let oldNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: oldNotes)
         
-        let editAction = EditAction(oldNotations: oldNotes, newNotations: newNote)
+        let editAction = EditAction(oldNotations: oldNotes, newNotations: [newNote])
         editAction.execute()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
@@ -181,7 +181,7 @@ class EditorViewController: UIViewController {
     
     func onDeleteKeyPressed () {
         let selectedNotes = musicSheet.selectedNotations
-        let noteMeasures = getNoteMeasures(notes: selectedNotes)
+        //let noteMeasures = getNoteMeasures(notes: selectedNotes)
                 
         let delAction = DeleteAction(notations: selectedNotes)
         delAction.execute()
