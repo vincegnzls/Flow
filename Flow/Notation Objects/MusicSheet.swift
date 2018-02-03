@@ -449,6 +449,8 @@ class MusicSheet: UIView {
 
     public func addMusicNotation(notation: MusicNotation) {
 
+        //drawBeam(notations: self.composition!.staffList[0].measures[0].notationObjects)
+
         var notationImageView: UIImageView
 
         notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
@@ -457,6 +459,8 @@ class MusicSheet: UIView {
         //noteImageView.tag = 1
         
         self.addSubview(notationImageView)
+
+        self.assembleNoteForBeaming(notation: notation, stemHeight: 100)
     }
     
     private func setupCursor() {
@@ -960,20 +964,137 @@ class MusicSheet: UIView {
         return curBeatValue
     }
 
-    public func beamMeasure(measure: Measure) {
+    public func drawLine(start: CGPoint, end: CGPoint, thickness: CGFloat) {
+        let line = CAShapeLayer()
+        let path = UIBezierPath()
 
-        var curGroup = [MusicNotation]()
+        path.move(to: start)
+        path.addLine(to: end)
+        path.stroke()
 
-        for note in measure.notationObjects {
+        line.path = path.cgPath
+        line.strokeColor = UIColor.black.cgColor
+        line.lineWidth = thickness
 
-            if note.type.getBeatValue() >= RestNoteType.eighth.getBeatValue() {
+        self.layer.addSublayer(line)
+    }
+    
+    // BEAMS group of notes
+    public func beamNotes(notations: [MusicNotation]) {
+        var curNotesToBeam = [MusicNotation]()
+        
+        if notations.count > 1 {
+            for notation in notations {
+                if notation.hasTail() {
+                    curNotesToBeam.append(notation)
+                } else if !notation.hasTail() {
+                    if curNotesToBeam.count > 1 {
+                        // beam notes
+                        drawBeam(notations: curNotesToBeam)
+                    } else if curNotesToBeam.count == 1 {
+                        addMusicNotation(notation: curNotesToBeam[0])
+                    }
+                    
+                    addMusicNotation(notation: notation)
+                    
+                    curNotesToBeam.removeAll()
+                }
+            }
+        } else if notations.count == 1 {
+            //add single note
+        }
+        
+        if curNotesToBeam.count > 1{
+            //beam notes
+            drawBeam(notations: curNotesToBeam)
+        } else if curNotesToBeam.count == 1 {
+            //add single note
+        }
+    }
 
+    // DRAWS
+    public func drawBeam(notations: [MusicNotation]) {
+        var upCount: Int = 0
+        var downCount: Int = 0
+
+        let stemHeight: CGFloat = 80
+
+        for notation in notations {
+            if let note = notation as? Note {
+                if note.isUpwards {
+                    upCount = upCount + 1
+                } else {
+                    downCount = downCount + 1
+                }
+            }
+        }
+
+        // check whether there are more upward notes and vice versa
+        if upCount > downCount {
+            let highestNote = getLowestOrHighestNote(highest: true, notations: notations)
+            let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 5
+            let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
+            let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9
+
+            for notation in notations {
+                let curHeight = notation.screenCoordinates!.y - 5 - highestY
+
+                assembleNoteForBeaming(notation: notation, stemHeight: curHeight)
             }
 
-            //insert rendering of beaming
+            // draws the beam based on highest note
+            self.drawLine(start: CGPoint(x: startX, y: highestY), end: CGPoint(x: endX, y: highestY), thickness: 2.3)
+        }
+    }
+
+    public func assembleNoteForBeaming(notation: MusicNotation, stemHeight: CGFloat) {
+        let noteHead = UIImage(named: "quarter-head")
+
+        var notationImageView: UIImageView
+
+        let noteX: CGFloat = notation.screenCoordinates!.x + noteXOffset
+        let noteY: CGFloat = notation.screenCoordinates!.y
+
+        /*var noteWidth: CGFloat = noteHead!.size.width + noteWidthAlter
+        var noteHeight: CGFloat = noteHead!.size.height + noteHeightAlter
+
+        notationImageView = UIImageView(frame: CGRect(x: noteX, y: noteY, width: noteWidth, height: noteHeight))
+
+        notationImageView.image = noteHead
+
+        self.addSubview(notationImageView)*/
+
+        if let note = notation as? Note {
+            if note.isUpwards {
+                self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - 5), end: CGPoint(x: noteX + 24.9, y: noteY - stemHeight - 5), thickness: 2.3)
+                drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - stemHeight - 5), end: CGPoint(x: noteX + 23.9 + 100, y: noteY - stemHeight - 5), thickness: 6)
+            } else {
+                self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY + 3), end: CGPoint(x: noteX + 1.5, y: noteY + stemHeight + 3), thickness: 2.3)
+                drawLine(start: CGPoint(x: noteX + 0.5, y: noteY + stemHeight + 3), end: CGPoint(x: noteX + 0.5 + 100, y: noteY + stemHeight + 3), thickness: 6)
+            }
         }
 
 
+    }
+
+    public func getLowestOrHighestNote(highest: Bool, notations: [MusicNotation]) -> MusicNotation{
+        var note: MusicNotation
+
+        note = notations[0]
+
+        for notation in notations {
+            if !highest {
+                if notation.screenCoordinates!.y < note.screenCoordinates!.y {
+                    note = notation
+                }
+            } else {
+                if notation.screenCoordinates!.y > note.screenCoordinates!.y {
+                    note = notation
+                }
+            }
+        }
+
+        return note
     }
 
 }
