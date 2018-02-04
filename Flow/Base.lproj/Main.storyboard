@@ -266,7 +266,7 @@
                                 </constraints>
                             </scrollView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x7c-ta-wj1" customClass="CursorControlsView" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="370" y="0.0" width="200" height="200"/>
+                                <rect key="frame" x="800" y="500" width="200" height="200"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zt0-BY-37g">
@@ -306,7 +306,7 @@
                                 </subviews>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLW-3Y-Rf2" customClass="NotationControlsView" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="5" y="38" width="344" height="135"/>
+                                <rect key="frame" x="450" y="545" width="344" height="135"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yvv-DJ-7yL" userLabel="NotesView">
@@ -873,20 +873,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kZZ-rP-7o3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4192.9721815519761" y="128.3203125"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="jhg-fo-nVg">
-            <objects>
-                <viewController id="QDj-wm-ksl" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="SI1-s0-3nr">
-                        <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="cPb-N0-8BT"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="L5a-nL-fH1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
     <resources>
