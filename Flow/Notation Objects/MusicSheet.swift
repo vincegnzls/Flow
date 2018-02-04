@@ -949,6 +949,23 @@ class MusicSheet: UIView {
                 CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: true)
         }
     }
+    
+    public func getMeasureFromPoint (point: CGPoint) -> Measure? {
+        for measurePoint in measureCoords {
+            let r:CGRect = CGRect(x: measurePoint.upperLeftPoint.x, y: measurePoint.upperLeftPoint.y,
+                                  width: measurePoint.lowerRightPoint.x - measurePoint.upperLeftPoint.x,
+                                  height: measurePoint.lowerRightPoint.y - measurePoint.upperLeftPoint.y)
+            
+            //  LOCATION IS IN MEASURE
+            if r.contains(point) {
+                if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measurePoint) {
+                    return measure
+                }
+            }
+        }
+        
+        return nil
+    }
 
     public func getNotesBeatValue(notes: [MusicNotation]) -> Float{
         var curBeatValue: Float = 0
