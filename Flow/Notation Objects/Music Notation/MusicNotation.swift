@@ -33,4 +33,8 @@ class MusicNotation {
     func setImage() {
         // Do nothing
     }
+
+    func hasTail() -> Bool {
+        return self.type.getBeatValue() <= RestNoteType.eighth.getBeatValue()
+    }
 }
