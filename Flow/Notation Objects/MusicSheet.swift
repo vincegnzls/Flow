@@ -460,7 +460,7 @@ class MusicSheet: UIView {
         
         self.addSubview(notationImageView)
 
-        self.assembleNoteForBeaming(notation: notation, stemHeight: 100)
+        //self.assembleNoteForBeaming(notation: notation, stemHeight: 100)
     }
     
     private func setupCursor() {
