@@ -40,7 +40,7 @@ class Clipboard {
     }
 
     func paste(measures: [Measure], measureIndex: inout Int, noteIndex: inout Int) {
-        for item in self.items {
+        /*for item in self.items {
             if !measures[measureIndex].isAddNoteValid(musicNotation: item.type) {
                 measureIndex += 1
                 noteIndex = 0
@@ -54,6 +54,6 @@ class Clipboard {
             let measure = measures[measureIndex]
             measure
 
-        }
+        }*/
     }
 }

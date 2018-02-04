@@ -29,12 +29,32 @@ class EditAction: Action {
         // Delete notes in measures
         for notation in self.oldNotations {
             if let measure = notation.measure {
-                self.measures.append(measure)
+
+                if !self.measures.contains(measure) {
+                    self.measures.append(measure)
+                }
                 measure.deleteInMeasure(notation)
             }
         }
-        
-        self.measures[0].addToMeasure(newNotations[0])
+
+        var measureIndex = 0
+
+        for notation in self.newNotations {
+            if !measures[measureIndex].isAddNoteValid(musicNotation: notation.type) {
+                measureIndex += 1
+            }
+
+            if measureIndex >= measures.count {
+                break
+            }
+
+
+            let measure = measures[measureIndex]
+            measure.addToMeasure(notation)
+
+        }
+
+        //self.measures[0].addToMeasure(newNotations[0])
 
         /*for notation in newNotations {
             if !measures[measureIndex].isAddNoteValid(musicNotation: item.type) {
