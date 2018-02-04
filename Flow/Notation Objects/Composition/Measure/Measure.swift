@@ -111,13 +111,13 @@ class Measure {
     }
     
     public func getTotalBeats() -> Float {
-        
+
         var totalBeats: Float = 0
-        
+
         for note in self.notationObjects {
             totalBeats = totalBeats + note.type.getBeatValue()
         }
-        
+
         return totalBeats
     }
     
