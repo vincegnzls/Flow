@@ -65,15 +65,15 @@ class MenuBar: UIView {
     }
     
     @IBAction func touchCopy(_ sender: UIButton) {
-        
+        EventBroadcaster.instance.postEvent(event: EventNames.COPY_KEY_PRESSED)
     }
     
     @IBAction func touchCut(_ sender: UIButton) {
-        
+        EventBroadcaster.instance.postEvent(event: EventNames.CUT_KEY_PRESSED)
     }
     
     @IBAction func touchPaste(_ sender: UIButton) {
-    
+        EventBroadcaster.instance.postEvent(event: EventNames.PASTE_KEY_PRESSED)
     }
     
     

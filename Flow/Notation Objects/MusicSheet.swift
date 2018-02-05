@@ -99,6 +99,16 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.ADD_NEW_NOTE)
         EventBroadcaster.instance.addObserver(event: EventNames.ADD_NEW_NOTE,
                 observer: Observer(id: "MusicSheet.addNewNote", function: self.addNewNote))
+
+        // Add listeners for cut/copy/paste events
+        EventBroadcaster.instance.removeObservers(event: EventNames.COPY_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.COPY_KEY_PRESSED, observer: Observer(id: "MusicSheet.copy", function: self.copy))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.CUT_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.CUT_KEY_PRESSED, observer: Observer(id: "MusicSheet.cut", function: self.cut))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.PASTE_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.PASTE_KEY_PRESSED, observer: Observer(id: "MusicSheet.paste", function: self.paste))
         
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -1112,6 +1122,18 @@ class MusicSheet: UIView {
         }
 
         return note
+    }
+
+    public func copy() {
+        print("Copy")
+    }
+
+    public func cut() {
+        print("Cut")
+    }
+
+    public func paste() {
+        print("Paste")
     }
 
 }

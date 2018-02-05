@@ -646,16 +646,25 @@
                                         <rect key="frame" x="331" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="copy-icon"/>
+                                        <connections>
+                                            <action selector="touchCopy:" destination="VHe-OH-6BV" eventType="touchUpInside" id="vc0-EB-ehF"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Eq-5K-fxN">
                                         <rect key="frame" x="372" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="cut-icon"/>
+                                        <connections>
+                                            <action selector="touchCut:" destination="VHe-OH-6BV" eventType="touchUpInside" id="1UQ-as-xtz"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JB1-ip-x0z">
                                         <rect key="frame" x="409" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="paste-icon"/>
+                                        <connections>
+                                            <action selector="touchPaste:" destination="VHe-OH-6BV" eventType="touchUpInside" id="xhH-mK-YyF"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S5P-cD-EmE">
                                         <rect key="frame" x="479" y="20" width="20" height="20"/>
