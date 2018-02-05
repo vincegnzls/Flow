@@ -30,7 +30,9 @@ class EditorViewController: UIViewController {
             let measure = Measure()
 
             // dummy data
-            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .quarter, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .whole, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
             //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
 
             measuresForG.append(measure)
@@ -149,7 +151,7 @@ class EditorViewController: UIViewController {
 
                     addAction.execute()
                     
-                    EventBroadcaster.instance.postEvent(event: EventNames.ADD_NEW_NOTE, params: parameters)
+                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
             }
 

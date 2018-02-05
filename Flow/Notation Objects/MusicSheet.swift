@@ -12,7 +12,7 @@ class MusicSheet: UIView {
     
     private let HIGHLIGHTED_NOTES_TAG = 2500
     
-    private let sheetYOffset:CGFloat = 60
+    private let sheetYOffset:CGFloat = 20
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
     private let staffSpace:CGFloat = 260 // Spaces between staff
     private let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
@@ -23,6 +23,8 @@ class MusicSheet: UIView {
     private let noteYOffset: CGFloat = -95.5
     private let noteWidthAlter: CGFloat = -3
     private let noteHeightAlter: CGFloat = -3
+    
+    private let initialNoteSpace: CGFloat = 10
 
     private let NUM_MEASURES_PER_STAFF = 2
     
@@ -312,7 +314,7 @@ class MusicSheet: UIView {
         
         //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
         // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
-        let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace, clef: measure.clef, lineSpace: lineSpace)
+        let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace, initialY: startY-curSpace, clef: measure.clef, lineSpace: lineSpace)
         GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
         
         // CHOOSE FIRST MEASURE COORD AS DEFAULT
@@ -338,49 +340,85 @@ class MusicSheet: UIView {
         bezierPath.addLine(to: CGPoint(x: endX, y: startY)) // change if staff space changes
         bezierPath.stroke()
         
+        // for the grand staff connection
         measureXDivs.insert(endX)
 
         let measureWeights = initMeasureGrid(startX: startX, endX: endX, startY: startY-curSpace)
         GridSystem.instance.assignWeightsToPoints(measurePoints: measureCoord,
                 weights: measureWeights)
 
-        if measure.clef == .G {
-            print(measure.notationObjects.count)
-        }
-
-        var points = snapPoints
+//        var points = snapPoints
 
         if measure.notationObjects.count > 0 {
             
-            GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: points[0].x)
+            GridSystem.instance.clearAllSnapPointsFromMeasure(measurePoints: measureCoord)
 
+            var notationSpace = measureCoord.width / CGFloat(measure.timeSignature.beats) // not still sure about this
+            
+            if measure.notationObjects.count < measure.timeSignature.beats {
+                // TODO: LESSEN SPACE HERE
+            } else if measure.notationObjects.count > measure.timeSignature.beats {
+                notationSpace = measureCoord.width / CGFloat(measure.notationObjects.count)
+            }
+            
+            let adjustXToCenter = initialNoteSpace*1.3
+            var prevX:CGFloat?
+            
             // add all notes existing in the measure
             for (index, note) in measure.notationObjects.enumerated() {
 
-                let coordinates:(CGPoint, CGPoint)?
-
-                coordinates = GridSystem.instance.getNotePlacement(
-                        notation: note, clef: measure.clef, snapPoints: points, weights: measureWeights)
-
-                if let coordinates = coordinates {
-
-                    note.screenCoordinates = coordinates.0
-
-                    points = GridSystem.instance.createSnapPoints(
-                            initialX: coordinates.1.x, initialY: coordinates.1.y, clef: measure.clef, lineSpace: lineSpace)
-                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord, snapPoints: points)
-
-                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
-                            snapPoints: GridSystem.instance.createSnapPoints(
-                                    initialX: coordinates.0.x, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
-
-                    if index != measure.notationObjects.count-1 {
-                        GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: coordinates.1.x)
-                    }
+                if index == 0 {
+                    note.screenCoordinates =
+                            CGPoint(x: measureCoord.upperLeftPoint.x + initialNoteSpace,
+                                    y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
                     
                     self.addMusicNotation(notation: note)
-
+                    
+                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
+                                                                  snapPoints: GridSystem.instance.createSnapPoints(
+                                                                    initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
+                    
+                    if !measure.isFull {
+                    
+                        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
+                                                                      snapPoints: GridSystem.instance.createSnapPoints(
+                                                                        initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
+                        
+                        prevX = measureCoord.upperLeftPoint.x + initialNoteSpace + notationSpace + adjustXToCenter
+                        
+                    }
+                    
+                } else {
+                    
+                    if let prevNoteCoordinates =  measure.notationObjects[index - 1].screenCoordinates {
+                    
+                        note.screenCoordinates =
+                            CGPoint(x: prevNoteCoordinates.x + notationSpace,
+                                    y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
+                        
+                        self.addMusicNotation(notation: note)
+                        
+                        if let prevX = prevX {
+                            GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: prevX)
+                        }
+                        
+                        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
+                                                                      snapPoints: GridSystem.instance.createSnapPoints(
+                                                                        initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
+                        
+                        if !measure.isFull {
+                        
+                            GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
+                                                                          snapPoints: GridSystem.instance.createSnapPoints(
+                                                                            initialX: prevNoteCoordinates.x + notationSpace*2 + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
+                            
+                            prevX = prevNoteCoordinates.x + notationSpace*2 + adjustXToCenter
+                            
+                        }
+                        
+                    }
                 }
+
             }
 
         }
