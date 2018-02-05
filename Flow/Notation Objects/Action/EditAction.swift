@@ -14,7 +14,7 @@ class EditAction: Action {
     var oldNotations: [MusicNotation]
     var newNotations: [MusicNotation]
     
-    init(oldNotations: [MusicNotation], newNotations: [MusicNotation]) {
+    init(old oldNotations: [MusicNotation], new newNotations: [MusicNotation]) {
         self.measures = []
         self.oldNotations = oldNotations
         self.newNotations = newNotations

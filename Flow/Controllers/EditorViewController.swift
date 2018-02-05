@@ -173,7 +173,7 @@ class EditorViewController: UIViewController {
         let oldNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: oldNotes)
         
-        let editAction = EditAction(oldNotations: oldNotes, newNotations: [newNote])
+        let editAction = EditAction(old: oldNotes, new: [newNote])
         editAction.execute()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)

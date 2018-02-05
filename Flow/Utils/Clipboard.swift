@@ -22,12 +22,15 @@ class Clipboard {
 
     func cut(_ notations: [MusicNotation]) {
         self.items = notations
-        for notation in notations {
+        /*for notation in notations {
             if let measure = notation.measure {
                 measure.deleteInMeasure(notation)
                 notation.measure = nil
             }
-        }
+        }*/
+
+        let deleteAction = DeleteAction(notations: notations)
+        deleteAction.execute()
     }
 
     func copy(_ notations: [MusicNotation]) {
@@ -40,7 +43,10 @@ class Clipboard {
     }
 
     func paste(measures: [Measure], measureIndex: inout Int, noteIndex: inout Int) {
-        /*for item in self.items {
+        var oldNotations = [MusicNotation]()
+        var newNotations = [MusicNotation]()
+
+        for item in self.items {
             if !measures[measureIndex].isAddNoteValid(musicNotation: item.type) {
                 measureIndex += 1
                 noteIndex = 0
@@ -50,10 +56,14 @@ class Clipboard {
                 break
             }
 
-
             let measure = measures[measureIndex]
-            measure
+            let oldNotation = measure.notationObjects[noteIndex]
 
-        }*/
+            oldNotations.append(oldNotation)
+            newNotations.append(item.duplicate())
+        }
+
+        let editAction = EditAction(old: oldNotations, new: newNotations)
+        editAction.execute()
     }
 }
