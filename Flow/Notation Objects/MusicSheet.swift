@@ -98,9 +98,9 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_UPDATE,
                                               observer:  Observer(id: "MusicSheet.updateMeasureDraw", function: self.updateMeasureDraw))
 
-        EventBroadcaster.instance.removeObservers(event: EventNames.ADD_NEW_NOTE)
+        /*EventBroadcaster.instance.removeObservers(event: EventNames.ADD_NEW_NOTE)
         EventBroadcaster.instance.addObserver(event: EventNames.ADD_NEW_NOTE,
-                observer: Observer(id: "MusicSheet.addNewNote", function: self.addNewNote))
+                observer: Observer(id: "MusicSheet.addNewNote", function: self.addNewNote))*/
         
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -932,7 +932,7 @@ class MusicSheet: UIView {
             if let prevSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints){
             
                 // get current index of previous snap points
-                
+
                 if let prevSnapIndex = prevSnapPoints.index(where: {$0.y == curYCursorLocation.y}) {
                     let indexJump:Int
                     
