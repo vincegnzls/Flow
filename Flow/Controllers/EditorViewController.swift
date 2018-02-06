@@ -30,10 +30,10 @@ class EditorViewController: UIViewController {
             let measure = Measure()
 
             // dummy data
-            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .whole, clef: measure.clef))
-            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
-            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
-            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .eighth, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .eighth, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .eighth, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .eighth, clef: measure.clef))
 
             measuresForG.append(measure)
         }
