@@ -372,7 +372,7 @@ class MusicSheet: UIView {
                             CGPoint(x: measureCoord.upperLeftPoint.x + initialNoteSpace,
                                     y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
                     
-                    self.addMusicNotation(notation: note)
+                    //self.addMusicNotation(notation: note)
                     
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                                                                   snapPoints: GridSystem.instance.createSnapPoints(
@@ -396,7 +396,7 @@ class MusicSheet: UIView {
                             CGPoint(x: prevNoteCoordinates.x + notationSpace,
                                     y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
                         
-                        self.addMusicNotation(notation: note)
+                        //self.addMusicNotation(notation: note)
                         
                         if let prevX = prevX {
                             GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: prevX)
@@ -420,6 +420,9 @@ class MusicSheet: UIView {
                 }
 
             }
+
+            // beam notes of all measures TODO: change if beaming per group is implemented
+            beamNotes(notations: measure.notationObjects)
 
         }
 
@@ -1057,7 +1060,7 @@ class MusicSheet: UIView {
             }
         } else if notations.count == 1 {
             //add single note
-            addMusicNotation(notation: notation[0])
+            addMusicNotation(notation: notations[0])
         }
         
         if curNotesToBeam.count > 1{
@@ -1096,7 +1099,7 @@ class MusicSheet: UIView {
             for notation in notations {
                 let curHeight = notation.screenCoordinates!.y - highestY
 
-                assembleNoteForBeaming(notation: notation, stemHeight: curHeight)
+                assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: true)
             }
 
             // draws the beam based on highest note
@@ -1110,7 +1113,7 @@ class MusicSheet: UIView {
             for notation in notations {
                 let curHeight = lowestY - notation.screenCoordinates!.y
 
-                assembleNoteForBeaming(notation: notation, stemHeight: curHeight)
+                assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: false)
             }
 
             // draws the beam based on lowest note
@@ -1118,30 +1121,30 @@ class MusicSheet: UIView {
         }
     }
 
-    public func assembleNoteForBeaming(notation: MusicNotation, stemHeight: CGFloat) {
+    public func assembleNoteForBeaming(notation: MusicNotation, stemHeight: CGFloat, isUpwards: Bool) {
         let noteHead = UIImage(named: "quarter-head")
 
         var notationImageView: UIImageView
 
         let noteX: CGFloat = notation.screenCoordinates!.x + noteXOffset
-        let noteY: CGFloat = notation.screenCoordinates!.y
+        let noteY: CGFloat = notation.screenCoordinates!.y + noteYOffset
 
-        /*var noteWidth: CGFloat = noteHead!.size.width + noteWidthAlter
+        var noteWidth: CGFloat = noteHead!.size.width + noteWidthAlter
         var noteHeight: CGFloat = noteHead!.size.height + noteHeightAlter
 
         notationImageView = UIImageView(frame: CGRect(x: noteX, y: noteY, width: noteWidth, height: noteHeight))
 
         notationImageView.image = noteHead
 
-        self.addSubview(notationImageView)*/
+        self.addSubview(notationImageView)
 
         if let note = notation as? Note {
-            if note.isUpwards {
-                self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - 5), end: CGPoint(x: noteX + 24.9, y: noteY - stemHeight - 5), thickness: 2.3)
-                //drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - stemHeight - 5), end: CGPoint(x: noteX + 23.9 + 100, y: noteY - stemHeight - 5), thickness: 6)
+            if isUpwards {
+                self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 5), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 5), thickness: 2.3)
+                //drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 23.9 + 22, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
             } else {
-                self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY + 3), end: CGPoint(x: noteX + 1.5, y: noteY + stemHeight + 3), thickness: 2.3)
-                //drawLine(start: CGPoint(x: noteX + 0.5, y: noteY + stemHeight + 3), end: CGPoint(x: noteX + 0.5 + 100, y: noteY + stemHeight + 3), thickness: 6)
+                self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + 3), end: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + stemHeight + 3), thickness: 2.3)
+                //drawLine(start: CGPoint(x: noteX + 0.5, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 0.5 + 22, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
             }
         }
 
