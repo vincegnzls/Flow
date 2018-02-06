@@ -67,6 +67,8 @@ class MusicSheet: UIView {
         }
     }
     
+    public var selectedClef: Clef?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
@@ -767,11 +769,35 @@ class MusicSheet: UIView {
             self.highlightRect.highlightingStartPoint = locationOfBeganTap
             self.highlightRect.highlightingEndPoint = locationOfBeganTap
             
+            if let measure = self.getMeasureFromPoint(point: locationOfBeganTap) {
+                print("found measure: \(measure)")
+                self.selectedClef = measure.clef
+            }
+            
         } else if sender.state == UIGestureRecognizerState.ended {
             self.checkPointsInRect()
             self.highlightRect.highlightingEndPoint = nil
         } else {
-            self.highlightRect.highlightingEndPoint = sender.location(in: self)
+            let location = sender.location(in: self)
+            let previousLocation = self.highlightRect.highlightingEndPoint
+            self.highlightRect.highlightingEndPoint = location
+            
+            if self.selectedClef == nil {
+                if let measure = self.getMeasureFromPoint(point: location) {
+                    print("found measure: \(measure)")
+                    self.selectedClef = measure.clef
+                }
+            } else if let clef = self.selectedClef {
+                print("My clef: \(clef)")
+                if self.getMeasureFromPoint(point: location)?.clef != clef {
+                    print("Not same clef")
+                    
+                    // TODO: Fix this! Still buggy
+                    self.highlightRect.highlightingEndPoint!.y = previousLocation!.y
+                    //self.selectedClef = measure.clef
+                }
+            }
+            
         }
     }
     
@@ -1126,14 +1152,17 @@ class MusicSheet: UIView {
 
     public func copy() {
         print("Copy")
+        Clipboard.instance.copy(self.selectedNotations)
     }
 
     public func cut() {
         print("Cut")
+        Clipboard.instance.cut(self.selectedNotations)
     }
 
     public func paste() {
         print("Paste")
+        //Clipboard.instance.paste
     }
 
 }
