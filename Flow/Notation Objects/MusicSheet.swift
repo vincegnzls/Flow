@@ -1153,7 +1153,7 @@ class MusicSheet: UIView {
             }
 
             // draws the beam based on highest note
-            self.drawLine(start: CGPoint(x: startX, y: highestY), end: CGPoint(x: endX, y: highestY), thickness: lineSpace / 2)
+            self.drawLine(start: CGPoint(x: startX, y: highestY - 1), end: CGPoint(x: endX, y: highestY - 1), thickness: lineSpace / 2)
         } else {
             let lowestNote = getLowestOrHighestNote(highest: false, notations: notations)
             let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 3
