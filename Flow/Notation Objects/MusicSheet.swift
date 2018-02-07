@@ -1023,18 +1023,12 @@ class MusicSheet: UIView {
     }
 
     public func drawLine(start: CGPoint, end: CGPoint, thickness: CGFloat) {
-        let line = CAShapeLayer()
         let path = UIBezierPath()
 
+        path.lineWidth = thickness
         path.move(to: start)
         path.addLine(to: end)
         path.stroke()
-
-        line.path = path.cgPath
-        line.strokeColor = UIColor.black.cgColor
-        line.lineWidth = thickness
-
-        self.layer.addSublayer(line)
     }
     
     // BEAMS group of notes
@@ -1077,7 +1071,7 @@ class MusicSheet: UIView {
         var upCount: Int = 0
         var downCount: Int = 0
 
-        let stemHeight: CGFloat = 80
+        let stemHeight: CGFloat = 60
 
         for notation in notations {
             if let note = notation as? Note {
@@ -1096,10 +1090,66 @@ class MusicSheet: UIView {
             let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
             let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
 
+            var curSameNotes = [MusicNotation]()
+
             for notation in notations {
                 let curHeight = notation.screenCoordinates!.y - highestY
 
                 assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: true)
+
+                    if !curSameNotes.isEmpty {
+                        if curSameNotes[curSameNotes.count - 1].type == notation.type {
+                            curSameNotes.append(notation)
+                        } else {
+                            if curSameNotes.count > 1 {
+                                //add appropriate flags for beaming
+                                if curSameNotes[0].type == RestNoteType.sixteenth {
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4 ), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                }
+                            } else if curSameNotes.count == 1 {
+                                // add flag of curSameNotes[0]
+                                // add flag of notation
+                                if curSameNotes[0].type == RestNoteType.sixteenth {
+                                    //CHECK IF LAST NOTE IF UPWARD
+                                    if curSameNotes[0] === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    }
+                                }
+
+                                if notation.type == RestNoteType.sixteenth {
+                                    if notation === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    }
+
+                                }
+                            }
+
+                            curSameNotes.removeAll()
+                            curSameNotes.append(notation)
+                        }
+                    } else {
+                        curSameNotes.append(notation)
+                    }
+            }
+
+            if curSameNotes.count > 1 {
+                // add appropriate flags for beaming
+                if curSameNotes[0].type == RestNoteType.sixteenth {
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                }
+            } else if curSameNotes.count == 1 {
+                // add appripriate flag of curSameNotes[0]
+                if curSameNotes[0].type == RestNoteType.sixteenth {
+                    if curSameNotes[0] === notations[notations.count - 1] {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                    } else {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                    }
+                }
             }
 
             // draws the beam based on highest note
@@ -1110,10 +1160,68 @@ class MusicSheet: UIView {
             let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 0.5
             let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
 
+            var curSameNotes = [MusicNotation]()
+
             for notation in notations {
                 let curHeight = lowestY - notation.screenCoordinates!.y
 
                 assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: false)
+
+
+                    if !curSameNotes.isEmpty {
+                        if curSameNotes[curSameNotes.count - 1].type == notation.type {
+                            curSameNotes.append(notation)
+                        } else {
+                            if curSameNotes.count > 1 {
+                                //add appropriate flags for beaming
+                                if curSameNotes[0].type == RestNoteType.sixteenth {
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4 ), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                }
+                            } else if curSameNotes.count == 1 {
+                                // add flag of curSameNotes[0]
+                                // add flag of notation
+                                if curSameNotes[0].type == RestNoteType.sixteenth {
+                                    //CHECK FIRST NOTE IF DOWNWARD
+                                    if curSameNotes[0] === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    }
+                                }
+
+                                if notation.type == RestNoteType.sixteenth {
+                                    if notation === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    }
+                                }
+                            }
+
+                            curSameNotes.removeAll()
+                            curSameNotes.append(notation)
+                        }
+                    } else {
+                        curSameNotes.append(notation)
+                    }
+
+            }
+
+            if curSameNotes.count > 1 {
+                // add appropriate flags for beaming
+                print("I AM ALIVE")
+                if curSameNotes[0].type == RestNoteType.sixteenth {
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                }
+            } else if curSameNotes.count == 1 {
+                // add appripriate flag of curSameNotes[0]
+                if curSameNotes[0].type == RestNoteType.sixteenth {
+                    if curSameNotes[0] === notations[notations.count - 1] {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                    } else {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                    }
+                }
             }
 
             // draws the beam based on lowest note
