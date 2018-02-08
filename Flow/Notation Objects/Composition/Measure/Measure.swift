@@ -79,6 +79,9 @@ class Measure {
     
     public func getInvalidNotes() -> [RestNoteType] {
         
+        print("CUR BEAT VALUE: " + String(curBeatValue))
+        print("MAX BEAT VALUE: " + String(timeSignature.getMaxBeatValue()))
+        
         var invalidNotes = [RestNoteType]()
         
         for note in RestNoteType.types {

@@ -21,6 +21,13 @@ class TimeSignatureViewController: UIViewController {
         super.viewDidLoad()
         
         setupKeySignaturePicker()
+        
+        if let measurePoint = GridSystem.instance.selectedMeasureCoord {
+            if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measurePoint) {
+                nBeatsLabel.text = String(measure.timeSignature.beats)
+                beatDurationLabel.text = String(measure.timeSignature.beatType)
+            }
+        }
     }
     
     func setupKeySignaturePicker() {
@@ -44,7 +51,17 @@ class TimeSignatureViewController: UIViewController {
     // When a user taps save
     @IBAction func onSavePress(_ sender: Any) {
         dismiss(animated: true) {
-            //asd
+            if let measurePoint = GridSystem.instance.selectedMeasureCoord {
+                let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measurePoint)
+                
+                measure?.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
+                measure?.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
+                
+                let params:Parameters = Parameters()
+                params.put(key: KeyNames.NEW_MEASURE, value: measure!)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+            }
         }
     }
     
