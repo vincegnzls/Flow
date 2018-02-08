@@ -50,17 +50,49 @@ class TimeSignatureViewController: UIViewController {
     
     // When a user taps save
     @IBAction func onSavePress(_ sender: Any) {
-        dismiss(animated: true) {
-            if let measurePoint = GridSystem.instance.selectedMeasureCoord {
-                let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measurePoint)
-                
-                measure?.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
-                measure?.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
-                
-                let params:Parameters = Parameters()
-                params.put(key: KeyNames.NEW_MEASURE, value: measure!)
-                
-                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+        let newMaxBeatValue: Float = Float(self.nBeatsLabel!.text!)! / Float(self.beatDurationLabel!.text!)!
+
+        if let measurePoint = GridSystem.instance.selectedMeasureCoord {
+            if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measurePoint) {
+                if newMaxBeatValue >= measure.getTotalBeats() {
+                    dismiss(animated: true) {
+                        measure.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
+                        measure.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
+                        
+                        let params:Parameters = Parameters()
+                        params.put(key: KeyNames.NEW_MEASURE, value: measure)
+                        
+                        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                    }
+                } else {
+                    let alert = UIAlertController(title: "Invalid Time Signature", message: "Changing the time signature would cut off some of your notes. Do you want to proceed?", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Proceed", style: .destructive) { _ in
+                        if let measurePoint = GridSystem.instance.selectedMeasureCoord {
+                            if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measurePoint) {
+                                
+                                var measures = [Measure]()
+                                var notes = [MusicNotation]()
+                                
+                                //var curMeasureTotalBeats = measure.getTotalBeats()
+                                
+                                while newMaxBeatValue < measure.getTotalBeats() {
+                                    /*measures.append(measure)
+                                    notes.append(measure.notationObjects[measure.notationObjects.count - 1])
+                                    curMeasureTotalBeats = curMeasureTotalBeats - measure.notationObjects[measure.notationObjects.count - 1].type.getBeatValue()*/
+                                    measure.deleteNoteInMeasure(measure.notationObjects[measure.notationObjects.count - 1])
+                                }
+                                
+                                /*let delAction = DeleteAction(measures: measures, notes: notes)
+                                delAction.execute()*/
+                            }
+                        }
+                    })
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .default) { _ in
+                        
+                    })
+                    
+                    self.present(alert, animated: true, completion: nil)
+                }
             }
         }
     }
