@@ -11,6 +11,7 @@ import UIKit
 class MusicSheet: UIView {
     
     private let HIGHLIGHTED_NOTES_TAG = 2500
+    private let TIME_SIGNATURES_TAG = 2501
     
     private let sheetYOffset:CGFloat = 20
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
@@ -80,6 +81,16 @@ class MusicSheet: UIView {
     }
     
     private func setup() {
+        
+        for family: String in UIFont.familyNames
+        {
+            print("\(family)")
+            for names: String in UIFont.fontNames(forFamilyName: family)
+            {
+                print("== \(names)")
+            }
+        }
+        
         startY += sheetYOffset
         
         setupCursor()
@@ -179,7 +190,7 @@ class MusicSheet: UIView {
         // Handles adding of clef based on parameter
         // TODO: SHIFT THIS TO BE DRAWN PER MEASURE
         if withTimeSig {
-            drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType)
+            drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType, timeSignature: measures[0].timeSignature)
         } else {
             drawClefLabel(startX: startX, startY: startY, clefType: clefType)
         }
@@ -227,22 +238,78 @@ class MusicSheet: UIView {
     }
     
     // Draws the clef and time before the staff
-    private func drawClefTimeLabel(startX:CGFloat, startY:CGFloat, clefType:Clef) {
+    private func drawClefTimeLabel(startX:CGFloat, startY:CGFloat, clefType:Clef, timeSignature:TimeSignature) {
         
         drawClefLabel(startX: startX, startY: startY, clefType: clefType)
         
-        // TODO: implement switch case for time sig
-        let upperTimeSig = UIImage(named:"numeral-4")
-        let lowerTimeSig = UIImage(named:"numeral-4")
+        let upperTimeSig = UILabel(frame: CGRect(x:startX + 85 ,y: startY - 127, width:96, height:96))
+        let lowerTimeSig = UILabel(frame: CGRect(x:startX + 85 ,y: startY - 86, width:96, height:96))
         
-        let upperTimeView = UIImageView(frame: CGRect(x:195 ,y: startY - 120, width:52, height:61))
-        let lowerTimeView = UIImageView(frame: CGRect(x:195 ,y: startY - 60, width:52, height:61))
+        let upperText = "\(timeSignature.beats)"
+        let lowerText = "\(timeSignature.beatType)"
         
-        upperTimeView.image = upperTimeSig
-        lowerTimeView.image = lowerTimeSig
+        var upperNumString = ""
+        var lowerNumString = ""
         
-        self.addSubview(upperTimeView)
-        self.addSubview(lowerTimeView)
+        for char in upperText {
+            if let singleNumber = Int(String(char)) {
+                if let equivSymbol = getEquivalentNumberSymbol(n: singleNumber) {
+                    upperNumString += equivSymbol
+                }
+            }
+        }
+        
+        for char in lowerText {
+            if let singleNumber = Int(String(char)) {
+                if let equivSymbol = getEquivalentNumberSymbol(n: singleNumber) {
+                    lowerNumString += equivSymbol
+                }
+            }
+        }
+        
+        upperTimeSig.text = upperNumString
+        lowerTimeSig.text = lowerNumString
+        
+        upperTimeSig.tag = TIME_SIGNATURES_TAG
+        lowerTimeSig.tag = TIME_SIGNATURES_TAG
+        
+        upperTimeSig.font = UIFont(name: "Maestro", size: 80.0)
+        lowerTimeSig.font = UIFont(name: "Maestro", size: 80.0)
+        
+        self.addSubview(upperTimeSig)
+        self.addSubview(lowerTimeSig)
+    }
+    
+    // this is for getting the Maestro font style of the time signature
+    private func getEquivalentNumberSymbol(n: Int) -> String? {
+        
+        switch n {
+            case 0:
+                return ""
+            case 1:
+                return ""
+            case 2:
+                return ""
+            case 3:
+                return ""
+            case 4:
+                return ""
+            case 5:
+                return ""
+            case 6:
+                return ""
+            case 7:
+                return ""
+            case 8:
+                return ""
+            case 9:
+                return ""
+            default:
+            break
+        }
+        
+        return nil
+        
     }
     
     // Draws the clef before the staff

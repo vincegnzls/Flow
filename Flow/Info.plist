@@ -39,7 +39,7 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Maestro.ttf</string>
+		<string>maestro.ttf</string>
 	</array>
 </dict>
 </plist>
