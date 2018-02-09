@@ -184,9 +184,14 @@ class EditorViewController: UIViewController {
     func onDeleteKeyPressed () {
         let selectedNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: selectedNotes)
-                
-        let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
-        delAction.execute()
+        
+        if !musicSheet.selectedNotations.isEmpty {
+            let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
+            delAction.execute()
+        } else if let notation = musicSheet.hoveredNotation {
+            let delAction = DeleteAction(measures: getNoteMeasures(notes: [notation]), notes: [notation])
+            delAction.execute()
+        }
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }

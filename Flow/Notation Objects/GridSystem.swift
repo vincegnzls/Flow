@@ -103,6 +103,8 @@ class GridSystem {
                 return measure
             }
         }
+        
+        return nil
     }
     
     public func getWeightsFromPoints(measurePoints:MeasurePoints) -> [CGPoint]? {

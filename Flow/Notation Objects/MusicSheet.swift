@@ -26,6 +26,7 @@ class MusicSheet: UIView {
     private let noteHeightAlter: CGFloat = -3
     
     private let initialNoteSpace: CGFloat = 10
+    private let adjustToXCenter: CGFloat = 1.3
 
     private let NUM_MEASURES_PER_STAFF = 2
     
@@ -46,6 +47,7 @@ class MusicSheet: UIView {
     private let highlightRect = HighlightRect()
     
     public var composition: Composition?
+    public var hoveredNotation: MusicNotation?
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -199,7 +201,7 @@ class MusicSheet: UIView {
         var startMeasure:CGFloat = 0
         
         if withTimeSig {
-            startMeasure = startX + 160
+            startMeasure = startX + 145
         } else {
             startMeasure = startX + 85
         }
@@ -413,6 +415,8 @@ class MusicSheet: UIView {
         let measureWeights = initMeasureGrid(startX: startX, endX: endX, startY: startY-curSpace)
         GridSystem.instance.assignWeightsToPoints(measurePoints: measureCoord,
                 weights: measureWeights)
+        
+        let adjustXToCenter = adjustToXCenter * initialNoteSpace
 
 //        var points = snapPoints
 
@@ -428,7 +432,6 @@ class MusicSheet: UIView {
                 notationSpace = measureCoord.width / CGFloat(measure.notationObjects.count)
             }
             
-            let adjustXToCenter = initialNoteSpace*1.3
             var prevX:CGFloat?
             
             // add all notes existing in the measure
@@ -678,6 +681,15 @@ class MusicSheet: UIView {
     public func moveCursorY(location: CGPoint) {
         yCursor.position = location
         curYCursorLocation = location
+        
+        if let measure = GridSystem.instance.getCurrentMeasure() {
+            for notation in measure.notationObjects {
+                // if note hovered
+                if CGPoint(x: location.x - adjustToXCenter * initialNoteSpace, y: location.y) == notation.screenCoordinates {
+                    hoveredNotation = notation
+                }
+            }
+        }
     }
     
     public func moveCursorX(location: CGPoint) {
@@ -800,7 +812,7 @@ class MusicSheet: UIView {
 
     }
 
-    func addNewNote(params: Parameters) {
+    /*func addNewNote(params: Parameters) {
         let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
         if let notePlacement = GridSystem.instance.getNotePlacement(notation: notation) {
 
@@ -844,7 +856,7 @@ class MusicSheet: UIView {
 
             }
         }
-    }
+    }*/
 
     func updateMeasureDraw () {
         startY = 200 + sheetYOffset
