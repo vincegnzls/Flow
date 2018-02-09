@@ -96,6 +96,14 @@ class GridSystem {
     public func getMeasureFromPoints(measurePoints:MeasurePoints) -> Measure? {
         return measureMap[measurePoints]
     }
+
+    public func getCurrentMeasure() -> Measure? {
+        if let measurePoints = self.selectedMeasureCoord {
+            if let measure = self.getMeasureFromPoints(measurePoints: measurePoints) {
+                return measure
+            }
+        }
+    }
     
     public func getWeightsFromPoints(measurePoints:MeasurePoints) -> [CGPoint]? {
         return weightsMap[measurePoints]
