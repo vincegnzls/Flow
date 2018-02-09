@@ -60,6 +60,7 @@ class TimeSignatureViewController: UIViewController {
                     params.put(key: KeyNames.NEW_MEASURE, value: measure)
 
                     EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
             } else {
                 let alert = UIAlertController(title: "Invalid Time Signature", message: "Changing the time signature would cut off some of your notes. Do you want to proceed?", preferredStyle: UIAlertControllerStyle.alert)
@@ -77,6 +78,10 @@ class TimeSignatureViewController: UIViewController {
                             curMeasureTotalBeats = curMeasureTotalBeats - measure.notationObjects[measure.notationObjects.count - 1].type.getBeatValue()*/
                             measure.deleteNoteInMeasure(measure.notationObjects[measure.notationObjects.count - 1])
                         }
+                        
+                        self.dismiss(animated: true) {
+                            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                        }
 
                         /*let delAction = DeleteAction(measures: measures, notes: notes)
                         delAction.execute()*/
@@ -88,6 +93,7 @@ class TimeSignatureViewController: UIViewController {
 
                 self.present(alert, animated: true, completion: nil)
             }
+            
         }
     }
     

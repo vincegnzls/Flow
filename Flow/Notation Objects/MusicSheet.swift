@@ -84,36 +84,25 @@ class MusicSheet: UIView {
     
     private func setup() {
         
-        for family: String in UIFont.familyNames
-        {
-            print("\(family)")
-            for names: String in UIFont.fontNames(forFamilyName: family)
-            {
-                print("== \(names)")
-            }
-        }
-        
         startY += sheetYOffset
         
         setupCursor()
         self.layer.addSublayer(self.highlightRect)
         
+        EventBroadcaster.instance.removeObservers(event: EventNames.ARROW_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
-        /*EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
-                                              observer: Observer(id: "MusicSheet.onDeleteKeyPressed", function: self.onDeleteKeyPressed))*/
+        
         EventBroadcaster.instance.addObserver(event: EventNames.VIEW_FINISH_LOADING,
                 observer: Observer(id: "MusicSheet.onCompositionLoad", function: self.onCompositionLoad))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.STAFF_SWITCHED)
         EventBroadcaster.instance.addObserver(event: EventNames.STAFF_SWITCHED,
                 observer: Observer(id: "MusicSheet.onStaffSwitch", function: self.onStaffChange))
-
+        
         EventBroadcaster.instance.removeObservers(event: EventNames.MEASURE_UPDATE)
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_UPDATE,
                                               observer:  Observer(id: "MusicSheet.updateMeasureDraw", function: self.updateMeasureDraw))
-
-        /*EventBroadcaster.instance.removeObservers(event: EventNames.ADD_NEW_NOTE)
-        EventBroadcaster.instance.addObserver(event: EventNames.ADD_NEW_NOTE,
-                observer: Observer(id: "MusicSheet.addNewNote", function: self.addNewNote))*/
         
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -192,6 +181,7 @@ class MusicSheet: UIView {
         // Handles adding of clef based on parameter
         // TODO: SHIFT THIS TO BE DRAWN PER MEASURE
         if withTimeSig {
+            print("ASDF: \(measures[0].timeSignature.beats)")
             drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType, timeSignature: measures[0].timeSignature)
         } else {
             drawClefLabel(startX: startX, startY: startY, clefType: clefType)
@@ -249,6 +239,9 @@ class MusicSheet: UIView {
         
         let upperText = "\(timeSignature.beats)"
         let lowerText = "\(timeSignature.beatType)"
+        
+        print (upperText)
+        print (lowerText)
         
         var upperNumString = ""
         var lowerNumString = ""
@@ -865,6 +858,8 @@ class MusicSheet: UIView {
         for subview in self.subviews {
             subview.removeFromSuperview()
         }
+        
+        measureCoords.removeAll()
 
         self.setNeedsDisplay()
 
@@ -1046,6 +1041,8 @@ class MusicSheet: UIView {
                         GridSystem.instance.selectedMeasureCoord = measureCoords[indexJump]
                         
                         let newCoord = newSnapPoints[(newSnapPoints.count-1) - (GridSystem.NUMBER_OF_SNAPPOINTS_PER_COLUMN - prevSnapIndex)]
+                        
+                        print(newCoord)
                         
                         GridSystem.instance.selectedCoord = newCoord
                         

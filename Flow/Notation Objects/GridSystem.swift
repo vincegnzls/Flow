@@ -59,7 +59,9 @@ class GridSystem {
     
     public func reset() {
         selectedMeasureCoord = nil
-        selectedCoord = CGPoint(x: -1, y: -1)
+        selectedCoord = nil
+        currentStaffIndex = 0
+        
         measurePointsInStaff.removeAll()
         measureMap.removeAll()
         weightsMap.removeAll()
