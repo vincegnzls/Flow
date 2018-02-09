@@ -84,7 +84,6 @@ class EditorViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
 
         // TODO: inline this with self instance of composition

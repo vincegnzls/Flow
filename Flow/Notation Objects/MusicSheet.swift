@@ -47,7 +47,8 @@ class MusicSheet: UIView {
     private let highlightRect = HighlightRect()
     
     public var composition: Composition?
-    public var hoveredNotation: MusicNotation?
+
+    private var curScale: CGFloat = 1.0
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -108,6 +109,16 @@ class MusicSheet: UIView {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.minimumNumberOfTouches = 2
         self.addGestureRecognizer(panGesture)
+
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(sender:)))
+        self.addGestureRecognizer(pinchGesture)
+    }
+
+    @objc private func pinchAction(sender: UIPinchGestureRecognizer) {
+        let scale: CGFloat = curScale * sender.scale
+        self.transform = CGAffineTransform(scaleX: scale, y: scale)
+
+        curScale = sender.scale
     }
 
     func onCompositionLoad (params: Parameters) {
