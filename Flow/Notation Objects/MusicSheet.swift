@@ -47,6 +47,7 @@ class MusicSheet: UIView {
     private let highlightRect = HighlightRect()
     
     public var composition: Composition?
+    public var hoveredNotation: MusicNotation?
 
     private var curScale: CGFloat = 1.0
     
