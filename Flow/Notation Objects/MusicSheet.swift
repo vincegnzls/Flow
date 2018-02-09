@@ -246,8 +246,11 @@ class MusicSheet: UIView {
         
         drawClefLabel(startX: startX, startY: startY, clefType: clefType)
         
-        let upperTimeSig = UILabel(frame: CGRect(x:startX + 85 ,y: startY - 127, width:96, height:96))
-        let lowerTimeSig = UILabel(frame: CGRect(x:startX + 85 ,y: startY - 86, width:96, height:96))
+        let upperTimeSig = UILabel(frame: CGRect(x:startX + 55 ,y: startY - 127, width:96, height:96))
+        let lowerTimeSig = UILabel(frame: CGRect(x:startX + 55 ,y: startY - 86, width:96, height:96))
+
+        upperTimeSig.textAlignment = .center
+        lowerTimeSig.textAlignment = .center
         
         let upperText = "\(timeSignature.beats)"
         let lowerText = "\(timeSignature.beatType)"
