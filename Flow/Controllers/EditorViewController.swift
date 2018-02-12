@@ -15,6 +15,8 @@ class EditorViewController: UIViewController {
     @IBOutlet weak var menuBar: MenuBar!
 
     private let composition: Composition?
+    
+    private var soundManager = SoundManager()
 
     required init?(coder aDecoder: NSCoder) {
         
@@ -148,6 +150,12 @@ class EditorViewController: UIViewController {
                 } else {
                     // instantiate add action
                     let addAction = AddAction(measure: measure, note: note)
+                    
+                    if let note = note as? Note {
+                        soundManager.playSound(note)
+                    }	
+                    
+                    GridSystem.instance.recentNotation = note
 
                     addAction.execute()
                     
@@ -186,12 +194,18 @@ class EditorViewController: UIViewController {
         let noteMeasures = getNoteMeasures(notes: selectedNotes)
         
         if !musicSheet.selectedNotations.isEmpty {
+            GridSystem.instance.recentNotation = nil
+            
             let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
             delAction.execute()
         } else if let notation = musicSheet.hoveredNotation {
+            GridSystem.instance.recentNotation = nil
+            
             let delAction = DeleteAction(measures: getNoteMeasures(notes: [notation]), notes: [notation])
             delAction.execute()
         }
+        
+        musicSheet.selectedNotations.removeAll()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }

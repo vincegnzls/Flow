@@ -51,6 +51,15 @@ class GridSystem {
     private var gClefPitches = [Pitch]()
     private var fClefPitches = [Pitch]()
     
+    public var recentNotation: MusicNotation? {
+        didSet {
+            if let note = recentNotation as? Note {
+                print("interacted note: \(note.pitch)")
+            }
+            
+        }
+    }
+    
     private init() {
         //GridSystem.sharedInstance = self
 
@@ -61,6 +70,7 @@ class GridSystem {
         selectedMeasureCoord = nil
         selectedCoord = nil
         currentStaffIndex = 0
+        recentNotation = nil
         
         measurePointsInStaff.removeAll()
         measureMap.removeAll()
