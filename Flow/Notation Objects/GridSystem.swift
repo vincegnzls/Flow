@@ -115,7 +115,6 @@ class GridSystem {
                 return measure
             }
         }
-        
         return nil
     }
     

@@ -80,6 +80,13 @@ class TimeSignatureViewController: UIViewController {
                         }
                         
                         self.dismiss(animated: true) {
+                            measure.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
+                            measure.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
+
+                            let params:Parameters = Parameters()
+                            params.put(key: KeyNames.NEW_MEASURE, value: measure)
+
+                            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
                             EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                         }
 

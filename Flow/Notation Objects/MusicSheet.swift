@@ -46,6 +46,8 @@ class MusicSheet: UIView {
     
     public var composition: Composition?
     public var hoveredNotation: MusicNotation?
+
+    private var curScale: CGFloat = 1.0
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -106,6 +108,16 @@ class MusicSheet: UIView {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.minimumNumberOfTouches = 2
         self.addGestureRecognizer(panGesture)
+
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(sender:)))
+        self.addGestureRecognizer(pinchGesture)
+    }
+
+    @objc private func pinchAction(sender: UIPinchGestureRecognizer) {
+        let scale: CGFloat = curScale * sender.scale
+        self.transform = CGAffineTransform(scaleX: scale, y: scale)
+
+        curScale = sender.scale
     }
 
     func onCompositionLoad (params: Parameters) {
@@ -275,8 +287,11 @@ class MusicSheet: UIView {
         
         drawClefLabel(startX: startX, startY: startY, clefType: clefType)
         
-        let upperTimeSig = UILabel(frame: CGRect(x:startX + 85 ,y: startY - 127, width:96, height:96))
-        let lowerTimeSig = UILabel(frame: CGRect(x:startX + 85 ,y: startY - 86, width:96, height:96))
+        let upperTimeSig = UILabel(frame: CGRect(x:startX + 55 ,y: startY - 127, width:96, height:96))
+        let lowerTimeSig = UILabel(frame: CGRect(x:startX + 55 ,y: startY - 86, width:96, height:96))
+
+        upperTimeSig.textAlignment = .center
+        lowerTimeSig.textAlignment = .center
         
         let upperText = "\(timeSignature.beats)"
         let lowerText = "\(timeSignature.beatType)"
