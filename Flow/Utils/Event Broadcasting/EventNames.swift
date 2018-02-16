@@ -18,4 +18,8 @@ struct EventNames {
     static let DELETE_KEY_PRESSED = "DELETE_KEY_PRESSED"
     
     static let UPDATE_INVALID_NOTES = "UPDATE_INVALID_NOTES"
+
+    static let COPY_KEY_PRESSED = "COPY_KEY_PRESSED"
+    static let CUT_KEY_PRESSED = "CUT_KEY_PRESSED"
+    static let PASTE_KEY_PRESSED = "PASTE_KEY_PRESSED"
 }

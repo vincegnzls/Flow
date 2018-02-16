@@ -13,14 +13,16 @@ class MusicSheet: UIView {
     private let HIGHLIGHTED_NOTES_TAG = 2500
     
     private let sheetYOffset:CGFloat = 60
-    private let lineSpace:CGFloat = 30 // Spaces between lines in staff
-    private let staffSpace:CGFloat = 280 // Spaces between staff
+    private let lineSpace:CGFloat = 20 // Spaces between lines in staff
+    private let staffSpace:CGFloat = 260 // Spaces between staff
     private let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
     private var startY:CGFloat = 200
-    private var startYConnection:CGFloat = 80
-    private let grandStaffSpace:CGFloat = 560 // change * 2 of staff space
-    private var grandStaffIndex:CGFloat = 0
     private var staffIndex:CGFloat = -1
+    
+    private let noteXOffset: CGFloat = 10
+    private let noteYOffset: CGFloat = -95.5
+    private let noteWidthAlter: CGFloat = -3
+    private let noteHeightAlter: CGFloat = -3
 
     private let NUM_MEASURES_PER_STAFF = 2
     
@@ -65,6 +67,8 @@ class MusicSheet: UIView {
         }
     }
     
+    public var selectedClef: Clef?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
@@ -77,7 +81,6 @@ class MusicSheet: UIView {
     
     private func setup() {
         startY += sheetYOffset
-        startYConnection += sheetYOffset
         
         setupCursor()
         self.layer.addSublayer(self.highlightRect)
@@ -98,6 +101,16 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.ADD_NEW_NOTE)
         EventBroadcaster.instance.addObserver(event: EventNames.ADD_NEW_NOTE,
                 observer: Observer(id: "MusicSheet.addNewNote", function: self.addNewNote))
+
+        // Add listeners for cut/copy/paste events
+        EventBroadcaster.instance.removeObservers(event: EventNames.COPY_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.COPY_KEY_PRESSED, observer: Observer(id: "MusicSheet.copy", function: self.copy))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.CUT_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.CUT_KEY_PRESSED, observer: Observer(id: "MusicSheet.cut", function: self.cut))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.PASTE_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.PASTE_KEY_PRESSED, observer: Observer(id: "MusicSheet.paste", function: self.paste))
         
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -139,7 +152,7 @@ class MusicSheet: UIView {
     
     //Setup a grand staff
     private func setupGrandStaff(startX:CGFloat, startY:CGFloat, withTimeSig:Bool, measures:[Measure]) {
-
+        
         GridSystem.instance.createNewMeasurePointsArray()
 
         let lowerStaffStart = measures.count/2
@@ -156,21 +169,22 @@ class MusicSheet: UIView {
         }
 
         staffIndex += 1
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex,
+        let startPoint = startY + staffSpace * staffIndex
+        
+        let measureHeight = drawStaff(startX: lefRightPadding, startY: startPoint,
                 clefType: upperStaffMeasures[0].clef, measures:upperStaffMeasures, withTimeSig: withTimeSig)
 
         staffIndex += 1
-
-        drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex,
+        let _ = drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex,
                 clefType: lowerStaffMeasures[0].clef, measures:lowerStaffMeasures, withTimeSig: withTimeSig)
 
-        drawStaffConnection(startX: lefRightPadding, startY: startYConnection + grandStaffSpace * grandStaffIndex)
-        
-        grandStaffIndex += 1
+        if let height = measureHeight {
+            drawStaffConnection(startX: lefRightPadding, startY: startPoint - height, height: height)
+        }
     }
     
     // Draws a staff
-    private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, measures:[Measure], withTimeSig:Bool) {
+    private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, measures:[Measure], withTimeSig:Bool) -> CGFloat? {
 
         // Handles adding of clef based on parameter
         // TODO: SHIFT THIS TO BE DRAWN PER MEASURE
@@ -214,6 +228,12 @@ class MusicSheet: UIView {
             
             modStartX = modStartX + distance
         }
+        
+        if let measureLocation = measureLocation {
+            return measureLocation.upperLeftPoint.y - measureLocation.lowerRightPoint.y
+        } else {
+            return nil
+        }
     }
     
     // Draws the clef and time before the staff
@@ -238,11 +258,11 @@ class MusicSheet: UIView {
     // Draws the clef before the staff
     private func drawClefLabel(startX: CGFloat, startY: CGFloat, clefType: Clef) {
         var clef = UIImage(named:"treble-clef")
-        var clefView = UIImageView(frame: CGRect(x: 110, y: 45 + startY - 200, width: 67.2, height: 192))
+        var clefView = UIImageView(frame: CGRect(x: 110, y: 45 + startY - 167, width: 58.2, height: 154))
         
         if clefType == .F {
             clef = UIImage(named:"bass-clef")
-            clefView = UIImageView(frame: CGRect(x: 110, y: 35 + startY - 200, width: 67.2, height: 192))
+            clefView = UIImageView(frame: CGRect(x: 110, y: 35 + startY - 116, width: 58.2, height: 68))
         }
         
         clefView.image = clef
@@ -304,7 +324,7 @@ class MusicSheet: UIView {
         
         //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
         // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
-        let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace, clef: measure.clef)
+        let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace, clef: measure.clef, lineSpace: lineSpace)
         GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
         
         // CHOOSE FIRST MEASURE COORD AS DEFAULT
@@ -313,7 +333,7 @@ class MusicSheet: UIView {
             GridSystem.instance.selectedCoord = snapPoints[0]
             
             moveCursorY(location: snapPoints[0])
-            moveCursorX(location: CGPoint(x: snapPoints[0].x, y: curXCursorLocation.y))
+            moveCursorX(location: CGPoint(x: snapPoints[0].x, y: curYCursorLocation.y - 30))
         }
         
         //draw line before measure
@@ -359,18 +379,18 @@ class MusicSheet: UIView {
                     note.screenCoordinates = coordinates.0
 
                     points = GridSystem.instance.createSnapPoints(
-                            initialX: coordinates.1.x, initialY: coordinates.1.y, clef: measure.clef)
+                            initialX: coordinates.1.x, initialY: coordinates.1.y, clef: measure.clef, lineSpace: lineSpace)
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord, snapPoints: points)
 
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                             snapPoints: GridSystem.instance.createSnapPoints(
-                                    initialX: coordinates.0.x, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef))
+                                    initialX: coordinates.0.x, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
 
                     if index != measure.notationObjects.count-1 {
                         GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: coordinates.1.x)
                     }
                     
-                    self.addMusicNotation(note: note)
+                    self.addMusicNotation(notation: note)
 
                 }
             }
@@ -414,7 +434,7 @@ class MusicSheet: UIView {
     }
 
     // Draws connecting lines for grand staves
-    private func drawStaffConnection(startX:CGFloat, startY:CGFloat) {
+    private func drawStaffConnection(startX:CGFloat, startY:CGFloat, height:CGFloat) {
         let staffConnection = CAShapeLayer()
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
@@ -422,7 +442,7 @@ class MusicSheet: UIView {
         
         for x in measureXDivs {
             bezierPath.move(to: CGPoint(x: x, y: startY))
-            bezierPath.addLine(to: CGPoint(x: x, y: startY + 400)) // change if staff space changes
+            bezierPath.addLine(to: CGPoint(x: x, y: startY + staffSpace)) // change if staff space changes
             bezierPath.stroke()
         }
         
@@ -431,23 +451,28 @@ class MusicSheet: UIView {
         staffConnection.lineWidth = 2
         
         let brace = UIImage(named:"brace-185")
-        let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: 400))
+        let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: staffSpace + height))
         
         measureXDivs.removeAll()
         
         braceView.image = brace
         self.addSubview(braceView)
     }
-    
-    public func addMusicNotation(note: MusicNotation) {
-        print("ADD NOTE")
-        
-        let noteImageView = UIImageView(frame: CGRect(x: ((note.screenCoordinates)?.x)! + 1.8, y: ((note.screenCoordinates)?.y)! - 5, width: (note.image?.size.width)!, height: (note.image?.size.height)!))
-        
-        noteImageView.image = note.image
+
+    public func addMusicNotation(notation: MusicNotation) {
+
+        //drawBeam(notations: self.composition!.staffList[0].measures[0].notationObjects)
+
+        var notationImageView: UIImageView
+
+        notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
+
+        notationImageView.image = notation.image
         //noteImageView.tag = 1
         
-        self.addSubview(noteImageView)
+        self.addSubview(notationImageView)
+
+        //self.assembleNoteForBeaming(notation: notation, stemHeight: 100)
     }
     
     private func setupCursor() {
@@ -467,7 +492,7 @@ class MusicSheet: UIView {
         // Setup vertical cursor
         let xPath = UIBezierPath()
         xPath.move(to: CGPoint(x: 10, y: 0))
-        xPath.addLine(to: CGPoint(x: 10, y: 460))
+        xPath.addLine(to: CGPoint(x: 10, y: 400))
         
         xCursor.path = xPath.cgPath
         xCursor.strokeColor = UIColor(red:0.00, green:0.47, blue:1.00, alpha:1.0).cgColor
@@ -488,13 +513,37 @@ class MusicSheet: UIView {
         var nextPoint:CGPoint = curYCursorLocation
         
         if direction == ArrowKey.up {
-            nextPoint = GridSystem.instance.getUpYSnapPoint(currentPoint: curYCursorLocation)
+            
+            if let point = GridSystem.instance.getUpYSnapPoint(currentPoint: curYCursorLocation) {
+                nextPoint = point
+            } else {
+                return
+            }
+            
         } else if direction == ArrowKey.down {
-            nextPoint = GridSystem.instance.getDownYSnapPoint(currentPoint: curYCursorLocation)
+            
+            if let point = GridSystem.instance.getDownYSnapPoint(currentPoint: curYCursorLocation) {
+                nextPoint = point
+            } else {
+                return
+            }
+            
         } else if direction == ArrowKey.left {
-            nextPoint = GridSystem.instance.getLeftXSnapPoint(currentPoint: curYCursorLocation)
+            
+            if let point = GridSystem.instance.getLeftXSnapPoint(currentPoint: curYCursorLocation) {
+                nextPoint = point
+            } else {
+                return
+            }
+            
         } else if direction == ArrowKey.right {
-            nextPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: curYCursorLocation)
+            
+            if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: curYCursorLocation) {
+                nextPoint = point
+            } else {
+                return
+            }
+            
         }
         
         // go to next measure with the same clef
@@ -645,63 +694,63 @@ class MusicSheet: UIView {
 
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
 
-            let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord)
+            if let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord) {
 
-            curXCursorLocation = CGPoint(x: curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30)
-            moveCursorX(location: curXCursorLocation)
-
+                curXCursorLocation = CGPoint(x: curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30)
+                moveCursorX(location: curXCursorLocation)
+                
+            }
         }
 
     }
 
     func addNewNote(params: Parameters) {
         let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
-        let notePlacement = GridSystem.instance.getNotePlacement(notation: notation)
+        if let notePlacement = GridSystem.instance.getNotePlacement(notation: notation) {
 
-        notation.screenCoordinates = notePlacement.0
+            notation.screenCoordinates = notePlacement.0
 
-        self.addMusicNotation(note: notation)
-        
-        if let note = notation as? Note {
-            soundManager.playSound(note)
-        }
+            self.addMusicNotation(notation: notation)
+            
+            if let note = notation as? Note {
+                soundManager.playSound(note)
+            }
 
-        if let coord = GridSystem.instance.selectedMeasureCoord {
+            if let coord = GridSystem.instance.selectedMeasureCoord {
 
-            if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: coord) {
-                
-                GridSystem.instance.removeRelativeXSnapPoints(measurePoints: coord, relativeX: curYCursorLocation.x)
-
-                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
-                        snapPoints: GridSystem.instance.createSnapPoints(
-                                initialX: notePlacement.0.x, initialY: coord.lowerRightPoint.y,
-                                clef: measure.clef))
-
-                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
-                        snapPoints: GridSystem.instance.createSnapPoints(initialX: notePlacement.1.x,
-                                initialY: coord.lowerRightPoint.y,
-                                clef: measure.clef))
-
-
-                if measure.isFull {
+                if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: coord) {
                     
-                    moveCursorsToNextMeasure(measurePoints: coord)
-                    
-                } else {
-                    GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
-                    
-                    moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
-                    moveCursorY(location: GridSystem.instance.selectedCoord!)
+                    GridSystem.instance.removeRelativeXSnapPoints(measurePoints: coord, relativeX: curYCursorLocation.x)
+
+                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
+                            snapPoints: GridSystem.instance.createSnapPoints(
+                                    initialX: notePlacement.0.x, initialY: coord.lowerRightPoint.y,
+                                    clef: measure.clef, lineSpace: lineSpace))
+
+                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
+                            snapPoints: GridSystem.instance.createSnapPoints(initialX: notePlacement.1.x,
+                                    initialY: coord.lowerRightPoint.y,
+                                    clef: measure.clef, lineSpace: lineSpace))
+
+
+                    if measure.isFull {
+                        
+                        moveCursorsToNextMeasure(measurePoints: coord)
+                        
+                    } else {
+                        GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
+                        
+                        moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
+                        moveCursorY(location: GridSystem.instance.selectedCoord!)
+                    }
+
                 }
 
             }
-
         }
-
     }
 
     func updateMeasureDraw () {
-        grandStaffIndex = 0
         startY = 200 + sheetYOffset
         staffIndex = -1
 
@@ -720,11 +769,35 @@ class MusicSheet: UIView {
             self.highlightRect.highlightingStartPoint = locationOfBeganTap
             self.highlightRect.highlightingEndPoint = locationOfBeganTap
             
+            if let measure = self.getMeasureFromPoint(point: locationOfBeganTap) {
+                print("found measure: \(measure)")
+                self.selectedClef = measure.clef
+            }
+            
         } else if sender.state == UIGestureRecognizerState.ended {
             self.checkPointsInRect()
             self.highlightRect.highlightingEndPoint = nil
         } else {
-            self.highlightRect.highlightingEndPoint = sender.location(in: self)
+            let location = sender.location(in: self)
+            let previousLocation = self.highlightRect.highlightingEndPoint
+            self.highlightRect.highlightingEndPoint = location
+            
+            if self.selectedClef == nil {
+                if let measure = self.getMeasureFromPoint(point: location) {
+                    print("found measure: \(measure)")
+                    self.selectedClef = measure.clef
+                }
+            } else if let clef = self.selectedClef {
+                print("My clef: \(clef)")
+                if self.getMeasureFromPoint(point: location)?.clef != clef {
+                    print("Not same clef")
+                    
+                    // TODO: Fix this! Still buggy
+                    self.highlightRect.highlightingEndPoint!.y = previousLocation!.y
+                    //self.selectedClef = measure.clef
+                }
+            }
+            
         }
     }
     
@@ -744,7 +817,7 @@ class MusicSheet: UIView {
                         notation.isSelected = true
                         self.selectedNotations.append(notation)
                         
-                        let noteImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + 1.8, y: ((notation.screenCoordinates)?.y)! - 5, width: (notation.image?.size.width)!, height: (notation.image?.size.height)!))
+                        let noteImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
                         
                         noteImageView.image = notation.image
                         noteImageView.image = noteImageView.image!.withRenderingMode(.alwaysTemplate)
@@ -833,14 +906,15 @@ class MusicSheet: UIView {
                     GridSystem.instance.selectedCoord = newSnapPoints[prevSnapIndex]
                     
                     // get first measure points of the
-                    let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump])
+                    if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
                     
-                    // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
-                    moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
-                                                  y: firstMeasurePoints.lowerRightPoint.y - 30))
-                    moveCursorY(location: newSnapPoints[prevSnapIndex])
-                    
-                    scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                        // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
+                        moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
+                                                      y: firstMeasurePoints.lowerRightPoint.y - 30))
+                        moveCursorY(location: newSnapPoints[prevSnapIndex])
+                        
+                        scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                    }
                     
                 }
                 
@@ -892,14 +966,16 @@ class MusicSheet: UIView {
                         GridSystem.instance.selectedCoord = newCoord
                         
                         // get first measure points of the
-                        let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump])
-                        
-                        // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
-                        moveCursorX(location: CGPoint(x: newCoord.x,
-                                                      y: firstMeasurePoints.lowerRightPoint.y - 30))
-                        moveCursorY(location: newCoord)
-                        
-                        scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                        if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
+                            
+                            // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
+                            moveCursorX(location: CGPoint(x: newCoord.x,
+                                                          y: firstMeasurePoints.lowerRightPoint.y - 30))
+                            moveCursorY(location: newCoord)
+                            
+                            scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                            
+                        }
                     }
                     
                 }
@@ -912,6 +988,181 @@ class MusicSheet: UIView {
             outerScrollView.setContentOffset(
                 CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: true)
         }
+    }
+    
+    public func getMeasureFromPoint (point: CGPoint) -> Measure? {
+        for measurePoint in measureCoords {
+            let r:CGRect = CGRect(x: measurePoint.upperLeftPoint.x, y: measurePoint.upperLeftPoint.y,
+                                  width: measurePoint.lowerRightPoint.x - measurePoint.upperLeftPoint.x,
+                                  height: measurePoint.lowerRightPoint.y - measurePoint.upperLeftPoint.y)
+            
+            //  LOCATION IS IN MEASURE
+            if r.contains(point) {
+                if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measurePoint) {
+                    return measure
+                }
+            }
+        }
+        
+        return nil
+    }
+
+    public func getNotesBeatValue(notes: [MusicNotation]) -> Float{
+        var curBeatValue: Float = 0
+
+        for note in notes {
+            curBeatValue = curBeatValue + note.type.getBeatValue()
+        }
+
+        return curBeatValue
+    }
+
+    public func drawLine(start: CGPoint, end: CGPoint, thickness: CGFloat) {
+        let line = CAShapeLayer()
+        let path = UIBezierPath()
+
+        path.move(to: start)
+        path.addLine(to: end)
+        path.stroke()
+
+        line.path = path.cgPath
+        line.strokeColor = UIColor.black.cgColor
+        line.lineWidth = thickness
+
+        self.layer.addSublayer(line)
+    }
+    
+    // BEAMS group of notes
+    public func beamNotes(notations: [MusicNotation]) {
+        var curNotesToBeam = [MusicNotation]()
+        
+        if notations.count > 1 {
+            for notation in notations {
+                if notation.hasTail() {
+                    curNotesToBeam.append(notation)
+                } else if !notation.hasTail() {
+                    if curNotesToBeam.count > 1 {
+                        // beam notes
+                        drawBeam(notations: curNotesToBeam)
+                    } else if curNotesToBeam.count == 1 {
+                        addMusicNotation(notation: curNotesToBeam[0])
+                    }
+                    
+                    addMusicNotation(notation: notation)
+                    
+                    curNotesToBeam.removeAll()
+                }
+            }
+        } else if notations.count == 1 {
+            //add single note
+        }
+        
+        if curNotesToBeam.count > 1{
+            //beam notes
+            drawBeam(notations: curNotesToBeam)
+        } else if curNotesToBeam.count == 1 {
+            //add single note
+        }
+    }
+
+    // DRAWS
+    public func drawBeam(notations: [MusicNotation]) {
+        var upCount: Int = 0
+        var downCount: Int = 0
+
+        let stemHeight: CGFloat = 80
+
+        for notation in notations {
+            if let note = notation as? Note {
+                if note.isUpwards {
+                    upCount = upCount + 1
+                } else {
+                    downCount = downCount + 1
+                }
+            }
+        }
+
+        // check whether there are more upward notes and vice versa
+        if upCount > downCount {
+            let highestNote = getLowestOrHighestNote(highest: true, notations: notations)
+            let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 5
+            let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
+            let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9
+
+            for notation in notations {
+                let curHeight = notation.screenCoordinates!.y - 5 - highestY
+
+                assembleNoteForBeaming(notation: notation, stemHeight: curHeight)
+            }
+
+            // draws the beam based on highest note
+            self.drawLine(start: CGPoint(x: startX, y: highestY), end: CGPoint(x: endX, y: highestY), thickness: 2.3)
+        }
+    }
+
+    public func assembleNoteForBeaming(notation: MusicNotation, stemHeight: CGFloat) {
+        let noteHead = UIImage(named: "quarter-head")
+
+        var notationImageView: UIImageView
+
+        let noteX: CGFloat = notation.screenCoordinates!.x + noteXOffset
+        let noteY: CGFloat = notation.screenCoordinates!.y
+
+        /*var noteWidth: CGFloat = noteHead!.size.width + noteWidthAlter
+        var noteHeight: CGFloat = noteHead!.size.height + noteHeightAlter
+
+        notationImageView = UIImageView(frame: CGRect(x: noteX, y: noteY, width: noteWidth, height: noteHeight))
+
+        notationImageView.image = noteHead
+
+        self.addSubview(notationImageView)*/
+
+        if let note = notation as? Note {
+            if note.isUpwards {
+                self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - 5), end: CGPoint(x: noteX + 24.9, y: noteY - stemHeight - 5), thickness: 2.3)
+                drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - stemHeight - 5), end: CGPoint(x: noteX + 23.9 + 100, y: noteY - stemHeight - 5), thickness: 6)
+            } else {
+                self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY + 3), end: CGPoint(x: noteX + 1.5, y: noteY + stemHeight + 3), thickness: 2.3)
+                drawLine(start: CGPoint(x: noteX + 0.5, y: noteY + stemHeight + 3), end: CGPoint(x: noteX + 0.5 + 100, y: noteY + stemHeight + 3), thickness: 6)
+            }
+        }
+
+
+    }
+
+    public func getLowestOrHighestNote(highest: Bool, notations: [MusicNotation]) -> MusicNotation{
+        var note: MusicNotation
+
+        note = notations[0]
+
+        for notation in notations {
+            if !highest {
+                if notation.screenCoordinates!.y < note.screenCoordinates!.y {
+                    note = notation
+                }
+            } else {
+                if notation.screenCoordinates!.y > note.screenCoordinates!.y {
+                    note = notation
+                }
+            }
+        }
+
+        return note
+    }
+
+    public func copy() {
+        print("Copy")
+        Clipboard.instance.copy(self.selectedNotations)
+    }
+
+    public func cut() {
+        print("Cut")
+        Clipboard.instance.cut(self.selectedNotations)
+    }
+
+    public func paste() {
+        print("Paste")
+        //Clipboard.instance.paste(measures: <#T##[Measure]#>, noteIndex: &<#T##Int#>)
     }
 
 }

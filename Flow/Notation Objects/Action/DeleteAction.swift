@@ -26,6 +26,7 @@ class DeleteAction: Action {
         for notation in self.notations {
             if let measure = notation.measure {
                 measure.deleteInMeasure(notation)
+                notation.measure = nil
                 self.measures.append(measure)
             }
         }

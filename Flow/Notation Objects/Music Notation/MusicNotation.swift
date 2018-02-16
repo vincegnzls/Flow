@@ -40,4 +40,13 @@ class MusicNotation {
     func setImage() {
         // Do nothing
     }
+
+    func hasTail() -> Bool {
+        return self.type.getBeatValue() <= RestNoteType.eighth.getBeatValue()
+    }
+
+
+    func duplicate() -> MusicNotation {
+        return MusicNotation(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure)
+    }
 }

@@ -19,4 +19,8 @@ class Rest: MusicNotation {
     override func setImage() {
         self.image = type.getRestImage()
     }
+
+    override func duplicate() -> MusicNotation {
+        return super.duplicate()
+    }
 }
