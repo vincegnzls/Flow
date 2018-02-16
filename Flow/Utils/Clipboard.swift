@@ -42,7 +42,8 @@ class Clipboard {
         }
     }
 
-    func paste(measures: [Measure], measureIndex: inout Int, noteIndex: inout Int) {
+    func paste(measures: [Measure], noteIndex: inout Int) {
+        var measureIndex = 0
         var oldNotations = [MusicNotation]()
         var newNotations = [MusicNotation]()
 

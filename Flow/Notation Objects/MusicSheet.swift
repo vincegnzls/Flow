@@ -1162,7 +1162,7 @@ class MusicSheet: UIView {
 
     public func paste() {
         print("Paste")
-        //Clipboard.instance.paste
+        //Clipboard.instance.paste(measures: <#T##[Measure]#>, noteIndex: &<#T##Int#>)
     }
 
 }
