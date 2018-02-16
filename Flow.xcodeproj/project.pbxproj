@@ -73,6 +73,7 @@
 		86B8EFEE1FEAC30500DD834E /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B8EFED1FEAC30500DD834E /* Clipboard.swift */; };
 		86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */; };
 		86CCD7C31FDD783400A0FC8D /* StartMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */; };
+		86DBDA8020368C6E00C834EF /* Chord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DBDA7F20368C6E00C834EF /* Chord.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -164,6 +165,7 @@
 		86B8EFED1FEAC30500DD834E /* Clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipboard.swift; sourceTree = "<group>"; };
 		86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenuViewController.swift; sourceTree = "<group>"; };
+		86DBDA7F20368C6E00C834EF /* Chord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chord.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -309,6 +311,7 @@
 				864CE5A11FD32FC3001FF059 /* RestNoteType.swift */,
 				864CE5A01FD32F41001FF059 /* Rest */,
 				864CE59E1FD32F2C001FF059 /* Note */,
+				86DBDA7F20368C6E00C834EF /* Chord.swift */,
 			);
 			path = "Music Notation";
 			sourceTree = "<group>";
@@ -559,6 +562,7 @@
 			files = (
 				610ECE3A1FE7CC9F009CC0F2 /* KeySignatureData.swift in Sources */,
 				611BFC9E1FE678C2001511B2 /* TimeSignatureViewController.swift in Sources */,
+				86DBDA8020368C6E00C834EF /* Chord.swift in Sources */,
 				861B3DDA1FDC20E2003FE0A5 /* KeyNames.swift in Sources */,
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
 				861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */,
