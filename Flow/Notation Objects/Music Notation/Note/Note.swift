@@ -47,7 +47,7 @@ class Note: MusicNotation {
         self.image = type.getNoteImage(isUpwards: isUpwards)
     }
 
-    override func duplicate() -> MusicNotation {
+    override func duplicate() -> Note {
         return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental)
     }
 }
