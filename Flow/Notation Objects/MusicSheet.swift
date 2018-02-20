@@ -233,12 +233,12 @@ class MusicSheet: UIView {
 
         // Handles adding of clef based on parameter
         // TODO: SHIFT THIS TO BE DRAWN PER MEASURE
-        if withTimeSig {
+        /*if withTimeSig {
             print("ASDF: \(measures[0].timeSignature.beats)")
             drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType, timeSignature: measures[0].timeSignature)
         } else {
             drawClefLabel(startX: startX, startY: startY, clefType: clefType)
-        }
+        }*/
         
         // Adjust initial space for clef and time signature
         var startMeasure:CGFloat = 0
@@ -271,6 +271,16 @@ class MusicSheet: UIView {
                 GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation, measure: measures[i])
                 GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measureLocation)
             }
+
+            if i == 0 {
+                drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType, timeSignature: measures[i].timeSignature)
+            }
+
+            if i > 0 {
+                if !self.sameTimeSignature(t1: measures[i-1].timeSignature, t2: measures[i].timeSignature) {
+                    drawClefTimeLabel(startX: modStartX, startY: startY, clefType: nil, timeSignature: measures[i].timeSignature)
+                }
+            }
             
             modStartX = modStartX + distance
         }
@@ -281,14 +291,27 @@ class MusicSheet: UIView {
             return nil
         }
     }
+
+    public func sameTimeSignature(t1: TimeSignature, t2: TimeSignature) -> Bool {
+        if t1.beats == t2.beats && t1.beatType == t2.beatType {
+            return true
+        }
+
+        return false
+    }
     
     // Draws the clef and time before the staff
-    private func drawClefTimeLabel(startX:CGFloat, startY:CGFloat, clefType:Clef, timeSignature:TimeSignature) {
+    private func drawClefTimeLabel(startX:CGFloat, startY:CGFloat, clefType:Clef?, timeSignature:TimeSignature) {
+
+        var x = startX
+
+        if let type = clefType {
+            drawClefLabel(startX: startX, startY: startY, clefType: type)
+            x = x + 55
+        }
         
-        drawClefLabel(startX: startX, startY: startY, clefType: clefType)
-        
-        let upperTimeSig = UILabel(frame: CGRect(x:startX + 55 ,y: startY - 127, width:96, height:96))
-        let lowerTimeSig = UILabel(frame: CGRect(x:startX + 55 ,y: startY - 86, width:96, height:96))
+        let upperTimeSig = UILabel(frame: CGRect(x:x ,y: startY - 127, width:96, height:96))
+        let lowerTimeSig = UILabel(frame: CGRect(x:x ,y: startY - 86, width:96, height:96))
 
         upperTimeSig.textAlignment = .center
         lowerTimeSig.textAlignment = .center
