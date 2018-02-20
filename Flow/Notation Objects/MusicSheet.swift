@@ -11,8 +11,9 @@ import UIKit
 class MusicSheet: UIView {
     
     private let HIGHLIGHTED_NOTES_TAG = 2500
+    private let TIME_SIGNATURES_TAG = 2501
     
-    private let sheetYOffset:CGFloat = 60
+    private let sheetYOffset:CGFloat = 20
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
     private let staffSpace:CGFloat = 260 // Spaces between staff
     private let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
@@ -23,6 +24,9 @@ class MusicSheet: UIView {
     private let noteYOffset: CGFloat = -95.5
     private let noteWidthAlter: CGFloat = -3
     private let noteHeightAlter: CGFloat = -3
+    
+    private let initialNoteSpace: CGFloat = 10
+    private let adjustToXCenter: CGFloat = 1.3
 
     private let NUM_MEASURES_PER_STAFF = 2
     
@@ -38,11 +42,12 @@ class MusicSheet: UIView {
     // used for tracking coordinates of measures
     private var measureCoords = [GridSystem.MeasurePoints]()
     
-    private var soundManager = SoundManager()
-    
     private let highlightRect = HighlightRect()
     
     public var composition: Composition?
+    public var hoveredNotation: MusicNotation?
+
+    private var curScale: CGFloat = 1.0
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -80,27 +85,26 @@ class MusicSheet: UIView {
     }
     
     private func setup() {
+        
         startY += sheetYOffset
         
         setupCursor()
         self.layer.addSublayer(self.highlightRect)
         
+        EventBroadcaster.instance.removeObservers(event: EventNames.ARROW_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
                                               observer: Observer(id: "MusicSheet.onArrowKeyPressed", function: self.onArrowKeyPressed))
-        /*EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
-                                              observer: Observer(id: "MusicSheet.onDeleteKeyPressed", function: self.onDeleteKeyPressed))*/
+        
         EventBroadcaster.instance.addObserver(event: EventNames.VIEW_FINISH_LOADING,
                 observer: Observer(id: "MusicSheet.onCompositionLoad", function: self.onCompositionLoad))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.STAFF_SWITCHED)
         EventBroadcaster.instance.addObserver(event: EventNames.STAFF_SWITCHED,
                 observer: Observer(id: "MusicSheet.onStaffSwitch", function: self.onStaffChange))
-
+        
         EventBroadcaster.instance.removeObservers(event: EventNames.MEASURE_UPDATE)
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_UPDATE,
                                               observer:  Observer(id: "MusicSheet.updateMeasureDraw", function: self.updateMeasureDraw))
-
-        EventBroadcaster.instance.removeObservers(event: EventNames.ADD_NEW_NOTE)
-        EventBroadcaster.instance.addObserver(event: EventNames.ADD_NEW_NOTE,
-                observer: Observer(id: "MusicSheet.addNewNote", function: self.addNewNote))
 
         // Add listeners for cut/copy/paste events
         EventBroadcaster.instance.removeObservers(event: EventNames.COPY_KEY_PRESSED)
@@ -116,6 +120,16 @@ class MusicSheet: UIView {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.minimumNumberOfTouches = 2
         self.addGestureRecognizer(panGesture)
+
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(sender:)))
+        self.addGestureRecognizer(pinchGesture)
+    }
+
+    @objc private func pinchAction(sender: UIPinchGestureRecognizer) {
+        let scale: CGFloat = curScale * sender.scale
+        self.transform = CGAffineTransform(scaleX: scale, y: scale)
+
+        curScale = sender.scale
     }
 
     func onCompositionLoad (params: Parameters) {
@@ -146,6 +160,49 @@ class MusicSheet: UIView {
 
             for i in 1..<measureSplices.count {
                 setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false, measures: measureSplices[i])
+            }
+            
+            if let measure = GridSystem.instance.getCurrentMeasure() {
+                
+                if measure.isFull {
+                    
+                    if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+                        self.moveCursorsToNextMeasure(measurePoints: measureCoord)
+                        return
+                    }
+                }
+                
+            }
+            
+            if let recentNotation = GridSystem.instance.recentNotation {
+                
+                if let noteScreenCoord = recentNotation.screenCoordinates {
+                    
+                    if let snapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: noteScreenCoord) {
+                        
+                        // get right again to go to the next
+                        if let nextSnapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: snapPoint) {
+                            
+                            GridSystem.instance.selectedCoord = nextSnapPoint
+                            moveCursorY(location: nextSnapPoint)
+                            moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: curXCursorLocation.y))
+                            
+                        }
+                    }
+                    
+                }
+                
+            } else {
+                if let currentPoint = GridSystem.instance.selectedCoord {
+                    
+                    if let nextSnapPoint = GridSystem.instance.getLeftXSnapPoint(currentPoint: currentPoint) {
+                    
+                        GridSystem.instance.selectedCoord = nextSnapPoint
+                        moveCursorY(location: nextSnapPoint)
+                        moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: curXCursorLocation.y))
+                        
+                    }
+                }
             }
         }
     }
@@ -189,7 +246,8 @@ class MusicSheet: UIView {
         // Handles adding of clef based on parameter
         // TODO: SHIFT THIS TO BE DRAWN PER MEASURE
         if withTimeSig {
-            drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType)
+            print("ASDF: \(measures[0].timeSignature.beats)")
+            drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType, timeSignature: measures[0].timeSignature)
         } else {
             drawClefLabel(startX: startX, startY: startY, clefType: clefType)
         }
@@ -198,7 +256,7 @@ class MusicSheet: UIView {
         var startMeasure:CGFloat = 0
         
         if withTimeSig {
-            startMeasure = startX + 160
+            startMeasure = startX + 145
         } else {
             startMeasure = startX + 85
         }
@@ -237,22 +295,84 @@ class MusicSheet: UIView {
     }
     
     // Draws the clef and time before the staff
-    private func drawClefTimeLabel(startX:CGFloat, startY:CGFloat, clefType:Clef) {
+    private func drawClefTimeLabel(startX:CGFloat, startY:CGFloat, clefType:Clef, timeSignature:TimeSignature) {
         
         drawClefLabel(startX: startX, startY: startY, clefType: clefType)
         
-        // TODO: implement switch case for time sig
-        let upperTimeSig = UIImage(named:"numeral-4")
-        let lowerTimeSig = UIImage(named:"numeral-4")
+        let upperTimeSig = UILabel(frame: CGRect(x:startX + 55 ,y: startY - 127, width:96, height:96))
+        let lowerTimeSig = UILabel(frame: CGRect(x:startX + 55 ,y: startY - 86, width:96, height:96))
+
+        upperTimeSig.textAlignment = .center
+        lowerTimeSig.textAlignment = .center
         
-        let upperTimeView = UIImageView(frame: CGRect(x:195 ,y: startY - 120, width:52, height:61))
-        let lowerTimeView = UIImageView(frame: CGRect(x:195 ,y: startY - 60, width:52, height:61))
+        let upperText = "\(timeSignature.beats)"
+        let lowerText = "\(timeSignature.beatType)"
         
-        upperTimeView.image = upperTimeSig
-        lowerTimeView.image = lowerTimeSig
+        print (upperText)
+        print (lowerText)
         
-        self.addSubview(upperTimeView)
-        self.addSubview(lowerTimeView)
+        var upperNumString = ""
+        var lowerNumString = ""
+        
+        for char in upperText {
+            if let singleNumber = Int(String(char)) {
+                if let equivSymbol = getEquivalentNumberSymbol(n: singleNumber) {
+                    upperNumString += equivSymbol
+                }
+            }
+        }
+        
+        for char in lowerText {
+            if let singleNumber = Int(String(char)) {
+                if let equivSymbol = getEquivalentNumberSymbol(n: singleNumber) {
+                    lowerNumString += equivSymbol
+                }
+            }
+        }
+        
+        upperTimeSig.text = upperNumString
+        lowerTimeSig.text = lowerNumString
+        
+        upperTimeSig.tag = TIME_SIGNATURES_TAG
+        lowerTimeSig.tag = TIME_SIGNATURES_TAG
+        
+        upperTimeSig.font = UIFont(name: "Maestro", size: 80.0)
+        lowerTimeSig.font = UIFont(name: "Maestro", size: 80.0)
+        
+        self.addSubview(upperTimeSig)
+        self.addSubview(lowerTimeSig)
+    }
+    
+    // this is for getting the Maestro font style of the time signature
+    private func getEquivalentNumberSymbol(n: Int) -> String? {
+        
+        switch n {
+            case 0:
+                return ""
+            case 1:
+                return ""
+            case 2:
+                return ""
+            case 3:
+                return ""
+            case 4:
+                return ""
+            case 5:
+                return ""
+            case 6:
+                return ""
+            case 7:
+                return ""
+            case 8:
+                return ""
+            case 9:
+                return ""
+            default:
+            break
+        }
+        
+        return nil
+        
     }
     
     // Draws the clef before the staff
@@ -324,11 +444,11 @@ class MusicSheet: UIView {
         
         //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
         // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
-        let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + 20, initialY: startY-curSpace, clef: measure.clef, lineSpace: lineSpace)
+        let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace, initialY: startY-curSpace, clef: measure.clef, lineSpace: lineSpace)
         GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
         
         // CHOOSE FIRST MEASURE COORD AS DEFAULT
-        if measureCoords.count == 1 {
+        if GridSystem.instance.selectedMeasureCoord == nil {
             GridSystem.instance.selectedMeasureCoord = measureCoord
             GridSystem.instance.selectedCoord = snapPoints[0]
             
@@ -350,50 +470,90 @@ class MusicSheet: UIView {
         bezierPath.addLine(to: CGPoint(x: endX, y: startY)) // change if staff space changes
         bezierPath.stroke()
         
+        // for the grand staff connection
         measureXDivs.insert(endX)
 
         let measureWeights = initMeasureGrid(startX: startX, endX: endX, startY: startY-curSpace)
         GridSystem.instance.assignWeightsToPoints(measurePoints: measureCoord,
                 weights: measureWeights)
+        
+        let adjustXToCenter = adjustToXCenter * initialNoteSpace
 
-        if measure.clef == .G {
-            print(measure.notationObjects.count)
-        }
-
-        var points = snapPoints
+//        var points = snapPoints
 
         if measure.notationObjects.count > 0 {
             
-            GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: points[0].x)
+            GridSystem.instance.clearAllSnapPointsFromMeasure(measurePoints: measureCoord)
 
+            var notationSpace = measureCoord.width / CGFloat(measure.timeSignature.beats) // not still sure about this
+            
+            if measure.notationObjects.count < measure.timeSignature.beats {
+                // TODO: LESSEN SPACE HERE
+            } else if measure.notationObjects.count > measure.timeSignature.beats {
+                notationSpace = measureCoord.width / CGFloat(measure.notationObjects.count)
+            }
+            
+            var prevX:CGFloat?
+            
             // add all notes existing in the measure
             for (index, note) in measure.notationObjects.enumerated() {
 
-                let coordinates:(CGPoint, CGPoint)?
-
-                coordinates = GridSystem.instance.getNotePlacement(
-                        notation: note, clef: measure.clef, snapPoints: points, weights: measureWeights)
-
-                if let coordinates = coordinates {
-
-                    note.screenCoordinates = coordinates.0
-
-                    points = GridSystem.instance.createSnapPoints(
-                            initialX: coordinates.1.x, initialY: coordinates.1.y, clef: measure.clef, lineSpace: lineSpace)
-                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord, snapPoints: points)
-
+                if index == 0 {
+                    note.screenCoordinates =
+                            CGPoint(x: measureCoord.upperLeftPoint.x + initialNoteSpace,
+                                    y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
+                    
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
-                            snapPoints: GridSystem.instance.createSnapPoints(
-                                    initialX: coordinates.0.x, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
-
-                    if index != measure.notationObjects.count-1 {
-                        GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: coordinates.1.x)
+                                                                  snapPoints: GridSystem.instance.createSnapPoints(
+                                                                    initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
+                    
+                    if !measure.isFull {
+                        
+                        let additionalSnapPoints = GridSystem.instance.createSnapPoints(
+                            initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace)
+                    
+                        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
+                                                                      snapPoints: additionalSnapPoints)
+                        
+                        prevX = measureCoord.upperLeftPoint.x + initialNoteSpace + notationSpace + adjustXToCenter
+                        
                     }
                     
-                    self.addMusicNotation(notation: note)
-
+                } else {
+                    
+                    if let prevNoteCoordinates =  measure.notationObjects[index - 1].screenCoordinates {
+                    
+                        note.screenCoordinates =
+                            CGPoint(x: prevNoteCoordinates.x + notationSpace,
+                                    y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
+                        
+                        if let prevX = prevX {
+                            GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: prevX)
+                        }
+                        
+                        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
+                                                                      snapPoints: GridSystem.instance.createSnapPoints(
+                                                                        initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
+                        
+                        if !measure.isFull {
+                            
+                            let additionalSnapPoints = GridSystem.instance.createSnapPoints(
+                                initialX: prevNoteCoordinates.x + notationSpace*2 + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace)
+                        
+                            GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
+                                                                          snapPoints: additionalSnapPoints)
+                            
+                            prevX = prevNoteCoordinates.x + notationSpace*2 + adjustXToCenter
+                            
+                        }
+                        
+                    }
                 }
+
             }
+
+            // beam notes of all measures TODO: change if beaming per group is implemented
+            beamNotes(notations: measure.notationObjects)
 
         }
 
@@ -582,6 +742,17 @@ class MusicSheet: UIView {
     public func moveCursorY(location: CGPoint) {
         yCursor.position = location
         curYCursorLocation = location
+        
+        if let measure = GridSystem.instance.getCurrentMeasure() {
+            for notation in measure.notationObjects {
+                // if note hovered
+                if CGPoint(x: location.x - adjustToXCenter * initialNoteSpace, y: location.y) == notation.screenCoordinates {
+                    hoveredNotation = notation
+                } else {
+                    hoveredNotation = nil
+                }
+            }
+        }
     }
     
     public func moveCursorX(location: CGPoint) {
@@ -618,7 +789,7 @@ class MusicSheet: UIView {
 
             if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoord) {
 
-                var closestPoint: CGPoint = snapPoints[0];
+                var closestPoint: CGPoint = snapPoints[0]
 
                 let x2: CGFloat = location.x - snapPoints[0].x
                 let y2: CGFloat = location.y - snapPoints[0].y
@@ -646,9 +817,6 @@ class MusicSheet: UIView {
                 moveCursorY(location: closestPoint)
 
                 GridSystem.instance.selectedCoord = closestPoint
-
-                print("PITCH: \(GridSystem.instance.getPitchFromY(y: closestPoint.y).step.toString())")
-
             }
 
             GridSystem.instance.currentStaffIndex =
@@ -704,7 +872,7 @@ class MusicSheet: UIView {
 
     }
 
-    func addNewNote(params: Parameters) {
+    /*func addNewNote(params: Parameters) {
         let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
         if let notePlacement = GridSystem.instance.getNotePlacement(notation: notation) {
 
@@ -748,7 +916,7 @@ class MusicSheet: UIView {
 
             }
         }
-    }
+    }*/
 
     func updateMeasureDraw () {
         startY = 200 + sheetYOffset
@@ -757,6 +925,8 @@ class MusicSheet: UIView {
         for subview in self.subviews {
             subview.removeFromSuperview()
         }
+        
+        measureCoords.removeAll()
 
         self.setNeedsDisplay()
 
@@ -930,7 +1100,7 @@ class MusicSheet: UIView {
             if let prevSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints){
             
                 // get current index of previous snap points
-                
+
                 if let prevSnapIndex = prevSnapPoints.index(where: {$0.y == curYCursorLocation.y}) {
                     let indexJump:Int
                     
@@ -962,6 +1132,8 @@ class MusicSheet: UIView {
                         GridSystem.instance.selectedMeasureCoord = measureCoords[indexJump]
                         
                         let newCoord = newSnapPoints[(newSnapPoints.count-1) - (GridSystem.NUMBER_OF_SNAPPOINTS_PER_COLUMN - prevSnapIndex)]
+                        
+                        print(newCoord)
                         
                         GridSystem.instance.selectedCoord = newCoord
                         
@@ -1018,18 +1190,12 @@ class MusicSheet: UIView {
     }
 
     public func drawLine(start: CGPoint, end: CGPoint, thickness: CGFloat) {
-        let line = CAShapeLayer()
         let path = UIBezierPath()
 
+        path.lineWidth = thickness
         path.move(to: start)
         path.addLine(to: end)
         path.stroke()
-
-        line.path = path.cgPath
-        line.strokeColor = UIColor.black.cgColor
-        line.lineWidth = thickness
-
-        self.layer.addSublayer(line)
     }
     
     // BEAMS group of notes
@@ -1055,6 +1221,7 @@ class MusicSheet: UIView {
             }
         } else if notations.count == 1 {
             //add single note
+            addMusicNotation(notation: notations[0])
         }
         
         if curNotesToBeam.count > 1{
@@ -1062,6 +1229,7 @@ class MusicSheet: UIView {
             drawBeam(notations: curNotesToBeam)
         } else if curNotesToBeam.count == 1 {
             //add single note
+            addMusicNotation(notation: curNotesToBeam[0])
         }
     }
 
@@ -1070,7 +1238,7 @@ class MusicSheet: UIView {
         var upCount: Int = 0
         var downCount: Int = 0
 
-        let stemHeight: CGFloat = 80
+        var stemHeight: CGFloat = 60
 
         for notation in notations {
             if let note = notation as? Note {
@@ -1080,54 +1248,318 @@ class MusicSheet: UIView {
                     downCount = downCount + 1
                 }
             }
+
+            if notation.type == RestNoteType.sixtyFourth {
+                stemHeight = 80
+            }
         }
 
         // check whether there are more upward notes and vice versa
         if upCount > downCount {
             let highestNote = getLowestOrHighestNote(highest: true, notations: notations)
-            let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 5
+            let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 6
             let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
-            let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9
+            let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
+
+            var curSameNotes = [MusicNotation]()
 
             for notation in notations {
-                let curHeight = notation.screenCoordinates!.y - 5 - highestY
+                let curHeight = notation.screenCoordinates!.y - highestY
 
-                assembleNoteForBeaming(notation: notation, stemHeight: curHeight)
+                assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: true)
+
+                    if !curSameNotes.isEmpty {
+                        if curSameNotes[curSameNotes.count - 1].type == notation.type {
+                            curSameNotes.append(notation)
+                        } else {
+                            if curSameNotes.count > 1 {
+                                //add appropriate flags for beaming
+                                if curSameNotes[0].type == RestNoteType.sixteenth {
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4 ), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                } else if curSameNotes[0].type == RestNoteType.thirtySecond {
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4 ), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                } else if curSameNotes[0].type == RestNoteType.sixtyFourth {
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4 ), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), thickness: lineSpace / 2)
+                                }
+                            } else if curSameNotes.count == 1 {
+                                // add flag of curSameNotes[0]
+                                // add flag of notation
+                                if curSameNotes[0].type == RestNoteType.sixteenth {
+                                    if curSameNotes[0] === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    }
+                                } else if curSameNotes[0].type == RestNoteType.thirtySecond {
+                                    if curSameNotes[0] === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                    }
+                                } else if curSameNotes[0].type == RestNoteType.sixtyFourth {
+                                    if curSameNotes[0] === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), thickness: lineSpace / 2)
+                                    }
+                                }
+
+                                if notation.type == RestNoteType.sixteenth {
+                                    if notation === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                    }
+
+                                } else if notation.type == RestNoteType.thirtySecond {
+                                    if notation === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                    }
+
+                                } else if notation.type == RestNoteType.sixtyFourth {
+                                    if notation === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), thickness: lineSpace / 2)
+                                    }
+
+                                }
+                            }
+
+                            curSameNotes.removeAll()
+                            curSameNotes.append(notation)
+                        }
+                    } else {
+                        curSameNotes.append(notation)
+                    }
+            }
+
+            if curSameNotes.count > 1 {
+                // add appropriate flags for beaming
+                if curSameNotes[0].type == RestNoteType.sixteenth {
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                } else if curSameNotes[0].type == RestNoteType.thirtySecond {
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                } else if curSameNotes[0].type == RestNoteType.sixtyFourth {
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), thickness: lineSpace / 2)
+                }
+            } else if curSameNotes.count == 1 {
+                // add appripriate flag of curSameNotes[0]
+                if curSameNotes[0].type == RestNoteType.sixteenth {
+                    if curSameNotes[0] === notations[notations.count - 1] {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                    } else {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                    }
+                } else if curSameNotes[0].type == RestNoteType.thirtySecond {
+                    if curSameNotes[0] === notations[notations.count - 1] {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                    } else {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                    }
+                } else if curSameNotes[0].type == RestNoteType.sixtyFourth {
+                    if curSameNotes[0] === notations[notations.count - 1] {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 - 22, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), thickness: lineSpace / 2)
+                    } else {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace + lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace + lineSpace / 2), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 23.9 + 24, y: highestY + lineSpace * 1.5 + lineSpace * 0.75), thickness: lineSpace / 2)
+                    }
+                }
             }
 
             // draws the beam based on highest note
-            self.drawLine(start: CGPoint(x: startX, y: highestY), end: CGPoint(x: endX, y: highestY), thickness: 2.3)
+            self.drawLine(start: CGPoint(x: startX, y: highestY), end: CGPoint(x: endX, y: highestY), thickness: lineSpace / 2)
+        } else {
+            let lowestNote = getLowestOrHighestNote(highest: false, notations: notations)
+            let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 3
+            let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 0.5
+            let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
+
+            var curSameNotes = [MusicNotation]()
+
+            for notation in notations {
+                let curHeight = lowestY - notation.screenCoordinates!.y
+
+                assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: false)
+
+
+                    if !curSameNotes.isEmpty {
+                        if curSameNotes[curSameNotes.count - 1].type == notation.type {
+                            curSameNotes.append(notation)
+                        } else {
+                            if curSameNotes.count > 1 {
+                                //add appropriate flags for beaming
+                                if curSameNotes[0].type == RestNoteType.sixteenth {
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                } else if curSameNotes[0].type == RestNoteType.thirtySecond {
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                } else if curSameNotes[0].type == RestNoteType.sixtyFourth {
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), thickness: lineSpace / 2)
+                                }
+                            } else if curSameNotes.count == 1 {
+                                // add flag of curSameNotes[0]
+                                // add flag of notation
+                                if curSameNotes[0].type == RestNoteType.sixteenth {
+                                    if curSameNotes[0] === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    }
+                                } else if curSameNotes[0].type == RestNoteType.thirtySecond {
+                                    if curSameNotes[0] === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                    }
+                                } else if curSameNotes[0].type == RestNoteType.sixtyFourth {
+                                    if curSameNotes[0] === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), thickness: lineSpace / 2)
+                                    }
+                                }
+
+                                if notation.type == RestNoteType.sixteenth {
+                                    if notation === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                    }
+                                } else if notation.type == RestNoteType.thirtySecond {
+                                    if notation === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                    }
+                                } else if notation.type == RestNoteType.sixtyFourth {
+                                    if notation === notations[notations.count - 1] {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), thickness: lineSpace / 2)
+                                    } else {
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                                        self.drawLine(start: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), end: CGPoint(x: notation.screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), thickness: lineSpace / 2)
+                                    }
+                                }
+                            }
+
+                            curSameNotes.removeAll()
+                            curSameNotes.append(notation)
+                        }
+                    } else {
+                        curSameNotes.append(notation)
+                    }
+
+            }
+
+            if curSameNotes.count > 1 {
+                // add appropriate flags for beaming
+                print("I AM ALIVE")
+                if curSameNotes[0].type == RestNoteType.sixteenth {
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                } else if curSameNotes[0].type == RestNoteType.thirtySecond {
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                } else if curSameNotes[0].type == RestNoteType.sixtyFourth {
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                    self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), thickness: lineSpace / 2)
+                }
+            } else if curSameNotes.count == 1 {
+                // add appripriate flag of curSameNotes[0]
+                if curSameNotes[0].type == RestNoteType.sixteenth {
+                    if curSameNotes[0] === notations[notations.count - 1] {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                    } else {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                    }
+                } else if curSameNotes[0].type == RestNoteType.thirtySecond {
+                    if curSameNotes[0] === notations[notations.count - 1] {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                    } else {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                    }
+                } else if curSameNotes[0].type == RestNoteType.sixtyFourth {
+                    if curSameNotes[0] === notations[notations.count - 1] {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 - 24, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), thickness: lineSpace / 2)
+                    } else {
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace - lineSpace / 2), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace - lineSpace / 2), thickness: lineSpace / 2)
+                        self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), end: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2 + 22, y: lowestY - lineSpace * 1.5 - lineSpace * 0.75), thickness: lineSpace / 2)
+                    }
+                }
+            }
+
+            // draws the beam based on lowest note
+            self.drawLine(start: CGPoint(x: startX, y: lowestY), end: CGPoint(x: endX, y: lowestY), thickness: lineSpace / 2)
         }
     }
 
-    public func assembleNoteForBeaming(notation: MusicNotation, stemHeight: CGFloat) {
+    public func assembleNoteForBeaming(notation: MusicNotation, stemHeight: CGFloat, isUpwards: Bool) {
         let noteHead = UIImage(named: "quarter-head")
 
         var notationImageView: UIImageView
 
         let noteX: CGFloat = notation.screenCoordinates!.x + noteXOffset
-        let noteY: CGFloat = notation.screenCoordinates!.y
+        let noteY: CGFloat = notation.screenCoordinates!.y + noteYOffset
 
-        /*var noteWidth: CGFloat = noteHead!.size.width + noteWidthAlter
-        var noteHeight: CGFloat = noteHead!.size.height + noteHeightAlter
+        let noteWidth: CGFloat = noteHead!.size.width + noteWidthAlter
+        let noteHeight: CGFloat = noteHead!.size.height + noteHeightAlter
 
         notationImageView = UIImageView(frame: CGRect(x: noteX, y: noteY, width: noteWidth, height: noteHeight))
 
         notationImageView.image = noteHead
 
-        self.addSubview(notationImageView)*/
+        self.addSubview(notationImageView)
 
-        if let note = notation as? Note {
-            if note.isUpwards {
-                self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - 5), end: CGPoint(x: noteX + 24.9, y: noteY - stemHeight - 5), thickness: 2.3)
-                drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - stemHeight - 5), end: CGPoint(x: noteX + 23.9 + 100, y: noteY - stemHeight - 5), thickness: 6)
-            } else {
-                self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY + 3), end: CGPoint(x: noteX + 1.5, y: noteY + stemHeight + 3), thickness: 2.3)
-                drawLine(start: CGPoint(x: noteX + 0.5, y: noteY + stemHeight + 3), end: CGPoint(x: noteX + 0.5 + 100, y: noteY + stemHeight + 3), thickness: 6)
-            }
+        if isUpwards {
+            self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 5), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 5), thickness: 2.3)
+            //drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 23.9 + 22, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+        } else {
+            self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + 3), end: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + stemHeight + 3), thickness: 2.3)
+            //drawLine(start: CGPoint(x: noteX + 0.5, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 0.5 + 22, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
         }
-
-
     }
 
     public func getLowestOrHighestNote(highest: Bool, notations: [MusicNotation]) -> MusicNotation{
@@ -1137,11 +1569,11 @@ class MusicSheet: UIView {
 
         for notation in notations {
             if !highest {
-                if notation.screenCoordinates!.y < note.screenCoordinates!.y {
+                if notation.screenCoordinates!.y > note.screenCoordinates!.y {
                     note = notation
                 }
             } else {
-                if notation.screenCoordinates!.y > note.screenCoordinates!.y {
+                if notation.screenCoordinates!.y < note.screenCoordinates!.y {
                     note = notation
                 }
             }
