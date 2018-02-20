@@ -51,6 +51,15 @@ class GridSystem {
     private var gClefPitches = [Pitch]()
     private var fClefPitches = [Pitch]()
     
+    public var recentNotation: MusicNotation? {
+        didSet {
+            if let note = recentNotation as? Note {
+                print("interacted note: \(note.pitch)")
+            }
+            
+        }
+    }
+    
     private init() {
         //GridSystem.sharedInstance = self
 
@@ -59,7 +68,10 @@ class GridSystem {
     
     public func reset() {
         selectedMeasureCoord = nil
-        selectedCoord = CGPoint(x: -1, y: -1)
+        selectedCoord = nil
+        currentStaffIndex = 0
+        recentNotation = nil
+        
         measurePointsInStaff.removeAll()
         measureMap.removeAll()
         weightsMap.removeAll()
@@ -95,6 +107,15 @@ class GridSystem {
     
     public func getMeasureFromPoints(measurePoints:MeasurePoints) -> Measure? {
         return measureMap[measurePoints]
+    }
+
+    public func getCurrentMeasure() -> Measure? {
+        if let measurePoints = self.selectedMeasureCoord {
+            if let measure = self.getMeasureFromPoints(measurePoints: measurePoints) {
+                return measure
+            }
+        }
+        return nil
     }
     
     public func getWeightsFromPoints(measurePoints:MeasurePoints) -> [CGPoint]? {
@@ -171,6 +192,11 @@ class GridSystem {
         
         }
     }
+    
+    public func clearAllSnapPointsFromMeasure(measurePoints:MeasurePoints) {
+        snapPointsMap[measurePoints] = [CGPoint]()
+    }
+    
     public func assignWeightsToPoints(measurePoints:MeasurePoints, weights:[CGPoint]) {
         weightsMap[measurePoints] = weights
     }
@@ -431,51 +457,21 @@ class GridSystem {
     }
 
     // THIS IS FOR RELOADING THE WHOLE COMPOSITION
-    public func getNotePlacement (notation: MusicNotation, clef: Clef, snapPoints: [CGPoint], weights: [CGPoint]) -> (CGPoint, CGPoint)? {
+    public func getYFromPitch (notation: MusicNotation, clef: Clef, snapPoints: [CGPoint]) -> CGFloat {
 
         var pitchToPointMap = [Pitch: CGPoint]()
         let pitches = getPitches(clef: clef)
 
-        var isUpwards = true
-
         if let note = notation as? Note {
-
-            isUpwards = note.isUpwards
 
             for i in 0..<snapPoints.count {
                 print(pitches[i])
                 pitchToPointMap[pitches[i]] = snapPoints[i]
             }
 
-            var endPoint: CGPoint
-
             if let corresPoint = pitchToPointMap[note.pitch] {
 
-                if let currIndex = weights.index(where: { $0.x == snapPoints[0].x }) {
-
-                    // TODO : get time signature
-                    let maximum64s = GridSystem.getMaximum64s(timeSig: TimeSignature())
-
-                    switch notation.type {
-                    case .sixtyFourth:
-                        return (CGPoint(x: corresPoint.x, y: corresPoint.y), weights[currIndex + 1])
-                    case .thirtySecond:
-                        endPoint = weights[currIndex + (maximum64s / 32 - 1)]
-                    case .sixteenth:
-                        endPoint = weights[currIndex + (maximum64s / 16 - 1)]
-                    case .eighth:
-                        endPoint = weights[currIndex + (maximum64s / 8 - 1)]
-                    case .quarter:
-                        endPoint = weights[currIndex + (maximum64s / 4 - 1)]
-                    case .half:
-                        endPoint = weights[currIndex + (maximum64s / 2 - 1)]
-                    case .whole:
-                        endPoint = weights[currIndex + (maximum64s - 1)]
-                    }
-
-                    return (CGPoint(x: (endPoint.x + weights[currIndex].x) / 2, y: corresPoint.y), endPoint)
-
-                }
+                return corresPoint.y
 
             } else if notation is Rest {
                 // TODO: PLACING OF REST
@@ -483,7 +479,7 @@ class GridSystem {
 
         }
 
-        return nil
+        return -1
 
     }
 
@@ -504,6 +500,12 @@ class GridSystem {
     struct MeasurePoints : Hashable {
         var upperLeftPoint:CGPoint
         var lowerRightPoint:CGPoint
+
+        var width:CGFloat {
+            get {
+                return lowerRightPoint.x - upperLeftPoint.x
+            }
+        }
         
         public var hashValue: Int {
             return upperLeftPoint.x.hashValue ^ upperLeftPoint.y.hashValue ^ lowerRightPoint.x.hashValue ^ lowerRightPoint.y.hashValue
@@ -511,10 +513,11 @@ class GridSystem {
         
         public static func == (lhs: MeasurePoints, rhs: MeasurePoints) -> Bool {
             return lhs.upperLeftPoint.x == rhs.upperLeftPoint.x &&
-                lhs.upperLeftPoint.y == rhs.upperLeftPoint.y &&
-                lhs.lowerRightPoint.x == rhs.lowerRightPoint.x &&
-                lhs.lowerRightPoint.y == rhs.lowerRightPoint.y
+                    lhs.upperLeftPoint.y == rhs.upperLeftPoint.y &&
+                    lhs.lowerRightPoint.x == rhs.lowerRightPoint.x &&
+                    lhs.lowerRightPoint.y == rhs.lowerRightPoint.y
         }
+
     }
     
 }

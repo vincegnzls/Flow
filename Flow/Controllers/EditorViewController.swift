@@ -15,6 +15,8 @@ class EditorViewController: UIViewController {
     @IBOutlet weak var menuBar: MenuBar!
 
     private let composition: Composition?
+    
+    private var soundManager = SoundManager()
 
     required init?(coder aDecoder: NSCoder) {
         
@@ -30,8 +32,10 @@ class EditorViewController: UIViewController {
             let measure = Measure()
 
             // dummy data
-            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .quarter, clef: measure.clef))
-            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .eighth, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .eighth, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .eighth, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .eighth, clef: measure.clef))
 
             measuresForG.append(measure)
         }
@@ -81,7 +85,6 @@ class EditorViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
 
@@ -146,10 +149,16 @@ class EditorViewController: UIViewController {
                 } else {
                     // instantiate add action
                     let addAction = AddAction(measure: measure, notation: note)
+                    
+                    if let note = note as? Note {
+                        soundManager.playSound(note)
+                    }	
+                    
+                    GridSystem.instance.recentNotation = note
 
                     addAction.execute()
                     
-                    EventBroadcaster.instance.postEvent(event: EventNames.ADD_NEW_NOTE, params: parameters)
+                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
             }
 
@@ -181,10 +190,21 @@ class EditorViewController: UIViewController {
     
     func onDeleteKeyPressed () {
         let selectedNotes = musicSheet.selectedNotations
-        //let noteMeasures = getNoteMeasures(notes: selectedNotes)
-                
-        let delAction = DeleteAction(notations: selectedNotes)
-        delAction.execute()
+        let noteMeasures = getNoteMeasures(notes: selectedNotes)
+        
+        if !musicSheet.selectedNotations.isEmpty {
+            GridSystem.instance.recentNotation = nil
+            
+            let delAction = DeleteAction(notations: selectedNotes)
+            delAction.execute()
+        } else if let notation = musicSheet.hoveredNotation {
+            GridSystem.instance.recentNotation = nil
+            
+            let delAction = DeleteAction(notations: [notation])
+            delAction.execute()
+        }
+        
+        musicSheet.selectedNotations.removeAll()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }

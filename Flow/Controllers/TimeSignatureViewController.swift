@@ -21,6 +21,11 @@ class TimeSignatureViewController: UIViewController {
         super.viewDidLoad()
         
         setupKeySignaturePicker()
+
+        if let measure = GridSystem.instance.getCurrentMeasure() {
+            nBeatsLabel.text = String(measure.timeSignature.beats)
+            beatDurationLabel.text = String(measure.timeSignature.beatType)
+        }
     }
     
     func setupKeySignaturePicker() {
@@ -43,8 +48,59 @@ class TimeSignatureViewController: UIViewController {
     
     // When a user taps save
     @IBAction func onSavePress(_ sender: Any) {
-        dismiss(animated: true) {
-            //asd
+        let newMaxBeatValue: Float = Float(self.nBeatsLabel!.text!)! / Float(self.beatDurationLabel!.text!)!
+
+        if let measure = GridSystem.instance.getCurrentMeasure() {
+            if newMaxBeatValue >= measure.getTotalBeats() {
+                dismiss(animated: true) {
+                    measure.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
+                    measure.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
+
+                    let params:Parameters = Parameters()
+                    params.put(key: KeyNames.NEW_MEASURE, value: measure)
+
+                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                }
+            } else {
+                let alert = UIAlertController(title: "Invalid Time Signature", message: "Changing the time signature would cut off some of your notes. Do you want to proceed?", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Proceed", style: .destructive) { _ in
+                    if let measure = GridSystem.instance.getCurrentMeasure() {
+
+                        var measures = [Measure]()
+                        var notes = [MusicNotation]()
+
+                        //var curMeasureTotalBeats = measure.getTotalBeats()
+
+                        while newMaxBeatValue < measure.getTotalBeats() {
+                            /*measures.append(measure)
+                            notes.append(measure.notationObjects[measure.notationObjects.count - 1])
+                            curMeasureTotalBeats = curMeasureTotalBeats - measure.notationObjects[measure.notationObjects.count - 1].type.getBeatValue()*/
+                            measure.deleteInMeasure(measure.notationObjects[measure.notationObjects.count - 1])
+                        }
+                        
+                        self.dismiss(animated: true) {
+                            measure.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
+                            measure.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
+
+                            let params:Parameters = Parameters()
+                            params.put(key: KeyNames.NEW_MEASURE, value: measure)
+
+                            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                        }
+
+                        /*let delAction = DeleteAction(measures: measures, notes: notes)
+                        delAction.execute()*/
+                    }
+                })
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default) { _ in
+
+                })
+
+                self.present(alert, animated: true, completion: nil)
+            }
+            
         }
     }
     
