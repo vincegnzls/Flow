@@ -114,7 +114,7 @@ class MusicSheet: UIView {
         
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
-        panGesture.minimumNumberOfTouches = 2
+        panGesture.maximumNumberOfTouches = 1
         self.addGestureRecognizer(panGesture)
     }
 
