@@ -115,6 +115,9 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.PASTE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.PASTE_KEY_PRESSED, observer: Observer(id: "MusicSheet.paste", function: self.paste))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
+        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_TIME_SIG, observer: Observer(id: "MusicSheet.editTimeSig", function: self.editTimeSig))
         
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -250,12 +253,12 @@ class MusicSheet: UIView {
 
         // Handles adding of clef based on parameter
         // TODO: SHIFT THIS TO BE DRAWN PER MEASURE
-        /*if withTimeSig {
+        if withTimeSig {
             print("ASDF: \(measures[0].timeSignature.beats)")
             drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType, timeSignature: measures[0].timeSignature)
         } else {
             drawClefLabel(startX: startX, startY: startY, clefType: clefType)
-        }*/
+        }
         
         // Adjust initial space for clef and time signature
         var startMeasure:CGFloat = 0
@@ -289,13 +292,19 @@ class MusicSheet: UIView {
                 GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measureLocation)
             }
 
-            if i == 0 {
+            /*if i == 0 {
                 drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType, timeSignature: measures[i].timeSignature)
-            }
+            }*/
 
-            if i > 0 {
-                if !self.sameTimeSignature(t1: measures[i-1].timeSignature, t2: measures[i].timeSignature) {
-                    drawClefTimeLabel(startX: modStartX, startY: startY, clefType: nil, timeSignature: measures[i].timeSignature)
+            if let staffList = composition?.staffList {
+                for staff in staffList {
+                    if let measureIndex = staff.measures.index(of: measures[i]) {
+                        if measureIndex > 0 {
+                            if !self.sameTimeSignature(t1: (staff.measures[measureIndex - 1].timeSignature), t2: staff.measures[measureIndex].timeSignature) {
+                                drawClefTimeLabel(startX: modStartX, startY: startY, clefType: nil, timeSignature: measures[i].timeSignature)
+                            }
+                        }
+                    }
                 }
             }
             
@@ -1650,6 +1659,44 @@ class MusicSheet: UIView {
     public func paste() {
         print("Paste")
         //Clipboard.instance.paste(measures: <#T##[Measure]#>, noteIndex: &<#T##Int#>)
+    }
+
+    public func editTimeSig(params: Parameters) {
+        let newMeasure:Measure = params.get(key: KeyNames.NEW_MEASURE) as! Measure
+        let oldMeasure:Measure = params.get(key: KeyNames.OLD_MEASURE) as! Measure
+
+        print("OLD MEASURE: \(oldMeasure.timeSignature.beats) \(oldMeasure.timeSignature.beatType)")
+        print("NEW MEASURE: \(newMeasure.timeSignature.beats) \( newMeasure.timeSignature.beatType)")
+
+        var oldTimeSig = TimeSignature()
+        oldTimeSig.beats = oldMeasure.timeSignature.beats
+        oldTimeSig.beatType = oldMeasure.timeSignature.beatType
+
+        if let index = searchMeasureIndex(measure: oldMeasure) {
+            print("INDEEEEX: \(index)")
+            if let staffs = composition?.staffList {
+                for staff in staffs {
+                    for i in index...staff.measures.count-1 {
+                        if sameTimeSignature(t1: staff.measures[i].timeSignature, t2: oldTimeSig) {
+                            print("CUR INDEX: \(staff.measures[i].timeSignature.beats) \(staff.measures[i].timeSignature.beatType)")
+                            staff.measures[i].timeSignature = newMeasure.timeSignature
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public func searchMeasureIndex(measure: Measure) -> Int? {
+        if let staffs = composition?.staffList {
+            for staff in staffs {
+                if let index = staff.measures.index(of: measure) {
+                    return index
+                }
+            }
+        }
+
+        return nil
     }
 
 }

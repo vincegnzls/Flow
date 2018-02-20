@@ -53,11 +53,17 @@ class TimeSignatureViewController: UIViewController {
         if let measure = GridSystem.instance.getCurrentMeasure() {
             if newMaxBeatValue >= measure.getTotalBeats() {
                 dismiss(animated: true) {
-                    measure.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
-                    measure.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
-
                     let params:Parameters = Parameters()
-                    params.put(key: KeyNames.NEW_MEASURE, value: measure)
+                    params.put(key: KeyNames.OLD_MEASURE, value: measure)
+
+                    var newMeasure = Measure()
+
+                    newMeasure.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
+                    newMeasure.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
+
+                    params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
+
+                    EventBroadcaster.instance.postEvent(event: EventNames.EDIT_TIME_SIG, params: params)
 
                     EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
                     EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
