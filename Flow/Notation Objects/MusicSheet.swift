@@ -204,6 +204,11 @@ class MusicSheet: UIView {
                     }
                 }
             }
+            
+            for notation in self.selectedNotations {
+                self.highlightNotation(notation)
+            }
+            
         }
     }
     
@@ -675,12 +680,16 @@ class MusicSheet: UIView {
         if direction == ArrowKey.up {
             
             if !self.selectedNotations.isEmpty {
+                print("selected count: \(selectedNotations.count)")
                 for notation in self.selectedNotations {
                     if let note = notation as? Note {
+                        print("here: \(note.pitch.step.toString())")
                         note.transposeUp()
-                        // Call refresh view
+                        print("here2: \(note.pitch.step.toString())")
                     }
                 }
+                print("calling draw")
+                self.updateMeasureDraw()
                 return;
             }
             
@@ -696,9 +705,9 @@ class MusicSheet: UIView {
                 for notation in self.selectedNotations {
                     if let note = notation as? Note {
                         note.transposeDown()
-                        // Call refresh view
                     }
                 }
+                self.updateMeasureDraw()
                 return;
             }
             
@@ -959,20 +968,20 @@ class MusicSheet: UIView {
             self.highlightRect.highlightingStartPoint = locationOfBeganTap
             self.highlightRect.highlightingEndPoint = locationOfBeganTap
             
-            if let measure = self.getMeasureFromPoint(point: locationOfBeganTap) {
+            /*if let measure = self.getMeasureFromPoint(point: locationOfBeganTap) {
                 print("found measure: \(measure)")
                 self.selectedClef = measure.clef
-            }
+            }*/
             
         } else if sender.state == UIGestureRecognizerState.ended {
             self.checkPointsInRect()
             self.highlightRect.highlightingEndPoint = nil
         } else {
             let location = sender.location(in: self)
-            let previousLocation = self.highlightRect.highlightingEndPoint
+//            let previousLocation = self.highlightRect.highlightingEndPoint
             self.highlightRect.highlightingEndPoint = location
             
-            if self.selectedClef == nil {
+            /*if self.selectedClef == nil {
                 if let measure = self.getMeasureFromPoint(point: location) {
                     print("found measure: \(measure)")
                     self.selectedClef = measure.clef
@@ -986,8 +995,7 @@ class MusicSheet: UIView {
                     self.highlightRect.highlightingEndPoint!.y = previousLocation!.y
                     //self.selectedClef = measure.clef
                 }
-            }
-            
+            }*/
         }
     }
     
@@ -1006,20 +1014,24 @@ class MusicSheet: UIView {
                     if rect.contains(coor) {
                         notation.isSelected = true
                         self.selectedNotations.append(notation)
+                        self.highlightNotation(notation)
                         
-                        let noteImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
-                        
-                        noteImageView.image = notation.image
-                        noteImageView.image = noteImageView.image!.withRenderingMode(.alwaysTemplate)
-                        noteImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-                        noteImageView.tag = HIGHLIGHTED_NOTES_TAG
-                        
-                        self.addSubview(noteImageView)
                         
                     }
                 }
             }
         }
+    }
+    
+    func highlightNotation(_ notation: MusicNotation) {
+        let noteImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
+        
+        noteImageView.image = notation.image
+        noteImageView.image = noteImageView.image!.withRenderingMode(.alwaysTemplate)
+        noteImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+        noteImageView.tag = HIGHLIGHTED_NOTES_TAG
+        
+        self.addSubview(noteImageView)
     }
     
     public func selectedNotes() {

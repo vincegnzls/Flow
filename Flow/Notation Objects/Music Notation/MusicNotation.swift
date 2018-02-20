@@ -18,7 +18,11 @@ class MusicNotation {
     }
     var image: UIImage?
     var imageView: UIImageView?
-    var isSelected: Bool
+    var isSelected: Bool {
+        didSet {
+            self.setImage()
+        }
+    }
     var measure: Measure? {
         didSet {
             self.setImage()

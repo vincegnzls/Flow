@@ -133,6 +133,8 @@ class EditorViewController: UIViewController {
                 } else {
                     // TODO: determine what is the correct pitch from the cursor's location
                     if let coord = GridSystem.instance.selectedCoord {
+                        //let pitch = GridSystem.instance.getPitchFromY(y: coord.y)
+//                        note = Note(pitch: Pitch(step: pitch.step, octave: pitch.octave), type: restNoteType)
                         note = Note(pitch: GridSystem.instance.getPitchFromY(y: coord.y), type: restNoteType)
                     } else {
                         note = Note(pitch: Pitch(step: Step.G, octave: 5), type: restNoteType)
@@ -184,6 +186,7 @@ class EditorViewController: UIViewController {
         
         let editAction = EditAction(old: oldNotes, new: [newNote])
         editAction.execute()
+        self.musicSheet.selectedNotations.removeAll()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }
