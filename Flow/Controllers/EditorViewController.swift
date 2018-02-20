@@ -148,7 +148,7 @@ class EditorViewController: UIViewController {
                     
                 } else {
                     // instantiate add action
-                    let addAction = AddAction(measure: measure, note: note)
+                    let addAction = AddAction(measure: measure, notation: note)
                     
                     if let note = note as? Note {
                         soundManager.playSound(note)
@@ -195,12 +195,12 @@ class EditorViewController: UIViewController {
         if !musicSheet.selectedNotations.isEmpty {
             GridSystem.instance.recentNotation = nil
             
-            let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
+            let delAction = DeleteAction(notations: selectedNotes)
             delAction.execute()
         } else if let notation = musicSheet.hoveredNotation {
             GridSystem.instance.recentNotation = nil
             
-            let delAction = DeleteAction(measures: getNoteMeasures(notes: [notation]), notes: [notation])
+            let delAction = DeleteAction(notations: [notation])
             delAction.execute()
         }
         
