@@ -18,13 +18,24 @@ class MusicNotation {
     }
     var image: UIImage?
     var imageView: UIImageView?
-    var isSelected: Bool
+    var isSelected: Bool {
+        didSet {
+            self.setImage()
+        }
+    }
+    var measure: Measure? {
+        didSet {
+            self.setImage()
+        }
+    }
     
     init(screenCoordinates: CGPoint? = nil,
-         type: RestNoteType) {
+         type: RestNoteType,
+         measure: Measure? = nil) {
         self.screenCoordinates = screenCoordinates
         self.type = type
         self.isSelected = false
+        self.measure = measure
         self.setImage()
 
     }
@@ -36,5 +47,10 @@ class MusicNotation {
 
     func hasTail() -> Bool {
         return self.type.getBeatValue() <= RestNoteType.eighth.getBeatValue()
+    }
+
+
+    func duplicate() -> MusicNotation {
+        return MusicNotation(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure)
     }
 }

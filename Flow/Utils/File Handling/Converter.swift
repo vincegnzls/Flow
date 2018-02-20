@@ -176,18 +176,18 @@ class Converter {
                         if let step = notationElement["pitch"]["step"].value {
                             let pitch = Pitch(step: Step.convert(step),
                                               octave: Int(notationElement["pitch"]["octave"].string)!)
-                            let note = Note(pitch: pitch, type: type, clef: measure.clef)
+                            let note = Note(pitch: pitch, type: type)
                             
                             //                            print(note.pitch.step.toString())
                             //                            print("\(note.pitch.octave)")
                             //measure.notationObjects.append(note)
                             
-                            measure.addNoteInMeasure(note)
+                            measure.addToMeasure(note)
                         } else {
                             let rest = Rest(type: type)
                             //measure.notationObjects.append(rest)
                             
-                            measure.addNoteInMeasure(rest)
+                            measure.addToMeasure(rest)
                         }
                     }
                 }

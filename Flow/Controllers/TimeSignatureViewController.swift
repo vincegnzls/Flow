@@ -76,7 +76,7 @@ class TimeSignatureViewController: UIViewController {
                             /*measures.append(measure)
                             notes.append(measure.notationObjects[measure.notationObjects.count - 1])
                             curMeasureTotalBeats = curMeasureTotalBeats - measure.notationObjects[measure.notationObjects.count - 1].type.getBeatValue()*/
-                            measure.deleteNoteInMeasure(measure.notationObjects[measure.notationObjects.count - 1])
+                            measure.deleteInMeasure(measure.notationObjects[measure.notationObjects.count - 1])
                         }
                         
                         self.dismiss(animated: true) {

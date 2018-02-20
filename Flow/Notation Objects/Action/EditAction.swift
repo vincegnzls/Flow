@@ -11,23 +11,66 @@ import Foundation
 class EditAction: Action {
     
     var measures: [Measure]
-    var oldNotes:[MusicNotation]
-    var newNote:MusicNotation
+    var oldNotations: [MusicNotation]
+    var newNotations: [MusicNotation]
     
-    init(measures: [Measure], oldNotes: [MusicNotation], newNote: MusicNotation) {
-        self.measures = measures
-        self.oldNotes = oldNotes
-        self.newNote = newNote
+    init(old oldNotations: [MusicNotation], new newNotations: [MusicNotation]) {
+        self.measures = []
+        self.oldNotations = oldNotations
+        self.newNotations = newNotations
     }
     
     func execute() {
-        
-        for (note, measure) in zip(oldNotes, measures) {
-            measure.deleteNoteInMeasure(note)
+
+        /*for (notation, measure) in zip(oldNotations, measures) {
+            measure.deleteInMeasure(notation)
+        }*/
+
+        // Delete notes in measures
+        for notation in self.oldNotations {
+            if let measure = notation.measure {
+
+                if !self.measures.contains(measure) {
+                    self.measures.append(measure)
+                }
+                measure.deleteInMeasure(notation)
+            }
         }
-        
-        measures[0].addNoteInMeasure(newNote)
-        
+
+        var measureIndex = 0
+
+        for notation in self.newNotations {
+            if !measures[measureIndex].isAddNoteValid(musicNotation: notation.type) {
+                measureIndex += 1
+            }
+
+            if measureIndex >= measures.count {
+                break
+            }
+
+
+            let measure = measures[measureIndex]
+            measure.addToMeasure(notation)
+
+        }
+
+        //self.measures[0].addToMeasure(newNotations[0])
+
+        /*for notation in newNotations {
+            if !measures[measureIndex].isAddNoteValid(musicNotation: item.type) {
+                measureIndex += 1
+                noteIndex = 0
+            }
+
+            if measureIndex >= measures.count {
+                break
+            }
+
+
+            let measure = measures[measureIndex]
+            measure
+
+        }*/
     }
     
     func undo() {

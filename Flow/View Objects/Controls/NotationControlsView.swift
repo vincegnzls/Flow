@@ -9,7 +9,11 @@
 import UIKit
 
 @IBDesignable
-class NotationControlsView: UIView {
+class NotationControlsView: DraggableView {
+
+    override var keyTag: String {
+        return "NotationControlsView"
+    }
     
     @IBOutlet var wholeNote: UIButton!
     @IBOutlet var wholeRest: UIButton!
@@ -54,72 +58,72 @@ class NotationControlsView: UIView {
                                               observer: Observer(id: "NotationControls.measureSwitched", function: self.measureSwitched))
     }
     
-    @IBAction func wholeNote(_ sender: ButtonEffect) {
+    @IBAction func wholeNote(_ sender: UIButton) {
         print("WHOLE NOTE")
         noteKeyTapped(noteType: RestNoteType.whole, isRest: false)
     }
     
-    @IBAction func halfNote(_ sender: ButtonEffect) {
+    @IBAction func halfNote(_ sender: UIButton) {
         print("HALF NOTE")
         noteKeyTapped(noteType: RestNoteType.half, isRest: false)
     }
     
-    @IBAction func quarterNote(_ sender: ButtonEffect) {
+    @IBAction func quarterNote(_ sender: UIButton) {
         print("QUARTER NOTE")
         noteKeyTapped(noteType: RestNoteType.quarter, isRest: false)
     }
     
-    @IBAction func eighthNote(_ sender: ButtonEffect) {
+    @IBAction func eighthNote(_ sender: UIButton) {
         print("EIGHTH NOTE")
         noteKeyTapped(noteType: RestNoteType.eighth, isRest: false)
     }
     
-    @IBAction func sixteenthNote(_ sender: ButtonEffect) {
+    @IBAction func sixteenthNote(_ sender: UIButton) {
         print("SIXTEENTH NOTE")
         noteKeyTapped(noteType: RestNoteType.sixteenth, isRest: false)
     }
     
-    @IBAction func thirtySecondNote(_ sender: ButtonEffect) {
+    @IBAction func thirtySecondNote(_ sender: UIButton) {
         print("THIRTY SECOND NOTE")
         noteKeyTapped(noteType: RestNoteType.thirtySecond, isRest: false)
     }
     
-    @IBAction func sixtyFourthNote(_ sender: ButtonEffect) {
+    @IBAction func sixtyFourthNote(_ sender: UIButton) {
         print("SIXTY FOURTH NOTE")
         noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
     }
     
-    @IBAction func wholeRest(_ sender: ButtonEffect) {
+    @IBAction func wholeRest(_ sender: UIButton) {
         print("WHOLE NOTE")
         noteKeyTapped(noteType: RestNoteType.whole, isRest: true)
     }
     
-    @IBAction func halfRest(_ sender: ButtonEffect) {
+    @IBAction func halfRest(_ sender: UIButton) {
         print("HALF NOTE")
         noteKeyTapped(noteType: RestNoteType.half, isRest: true)
     }
     
-    @IBAction func quarterRest(_ sender: ButtonEffect) {
+    @IBAction func quarterRest(_ sender: UIButton) {
         print("QUARTER NOTE")
         noteKeyTapped(noteType: RestNoteType.quarter, isRest: true)
     }
     
-    @IBAction func eighthRest(_ sender: ButtonEffect) {
+    @IBAction func eighthRest(_ sender: UIButton) {
         print("EIGHTH NOTE")
         noteKeyTapped(noteType: RestNoteType.eighth, isRest: true)
     }
     
-    @IBAction func sixteenthRest(_ sender: ButtonEffect) {
+    @IBAction func sixteenthRest(_ sender: UIButton) {
         print("SIXTEENTH NOTE")
         noteKeyTapped(noteType: RestNoteType.sixteenth, isRest: true)
     }
     
-    @IBAction func thirtySecondRest(_ sender: ButtonEffect) {
+    @IBAction func thirtySecondRest(_ sender: UIButton) {
         print("THIRTY SECOND NOTE")
         noteKeyTapped(noteType: RestNoteType.thirtySecond, isRest: true)
     }
     
-    @IBAction func sixtyFourthRest(_ sender: ButtonEffect) {
+    @IBAction func sixtyFourthRest(_ sender: UIButton) {
         print("SIXTY FOURTH NOTE")
         noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: true)
     }
@@ -183,5 +187,5 @@ class NotationControlsView: UIView {
             }
         }
     }
-    
+
 }

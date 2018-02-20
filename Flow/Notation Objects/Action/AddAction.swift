@@ -10,16 +10,26 @@ import Foundation
 
 class AddAction: Action {
 
-    var measure:Measure
-    var note:MusicNotation
+    var measures: [Measure]
+    var notations: [MusicNotation]
+    //var note:MusicNotation
     
-    init(measure: Measure, note: MusicNotation) {
-        self.measure = measure
-        self.note = note
+    init(measure: Measure, notation: MusicNotation) {
+        self.measures = []
+        self.notations = []
+        self.measures.append(measure)
+        self.notations.append(notation)
+    }
+
+    init(measures: [Measure], notations: [MusicNotation]) {
+        self.measures = measures
+        self.notations = notations
     }
 
     func execute() {
-        measure.addNoteInMeasure(note)
+        for (notation, measure) in zip(notations, measures) {
+            measure.addToMeasure(notation)
+        }
     }
     
     func undo() {

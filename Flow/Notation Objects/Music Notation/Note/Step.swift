@@ -5,7 +5,7 @@
 //  Created by Kevin Chan on 20/12/2017.
 //  Copyright © 2017 MusicG. All rights reserved.
 //
-enum Step {
+enum Step: Int {
     case
     C,
     D,

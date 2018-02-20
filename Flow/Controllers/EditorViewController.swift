@@ -91,7 +91,7 @@ class EditorViewController: UIViewController {
         // TODO: inline this with self instance of composition
 
         // FOR TESTING PURPOSES ONLY
-        let measure = Measure(keySignature: KeySignature.c,
+        /*let measure = Measure(keySignature: KeySignature.c,
                               timeSignature: TimeSignature(),
                               clef: Clef.G)
         measure.notationObjects.append(Note(pitch: Pitch(step: Step.A, octave: 2),
@@ -100,7 +100,7 @@ class EditorViewController: UIViewController {
         measure.notationObjects.append(Rest(type: .half))
         
         var measures = [Measure]()
-        measures.append(measure)
+        measures.append(measure)*/
 
         //let comp = Composition(measures: measures)
         //let test = FileHandler.instance.convertCompositionToMusicXML(comp)
@@ -133,9 +133,11 @@ class EditorViewController: UIViewController {
                 } else {
                     // TODO: determine what is the correct pitch from the cursor's location
                     if let coord = GridSystem.instance.selectedCoord {
-                        note = Note(pitch: GridSystem.instance.getPitchFromY(y: coord.y), type: restNoteType, clef: measure.clef)
+                        //let pitch = GridSystem.instance.getPitchFromY(y: coord.y)
+//                        note = Note(pitch: Pitch(step: pitch.step, octave: pitch.octave), type: restNoteType)
+                        note = Note(pitch: GridSystem.instance.getPitchFromY(y: coord.y), type: restNoteType)
                     } else {
-                        note = Note(pitch: Pitch(step: Step.G, octave: 5), type: restNoteType, clef: measure.clef)
+                        note = Note(pitch: Pitch(step: Step.G, octave: 5), type: restNoteType)
                     }
                 }
 
@@ -148,7 +150,7 @@ class EditorViewController: UIViewController {
                     
                 } else {
                     // instantiate add action
-                    let addAction = AddAction(measure: measure, note: note)
+                    let addAction = AddAction(measure: measure, notation: note)
                     
                     if let note = note as? Note {
                         soundManager.playSound(note)
@@ -182,8 +184,9 @@ class EditorViewController: UIViewController {
         let oldNotes = musicSheet.selectedNotations
         let noteMeasures = getNoteMeasures(notes: oldNotes)
         
-        let editAction = EditAction(measures: noteMeasures, oldNotes: oldNotes, newNote: newNote)
+        let editAction = EditAction(old: oldNotes, new: [newNote])
         editAction.execute()
+        self.musicSheet.selectedNotations.removeAll()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }
@@ -195,12 +198,12 @@ class EditorViewController: UIViewController {
         if !musicSheet.selectedNotations.isEmpty {
             GridSystem.instance.recentNotation = nil
             
-            let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
+            let delAction = DeleteAction(notations: selectedNotes)
             delAction.execute()
         } else if let notation = musicSheet.hoveredNotation {
             GridSystem.instance.recentNotation = nil
             
-            let delAction = DeleteAction(measures: getNoteMeasures(notes: [notation]), notes: [notation])
+            let delAction = DeleteAction(notations: [notation])
             delAction.execute()
         }
         
