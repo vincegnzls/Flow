@@ -514,6 +514,16 @@ class MusicSheet: UIView {
         
         if direction == ArrowKey.up {
             
+            if !self.selectedNotations.isEmpty {
+                for notation in self.selectedNotations {
+                    if let note = notation as? Note {
+                        note.transposeUp()
+                        // Call refresh view
+                    }
+                }
+                return;
+            }
+            
             if let point = GridSystem.instance.getUpYSnapPoint(currentPoint: curYCursorLocation) {
                 nextPoint = point
             } else {
@@ -521,6 +531,16 @@ class MusicSheet: UIView {
             }
             
         } else if direction == ArrowKey.down {
+            
+            if !self.selectedNotations.isEmpty {
+                for notation in self.selectedNotations {
+                    if let note = notation as? Note {
+                        note.transposeDown()
+                        // Call refresh view
+                    }
+                }
+                return;
+            }
             
             if let point = GridSystem.instance.getDownYSnapPoint(currentPoint: curYCursorLocation) {
                 nextPoint = point

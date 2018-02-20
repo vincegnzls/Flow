@@ -6,7 +6,7 @@
 //  Copyright © 2017 MusicG. All rights reserved.
 //
 
-struct Pitch : Hashable {
+class Pitch : Hashable {
     var step: Step
     var octave: Int
     
@@ -24,4 +24,41 @@ struct Pitch : Hashable {
                 lhs.step.toString() == rhs.step.toString()
     }
 
+    func transposeUp() {
+        if self.step == .C {
+            self.step = .D
+        } else if self.step == .D {
+            self.step = .E
+        } else if self.step == .E {
+            self.step = .F
+        } else if self.step == .F {
+            self.step = .G
+        } else if self.step == .G {
+            self.step = .A
+        } else if self.step == .A {
+            self.step = .B
+        } else if self.step == .B {
+            self.step = .C
+            self.octave = (self.octave + 1) % 8
+        }
+    }
+    
+    func transposeDown() {
+        if self.step == .C {
+            self.step = .B
+            self.octave = (self.octave - 1) % 8
+        } else if self.step == .D {
+            self.step = .C
+        } else if self.step == .E {
+            self.step = .D
+        } else if self.step == .F {
+            self.step = .E
+        } else if self.step == .G {
+            self.step = .F
+        } else if self.step == .A {
+            self.step = .G
+        } else if self.step == .B {
+            self.step = .A
+        }
+    }
 }
