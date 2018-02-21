@@ -237,11 +237,11 @@ class MusicSheet: UIView {
         let startPoint = startY + staffSpace * staffIndex
         
         let measureHeight = drawStaff(startX: lefRightPadding, startY: startPoint,
-                clefType: upperStaffMeasures[0].clef, measures:upperStaffMeasures, withTimeSig: withTimeSig)
+                clefType: upperStaffMeasures[0].clef, measures:upperStaffMeasures)
 
         staffIndex += 1
         let _ = drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex,
-                clefType: lowerStaffMeasures[0].clef, measures:lowerStaffMeasures, withTimeSig: withTimeSig)
+                clefType: lowerStaffMeasures[0].clef, measures:lowerStaffMeasures)
 
         if let height = measureHeight {
             drawStaffConnection(startX: lefRightPadding, startY: startPoint - height, height: height)
@@ -249,65 +249,60 @@ class MusicSheet: UIView {
     }
     
     // Draws a staff
-    private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, measures:[Measure], withTimeSig:Bool) -> CGFloat? {
+    private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, measures:[Measure]) -> CGFloat? {
 
         // Handles adding of clef based on parameter
-        // TODO: SHIFT THIS TO BE DRAWN PER MEASURE
-        if withTimeSig {
-            print("ASDF: \(measures[0].timeSignature.beats)")
-            drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType, timeSignature: measures[0].timeSignature)
-        } else {
-            drawClefLabel(startX: startX, startY: startY, clefType: clefType)
-        }
+        drawClefLabel(startX: startX, startY: startY, clefType: clefType)
         
         // Adjust initial space for clef and time signature
-        var startMeasure:CGFloat = 0
-        
-        if withTimeSig {
-            startMeasure = startX + 145
-        } else {
-            startMeasure = startX + 85
-        }
+        let startMeasure:CGFloat = startX + 85
 
         // Track distance for each measure to be printed
-        let distance:CGFloat = (endX-startMeasure)/CGFloat(measures.count)
+        var distance:CGFloat = (endX-startMeasure)/CGFloat(measures.count)
 
         // Start drawing the measures
         var modStartX:CGFloat = startMeasure
         var measureLocation:GridSystem.MeasurePoints?
 
         for i in 0...measures.count-1 {
-
-            if i == 0 {
-                measureLocation = drawMeasure(
-                        measure: measures[i], startX: modStartX, endX:modStartX+distance, startY: startY, withLeftLine: false)
-
-            } else {
-                measureLocation = drawMeasure(
-                        measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
+            
+            // START OF DRAWING TIME SIGNATURE
+            var adjustTimeSig:CGFloat = 0
+            var timeLabelWidth:CGFloat?
+            
+            if i > 0 {
+                adjustTimeSig += 20
             }
-
-            if let measureLocation = measureLocation {
-                GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation, measure: measures[i])
-                GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measureLocation)
-            }
-
-            /*if i == 0 {
-                drawClefTimeLabel(startX: startX, startY: startY, clefType: clefType, timeSignature: measures[i].timeSignature)
-            }*/
-
+            
             if let staffList = composition?.staffList {
                 for staff in staffList {
                     if let measureIndex = staff.measures.index(of: measures[i]) {
                         if measureIndex > 0 {
                             if !self.sameTimeSignature(t1: (staff.measures[measureIndex - 1].timeSignature), t2: staff.measures[measureIndex].timeSignature) {
-                                drawClefTimeLabel(startX: modStartX, startY: startY, clefType: nil, timeSignature: measures[i].timeSignature)
+                                timeLabelWidth = drawTimeLabel(startX: modStartX + adjustTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
                             }
+                        } else if measureIndex == 0 {
+                            timeLabelWidth = drawTimeLabel(startX: modStartX + adjustTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
                         }
                     }
                 }
             }
+            // END OF DRAWING TIME SIGNATURE
             
+            if let timeLabelWidth = timeLabelWidth {
+                modStartX = modStartX + timeLabelWidth + adjustTimeSig
+                //distance = distance - timeLabelWidth - adjustTimeSig
+            }
+            
+            // START OF DRAWING OF MEASURE
+            measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
+            
+            if let measureLocation = measureLocation {
+                GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation, measure: measures[i])
+                GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measureLocation)
+            }
+            // END OF DRAWING OF MEASURE
+
             modStartX = modStartX + distance
         }
         
@@ -327,26 +322,26 @@ class MusicSheet: UIView {
     }
     
     // Draws the clef and time before the staff
-    private func drawClefTimeLabel(startX:CGFloat, startY:CGFloat, clefType:Clef?, timeSignature:TimeSignature) {
-
-        var x = startX
-
-        if let type = clefType {
-            drawClefLabel(startX: startX, startY: startY, clefType: type)
-            x = x + 55
-        }
-        
-        let upperTimeSig = UILabel(frame: CGRect(x:x ,y: startY - 127, width:96, height:96))
-        let lowerTimeSig = UILabel(frame: CGRect(x:x ,y: startY - 86, width:96, height:96))
-
-        upperTimeSig.textAlignment = .center
-        lowerTimeSig.textAlignment = .center
+    private func drawTimeLabel(startX:CGFloat, startY:CGFloat, timeSignature:TimeSignature) -> CGFloat {
         
         let upperText = "\(timeSignature.beats)"
         let lowerText = "\(timeSignature.beatType)"
         
-        print (upperText)
-        print (lowerText)
+        // default width for 1 digit time signature
+        var maxWidth:CGFloat = 32
+        
+        // adjust width for time signature based on number of digits
+        if maxWidth * CGFloat(upperText.count) >= maxWidth * CGFloat(lowerText.count) {
+            maxWidth = maxWidth * CGFloat(upperText.count)
+        } else if maxWidth * CGFloat(lowerText.count) >= maxWidth * CGFloat(upperText.count) {
+            maxWidth = maxWidth * CGFloat(lowerText.count)
+        }
+        
+        let upperTimeSig = UILabel(frame: CGRect(x:startX ,y: startY - 127, width:maxWidth, height:96))
+        let lowerTimeSig = UILabel(frame: CGRect(x:startX ,y: startY - 86, width:maxWidth, height:96))
+
+        upperTimeSig.textAlignment = .center
+        lowerTimeSig.textAlignment = .center
         
         var upperNumString = ""
         var lowerNumString = ""
@@ -378,6 +373,8 @@ class MusicSheet: UIView {
         
         self.addSubview(upperTimeSig)
         self.addSubview(lowerTimeSig)
+        
+        return maxWidth
     }
     
     // this is for getting the Maestro font style of the time signature
@@ -454,7 +451,7 @@ class MusicSheet: UIView {
     }
     
     // Draws a measure
-    private func drawMeasure(measure: Measure, startX:CGFloat, endX:CGFloat, startY:CGFloat, withLeftLine:Bool = true) -> GridSystem.MeasurePoints {
+    private func drawMeasure(measure: Measure, startX:CGFloat, endX:CGFloat, startY:CGFloat) -> GridSystem.MeasurePoints {
         
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
@@ -494,13 +491,13 @@ class MusicSheet: UIView {
         }
         
         //draw line before measure
-        if withLeftLine {
+        /*if withLeftLine {
             bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
             bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
             bezierPath.stroke()
             
             measureXDivs.insert(startX)
-        }
+        }*/
         
         //draw line after measure
         bezierPath.move(to: CGPoint(x: endX, y: startY - curSpace))
@@ -1666,27 +1663,18 @@ class MusicSheet: UIView {
         let oldMeasure:Measure = params.get(key: KeyNames.OLD_MEASURE) as! Measure
         let newMaxBeatValue: Float = newMeasure.timeSignature.getMaxBeatValue()
 
-        //print("OLD MEASURE: \(oldMeasure.timeSignature.beats) \(oldMeasure.timeSignature.beatType)")
-        //print("NEW MEASURE: \(newMeasure.timeSignature.beats) \( newMeasure.timeSignature.beatType)")
-
         var oldTimeSig = TimeSignature()
         oldTimeSig.beats = oldMeasure.timeSignature.beats
         oldTimeSig.beatType = oldMeasure.timeSignature.beatType
 
         if let index = searchMeasureIndex(measure: oldMeasure) {
-            //print("INDEEEEX: \(index)")
             if let staffs = composition?.staffList {
                 for staff in staffs {
                     for i in index...staff.measures.count-1 {
                         if sameTimeSignature(t1: staff.measures[i].timeSignature, t2: oldTimeSig) {
-                            //print("CUR INDEX: \(staff.measures[i].timeSignature.beats) \(staff.measures[i].timeSignature.beatType)")
                             let curMeasure = staff.measures[i]
 
                             while newMaxBeatValue < curMeasure.getTotalBeats() {
-                                /*measures.append(measure)
-                                notes.append(measure.notationObjects[measure.notationObjects.count - 1])
-                                curMeasureTotalBeats = curMeasureTotalBeats - measure.notationObjects[measure.notationObjects.count - 1].type.getBeatValue()*/
-
                                 curMeasure.deleteInMeasure(curMeasure.notationObjects[curMeasure.notationObjects.count - 1])
                             }
 
