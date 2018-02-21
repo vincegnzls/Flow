@@ -13,11 +13,13 @@ class EditAction: Action {
     var measures: [Measure]
     var oldNotations: [MusicNotation]
     var newNotations: [MusicNotation]
+    var notationIndices: [Int]
     
     init(old oldNotations: [MusicNotation], new newNotations: [MusicNotation]) {
         self.measures = []
         self.oldNotations = oldNotations
         self.newNotations = newNotations
+        self.notationIndices = []
     }
     
     func execute() {
@@ -29,7 +31,10 @@ class EditAction: Action {
         // Delete notes in measures
         for notation in self.oldNotations {
             if let measure = notation.measure {
-
+                if let index = measure.notationObjects.index(of: notation) {
+                    self.notationIndices.append(index)
+                    print("found index at: \(index)")
+                }
                 if !self.measures.contains(measure) {
                     self.measures.append(measure)
                 }
@@ -38,8 +43,8 @@ class EditAction: Action {
         }
 
         var measureIndex = 0
-
-        for notation in self.newNotations {
+        
+        for (notation, index) in zip(self.newNotations, self.notationIndices) {
             if !measures[measureIndex].isAddNoteValid(musicNotation: notation.type) {
                 measureIndex += 1
             }
@@ -48,10 +53,8 @@ class EditAction: Action {
                 break
             }
 
-
             let measure = measures[measureIndex]
-            measure.addToMeasure(notation)
-
+            measure.addToMeasure(notation, at: index)
         }
 
         //self.measures[0].addToMeasure(newNotations[0])

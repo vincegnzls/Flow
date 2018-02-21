@@ -145,9 +145,14 @@ class EditorViewController: UIViewController {
 
                 if musicSheet.selectedNotations.count > 0 {
                     //edit selected notes
+                    print("at selectedNotations.count > 0")
+                    editNotations(old: self.musicSheet.selectedNotations, new: [note])
+//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                     
-                    editSelectedNotes(newNote: note)
-                    
+                } else if let hovered = self.musicSheet.hoveredNotation {
+                    //EditAction editAction = EditAction(old: [hovered], new: note)
+                    self.editNotations(old: [hovered], new: [note])
+//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 } else {
                     // instantiate add action
                     let addAction = AddAction(measure: measure, notation: note)
@@ -160,8 +165,9 @@ class EditorViewController: UIViewController {
 
                     addAction.execute()
                     
-                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
+                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
             }
 
         }
@@ -180,11 +186,11 @@ class EditorViewController: UIViewController {
         return measures
     }
     
-    func editSelectedNotes(newNote: MusicNotation) {
-        let oldNotes = musicSheet.selectedNotations
-        let noteMeasures = getNoteMeasures(notes: oldNotes)
+    func editNotations(old: [MusicNotation], new: [MusicNotation]) {
+        //let oldNotes = musicSheet.selectedNotations
+        //let noteMeasures = getNoteMeasures(notes: oldNotes)
         
-        let editAction = EditAction(old: oldNotes, new: [newNote])
+        let editAction = EditAction(old: old, new: new)
         editAction.execute()
         self.musicSheet.selectedNotations.removeAll()
         
@@ -193,7 +199,7 @@ class EditorViewController: UIViewController {
     
     func onDeleteKeyPressed () {
         let selectedNotes = musicSheet.selectedNotations
-        let noteMeasures = getNoteMeasures(notes: selectedNotes)
+        //let noteMeasures = getNoteMeasures(notes: selectedNotes)
         
         if !musicSheet.selectedNotations.isEmpty {
             GridSystem.instance.recentNotation = nil

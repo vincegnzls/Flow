@@ -25,7 +25,6 @@ struct Pitch : Hashable {
     }
 
     mutating func transposeUp() {
-        print("step \(self.step.toString())")
         if self.step == .C {
             self.step = .D
         } else if self.step == .D {
