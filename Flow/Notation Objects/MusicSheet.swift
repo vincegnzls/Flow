@@ -709,15 +709,11 @@ class MusicSheet: UIView {
         if direction == ArrowKey.up {
             
             if !self.selectedNotations.isEmpty {
-                print("selected count: \(selectedNotations.count)")
                 for notation in self.selectedNotations {
                     if let note = notation as? Note {
-                        print("here: \(note.pitch.step.toString())")
                         note.transposeUp()
-                        print("here2: \(note.pitch.step.toString())")
                     }
                 }
-                print("calling draw")
                 self.updateMeasureDraw()
                 return;
             }
@@ -806,10 +802,16 @@ class MusicSheet: UIView {
                 // if note hovered
                 if CGPoint(x: location.x - adjustToXCenter * initialNoteSpace, y: location.y) == notation.screenCoordinates {
                     hoveredNotation = notation
+                    if let measure = notation.measure {
+                        measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
+                    }
+                    return
                 } else {
                     hoveredNotation = nil
                 }
             }
+            
+            hoveredNotation = nil
         }
     }
     

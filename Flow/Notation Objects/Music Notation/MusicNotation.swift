@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MusicNotation {
+class MusicNotation: Equatable {
     // MARK: Properties
     var screenCoordinates: CGPoint?
     var type: RestNoteType {
@@ -52,5 +52,9 @@ class MusicNotation {
 
     func duplicate() -> MusicNotation {
         return MusicNotation(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure)
+    }
+    
+    static func == (lhs: MusicNotation, rhs: MusicNotation) -> Bool {
+        return lhs === rhs
     }
 }

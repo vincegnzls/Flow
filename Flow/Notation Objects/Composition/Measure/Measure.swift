@@ -15,7 +15,6 @@ class Measure: Equatable {
     var clef: Clef
     var notationObjects: [MusicNotation] {
         didSet{
-            print("SAAAAAAAAAAA")
             curBeatValue = getTotalBeats()
             updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls
         }
@@ -50,15 +49,12 @@ class Measure: Equatable {
         return lhs !== rhs
     }
 
-    public func addToMeasure(_ musicNotation: MusicNotation) {
-
-        print("ADD NOTE")
-
-        if(isAddNoteValid(musicNotation: musicNotation.type)) {
+    public func addToMeasure(_ notation: MusicNotation) {
+        if(isAddNoteValid(musicNotation: notation.type)) {
             print("ADD NOTE VALID")
 
-            musicNotation.measure = self
-            notationObjects.append(musicNotation)
+            notation.measure = self
+            notationObjects.append(notation)
 
         } else {
 
@@ -66,6 +62,28 @@ class Measure: Equatable {
 
         }
 
+    }
+    
+    public func addToMeasure(_ notation: MusicNotation, at index: Int) {
+        if(isAddNoteValid(musicNotation: notation.type)) {
+            print("ADD NOTE VALID")
+            
+            notation.measure = self
+            print("inserting note at index \(index)")
+            print("before inserting: ")
+            for notation in notationObjects {
+                print(notation.type.toString())
+            }
+            self.notationObjects.insert(notation, at: index)
+            print("after inserting:")
+            for notation in notationObjects {
+                print(notation.type.toString())
+            }
+        } else {
+            
+            print("INVALID ADD NOTE")
+            
+        }
     }
 
     public func deleteInMeasure(_ musicNotation: MusicNotation) {
@@ -91,8 +109,8 @@ class Measure: Equatable {
 
     public func getInvalidNotes() -> [RestNoteType] {
         
-        print("CUR BEAT VALUE: " + String(curBeatValue))
-        print("MAX BEAT VALUE: " + String(timeSignature.getMaxBeatValue()))
+//        print("CUR BEAT VALUE: " + String(curBeatValue))
+//        print("MAX BEAT VALUE: " + String(timeSignature.getMaxBeatValue()))
         
         var invalidNotes = [RestNoteType]()
 
@@ -104,6 +122,21 @@ class Measure: Equatable {
 
         return invalidNotes
 
+    }
+    
+    public func getInvalidNotes(without filteredNotation: MusicNotation) -> [RestNoteType] {
+        var invalidNotes = [RestNoteType]()
+        
+        let beatValue = self.curBeatValue - filteredNotation.type.getBeatValue()
+        
+        for note in RestNoteType.types {
+
+            if note.getBeatValue() + beatValue > timeSignature.getMaxBeatValue() {
+                invalidNotes.append(note)
+            }
+        }
+        
+        return invalidNotes
     }
 
     // send event to notation controls

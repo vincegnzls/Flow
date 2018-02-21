@@ -465,7 +465,7 @@ class GridSystem {
         if let note = notation as? Note {
 
             for i in 0..<snapPoints.count {
-                print(pitches[i])
+                //print(pitches[i])
                 pitchToPointMap[pitches[i]] = snapPoints[i]
             }
 
