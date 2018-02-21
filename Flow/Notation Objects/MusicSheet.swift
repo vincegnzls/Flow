@@ -1664,21 +1664,32 @@ class MusicSheet: UIView {
     public func editTimeSig(params: Parameters) {
         let newMeasure:Measure = params.get(key: KeyNames.NEW_MEASURE) as! Measure
         let oldMeasure:Measure = params.get(key: KeyNames.OLD_MEASURE) as! Measure
+        let newMaxBeatValue: Float = newMeasure.timeSignature.getMaxBeatValue()
 
-        print("OLD MEASURE: \(oldMeasure.timeSignature.beats) \(oldMeasure.timeSignature.beatType)")
-        print("NEW MEASURE: \(newMeasure.timeSignature.beats) \( newMeasure.timeSignature.beatType)")
+        //print("OLD MEASURE: \(oldMeasure.timeSignature.beats) \(oldMeasure.timeSignature.beatType)")
+        //print("NEW MEASURE: \(newMeasure.timeSignature.beats) \( newMeasure.timeSignature.beatType)")
 
         var oldTimeSig = TimeSignature()
         oldTimeSig.beats = oldMeasure.timeSignature.beats
         oldTimeSig.beatType = oldMeasure.timeSignature.beatType
 
         if let index = searchMeasureIndex(measure: oldMeasure) {
-            print("INDEEEEX: \(index)")
+            //print("INDEEEEX: \(index)")
             if let staffs = composition?.staffList {
                 for staff in staffs {
                     for i in index...staff.measures.count-1 {
                         if sameTimeSignature(t1: staff.measures[i].timeSignature, t2: oldTimeSig) {
-                            print("CUR INDEX: \(staff.measures[i].timeSignature.beats) \(staff.measures[i].timeSignature.beatType)")
+                            //print("CUR INDEX: \(staff.measures[i].timeSignature.beats) \(staff.measures[i].timeSignature.beatType)")
+                            let curMeasure = staff.measures[i]
+
+                            while newMaxBeatValue < curMeasure.getTotalBeats() {
+                                /*measures.append(measure)
+                                notes.append(measure.notationObjects[measure.notationObjects.count - 1])
+                                curMeasureTotalBeats = curMeasureTotalBeats - measure.notationObjects[measure.notationObjects.count - 1].type.getBeatValue()*/
+
+                                curMeasure.deleteInMeasure(curMeasure.notationObjects[curMeasure.notationObjects.count - 1])
+                            }
+
                             staff.measures[i].timeSignature = newMeasure.timeSignature
                         }
                     }
@@ -1698,5 +1709,4 @@ class MusicSheet: UIView {
 
         return nil
     }
-
 }
