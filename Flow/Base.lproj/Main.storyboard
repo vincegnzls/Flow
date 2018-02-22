@@ -701,18 +701,18 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="double-sharp"/>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycl-gp-KaZ">
-                                        <rect key="frame" x="1049" y="15" width="46" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-B0-Oho">
+                                        <rect key="frame" x="978" y="15" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Play"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-B0-Oho">
-                                        <rect key="frame" x="916" y="15" width="117" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Time Signature"/>
+                                        <state key="normal" title="Time Signature" image="time-key-icon"/>
                                         <connections>
                                             <segue destination="cUa-Ia-SFW" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="fAg-Li-uzT"/>
                                         </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycl-gp-KaZ">
+                                        <rect key="frame" x="1060" y="14" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Play" image="play-icon"/>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -910,10 +910,12 @@
         <image name="half-rest-icon" width="116" height="115"/>
         <image name="natural" width="18" height="77"/>
         <image name="paste-icon" width="50" height="50"/>
+        <image name="play-icon" width="100" height="100"/>
         <image name="quarter-note-icon" width="115" height="115"/>
         <image name="quarter-rest-icon" width="115" height="115"/>
         <image name="redo-icon" width="50" height="50"/>
         <image name="sharp" width="28" height="75"/>
+        <image name="time-key-icon" width="100" height="100"/>
         <image name="undo-icon" width="50" height="50"/>
         <image name="whole-note-icon" width="116" height="115"/>
         <image name="whole-rest-icon" width="115" height="115"/>
