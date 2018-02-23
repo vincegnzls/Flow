@@ -159,7 +159,7 @@ class EditorViewController: UIViewController {
                     
                     if let note = note as? Note {
                         soundManager.playSound(note)
-                    }	
+                    }
                     
                     GridSystem.instance.recentNotation = note
 

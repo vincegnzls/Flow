@@ -403,12 +403,6 @@ class GridSystem {
 
     public func getNotePlacement (notation: MusicNotation) -> (CGPoint, CGPoint)? {
 
-        var isUpwards = true
-
-        if let note = notation as? Note {
-            isUpwards = note.isUpwards
-        }
-
         if let measureCoord = selectedMeasureCoord {
 
             if let weights = weightsMap[measureCoord] {
@@ -470,14 +464,23 @@ class GridSystem {
             }
 
             if let corresPoint = pitchToPointMap[note.pitch] {
-
                 return corresPoint.y
-
-            } else if notation is Rest {
-                // TODO: PLACING OF REST
             }
 
-        }
+        }/* else if notation is Rest {
+            let firstSnapPoint = snapPoints[0]
+            let lastSnapPoint = snapPoints[snapPoints.count - 1]
+            
+            let middleY = (firstSnapPoint.y + lastSnapPoint.y) / 2
+            
+            var halfImageHeight:CGFloat = 0
+            
+            if let height = notation.image?.size.height {
+                halfImageHeight = height / CGFloat(2)
+            }
+            
+            return middleY
+        }*/
 
         return -1
 

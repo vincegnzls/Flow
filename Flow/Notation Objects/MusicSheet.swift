@@ -25,6 +25,10 @@ class MusicSheet: UIView {
     private let noteWidthAlter: CGFloat = -3
     private let noteHeightAlter: CGFloat = -3
     
+    private let restYOffset: CGFloat = -0.5
+    private let restWidthAlter: CGFloat = 1.7
+    private let restHeightAlter: CGFloat = 1.7
+    
     private let initialNoteSpace: CGFloat = 10
     private let adjustToXCenter: CGFloat = 1.3
 
@@ -161,6 +165,7 @@ class MusicSheet: UIView {
             // TODO: fix this if there are changing time signatures and key signatures between measure splices
             setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: true, measures: measureSplices[0])
 
+            // for redirecting the cursor after a full measure
             for i in 1..<measureSplices.count {
                 setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false, measures: measureSplices[i])
             }
@@ -177,14 +182,30 @@ class MusicSheet: UIView {
                 
             }
             
+            // for redirecting the cursor after redrawing the whole composition
             if let recentNotation = GridSystem.instance.recentNotation {
                 
-                if let noteScreenCoord = recentNotation.screenCoordinates {
+                var coordForCurrentPoint:CGPoint?
+                
+                if let coord = recentNotation.screenCoordinates {
+                
+                    if recentNotation is Note {
+                        coordForCurrentPoint = coord
+                    } else if recentNotation is Rest {
+                        coordForCurrentPoint = curYCursorLocation
+                    }
+                    
+                }
+                
+                if let noteScreenCoord = coordForCurrentPoint {
                     
                     if let snapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: noteScreenCoord) {
                         
                         // get right again to go to the next
+                        print("RIGHT SNAP: \(snapPoint)")
                         if let nextSnapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: snapPoint) {
+                            
+                            print("RIGHTER SNAP: \(nextSnapPoint)")
                             
                             GridSystem.instance.selectedCoord = nextSnapPoint
                             moveCursorY(location: nextSnapPoint)
@@ -533,14 +554,27 @@ class MusicSheet: UIView {
             for (index, note) in measure.notationObjects.enumerated() {
 
                 if index == 0 {
-                    note.screenCoordinates =
+                    
+                    if note is Note {
+                        note.screenCoordinates =
                             CGPoint(x: measureCoord.upperLeftPoint.x + initialNoteSpace,
                                     y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
+                    } else if note is Rest {
+                        
+                        if let height = note.image?.size.height {
+                        
+                            note.screenCoordinates =
+                                CGPoint(x: measureCoord.upperLeftPoint.x + initialNoteSpace,
+                                        y: (measureCoord.upperLeftPoint.y + measureCoord.lowerRightPoint.y) / 2 - (height/restHeightAlter/2))
+                            
+                        }
+                    }
                     
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                                                                   snapPoints: GridSystem.instance.createSnapPoints(
                                                                     initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
                     
+                    // if measure is not full, add more snapping points right next to new note added
                     if !measure.isFull {
                         
                         let additionalSnapPoints = GridSystem.instance.createSnapPoints(
@@ -557,9 +591,21 @@ class MusicSheet: UIView {
                     
                     if let prevNoteCoordinates =  measure.notationObjects[index - 1].screenCoordinates {
                     
-                        note.screenCoordinates =
-                            CGPoint(x: prevNoteCoordinates.x + notationSpace,
-                                    y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
+                        
+                        if note is Note {
+                            note.screenCoordinates =
+                                CGPoint(x: prevNoteCoordinates.x + notationSpace,
+                                        y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
+                        }  else if note is Rest {
+                            
+                            if let height = note.image?.size.height {
+                                
+                                note.screenCoordinates =
+                                    CGPoint(x: prevNoteCoordinates.x + notationSpace,
+                                            y: (measureCoord.upperLeftPoint.y + measureCoord.lowerRightPoint.y) / 2 - (height/restHeightAlter/git2))
+                                
+                            }
+                        }
                         
                         if let prevX = prevX {
                             GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: prevX)
@@ -569,6 +615,7 @@ class MusicSheet: UIView {
                                                                       snapPoints: GridSystem.instance.createSnapPoints(
                                                                         initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y, clef: measure.clef, lineSpace: lineSpace))
                         
+                        // if measure is not full, add more snapping points right next to new note added
                         if !measure.isFull {
                             
                             let additionalSnapPoints = GridSystem.instance.createSnapPoints(
@@ -657,14 +704,19 @@ class MusicSheet: UIView {
 
         //drawBeam(notations: self.composition!.staffList[0].measures[0].notationObjects)
 
-        var notationImageView: UIImageView
-
-        notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
-
-        notationImageView.image = notation.image
-        //noteImageView.tag = 1
+        var notationImageView: UIImageView?
         
-        self.addSubview(notationImageView)
+        if notation is Note {
+            notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
+        } else if notation is Rest {
+            notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + restYOffset, width: (notation.image?.size.width)! / restWidthAlter, height: (notation.image?.size.height)! / restHeightAlter))
+        }
+        
+        if let notationImageView = notationImageView {
+            notationImageView.image = notation.image
+        
+            self.addSubview(notationImageView)
+        }
 
         //self.assembleNoteForBeaming(notation: notation, stemHeight: 100)
     }
@@ -842,48 +894,47 @@ class MusicSheet: UIView {
         }
         
         remapCurrentMeasure(location: location)
-        
-        // START FOR SNAPPING
-        
+        moveCursorsToNearestSnapPoint(location: location)
+    }
+    
+    private func moveCursorsToNearestSnapPoint (location:CGPoint) {
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
-
+            
             if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoord) {
-
+                
                 var closestPoint: CGPoint = snapPoints[0]
-
+                
                 let x2: CGFloat = location.x - snapPoints[0].x
                 let y2: CGFloat = location.y - snapPoints[0].y
-
+                
                 var currDistance: CGFloat = (x2 * x2) + (y2 * y2)
-
+                
                 for snapPoint in snapPoints {
                     let x2: CGFloat = location.x - snapPoint.x
                     let y2: CGFloat = location.y - snapPoint.y
-
+                    
                     let potDistance = (x2 * x2) + (y2 * y2)
-
+                    
                     if (potDistance < currDistance) {
                         currDistance = potDistance
                         closestPoint = snapPoint
                     }
                 }
-
+                
                 let newXCurLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
                 
                 curXCursorLocation = newXCurLocation
                 moveCursorX(location: newXCurLocation)
-
+                
                 curYCursorLocation = closestPoint
                 moveCursorY(location: closestPoint)
-
+                
                 GridSystem.instance.selectedCoord = closestPoint
             }
-
+            
             GridSystem.instance.currentStaffIndex =
-                    GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: measureCoord)
+                GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: measureCoord)
         }
-        
-        // END FOR SNAPPING
     }
     
     private func remapCurrentMeasure (location:CGPoint) {
