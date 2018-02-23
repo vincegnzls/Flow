@@ -602,7 +602,7 @@ class MusicSheet: UIView {
                                 
                                 note.screenCoordinates =
                                     CGPoint(x: prevNoteCoordinates.x + notationSpace,
-                                            y: (measureCoord.upperLeftPoint.y + measureCoord.lowerRightPoint.y) / 2 - (height/restHeightAlter/git2))
+                                            y: (measureCoord.upperLeftPoint.y + measureCoord.lowerRightPoint.y) / 2 - (height/restHeightAlter/2))
                                 
                             }
                         }
