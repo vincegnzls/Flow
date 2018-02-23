@@ -13,7 +13,7 @@ class GridSystem {
     
     static let instance = GridSystem()
     
-    static let NUMBER_OF_SNAPPOINTS_PER_COLUMN = 8
+    static let NUMBER_OF_SNAPPOINTS_PER_COLUMN = 22
 
     public var selectedMeasureCoord:MeasurePoints? {
         didSet {
@@ -82,7 +82,14 @@ class GridSystem {
     }
 
     private func initClefPitches() {
-
+        
+        gClefPitches.append(Pitch(step: Step.F, octave: 6))
+        gClefPitches.append(Pitch(step: Step.E, octave: 6))
+        gClefPitches.append(Pitch(step: Step.D, octave: 6))
+        gClefPitches.append(Pitch(step: Step.C, octave: 6))
+        gClefPitches.append(Pitch(step: Step.B, octave: 6))
+        gClefPitches.append(Pitch(step: Step.A, octave: 6))
+        gClefPitches.append(Pitch(step: Step.G, octave: 6))
         gClefPitches.append(Pitch(step: Step.F, octave: 5))
         gClefPitches.append(Pitch(step: Step.E, octave: 5))
         gClefPitches.append(Pitch(step: Step.D, octave: 5))
@@ -92,7 +99,21 @@ class GridSystem {
         gClefPitches.append(Pitch(step: Step.G, octave: 4))
         gClefPitches.append(Pitch(step: Step.F, octave: 4))
         gClefPitches.append(Pitch(step: Step.E, octave: 4))
+        gClefPitches.append(Pitch(step: Step.D, octave: 4))
+        gClefPitches.append(Pitch(step: Step.C, octave: 4))
+        gClefPitches.append(Pitch(step: Step.B, octave: 3))
+        gClefPitches.append(Pitch(step: Step.A, octave: 3))
+        gClefPitches.append(Pitch(step: Step.G, octave: 3))
+        gClefPitches.append(Pitch(step: Step.F, octave: 3))
+        gClefPitches.append(Pitch(step: Step.E, octave: 3))
 
+        fClefPitches.append(Pitch(step: Step.A, octave: 4))
+        fClefPitches.append(Pitch(step: Step.G, octave: 4))
+        fClefPitches.append(Pitch(step: Step.F, octave: 4))
+        fClefPitches.append(Pitch(step: Step.E, octave: 4))
+        fClefPitches.append(Pitch(step: Step.D, octave: 4))
+        fClefPitches.append(Pitch(step: Step.C, octave: 4))
+        fClefPitches.append(Pitch(step: Step.B, octave: 3))
         fClefPitches.append(Pitch(step: Step.A, octave: 3))
         fClefPitches.append(Pitch(step: Step.G, octave: 3))
         fClefPitches.append(Pitch(step: Step.F, octave: 3))
@@ -102,6 +123,13 @@ class GridSystem {
         fClefPitches.append(Pitch(step: Step.B, octave: 2))
         fClefPitches.append(Pitch(step: Step.A, octave: 2))
         fClefPitches.append(Pitch(step: Step.G, octave: 2))
+        fClefPitches.append(Pitch(step: Step.F, octave: 2))
+        fClefPitches.append(Pitch(step: Step.E, octave: 2))
+        fClefPitches.append(Pitch(step: Step.D, octave: 2))
+        fClefPitches.append(Pitch(step: Step.C, octave: 2))
+        fClefPitches.append(Pitch(step: Step.B, octave: 1))
+        fClefPitches.append(Pitch(step: Step.A, octave: 1))
+        fClefPitches.append(Pitch(step: Step.G, octave: 1))
 
     }
     
