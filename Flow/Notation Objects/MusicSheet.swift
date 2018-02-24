@@ -52,6 +52,9 @@ class MusicSheet: UIView {
     public var hoveredNotation: MusicNotation?
 
     private var curScale: CGFloat = 1.0
+    var originalCenter:CGPoint?
+
+    var isZooming = false
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -128,15 +131,56 @@ class MusicSheet: UIView {
         panGesture.maximumNumberOfTouches = 1
         self.addGestureRecognizer(panGesture)
 
+        // Set up pan gesture for dragging
+        let dragViewGesture = UIPanGestureRecognizer(target: self, action: #selector(dragViewGesture(sender:)))
+        dragViewGesture.minimumNumberOfTouches = 2
+        self.addGestureRecognizer(dragViewGesture)
+
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(sender:)))
         self.addGestureRecognizer(pinchGesture)
     }
 
     @objc private func pinchAction(sender: UIPinchGestureRecognizer) {
-        let scale: CGFloat = curScale * sender.scale
-        self.transform = CGAffineTransform(scaleX: scale, y: scale)
+        if sender.state == .began {
+            let currentScale = self.frame.size.width / self.bounds.size.width
+            let newScale = currentScale*sender.scale
+            if newScale >= 1 {
+                self.isZooming = true
+            }
+        } else if sender.state == .changed {
+            guard let view = sender.view else {return}
+            let pinchCenter = CGPoint(x: sender.location(in: view).x - view.bounds.midX,
+                    y: sender.location(in: view).y - view.bounds.midY)
+            let transform = view.transform.translatedBy(x: pinchCenter.x, y: pinchCenter.y)
+                    .scaledBy(x: sender.scale, y: sender.scale)
+                    .translatedBy(x: -pinchCenter.x, y: -pinchCenter.y)
+            let currentScale = self.frame.size.width / self.bounds.size.width
+            var newScale = currentScale*sender.scale
+            if newScale < 1 {
+                newScale = 1
+                let transform = CGAffineTransform(scaleX: newScale, y: newScale)
+                self.transform = transform
+                sender.scale = 1
+            }else {
+                view.transform = transform
+                sender.scale = 1
+            }
+        } else if sender.state == .ended {
+            self.isZooming = false
+        }
+    }
 
-        curScale = sender.scale
+    @objc private func dragViewGesture(sender: UIPanGestureRecognizer) {
+        if self.isZooming && sender.state == .began {
+            self.originalCenter = sender.view?.center
+        } else if self.isZooming && sender.state == .changed {
+            let translation = sender.translation(in: self)
+            if let view = sender.view {
+                view.center = CGPoint(x:view.center.x + translation.x,
+                        y:view.center.y + translation.y)
+            }
+            sender.setTranslation(CGPoint.zero, in: self.superview)
+        }
     }
 
     func onCompositionLoad (params: Parameters) {
@@ -1318,19 +1362,23 @@ class MusicSheet: UIView {
         
         if notations.count > 1 {
             for notation in notations {
-                if notation.hasTail() {
-                    curNotesToBeam.append(notation)
-                } else if !notation.hasTail() {
-                    if curNotesToBeam.count > 1 {
-                        // beam notes
-                        drawBeam(notations: curNotesToBeam)
-                    } else if curNotesToBeam.count == 1 {
-                        addMusicNotation(notation: curNotesToBeam[0])
+                if !(notation is Rest) {
+                    if notation.hasTail() {
+                        curNotesToBeam.append(notation)
+                    } else if !notation.hasTail() {
+                        if curNotesToBeam.count > 1 {
+                            // beam notes
+                            drawBeam(notations: curNotesToBeam)
+                        } else if curNotesToBeam.count == 1 {
+                            addMusicNotation(notation: curNotesToBeam[0])
+                        }
+
+                        addMusicNotation(notation: notation)
+
+                        curNotesToBeam.removeAll()
                     }
-                    
+                } else {
                     addMusicNotation(notation: notation)
-                    
-                    curNotesToBeam.removeAll()
                 }
             }
         } else if notations.count == 1 {
