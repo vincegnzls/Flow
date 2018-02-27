@@ -543,7 +543,7 @@ class MusicSheet: UIView {
         
         //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
         // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
-        let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace, initialY: startY-curSpace-(lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
+        let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace, initialY: startY-curSpace-(lineSpace*3), clef: measure.clef, lineSpace: lineSpace)
         GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
         
         // CHOOSE FIRST MEASURE COORD AS DEFAULT
@@ -616,13 +616,13 @@ class MusicSheet: UIView {
                     
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                                                                   snapPoints: GridSystem.instance.createSnapPoints(
-                                                                    initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace))
+                                                                    initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3), clef: measure.clef, lineSpace: lineSpace))
                     
                     // if measure is not full, add more snapping points right next to new note added
                     if !measure.isFull {
                         
                         let additionalSnapPoints = GridSystem.instance.createSnapPoints(
-                            initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
+                            initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3), clef: measure.clef, lineSpace: lineSpace)
                     
                         GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                                                                       snapPoints: additionalSnapPoints)
@@ -657,13 +657,13 @@ class MusicSheet: UIView {
                         
                         GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                                                                       snapPoints: GridSystem.instance.createSnapPoints(
-                                                                        initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace))
+                                                                        initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3), clef: measure.clef, lineSpace: lineSpace))
                         
                         // if measure is not full, add more snapping points right next to new note added
                         if !measure.isFull {
                             
                             let additionalSnapPoints = GridSystem.instance.createSnapPoints(
-                                initialX: prevNoteCoordinates.x + notationSpace*2 + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
+                                initialX: prevNoteCoordinates.x + notationSpace*2 + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3), clef: measure.clef, lineSpace: lineSpace)
                         
                             GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                                                                           snapPoints: additionalSnapPoints)
