@@ -204,6 +204,15 @@
                                     <constraint firstItem="g8R-FX-vJY" firstAttribute="top" secondItem="hfX-sa-C2s" secondAttribute="topMargin" id="yfm-nS-SXJ"/>
                                 </constraints>
                             </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fsa-VO-RcI">
+                                <rect key="frame" x="8" y="395" width="1096" height="77"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <string key="text">There are no compositions yet.
+Tap '+' to create a new composition.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -221,6 +230,7 @@
                     <connections>
                         <outlet property="collectionView" destination="FMb-5Y-qyJ" id="UqJ-qy-wZQ"/>
                         <outlet property="menu" destination="4Dd-JO-83n" id="Kag-Dr-GOD"/>
+                        <outlet property="noCompsLabel" destination="fsa-VO-RcI" id="ZL4-cr-CIA"/>
                         <outlet property="tableView" destination="g8R-FX-vJY" id="r55-fd-eUZ"/>
                     </connections>
                 </viewController>
