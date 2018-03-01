@@ -17,7 +17,7 @@ struct CompositionInfo: Codable {
         return lastEdited.toString(withFormat: "E, MMM d, yyyy h:mm a")
     }
     
-    init(name: String = "Untitled", lastEdited: Date = Date(), id: String = UUID().uuidString) {
+    init(name: String = "Untitled Composition", lastEdited: Date = Date(), id: String = UUID().uuidString) {
         self.name = name
         self.lastEdited = lastEdited
         self.id = id

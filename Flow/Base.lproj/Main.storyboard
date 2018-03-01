@@ -121,9 +121,6 @@
                                                     <constraint firstItem="URL-me-ESm" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="in2-yU-kjs"/>
                                                     <constraint firstItem="1Vf-Hj-b3c" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="tcB-5H-qbH"/>
                                                 </constraints>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="keyPath" value="YES"/>
-                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <outlet property="lastEditedLabel" destination="URL-me-ESm" id="3fA-Cw-Cyc"/>
                                                     <outlet property="nameLabel" destination="B6I-9M-6Qh" id="M71-T8-Pub"/>

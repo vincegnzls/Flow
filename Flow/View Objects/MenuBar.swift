@@ -46,6 +46,9 @@ class MenuBar: UIView {
             
             if !(title?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)! {
                 self.compositionTitleButton.setTitle(title, for: .normal)
+                let params = Parameters()
+                params.put(key: KeyNames.NEW_TITLE, value: title!)
+                EventBroadcaster.instance.postEvent(event: EventNames.TITLE_CHANGED, params: params)
             }
         }
         

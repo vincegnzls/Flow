@@ -124,6 +124,12 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         //print("\(test)")
         
         //FileHandler.instance.convertMusicXMLtoComposition(test)
+        
+        if let composition = self.musicSheet.composition {
+            FileHandler.instance.saveFile(composition: composition)
+            print("saved file")
+        }
+        
     }
 
     func onNoteKeyPressed (params:Parameters) {
