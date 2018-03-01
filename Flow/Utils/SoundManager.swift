@@ -153,7 +153,15 @@ class SoundManager{
     }
     
     func musicPlayback(_ composition: Composition){
-        
+        for staff in composition.staffList{
+            for measure in staff.measures{
+                for musicNotation in measure.notationObjects{
+                    if(musicNotation.type == Note){
+                        playSound(musicNotation)
+                    }
+                }
+            }
+        }
         
     }
 }
