@@ -21,7 +21,7 @@ class MusicSheet: UIView {
     private var staffIndex:CGFloat = -1
     
     private let noteXOffset: CGFloat = 10
-    private let noteYOffset: CGFloat = -95.5
+    private let noteYOffset: CGFloat = -94
     private let noteWidthAlter: CGFloat = -3
     private let noteHeightAlter: CGFloat = -3
     
