@@ -13,7 +13,7 @@ class GridSystem {
     
     static let instance = GridSystem()
     
-    static let NUMBER_OF_SNAPPOINTS_PER_COLUMN = 20
+    let NUMBER_OF_SNAPPOINTS_PER_COLUMN = 22
 
     public var selectedMeasureCoord:MeasurePoints? {
         didSet {
@@ -86,7 +86,7 @@ class GridSystem {
         // starting from the top of g clef staff
         var currGClefPitch = Pitch(step: Step.F, octave: 6)
         
-        for _ in 0...20 {
+        for _ in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
             
             gClefPitches.append(currGClefPitch)
             currGClefPitch.transposeDown()
@@ -96,7 +96,7 @@ class GridSystem {
         // starting from the top of f clef staff
         var currFClefPitch = Pitch(step: Step.A, octave: 4)
         
-        for _ in 0...20 {
+        for _ in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
             
             fClefPitches.append(currFClefPitch)
             currFClefPitch.transposeDown()
@@ -387,7 +387,7 @@ class GridSystem {
                 pitchArray = fClefPitches
         }
 
-        for i in 0...GridSystem.NUMBER_OF_SNAPPOINTS_PER_COLUMN {
+        for i in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
             snapPoints.append(currSnapPoint)
             YPitchMap[currSnapPoint.y] = pitchArray[i]
 
