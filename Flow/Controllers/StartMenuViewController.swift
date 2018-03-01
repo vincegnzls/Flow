@@ -86,6 +86,22 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         //self.tableView.separatorStyle = .none
     }
     
+    // MARK: Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        switch(segue.identifier ?? "") {
+        case "CreateComposition":
+            print("Creating a new composition")
+            
+        case "EditComposition":
+            print("Editing composition")
+            
+        default:
+            fatalError("Unexpected Segue Identifier; \(segue.identifier ?? "")")
+        }
+    }
+    
     // MARK: Table view data source
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
