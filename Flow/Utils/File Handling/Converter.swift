@@ -200,10 +200,10 @@ class Converter {
                 } else if measure.clef == .F {
                     fStaff.addMeasure(measure)
                 }
-                
-                composition.addStaff(gStaff)
-                composition.addStaff(fStaff)
             }
+
+            composition.addStaff(gStaff)
+            composition.addStaff(fStaff)
             
         } catch {
             print("\(error)")
