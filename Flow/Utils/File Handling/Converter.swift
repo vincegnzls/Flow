@@ -24,8 +24,9 @@ class Converter {
         // Part
         let partElement = scoreElement.addChild(name: "part", attributes: ["id": "P1"])
         
+        print(composition.numMeasures)
         // Loop through measures
-        for i in 0..<composition.numMeasures {
+        for i in 0..<(composition.numMeasures / 2) {
             for (index, staff) in composition.staffList.enumerated() {
                 let measure = staff.measures[i]
                 let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(i + index + 1)"])
@@ -137,6 +138,8 @@ class Converter {
         var index = xmlString.index(of: ">")!
         index = xmlString.index(index, offsetBy: 1, limitedBy: xmlString.endIndex)!
         xmlString.insert(contentsOf: doctype, at: index)
+        
+        print(xmlString)
         
         return xmlString
     }

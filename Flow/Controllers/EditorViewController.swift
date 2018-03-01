@@ -15,7 +15,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var menuBar: MenuBar!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    private let composition: Composition?
+    var composition: Composition?
     
     private var soundManager = SoundManager()
 
@@ -124,6 +124,12 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         //print("\(test)")
         
         //FileHandler.instance.convertMusicXMLtoComposition(test)
+        
+        if let composition = self.musicSheet.composition {
+            FileHandler.instance.saveFile(composition: composition)
+            print("saved file")
+        }
+        
     }
 
     func onNoteKeyPressed (params:Parameters) {

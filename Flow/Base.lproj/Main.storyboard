@@ -48,7 +48,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="50"/>
                                         <state key="normal" title="+"/>
                                         <connections>
-                                            <segue destination="ldS-Qo-c4z" kind="show" id="cr9-tM-n2r"/>
+                                            <segue destination="ldS-Qo-c4z" kind="show" identifier="CreateComposition" id="cr9-tM-n2r"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACm-2h-O3l">
@@ -121,12 +121,10 @@
                                                     <constraint firstItem="URL-me-ESm" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="in2-yU-kjs"/>
                                                     <constraint firstItem="1Vf-Hj-b3c" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="tcB-5H-qbH"/>
                                                 </constraints>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="keyPath" value="YES"/>
-                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <outlet property="lastEditedLabel" destination="URL-me-ESm" id="3fA-Cw-Cyc"/>
                                                     <outlet property="nameLabel" destination="B6I-9M-6Qh" id="M71-T8-Pub"/>
+                                                    <segue destination="ldS-Qo-c4z" kind="show" identifier="EditCompositionFromCollection" id="2Bx-FE-wU0"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
@@ -185,6 +183,7 @@
                                                 <connections>
                                                     <outlet property="lastEditedLabel" destination="TM7-Ae-ZBD" id="Xh6-VR-LCH"/>
                                                     <outlet property="nameLabel" destination="Zqy-75-84O" id="oDc-47-25a"/>
+                                                    <segue destination="ldS-Qo-c4z" kind="show" identifier="EditCompositionFromTable" id="9qL-sA-OPV"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -926,4 +925,7 @@
         <image name="whole-note-icon" width="116" height="115"/>
         <image name="whole-rest-icon" width="115" height="115"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="2Bx-FE-wU0"/>
+    </inferredMetricsTieBreakers>
 </document>

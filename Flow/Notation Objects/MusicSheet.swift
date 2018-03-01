@@ -127,6 +127,9 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_TIME_SIG, observer: Observer(id: "MusicSheet.editTimeSig", function: self.editTimeSig))
         
+        EventBroadcaster.instance.removeObservers(event: EventNames.TITLE_CHANGED)
+        EventBroadcaster.instance.addObserver(event: EventNames.TITLE_CHANGED, observer: Observer(id: "MusicSheet.titleChanged", function: self.titleChanged))
+        
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
@@ -1788,5 +1791,12 @@ class MusicSheet: UIView {
         }
 
         return nil
+    }
+    
+    public func titleChanged(params: Parameters) {
+        print("here")
+        if let composition = self.composition {
+            composition.compositionInfo.name = params.get(key: KeyNames.NEW_TITLE, defaultValue: "Untitled Composition")
+        }
     }
 }
