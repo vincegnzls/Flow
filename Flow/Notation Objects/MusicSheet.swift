@@ -131,57 +131,6 @@ class MusicSheet: UIView {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
         self.addGestureRecognizer(panGesture)
-
-        // Set up pan gesture for dragging
-        let dragViewGesture = UIPanGestureRecognizer(target: self, action: #selector(dragViewGesture(sender:)))
-        dragViewGesture.minimumNumberOfTouches = 2
-        self.addGestureRecognizer(dragViewGesture)
-
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(sender:)))
-        self.addGestureRecognizer(pinchGesture)
-    }
-
-    @objc private func pinchAction(sender: UIPinchGestureRecognizer) {
-        if sender.state == .began {
-            let currentScale = self.frame.size.width / self.bounds.size.width
-            let newScale = currentScale*sender.scale
-            if newScale >= 1 {
-                self.isZooming = true
-            }
-        } else if sender.state == .changed {
-            guard let view = sender.view else {return}
-            let pinchCenter = CGPoint(x: sender.location(in: view).x - view.bounds.midX,
-                    y: sender.location(in: view).y - view.bounds.midY)
-            let transform = view.transform.translatedBy(x: pinchCenter.x, y: pinchCenter.y)
-                    .scaledBy(x: sender.scale, y: sender.scale)
-                    .translatedBy(x: -pinchCenter.x, y: -pinchCenter.y)
-            let currentScale = self.frame.size.width / self.bounds.size.width
-            var newScale = currentScale*sender.scale
-            if newScale < 1 {
-                newScale = 1
-                let transform = CGAffineTransform(scaleX: newScale, y: newScale)
-                self.transform = transform
-                sender.scale = 1
-            }else {
-                view.transform = transform
-                sender.scale = 1
-            }
-        } else if sender.state == .ended {
-            self.isZooming = false
-        }
-    }
-
-    @objc private func dragViewGesture(sender: UIPanGestureRecognizer) {
-        if self.isZooming && sender.state == .began {
-            self.originalCenter = sender.view?.center
-        } else if self.isZooming && sender.state == .changed {
-            let translation = sender.translation(in: self)
-            if let view = sender.view {
-                view.center = CGPoint(x:view.center.x + translation.x,
-                        y:view.center.y + translation.y)
-            }
-            sender.setTranslation(CGPoint.zero, in: self.superview)
-        }
     }
 
     func onCompositionLoad (params: Parameters) {
