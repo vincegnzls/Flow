@@ -2,7 +2,7 @@
 //  SoundManager.swift
 //  Flow
 //
-//  Created by Kevin Chan ANFD MIGO DANCEL on 03/01/2018.
+//  Created by Kevin Chan AND MIGO DANCEL on 03/01/2018.
 //  Copyright © 2018 MusicG. All rights reserved.
 //
 
@@ -150,6 +150,11 @@ class SoundManager{
         } else {
             // Fallback on earlier versions
         }
+    }
+    
+    func musicPlayback(_ composition: Composition){
+        
+        
     }
 }
 
