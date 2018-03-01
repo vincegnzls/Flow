@@ -50,8 +50,17 @@ class FileHandler {
         let writeString = Converter.compositionToMusicXML(composition)
         do {
             try writeString.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-            self.compositions.append(composition.compositionInfo)
+            
+            if !self.compositions.contains(composition.compositionInfo) {
+                self.compositions.append(composition.compositionInfo)
+            } else {
+                let index = self.compositions.index(of: composition.compositionInfo)!
+                composition.compositionInfo.lastEdited = Date()
+                self.compositions[index] = composition.compositionInfo
+            }
+            
             self.saveCompositionList()
+            
         } catch let error as NSError {
             print("Failed to write to file \(composition.compositionInfo.name) with id \(composition.compositionInfo.id)")
             print(error)
