@@ -21,6 +21,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
     @IBOutlet weak var menu: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var noCompsLabel: UILabel!
     
     // MARK: Properties
     private var isCollectionViewShowing = false
@@ -52,6 +53,12 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         super.viewWillAppear(animated)
         self.collectionView!.reloadData()
         self.tableView!.reloadData()
+        
+        if FileHandler.instance.compositions.isEmpty {
+            self.noCompsLabel.isHidden = false
+        } else {
+            self.noCompsLabel.isHidden = true
+        }
     }
     
     // MARK: Setup methods
@@ -275,6 +282,11 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         // Create OK button with action handler
         let delete = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) -> Void in
             self.deleteItem(at: index)
+            if FileHandler.instance.compositions.isEmpty {
+                self.noCompsLabel.isHidden = false
+            } else {
+                self.noCompsLabel.isHidden = true
+            }
         })
 
         // Create Cancel button with action handlder

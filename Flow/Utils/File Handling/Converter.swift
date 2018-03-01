@@ -139,8 +139,6 @@ class Converter {
         index = xmlString.index(index, offsetBy: 1, limitedBy: xmlString.endIndex)!
         xmlString.insert(contentsOf: doctype, at: index)
         
-        print(xmlString)
-        
         return xmlString
     }
     

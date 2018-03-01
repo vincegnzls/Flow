@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CompositionInfo: Codable {
+struct CompositionInfo: Codable, Equatable {
     var name: String
     var lastEdited: Date
     var id: String
@@ -21,5 +21,13 @@ struct CompositionInfo: Codable {
         self.name = name
         self.lastEdited = lastEdited
         self.id = id
+    }
+    
+    static func == (lhs: CompositionInfo, rhs: CompositionInfo) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    static func != (lhs: CompositionInfo, rhs: CompositionInfo) -> Bool {
+        return lhs.id != rhs.id
     }
 }

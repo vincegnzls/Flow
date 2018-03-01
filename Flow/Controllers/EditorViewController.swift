@@ -75,9 +75,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
 
         //EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
 
-        if musicSheet != nil {
+        if self.musicSheet != nil {
             // set composition in music sheet
-            musicSheet.composition = composition
+            self.musicSheet.composition = self.composition
+        }
+        
+        if let menuBar = self.menuBar, let composition = self.composition {
+            menuBar.compositionInfo = composition.compositionInfo
         }
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -103,31 +107,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
-
-        // TODO: inline this with self instance of composition
-
-        // FOR TESTING PURPOSES ONLY
-        /*let measure = Measure(keySignature: KeySignature.c,
-                              timeSignature: TimeSignature(),
-                              clef: Clef.G)
-        measure.notationObjects.append(Note(pitch: Pitch(step: Step.A, octave: 2),
-                                            type: RestNoteType.quarter,
-                                            clef: Clef.G))
-        measure.notationObjects.append(Rest(type: .half))
-        
-        var measures = [Measure]()
-        measures.append(measure)*/
-
-        //let comp = Composition(measures: measures)
-        //let test = FileHandler.instance.convertCompositionToMusicXML(comp)
-        
-        //print("\(test)")
-        
-        //FileHandler.instance.convertMusicXMLtoComposition(test)
         
         if let composition = self.musicSheet.composition {
+            print(composition.compositionInfo.name)
             FileHandler.instance.saveFile(composition: composition)
-            print("saved file")
         }
         
     }
