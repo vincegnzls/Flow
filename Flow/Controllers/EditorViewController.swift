@@ -8,12 +8,13 @@
 
 import UIKit
 
-class EditorViewController: UIViewController {
+class EditorViewController: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var musicSheet: MusicSheet!
     @IBOutlet weak var height: NSLayoutConstraint!
     @IBOutlet weak var menuBar: MenuBar!
-
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     private let composition: Composition?
     
     private var soundManager = SoundManager()
@@ -79,6 +80,21 @@ class EditorViewController: UIViewController {
             musicSheet.composition = composition
         }
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updateMinZoomScaleForSize(view.bounds.size)
+    }
+    
+    fileprivate func updateMinZoomScaleForSize(_ size: CGSize) {
+        let widthScale = size.width / musicSheet.bounds.width
+        let heightScale = size.height / musicSheet.bounds.height
+        let minScale = min(widthScale, heightScale)
+        
+        scrollView.minimumZoomScale = 1
+        scrollView.maximumZoomScale = 2
+        scrollView.zoomScale = minScale
     }
 
     override func didReceiveMemoryWarning() {
@@ -216,6 +232,10 @@ class EditorViewController: UIViewController {
         musicSheet.selectedNotations.removeAll()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.musicSheet
     }
 }
 
