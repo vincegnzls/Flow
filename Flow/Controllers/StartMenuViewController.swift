@@ -94,8 +94,41 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         case "CreateComposition":
             print("Creating a new composition")
             
-        case "EditComposition":
+        case "EditCompositionFromTable":
             print("Editing composition")
+            guard let editorViewController = segue.destination as? EditorViewController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            
+            guard let selectedCompositionCell = sender as? CompositionTableViewCell else {
+                fatalError("Unexpected sender: \(sender ?? "")")
+            }
+            
+            guard let indexPath = tableView.indexPath(for: selectedCompositionCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            let selectedCompositionInfo = FileHandler.instance.compositions[indexPath.row]
+            let selectedComposition = FileHandler.instance.readFile(selectedCompositionInfo)
+            editorViewController.composition = selectedComposition
+            
+        case "EditCompositionFromCollection":
+            print("Editing composition")
+            guard let editorViewController = segue.destination as? EditorViewController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            
+            guard let selectedCompositionCell = sender as? CompositionCollectionViewCell else {
+                fatalError("Unexpected sender: \(sender ?? "")")
+            }
+            
+            guard let indexPath = collectionView.indexPath(for: selectedCompositionCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            let selectedCompositionInfo = FileHandler.instance.compositions[indexPath.row]
+            let selectedComposition = FileHandler.instance.readFile(selectedCompositionInfo)
+            editorViewController.composition = selectedComposition
             
         default:
             fatalError("Unexpected Segue Identifier; \(segue.identifier ?? "")")

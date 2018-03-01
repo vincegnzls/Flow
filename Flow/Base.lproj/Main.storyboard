@@ -124,7 +124,7 @@
                                                 <connections>
                                                     <outlet property="lastEditedLabel" destination="URL-me-ESm" id="3fA-Cw-Cyc"/>
                                                     <outlet property="nameLabel" destination="B6I-9M-6Qh" id="M71-T8-Pub"/>
-                                                    <segue destination="ldS-Qo-c4z" kind="show" identifier="EditComposition" id="2Bx-FE-wU0"/>
+                                                    <segue destination="ldS-Qo-c4z" kind="show" identifier="EditCompositionFromCollection" id="2Bx-FE-wU0"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
@@ -183,7 +183,7 @@
                                                 <connections>
                                                     <outlet property="lastEditedLabel" destination="TM7-Ae-ZBD" id="Xh6-VR-LCH"/>
                                                     <outlet property="nameLabel" destination="Zqy-75-84O" id="oDc-47-25a"/>
-                                                    <segue destination="ldS-Qo-c4z" kind="show" identifier="EditComposition" id="9qL-sA-OPV"/>
+                                                    <segue destination="ldS-Qo-c4z" kind="show" identifier="EditCompositionFromTable" id="9qL-sA-OPV"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -926,6 +926,6 @@
         <image name="whole-rest-icon" width="115" height="115"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="9qL-sA-OPV"/>
+        <segue reference="2Bx-FE-wU0"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -15,7 +15,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var menuBar: MenuBar!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    private let composition: Composition?
+    var composition: Composition?
     
     private var soundManager = SoundManager()
 
