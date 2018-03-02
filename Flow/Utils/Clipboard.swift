@@ -42,7 +42,9 @@ class Clipboard {
         }
     }
 
-    func paste(measures: [Measure], noteIndex: inout Int) {
+    func paste(measures: [Measure], at startIndex: Int) {
+        print("I was called")
+        var noteIndex = startIndex
         var measureIndex = 0
         var oldNotations = [MusicNotation]()
         var newNotations = [MusicNotation]()
@@ -58,9 +60,13 @@ class Clipboard {
             }
 
             let measure = measures[measureIndex]
-            let oldNotation = measure.notationObjects[noteIndex]
-
-            oldNotations.append(oldNotation)
+            
+            if noteIndex < measure.notationObjects.count {
+                let oldNotation = measure.notationObjects[noteIndex]
+                
+                oldNotations.append(oldNotation)
+            }
+            
             newNotations.append(item.duplicate())
         }
 

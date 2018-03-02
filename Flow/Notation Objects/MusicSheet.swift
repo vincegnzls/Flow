@@ -1753,6 +1753,28 @@ class MusicSheet: UIView {
 
     public func paste() {
         print("Paste")
+        var measures = [Measure]()
+        if !self.selectedNotations.isEmpty {
+            
+        } else if let selectedMeasure = GridSystem.instance.getCurrentMeasure() {
+            if let staves = self.composition?.staffList {
+                for staff in staves {
+                    if let startIndex = staff.measures.index(of: selectedMeasure) {
+                        measures = Array(staff.measures[startIndex...])
+                    }
+                }
+            }
+        }
+        
+        let startMeasure = measures[0]
+        if let hovered = self.hoveredNotation {
+            if let noteIndex = startMeasure.notationObjects.index(of: hovered) {
+                Clipboard.instance.paste(measures: measures, at: noteIndex)
+            }
+        } else {
+            Clipboard.instance.paste(measures: measures, at: startMeasure.notationObjects.count)
+        }
+        
         //Clipboard.instance.paste(measures: <#T##[Measure]#>, noteIndex: &<#T##Int#>)
     }
 
