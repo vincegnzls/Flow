@@ -15,4 +15,6 @@ struct KeyNames {
     static let DELETE_KEY = "DELETE_KEY"
     static let INVALID_NOTES = "INVALID_NOTES"
     static let NEW_MEASURE = "NEW_MEASURE"
+    static let OLD_MEASURE = "OLD_MEASURE"
+    static let NEW_TITLE = "NEW_TITLE"
 }

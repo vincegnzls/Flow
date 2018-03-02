@@ -27,7 +27,7 @@
 		61EBB0321FE695B60015F7C2 /* KeySignatureDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
 		7A8D3F27201B845900692B66 /* Support Objects in Resources */ = {isa = PBXBuildFile; fileRef = 7A8D3F26201B845900692B66 /* Support Objects */; };
-		7AC6E252201F3BB6000453AA /* Maestro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7AC6E251201F3BB5000453AA /* Maestro.ttf */; };
+		7AA94C29202D488100CE537B /* maestro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7AA94C28202D488100CE537B /* maestro.ttf */; };
 		7ADDE1311FEA29FD0065523E /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADDE1301FEA29FD0065523E /* GridSystem.swift */; };
 		860ACC431FFCA25900A86D50 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860ACC421FFCA25900A86D50 /* SoundManager.swift */; };
 		8618F0741FED3D0400DF8A10 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8618F0731FED3D0400DF8A10 /* Action.swift */; };
@@ -73,6 +73,7 @@
 		86B8EFEE1FEAC30500DD834E /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B8EFED1FEAC30500DD834E /* Clipboard.swift */; };
 		86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */; };
 		86CCD7C31FDD783400A0FC8D /* StartMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */; };
+		86DBDA8020368C6E00C834EF /* Chord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DBDA7F20368C6E00C834EF /* Chord.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,7 +118,7 @@
 		61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureDesignable.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		7A8D3F26201B845900692B66 /* Support Objects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Support Objects"; sourceTree = "<group>"; };
-		7AC6E251201F3BB5000453AA /* Maestro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Maestro.ttf; sourceTree = "<group>"; };
+		7AA94C28202D488100CE537B /* maestro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = maestro.ttf; sourceTree = "<group>"; };
 		7ADDE1301FEA29FD0065523E /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		860ACC421FFCA25900A86D50 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		8618F0731FED3D0400DF8A10 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
@@ -164,6 +165,7 @@
 		86B8EFED1FEAC30500DD834E /* Clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipboard.swift; sourceTree = "<group>"; };
 		86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenuViewController.swift; sourceTree = "<group>"; };
+		86DBDA7F20368C6E00C834EF /* Chord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chord.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,7 +274,7 @@
 		7AC6E24E201F388A000453AA /* fonts */ = {
 			isa = PBXGroup;
 			children = (
-				7AC6E251201F3BB5000453AA /* Maestro.ttf */,
+				7AA94C28202D488100CE537B /* maestro.ttf */,
 			);
 			path = fonts;
 			sourceTree = "<group>";
@@ -309,6 +311,7 @@
 				864CE5A11FD32FC3001FF059 /* RestNoteType.swift */,
 				864CE5A01FD32F41001FF059 /* Rest */,
 				864CE59E1FD32F2C001FF059 /* Note */,
+				86DBDA7F20368C6E00C834EF /* Chord.swift */,
 			);
 			path = "Music Notation";
 			sourceTree = "<group>";
@@ -529,10 +532,10 @@
 			files = (
 				8696A8BF1FD5898200EB81BD /* Info.plist in Resources */,
 				61370E211F82A1CB002B6A09 /* LaunchScreen.storyboard in Resources */,
-				7AC6E252201F3BB6000453AA /* Maestro.ttf in Resources */,
 				61370E1E1F82A1CB002B6A09 /* Assets.xcassets in Resources */,
 				7A8D3F27201B845900692B66 /* Support Objects in Resources */,
 				61370E1C1F82A1CB002B6A09 /* Main.storyboard in Resources */,
+				7AA94C29202D488100CE537B /* maestro.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,6 +562,7 @@
 			files = (
 				610ECE3A1FE7CC9F009CC0F2 /* KeySignatureData.swift in Sources */,
 				611BFC9E1FE678C2001511B2 /* TimeSignatureViewController.swift in Sources */,
+				86DBDA8020368C6E00C834EF /* Chord.swift in Sources */,
 				861B3DDA1FDC20E2003FE0A5 /* KeyNames.swift in Sources */,
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
 				861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */,
@@ -783,11 +787,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4HW4U7R3UV;
+				DEVELOPMENT_TEAM = 2232DYE84D;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -802,11 +806,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4HW4U7R3UV;
+				DEVELOPMENT_TEAM = 2232DYE84D;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

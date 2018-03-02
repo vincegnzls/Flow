@@ -49,7 +49,6 @@ class Parameters {
     
     func put(key: String, value: Any) {
         self.anyData.updateValue(value, forKey: key)
-        print("any")
     }
     
     // MARK: Get Methods

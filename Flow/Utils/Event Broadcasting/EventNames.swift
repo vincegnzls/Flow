@@ -22,4 +22,8 @@ struct EventNames {
     static let COPY_KEY_PRESSED = "COPY_KEY_PRESSED"
     static let CUT_KEY_PRESSED = "CUT_KEY_PRESSED"
     static let PASTE_KEY_PRESSED = "PASTE_KEY_PRESSED"
+
+    static let EDIT_TIME_SIG = "EDIT_TIME_SIG"
+    
+    static let TITLE_CHANGED = "TITLE_CHANGED"
 }

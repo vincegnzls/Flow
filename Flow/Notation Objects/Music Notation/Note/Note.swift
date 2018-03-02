@@ -45,9 +45,23 @@ class Note: MusicNotation {
         }
 
         self.image = type.getNoteImage(isUpwards: isUpwards)
+        
+        /*if self.isSelected {
+            if let imageView = self.imageView {
+                imageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+            }
+        }*/
+    }
+    
+    func transposeUp() {
+        self.pitch.transposeUp()
+    }
+    
+    func transposeDown() {
+        self.pitch.transposeDown()
     }
 
-    override func duplicate() -> MusicNotation {
+    override func duplicate() -> Note {
         return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental)
     }
 }

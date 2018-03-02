@@ -48,7 +48,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="50"/>
                                         <state key="normal" title="+"/>
                                         <connections>
-                                            <segue destination="ldS-Qo-c4z" kind="show" id="cr9-tM-n2r"/>
+                                            <segue destination="ldS-Qo-c4z" kind="show" identifier="CreateComposition" id="cr9-tM-n2r"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACm-2h-O3l">
@@ -121,12 +121,10 @@
                                                     <constraint firstItem="URL-me-ESm" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="in2-yU-kjs"/>
                                                     <constraint firstItem="1Vf-Hj-b3c" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="tcB-5H-qbH"/>
                                                 </constraints>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="keyPath" value="YES"/>
-                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <outlet property="lastEditedLabel" destination="URL-me-ESm" id="3fA-Cw-Cyc"/>
                                                     <outlet property="nameLabel" destination="B6I-9M-6Qh" id="M71-T8-Pub"/>
+                                                    <segue destination="ldS-Qo-c4z" kind="show" identifier="EditCompositionFromCollection" id="2Bx-FE-wU0"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
@@ -185,6 +183,7 @@
                                                 <connections>
                                                     <outlet property="lastEditedLabel" destination="TM7-Ae-ZBD" id="Xh6-VR-LCH"/>
                                                     <outlet property="nameLabel" destination="Zqy-75-84O" id="oDc-47-25a"/>
+                                                    <segue destination="ldS-Qo-c4z" kind="show" identifier="EditCompositionFromTable" id="9qL-sA-OPV"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -205,6 +204,15 @@
                                     <constraint firstItem="g8R-FX-vJY" firstAttribute="top" secondItem="hfX-sa-C2s" secondAttribute="topMargin" id="yfm-nS-SXJ"/>
                                 </constraints>
                             </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fsa-VO-RcI">
+                                <rect key="frame" x="8" y="395" width="1096" height="77"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <string key="text">There are no compositions yet.
+Tap '+' to create a new composition.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -222,6 +230,7 @@
                     <connections>
                         <outlet property="collectionView" destination="FMb-5Y-qyJ" id="UqJ-qy-wZQ"/>
                         <outlet property="menu" destination="4Dd-JO-83n" id="Kag-Dr-GOD"/>
+                        <outlet property="noCompsLabel" destination="fsa-VO-RcI" id="ZL4-cr-CIA"/>
                         <outlet property="tableView" destination="g8R-FX-vJY" id="r55-fd-eUZ"/>
                     </connections>
                 </viewController>
@@ -264,6 +273,14 @@
                                     <constraint firstItem="bCt-Js-Xda" firstAttribute="top" secondItem="9Me-FI-wrK" secondAttribute="top" id="g4l-Dq-SDk"/>
                                     <constraint firstAttribute="bottom" secondItem="bCt-Js-Xda" secondAttribute="bottom" id="ofv-bK-9Aw"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="panGestureRecognizer.minimumNumberOfTouches">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="ldS-Qo-c4z" id="rSu-9g-Lf0"/>
+                                </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x7c-ta-wj1" customClass="CursorControlsView" customModule="Flow" customModuleProvider="target">
                                 <rect key="frame" x="800" y="500" width="200" height="200"/>
@@ -696,18 +713,18 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="double-sharp"/>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycl-gp-KaZ">
-                                        <rect key="frame" x="1049" y="15" width="46" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-B0-Oho">
+                                        <rect key="frame" x="978" y="15" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Play"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-B0-Oho">
-                                        <rect key="frame" x="916" y="15" width="117" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Time Signature"/>
+                                        <state key="normal" title="Time Signature" image="time-key-icon"/>
                                         <connections>
                                             <segue destination="cUa-Ia-SFW" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="fAg-Li-uzT"/>
                                         </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycl-gp-KaZ">
+                                        <rect key="frame" x="1060" y="14" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Play" image="play-icon"/>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -734,7 +751,8 @@
                         <viewLayoutGuide key="safeArea" id="j19-iv-FrW"/>
                     </view>
                     <navigationItem key="navigationItem" title="Editor" id="Hhe-eV-Nri">
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="HR0-Bv-Tya">
+                        <barButtonItem key="rightBarButtonItem" title="Save" image="save-icon" id="HR0-Bv-Tya">
+                            <inset key="imageInsets" minX="0.0" minY="0.0" maxX="-40" maxY="0.0"/>
                             <connections>
                                 <action selector="onTapSave:" destination="ldS-Qo-c4z" id="d5m-eI-AP1"/>
                             </connections>
@@ -745,6 +763,7 @@
                         <outlet property="height" destination="xo5-Y1-ev2" id="n6n-09-Ew5"/>
                         <outlet property="menuBar" destination="VHe-OH-6BV" id="EC9-aQ-TAh"/>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
+                        <outlet property="scrollView" destination="9Me-FI-wrK" id="TfR-zs-wl6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2W-99-FM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -905,12 +924,18 @@
         <image name="half-rest-icon" width="116" height="115"/>
         <image name="natural" width="18" height="77"/>
         <image name="paste-icon" width="50" height="50"/>
+        <image name="play-icon" width="100" height="100"/>
         <image name="quarter-note-icon" width="115" height="115"/>
         <image name="quarter-rest-icon" width="115" height="115"/>
         <image name="redo-icon" width="50" height="50"/>
+        <image name="save-icon" width="100" height="100"/>
         <image name="sharp" width="28" height="75"/>
+        <image name="time-key-icon" width="100" height="100"/>
         <image name="undo-icon" width="50" height="50"/>
         <image name="whole-note-icon" width="116" height="115"/>
         <image name="whole-rest-icon" width="115" height="115"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="2Bx-FE-wU0"/>
+    </inferredMetricsTieBreakers>
 </document>

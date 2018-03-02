@@ -8,13 +8,16 @@
 
 import UIKit
 
-class EditorViewController: UIViewController {
+class EditorViewController: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var musicSheet: MusicSheet!
     @IBOutlet weak var height: NSLayoutConstraint!
     @IBOutlet weak var menuBar: MenuBar!
-
-    private let composition: Composition?
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    var composition: Composition?
+    
+    private var soundManager = SoundManager()
 
     required init?(coder aDecoder: NSCoder) {
         
@@ -30,8 +33,10 @@ class EditorViewController: UIViewController {
             let measure = Measure()
 
             // dummy data
-            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .quarter, clef: measure.clef))
-            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .eighth, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .eighth, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .eighth, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .eighth, clef: measure.clef))
 
             measuresForG.append(measure)
         }
@@ -70,11 +75,30 @@ class EditorViewController: UIViewController {
 
         //EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
 
-        if musicSheet != nil {
+        if self.musicSheet != nil {
             // set composition in music sheet
-            musicSheet.composition = composition
+            self.musicSheet.composition = self.composition
+        }
+        
+        if let menuBar = self.menuBar, let composition = self.composition {
+            menuBar.compositionInfo = composition.compositionInfo
         }
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updateMinZoomScaleForSize(view.bounds.size)
+    }
+    
+    fileprivate func updateMinZoomScaleForSize(_ size: CGSize) {
+        let widthScale = size.width / musicSheet.bounds.width
+        let heightScale = size.height / musicSheet.bounds.height
+        let minScale = min(widthScale, heightScale)
+        
+        scrollView.minimumZoomScale = 1
+        scrollView.maximumZoomScale = 2
+        scrollView.zoomScale = minScale
     }
 
     override func didReceiveMemoryWarning() {
@@ -82,29 +106,13 @@ class EditorViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
-
-        // TODO: inline this with self instance of composition
-
-        // FOR TESTING PURPOSES ONLY
-        /*let measure = Measure(keySignature: KeySignature.c,
-                              timeSignature: TimeSignature(),
-                              clef: Clef.G)
-        measure.notationObjects.append(Note(pitch: Pitch(step: Step.A, octave: 2),
-                                            type: RestNoteType.quarter,
-                                            clef: Clef.G))
-        measure.notationObjects.append(Rest(type: .half))
         
-        var measures = [Measure]()
-        measures.append(measure)*/
-
-        //let comp = Composition(measures: measures)
-        //let test = FileHandler.instance.convertCompositionToMusicXML(comp)
+        if let composition = self.musicSheet.composition {
+            print(composition.compositionInfo.name)
+            FileHandler.instance.saveFile(composition: composition)
+        }
         
-        //print("\(test)")
-        
-        //FileHandler.instance.convertMusicXMLtoComposition(test)
     }
 
     func onNoteKeyPressed (params:Parameters) {
@@ -130,6 +138,8 @@ class EditorViewController: UIViewController {
                 } else {
                     // TODO: determine what is the correct pitch from the cursor's location
                     if let coord = GridSystem.instance.selectedCoord {
+                        //let pitch = GridSystem.instance.getPitchFromY(y: coord.y)
+//                        note = Note(pitch: Pitch(step: pitch.step, octave: pitch.octave), type: restNoteType)
                         note = Note(pitch: GridSystem.instance.getPitchFromY(y: coord.y), type: restNoteType)
                     } else {
                         note = Note(pitch: Pitch(step: Step.G, octave: 5), type: restNoteType)
@@ -140,17 +150,29 @@ class EditorViewController: UIViewController {
 
                 if musicSheet.selectedNotations.count > 0 {
                     //edit selected notes
+                    print("at selectedNotations.count > 0")
+                    editNotations(old: self.musicSheet.selectedNotations, new: [note])
+//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                     
-                    editSelectedNotes(newNote: note)
-                    
+                } else if let hovered = self.musicSheet.hoveredNotation {
+                    //EditAction editAction = EditAction(old: [hovered], new: note)
+                    self.editNotations(old: [hovered], new: [note])
+//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 } else {
                     // instantiate add action
                     let addAction = AddAction(measure: measure, notation: note)
+                    
+                    if let note = note as? Note {
+                        soundManager.playSound(note)
+                    }
+                    
+                    GridSystem.instance.recentNotation = note
 
                     addAction.execute()
                     
-                    EventBroadcaster.instance.postEvent(event: EventNames.ADD_NEW_NOTE, params: parameters)
+//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
+                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
             }
 
         }
@@ -169,12 +191,13 @@ class EditorViewController: UIViewController {
         return measures
     }
     
-    func editSelectedNotes(newNote: MusicNotation) {
-        let oldNotes = musicSheet.selectedNotations
-        let noteMeasures = getNoteMeasures(notes: oldNotes)
+    func editNotations(old: [MusicNotation], new: [MusicNotation]) {
+        //let oldNotes = musicSheet.selectedNotations
+        //let noteMeasures = getNoteMeasures(notes: oldNotes)
         
-        let editAction = EditAction(old: oldNotes, new: [newNote])
+        let editAction = EditAction(old: old, new: new)
         editAction.execute()
+        self.musicSheet.selectedNotations.removeAll()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }
@@ -182,11 +205,26 @@ class EditorViewController: UIViewController {
     func onDeleteKeyPressed () {
         let selectedNotes = musicSheet.selectedNotations
         //let noteMeasures = getNoteMeasures(notes: selectedNotes)
-                
-        let delAction = DeleteAction(notations: selectedNotes)
-        delAction.execute()
+        
+        if !musicSheet.selectedNotations.isEmpty {
+            GridSystem.instance.recentNotation = nil
+            
+            let delAction = DeleteAction(notations: selectedNotes)
+            delAction.execute()
+        } else if let notation = musicSheet.hoveredNotation {
+            GridSystem.instance.recentNotation = nil
+            
+            let delAction = DeleteAction(notations: [notation])
+            delAction.execute()
+        }
+        
+        musicSheet.selectedNotations.removeAll()
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.musicSheet
     }
 }
 

@@ -16,11 +16,17 @@ class TimeSignatureViewController: UIViewController {
     
     let keySignatureHandler = KeySignaturePicker()
     var rotationAngle: CGFloat = 0
+    var valid: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupKeySignaturePicker()
+
+        if let measure = GridSystem.instance.getCurrentMeasure() {
+            nBeatsLabel.text = String(measure.timeSignature.beats)
+            beatDurationLabel.text = String(measure.timeSignature.beatType)
+        }
     }
     
     func setupKeySignaturePicker() {
@@ -43,8 +49,31 @@ class TimeSignatureViewController: UIViewController {
     
     // When a user taps save
     @IBAction func onSavePress(_ sender: Any) {
-        dismiss(animated: true) {
-            //asd
+        if let measure = GridSystem.instance.getCurrentMeasure() {
+            let params:Parameters = Parameters()
+            params.put(key: KeyNames.OLD_MEASURE, value: measure)
+
+            let newMeasure = Measure()
+
+            newMeasure.notationObjects = measure.notationObjects
+            newMeasure.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
+            newMeasure.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
+
+            params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
+
+            let alert = UIAlertController(title: "Time Signature Warning", message: "Changing the time signature may cut off some of your notes. Do you want to proceed?", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Proceed", style: .destructive) { _ in
+                self.dismiss(animated: true) {
+                    EventBroadcaster.instance.postEvent(event: EventNames.EDIT_TIME_SIG, params: params)
+                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                }
+            })
+            alert.addAction(UIAlertAction(title: "Cancel", style: .default) { _ in
+
+            })
+
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
