@@ -1753,11 +1753,6 @@ class MusicSheet: UIView {
 
     public func paste() {
         print("Paste")
-        let notations = Clipboard.instance.items
-        
-        for notation in notations {
-            print(notation.type)
-        }
         //Clipboard.instance.paste(measures: <#T##[Measure]#>, noteIndex: &<#T##Int#>)
     }
 
