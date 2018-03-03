@@ -1755,6 +1755,19 @@ class MusicSheet: UIView {
         print("Paste")
         var measures = [Measure]()
         if !self.selectedNotations.isEmpty {
+            for notation in self.selectedNotations {
+                if let measure = notation.measure {
+                    if !measures.contains(measure) {
+                        measures.append(measure)
+                    }
+                }
+            }
+            
+            let startMeasure = measures[0]
+            let firstNotation = self.selectedNotations[0]
+            if let startIndex = startMeasure.notationObjects.index(of: firstNotation) {
+                Clipboard.instance.paste(measures: measures, at: startIndex)
+            }
             
         } else if let selectedMeasure = GridSystem.instance.getCurrentMeasure() {
             if let staves = self.composition?.staffList {
@@ -1764,16 +1777,18 @@ class MusicSheet: UIView {
                     }
                 }
             }
+            
+            let startMeasure = measures[0]
+            if let hovered = self.hoveredNotation {
+                if let startIndex = startMeasure.notationObjects.index(of: hovered) {
+                    Clipboard.instance.paste(measures: measures, at: startIndex)
+                }
+            } else {
+                Clipboard.instance.paste(measures: measures, at: startMeasure.notationObjects.count)
+            }
         }
         
-        let startMeasure = measures[0]
-        if let hovered = self.hoveredNotation {
-            if let noteIndex = startMeasure.notationObjects.index(of: hovered) {
-                Clipboard.instance.paste(measures: measures, at: noteIndex)
-            }
-        } else {
-            Clipboard.instance.paste(measures: measures, at: startMeasure.notationObjects.count)
-        }
+        
         
         self.updateMeasureDraw()
         
