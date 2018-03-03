@@ -43,7 +43,7 @@ class Clipboard {
     }
 
     func paste(measures: [Measure], at startIndex: Int) {
-        print("I was called")
+
         var noteIndex = startIndex
         var measureIndex = 0
         var oldNotations = [MusicNotation]()
@@ -68,9 +68,17 @@ class Clipboard {
             }
             
             newNotations.append(item.duplicate())
+            noteIndex += 1
+        }
+        
+        if oldNotations.count > 0 {
+            let editAction = EditAction(old: oldNotations, new: newNotations)
+            editAction.execute()
+        } else {
+            let addAction = AddAction(measures: measures, notations: newNotations)
+            addAction.execute()
         }
 
-        let editAction = EditAction(old: oldNotations, new: newNotations)
-        editAction.execute()
+        
     }
 }
