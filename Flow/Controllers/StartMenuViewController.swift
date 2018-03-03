@@ -245,8 +245,10 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
-        alert.addAction(UIAlertAction(title: "Export", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: "Share", style: .default) { _ in
             print("Export tapped")
+            let compositionInfo = FileHandler.instance.compositions[index.row]
+            self.shareComposition(compositionInfo: compositionInfo, cell: cell)
         })
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
@@ -259,6 +261,28 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         }
 
         present(alert, animated: true)
+    }
+    
+    private func shareComposition(compositionInfo: CompositionInfo, cell: UIView) {
+        guard let url = FileHandler.instance.export(compositionInfo) else {
+            return
+        }
+        let activityViewController = UIActivityViewController(
+            activityItems: ["Check out this composition I wrote using Flow.", url],
+            applicationActivities: nil)
+        if let popoverPresentationController = activityViewController.popoverPresentationController {
+            if self.isCollectionViewShowing {
+                popoverPresentationController.sourceView = cell
+                popoverPresentationController.sourceRect = cell.bounds
+            } else {
+                popoverPresentationController.sourceView = cell
+                popoverPresentationController.sourceRect = cell.bounds
+            }
+            
+            
+            //popoverPresentationController.barButtonItem = (sender as! UIBarButtonItem)
+        }
+        present(activityViewController, animated: true, completion: nil)
     }
 
     private func deleteItem(at index: IndexPath) {

@@ -67,6 +67,18 @@ class FileHandler {
         }
     }
     
+    func export(_ compositionInfo: CompositionInfo) -> URL? {
+        // 4
+        guard let _ = FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask).first else {
+                return nil
+        }
+        
+        // 5
+        let fileURL = documentsDirectory.appendingPathComponent(compositionInfo.id).appendingPathExtension("xml")
+        return fileURL
+    }
+    
     private func retrieveCompositionList() {
         if let objects = UserDefaults.standard.value(forKey: FileHandler.KEY_COMPOSITION_LIST) as? Data {
             let decoder = JSONDecoder()
