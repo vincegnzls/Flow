@@ -88,11 +88,9 @@ class Measure: Equatable {
 
     public func deleteInMeasure(_ musicNotation: MusicNotation) {
 
-        if let index = notationObjects.index(where: {$0 === musicNotation}) {
-
+        if let index = notationObjects.index(of: musicNotation) {
             musicNotation.measure = nil
             notationObjects.remove(at: index)
-
         }
 
     }

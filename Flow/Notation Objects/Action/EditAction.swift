@@ -27,7 +27,7 @@ class EditAction: Action {
         /*for (notation, measure) in zip(oldNotations, measures) {
             measure.deleteInMeasure(notation)
         }*/
-
+        
         // Delete notes in measures
         for notation in self.oldNotations {
             if let measure = notation.measure {
@@ -38,11 +38,16 @@ class EditAction: Action {
                 if !self.measures.contains(measure) {
                     self.measures.append(measure)
                 }
+                print("deleting notation")
                 measure.deleteInMeasure(notation)
             }
         }
 
         var measureIndex = 0
+        
+        while self.notationIndices.count < self.newNotations.count {
+            self.notationIndices.append(-1)
+        }
         
         for (notation, index) in zip(self.newNotations, self.notationIndices) {
             if !measures[measureIndex].isAddNoteValid(musicNotation: notation.type) {
@@ -54,7 +59,13 @@ class EditAction: Action {
             }
 
             let measure = measures[measureIndex]
-            measure.addToMeasure(notation, at: index)
+            
+            if index > -1 {
+                measure.addToMeasure(notation, at: index)
+            } else {
+                measure.addToMeasure(notation)
+            }
+            
         }
 
         //self.measures[0].addToMeasure(newNotations[0])

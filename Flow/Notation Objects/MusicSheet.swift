@@ -1775,6 +1775,8 @@ class MusicSheet: UIView {
             Clipboard.instance.paste(measures: measures, at: startMeasure.notationObjects.count)
         }
         
+        self.updateMeasureDraw()
+        
         //Clipboard.instance.paste(measures: <#T##[Measure]#>, noteIndex: &<#T##Int#>)
     }
 

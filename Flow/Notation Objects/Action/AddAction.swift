@@ -27,7 +27,23 @@ class AddAction: Action {
     }
 
     func execute() {
-        for (notation, measure) in zip(notations, measures) {
+        /*for (notation, measure) in zip(notations, measures) {
+            measure.addToMeasure(notation)
+        }*/
+        
+        for notation in self.notations {
+            var measureIndex = 0
+            
+            if !self.measures[measureIndex].isAddNoteValid(musicNotation: notation.type) {
+                measureIndex += 1
+            }
+            
+            if measureIndex >= self.measures.count {
+                break
+            }
+            
+            let measure = measures[measureIndex]
+            
             measure.addToMeasure(notation)
         }
     }
