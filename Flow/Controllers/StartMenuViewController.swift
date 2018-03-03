@@ -22,6 +22,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noCompsLabel: UILabel!
+    @IBOutlet weak var changeViewBtn: UIButton!
     
     // MARK: Properties
     private var isCollectionViewShowing = false
@@ -56,8 +57,12 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         
         if FileHandler.instance.compositions.isEmpty {
             self.noCompsLabel.isHidden = false
+            self.tableView.isHidden = true
+            self.changeViewBtn.isEnabled = false
         } else {
             self.noCompsLabel.isHidden = true
+            self.tableView.isHidden = false
+            self.changeViewBtn.isEnabled = true
         }
     }
     
@@ -308,8 +313,12 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             self.deleteItem(at: index)
             if FileHandler.instance.compositions.isEmpty {
                 self.noCompsLabel.isHidden = false
+                self.tableView.isHidden = true
+                self.changeViewBtn.isEnabled = false
             } else {
                 self.noCompsLabel.isHidden = true
+                self.tableView.isHidden = false
+                self.changeViewBtn.isEnabled = true
             }
         })
 

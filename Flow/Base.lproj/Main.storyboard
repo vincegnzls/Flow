@@ -228,6 +228,7 @@ Tap '+' to create a new composition.</string>
                     </view>
                     <navigationItem key="navigationItem" title="Your Compositions" id="0l2-Ep-9cc"/>
                     <connections>
+                        <outlet property="changeViewBtn" destination="ACm-2h-O3l" id="xbf-mZ-O08"/>
                         <outlet property="collectionView" destination="FMb-5Y-qyJ" id="UqJ-qy-wZQ"/>
                         <outlet property="menu" destination="4Dd-JO-83n" id="Kag-Dr-GOD"/>
                         <outlet property="noCompsLabel" destination="fsa-VO-RcI" id="ZL4-cr-CIA"/>
