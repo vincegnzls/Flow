@@ -97,9 +97,10 @@ class Measure: Equatable {
 
     public func editInMeasure(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
 
-        if let index = notationObjects.index(where: {$0 === oldNote}) {
-
+        if let index = notationObjects.index(of: oldNote) {
+            oldNote.measure = nil
             notationObjects[index] = newNote
+            newNote.measure = self
 
         }
 
