@@ -27,6 +27,8 @@ class GridSystem {
                     if let newMeasure = getMeasureFromPoints(measurePoints: measureCoord) {
                         let params:Parameters = Parameters()
                         params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
+
+                        print("KEY SIG: \(newMeasure.keySignature)")
                         
                         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
                     }

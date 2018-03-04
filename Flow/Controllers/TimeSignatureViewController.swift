@@ -26,6 +26,8 @@ class TimeSignatureViewController: UIViewController {
         if let measure = GridSystem.instance.getCurrentMeasure() {
             nBeatsLabel.text = String(measure.timeSignature.beats)
             beatDurationLabel.text = String(measure.timeSignature.beatType)
+
+            keySignaturePicker.selectRow(KeySignatureData.getIndexOf(ks: measure.keySignature), inComponent: 0, animated: false)
         }
     }
     
@@ -40,6 +42,7 @@ class TimeSignatureViewController: UIViewController {
         // Assign delegate and data source
         keySignaturePicker.delegate = keySignatureHandler
         keySignaturePicker.dataSource = keySignatureHandler
+
     }
 
     // When a user taps outside the popup
@@ -50,38 +53,58 @@ class TimeSignatureViewController: UIViewController {
     // When a user taps save
     @IBAction func onSavePress(_ sender: Any) {
         if let measure = GridSystem.instance.getCurrentMeasure() {
-            let params:Parameters = Parameters()
-            params.put(key: KeyNames.OLD_MEASURE, value: measure)
-
             let newMeasure = Measure()
 
             newMeasure.notationObjects = measure.notationObjects
+
             newMeasure.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
             newMeasure.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!
 
+            let params:Parameters = Parameters()
+
+            params.put(key: KeyNames.OLD_MEASURE, value: measure)
             params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
 
-            let alert = UIAlertController(title: "Time Signature Warning", message: "Changing the time signature may cut off some of your notes. Do you want to proceed?", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Proceed", style: .destructive) { _ in
-                self.dismiss(animated: true) {
-                    EventBroadcaster.instance.postEvent(event: EventNames.EDIT_TIME_SIG, params: params)
-                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
-                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
-                }
-            })
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default) { _ in
+            if keySignatureHandler.selectedKeySignature != measure.keySignature {
+                newMeasure.keySignature = keySignatureHandler.selectedKeySignature
+                EventBroadcaster.instance.postEvent(event: EventNames.EDIT_KEY_SIG, params: params)
+                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+            }
 
-            })
+            if !sameTimeSignature(t1: measure.timeSignature, t2: newMeasure.timeSignature) {
+                let alert = UIAlertController(title: "Time Signature Warning", message: "Changing the time signature may cut off some of your notes. Do you want to proceed?", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Proceed", style: .destructive) { _ in
+                    self.dismiss(animated: true) {
+                        EventBroadcaster.instance.postEvent(event: EventNames.EDIT_TIME_SIG, params: params)
+                        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                    }
+                })
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default) { _ in
 
-            self.present(alert, animated: true, completion: nil)
+                })
+
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                dismiss(animated: true, completion: nil)
+            }
+
+
         }
+    }
+
+    public func sameTimeSignature(t1: TimeSignature, t2: TimeSignature) -> Bool {
+        if t1.beats == t2.beats && t1.beatType == t2.beatType {
+            return true
+        }
+
+        return false
     }
     
     // When a user taps cancel
     @IBAction func onCancelPress(_ sender: Any) {
-        dismiss(animated: true) {
-            //asd
-        }
+        dismiss(animated: true)
     }
     
     // Updates label whenever number of beats is changed

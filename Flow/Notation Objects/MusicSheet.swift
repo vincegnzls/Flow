@@ -126,6 +126,9 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_TIME_SIG, observer: Observer(id: "MusicSheet.editTimeSig", function: self.editTimeSig))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_KEY_SIG)
+        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editKeySig", function: self.editKeySig))
         
         EventBroadcaster.instance.removeObservers(event: EventNames.TITLE_CHANGED)
         EventBroadcaster.instance.addObserver(event: EventNames.TITLE_CHANGED, observer: Observer(id: "MusicSheet.titleChanged", function: self.titleChanged))
@@ -1816,6 +1819,28 @@ class MusicSheet: UIView {
                             }
 
                             staff.measures[i].timeSignature = newMeasure.timeSignature
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public func editKeySig(params: Parameters) {
+        let newMeasure:Measure = params.get(key: KeyNames.NEW_MEASURE) as! Measure
+        let oldMeasure:Measure = params.get(key: KeyNames.OLD_MEASURE) as! Measure
+
+        var oldKeySignature = KeySignature(rawValue: 0)
+        oldKeySignature = oldMeasure.keySignature
+
+        if let index = searchMeasureIndex(measure: oldMeasure) {
+            if let staffs = composition?.staffList {
+                for staff in staffs {
+                    for i in index...staff.measures.count-1 {
+                        if staff.measures[i].keySignature == oldKeySignature {
+                            print(staff.measures[i].keySignature.toString())
+                            staff.measures[i].keySignature = newMeasure.keySignature
+                            print(staff.measures[i].keySignature.toString())
                         }
                     }
                 }

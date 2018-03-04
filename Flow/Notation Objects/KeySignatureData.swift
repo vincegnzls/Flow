@@ -9,6 +9,8 @@
 import Foundation
 
 class KeySignatureData {
+
+    var data = [KeySignatureModel]()
     
     class func getData() -> [KeySignatureModel] {
         var data  = [KeySignatureModel]()
@@ -31,5 +33,19 @@ class KeySignatureData {
         
         return data
     }
-    
+
+    class func getIndexOf(ks: KeySignature) -> Int {
+        var index = 0
+
+        for x in KeySignatureData.getData() {
+            if x.key == ks {
+                return index
+            }
+
+            index = index + 1
+        }
+
+        return -1
+
+    }
 }
