@@ -58,4 +58,16 @@ class Composition {
         
         return nil
     }
+    
+    func getDivisions(at index: Int) -> Int{
+        var divisions = 1
+        
+        for staff in self.staffList {
+            if staff.measures.count > index {
+                divisions = max(staff.measures[index].divisions, divisions)
+            }
+        }
+        
+        return divisions
+    }
 }

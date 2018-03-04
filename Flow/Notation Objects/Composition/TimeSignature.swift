@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TimeSignature {
+struct TimeSignature: Equatable {
     var beats: Int // Top number
     var beatType: Int // Bottom number
     

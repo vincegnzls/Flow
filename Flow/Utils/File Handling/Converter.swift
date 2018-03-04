@@ -24,12 +24,60 @@ class Converter {
         // Part
         let partElement = scoreElement.addChild(name: "part", attributes: ["id": "P1"])
         
-        print(composition.numMeasures)
+        var previousKeySignature = KeySignature.c
+        var previousTimeSignature = TimeSignature(beats: 4, beatType: 4 )
+        var previousDivisions = 1
+        
         // Loop through measures
         for i in 0..<(composition.numMeasures / 2) {
-            for (index, staff) in composition.staffList.enumerated() {
+            let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(i)"])
+            
+            
+            guard composition.staffList[0].measures.count > 0 else {
+                fatalError("No measure found.")
+            }
+            
+            let firstMeasure = composition.staffList[0].measures[0]
+            
+            let divisions = composition.getDivisions(at: i)
+            
+            let equal = previousKeySignature == firstMeasure.keySignature &&
+                        previousTimeSignature == firstMeasure.timeSignature  &&
+                        previousDivisions == divisions
+            
+            if !equal && i > 0 {
+                previousKeySignature = firstMeasure.keySignature
+                previousTimeSignature = firstMeasure.timeSignature
+                previousDivisions = divisions
+                
+                // Set attributes
+                let attributesElement = measureElement.addChild(name: "attributes")
+                
+                // Set divisions
+                attributesElement.addChild(name: "divisions", value: "\(divisions)")
+                
+                // Key signature
+                let keyElement = attributesElement.addChild(name: "key")
+                keyElement.addChild(name: "fifths", value: "\(firstMeasure.keySignature.rawValue)")
+                
+                // Time signature
+                let timeSignatureElement = attributesElement.addChild(name: "time")
+                timeSignatureElement.addChild(name: "beats", value: "\(firstMeasure.timeSignature.beats)")
+                timeSignatureElement.addChild(name: "beat-type", value: "\(firstMeasure.timeSignature.beatType)")
+                
+                // Calculate divisions and set clefs
+                for index in composition.staffList.indices {
+                    
+                    // Clef
+                    let clefElement = attributesElement.addChild(name: "clef", attributes: ["number": "\(index + 1)"])
+                    clefElement.addChild(name: "sign", value: firstMeasure.clef.rawValue)
+                    clefElement.addChild(name: "line", value: "\(firstMeasure.clef.getStandardLine())")
+                }
+            }
+            
+            for staff in composition.staffList {
                 let measure = staff.measures[i]
-                let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(i + index + 1)"])
+                /*let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(i + index + 1)"])
                 
                 // Set attributes
                 let attributesElement = measureElement.addChild(name: "attributes")
@@ -55,7 +103,7 @@ class Converter {
                 // Clef
                 let clefElement = attributesElement.addChild(name: "clef")
                 clefElement.addChild(name: "sign", value: measure.clef.rawValue)
-                clefElement.addChild(name: "line", value: "\(measure.clef.getStandardLine())")
+                clefElement.addChild(name: "line", value: "\(measure.clef.getStandardLine())")*/
                 
                 // Add notes and/or rests
                 for notation in measure.notationObjects {
@@ -76,53 +124,6 @@ class Converter {
                 }
             }
         }
-        /*for (index, measure) in composition.measures.enumerated() {
-         let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(index + 1)"])
-         
-         // Set attributes
-         let attributesElement = measureElement.addChild(name: "attributes")
-         
-         // Calculate divisions
-         var divisions = 1
-         for notation in measure.notationObjects {
-         divisions = max(notation.type.getDivision(), divisions)
-         }
-         
-         // Set divisions
-         attributesElement.addChild(name: "divisions", value: "\(divisions)")
-         
-         // Key signature
-         let keyElement = attributesElement.addChild(name: "key")
-         keyElement.addChild(name: "fifths", value: "\(measure.keySignature.rawValue)")
-         
-         // Time signature
-         let timeSignatureElement = attributesElement.addChild(name: "time")
-         timeSignatureElement.addChild(name: "beats", value: "\(measure.timeSignature.beats)")
-         timeSignatureElement.addChild(name: "beat-type", value: "\(measure.timeSignature.beatType)")
-         
-         // Clef
-         let clefElement = attributesElement.addChild(name: "clef")
-         clefElement.addChild(name: "sign", value: measure.clef.rawValue)
-         clefElement.addChild(name: "line", value: "\(measure.clef.getStandardLine())")
-         
-         // Add notes and/or rests
-         for notation in measure.notationObjects {
-         let notationElement = measureElement.addChild(name: "note")
-         
-         // Add necessary elements depending on note or rest
-         if let note = notation as? Note {
-         let pitchElement = notationElement.addChild(name: "pitch")
-         pitchElement.addChild(name: "step", value: note.pitch.step.toString())
-         pitchElement.addChild(name: "octave", value: "\(note.pitch.octave)")
-         } else if notation is Rest {
-         notationElement.addChild(name: "rest")
-         }
-         
-         // Set duration and type
-         notationElement.addChild(name: "duration", value: "\(notation.type.getDuration(divisions: divisions))")
-         notationElement.addChild(name: "type", value: notation.type.toString())
-         }
-         }*/
         
         // Get string format of xml
         var xmlString = xml.xml
