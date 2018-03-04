@@ -1504,7 +1504,7 @@ class MusicSheet: UIView {
             }
 
             // draws the beam based on highest note
-            let _ = self.drawLine(start: CGPoint(x: startX, y: highestY), end: CGPoint(x: endX, y: highestY), thickness: lineSpace / 2)
+            let _ = self.drawLine(start: CGPoint(x: startX, y: highestY + 2), end: CGPoint(x: endX, y: highestY + 2), thickness: lineSpace / 2)
         } else {
             let lowestNote = getLowestOrHighestNote(highest: false, notations: notations)
             let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 3
@@ -1642,7 +1642,7 @@ class MusicSheet: UIView {
             }
 
             // draws the beam based on lowest note
-            let _ = self.drawLine(start: CGPoint(x: startX, y: lowestY), end: CGPoint(x: endX, y: lowestY), thickness: lineSpace / 2)
+            let _ = self.drawLine(start: CGPoint(x: startX, y: lowestY + 2), end: CGPoint(x: endX, y: lowestY + 2), thickness: lineSpace / 2)
         }
     }
 
@@ -1664,7 +1664,7 @@ class MusicSheet: UIView {
         self.addSubview(notationImageView)
 
         if isUpwards {
-            let _ = self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 5), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 5), thickness: 2.3)
+            let _ = self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 4), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 4), thickness: 2.3)
             //drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 23.9 + 22, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
         } else {
             let _ = self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + 3), end: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + stemHeight + 3), thickness: 2.3)
