@@ -34,12 +34,6 @@ class MusicSheet: UIView {
 
     private let NUM_MEASURES_PER_STAFF = 2
     
-    private let yCursor = CAShapeLayer() // Horizontal cursor
-    private let xCursor = CAShapeLayer() // Vertical cursor
-    
-    private var curYCursorLocation = CGPoint(x: 0, y: 0)
-    private var curXCursorLocation = CGPoint(x: 0, y: 0)
-    
     // used for connecting a grand staff
     private var measureXDivs = Set<CGFloat>()
     
@@ -47,6 +41,7 @@ class MusicSheet: UIView {
     private var measureCoords = [GridSystem.MeasurePoints]()
     
     private let highlightRect = HighlightRect()
+    private let sheetCursor = SheetCursor()
     
     public var composition: Composition?
     public var hoveredNotation: MusicNotation?
@@ -96,8 +91,8 @@ class MusicSheet: UIView {
         
         startY += sheetYOffset
         
-        setupCursor()
         self.layer.addSublayer(self.highlightRect)
+        self.layer.addSublayer(self.sheetCursor)
         
         EventBroadcaster.instance.removeObservers(event: EventNames.ARROW_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.ARROW_KEY_PRESSED,
@@ -189,7 +184,7 @@ class MusicSheet: UIView {
                     if recentNotation is Note {
                         coordForCurrentPoint = coord
                     } else if recentNotation is Rest {
-                        coordForCurrentPoint = curYCursorLocation
+                        coordForCurrentPoint = sheetCursor.curYCursorLocation
                     }
                     
                 }
@@ -206,7 +201,7 @@ class MusicSheet: UIView {
                             
                             GridSystem.instance.selectedCoord = nextSnapPoint
                             moveCursorY(location: nextSnapPoint)
-                            moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: curXCursorLocation.y))
+                            moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.x))
                             
                         }
                     }
@@ -220,7 +215,7 @@ class MusicSheet: UIView {
                     
                         GridSystem.instance.selectedCoord = nextSnapPoint
                         moveCursorY(location: nextSnapPoint)
-                        moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: curXCursorLocation.y))
+                        moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
                         
                     }
                 }
@@ -504,8 +499,8 @@ class MusicSheet: UIView {
             GridSystem.instance.selectedMeasureCoord = measureCoord
             GridSystem.instance.selectedCoord = snapPoints[0]
             
+            moveCursorX(location: CGPoint(x: snapPoints[0].x, y: sheetCursor.curYCursorLocation.y - 30))
             moveCursorY(location: snapPoints[0])
-            moveCursorX(location: CGPoint(x: snapPoints[0].x, y: curYCursorLocation.y - 30))
         }
         
         //draw line before measure
@@ -723,42 +718,9 @@ class MusicSheet: UIView {
         //self.assembleNoteForBeaming(notation: notation, stemHeight: 100)
     }
     
-    private func setupCursor() {
-        
-        yCursor.zPosition = CGFloat.greatestFiniteMagnitude // Places horizontal cursor to front
-        xCursor.zPosition = CGFloat.greatestFiniteMagnitude // Places vertical cursor to front
-        
-        // Setup horizontal cursor
-        let yPath = UIBezierPath()
-        yPath.move(to: .zero)
-        yPath.addLine(to: CGPoint(x: 20, y: 0))
-
-        yCursor.path = yPath.cgPath
-        yCursor.strokeColor = UIColor(red:0.00, green:0.47, blue:1.00, alpha:1.0).cgColor
-        yCursor.lineWidth = 8
-        
-        // Setup vertical cursor
-        let xPath = UIBezierPath()
-        xPath.move(to: CGPoint(x: 10, y: 0))
-        xPath.addLine(to: CGPoint(x: 10, y: 530))
-        
-        xCursor.path = xPath.cgPath
-        xCursor.strokeColor = UIColor(red:0.00, green:0.47, blue:1.00, alpha:1.0).cgColor
-        xCursor.lineWidth = 4
-        
-        self.layer.addSublayer(yCursor)
-        self.layer.addSublayer(xCursor)
-        
-        curYCursorLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
-        curXCursorLocation = CGPoint(x: 300, y: 50 + sheetYOffset)
-        
-        // Adjust initial placement of cursor
-        moveCursor(location: curXCursorLocation)
-    }
-    
     func onArrowKeyPressed(params: Parameters) {
         let direction:ArrowKey = params.get(key: KeyNames.ARROW_KEY_DIRECTION) as! ArrowKey
-        var nextPoint:CGPoint = curYCursorLocation
+        var nextPoint:CGPoint = sheetCursor.curYCursorLocation
         
         if direction == ArrowKey.up {
             
@@ -772,7 +734,7 @@ class MusicSheet: UIView {
                 return;
             }
             
-            if let point = GridSystem.instance.getUpYSnapPoint(currentPoint: curYCursorLocation) {
+            if let point = GridSystem.instance.getUpYSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
                 nextPoint = point
             } else {
                 return
@@ -790,7 +752,7 @@ class MusicSheet: UIView {
                 return;
             }
             
-            if let point = GridSystem.instance.getDownYSnapPoint(currentPoint: curYCursorLocation) {
+            if let point = GridSystem.instance.getDownYSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
                 nextPoint = point
             } else {
                 return
@@ -798,7 +760,7 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.left {
             
-            if let point = GridSystem.instance.getLeftXSnapPoint(currentPoint: curYCursorLocation) {
+            if let point = GridSystem.instance.getLeftXSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
                 nextPoint = point
             } else {
                 return
@@ -806,7 +768,7 @@ class MusicSheet: UIView {
             
         } else if direction == ArrowKey.right {
             
-            if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: curYCursorLocation) {
+            if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
                 nextPoint = point
             } else {
                 return
@@ -815,7 +777,7 @@ class MusicSheet: UIView {
         }
         
         // go to next measure with the same clef
-        if nextPoint == curYCursorLocation {
+        if nextPoint == sheetCursor.curYCursorLocation {
             if let measurePoints = GridSystem.instance.selectedMeasureCoord {
                 
                 if direction == ArrowKey.left {
@@ -825,15 +787,15 @@ class MusicSheet: UIView {
                 }
             }
         } else {
-            curXCursorLocation.x = nextPoint.x
-            curYCursorLocation.x = nextPoint.x
+            sheetCursor.curXCursorLocation.x = nextPoint.x
+            sheetCursor.curYCursorLocation.x = nextPoint.x
             
-            moveCursorX(location: curXCursorLocation)
+            moveCursorX(location: sheetCursor.curXCursorLocation)
             moveCursorY(location: nextPoint)
         }
         
         
-        GridSystem.instance.selectedCoord = curYCursorLocation
+        GridSystem.instance.selectedCoord = sheetCursor.curYCursorLocation
         
         /*let xLocString = "CURSOR X LOCATION: (" + String(describing: curXCursorLocation.x) + ", " + String(describing: curXCursorLocation.y) + ")"
         let yLocString = "CURSOR Y LOCATION: (" + String(describing: curYCursorLocation.x) + ", " + String(describing: curYCursorLocation.y) + ")"
@@ -842,16 +804,8 @@ class MusicSheet: UIView {
         print(yLocString)*/
     }
     
-    public func moveCursor(location: CGPoint) {
-        yCursor.position = location
-        xCursor.position = location
-    }
-    
     public func moveCursorY(location: CGPoint) {
-        yCursor.position = location
-        curYCursorLocation = location
-        
-        //drawLedgerLines(upToLocation: curYCursorLocation)
+        sheetCursor.moveCursorY(location: location)
         
         // in getting the hovered note
         if let measure = GridSystem.instance.getCurrentMeasure() {
@@ -905,15 +859,12 @@ class MusicSheet: UIView {
     }
     
     public func moveCursorX(location: CGPoint) {
-        xCursor.position = location
-        curXCursorLocation = location
+        sheetCursor.moveCursorX(location: location)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: self)
-
-        print("LOCATION TAPPED: \(location)")
         
         if selectedNotations.count > 0 {
             // Remove highlight
@@ -958,12 +909,9 @@ class MusicSheet: UIView {
                     }
                 }
                 
-                let newXCurLocation = CGPoint(x: closestPoint.x, y: curXCursorLocation.y)
+                let newXCurLocation = CGPoint(x: closestPoint.x, y: sheetCursor.curXCursorLocation.y)
                 
-                curXCursorLocation = newXCurLocation
                 moveCursorX(location: newXCurLocation)
-                
-                curYCursorLocation = closestPoint
                 moveCursorY(location: closestPoint)
                 
                 GridSystem.instance.selectedCoord = closestPoint
@@ -1011,9 +959,8 @@ class MusicSheet: UIView {
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
 
             if let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord) {
-
-                curXCursorLocation = CGPoint(x: curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30)
-                moveCursorX(location: curXCursorLocation)
+                
+                moveCursorX(location: CGPoint(x: sheetCursor.curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30))
                 
             }
         }
@@ -1198,7 +1145,7 @@ class MusicSheet: UIView {
             let prevSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints)
             
             // get current index of previous snap points
-            if let prevSnapIndex = prevSnapPoints?.index(where: {$0.y == curYCursorLocation.y}) {
+            if let prevSnapIndex = prevSnapPoints?.index(where: {$0.y == sheetCursor.curYCursorLocation.y}) {
                 
                 let indexJump:Int
                 
@@ -1252,7 +1199,7 @@ class MusicSheet: UIView {
             
                 // get current index of previous snap points
 
-                if let prevSnapIndex = prevSnapPoints.index(where: {$0.y == curYCursorLocation.y}) {
+                if let prevSnapIndex = prevSnapPoints.index(where: {$0.y == sheetCursor.curYCursorLocation.y}) {
                     let indexJump:Int
                     
                     // for jumping to relative measure with the same clef
