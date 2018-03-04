@@ -21,7 +21,7 @@ class MusicSheet: UIView {
     private var staffIndex:CGFloat = -1
     
     private let noteXOffset: CGFloat = 10
-    private let noteYOffset: CGFloat = -94
+    private let noteYOffset: CGFloat = -93
     private let noteWidthAlter: CGFloat = -3
     private let noteHeightAlter: CGFloat = -3
     
@@ -201,10 +201,7 @@ class MusicSheet: UIView {
                     if let snapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: noteScreenCoord) {
                         
                         // get right again to go to the next
-                        print("RIGHT SNAP: \(snapPoint)")
                         if let nextSnapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: snapPoint) {
-                            
-                            print("RIGHTER SNAP: \(nextSnapPoint)")
                             
                             GridSystem.instance.selectedCoord = nextSnapPoint
                             moveCursorY(location: nextSnapPoint)
