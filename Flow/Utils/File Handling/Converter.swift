@@ -160,22 +160,55 @@ class Converter {
             let gStaff = Staff()
             let fStaff = Staff()
             
+            var previousKeySignature = KeySignature.c
+            var previousTimeSignature = TimeSignature(beats: 4, beatType: 4 )
+            
             for measureElement in measureElements {
+                if let keyInt = Int(measureElement["attributes"]["key"]["fifths"].string) {
+                    if let keySignature = KeySignature(rawValue: keyInt) {
+                        previousKeySignature = keySignature
+                    }
+                }
+                
+                if let beats = Int(measureElement["attributes"]["time"]["beats"].string),
+                    let beatType = Int(measureElement["attributes"]["time"]["beat-type"].string) {
+                    previousTimeSignature = TimeSignature(beats: beats, beatType: beatType)
+                }
+                
                 // Get attributes
-                let keySignature = KeySignature(rawValue: Int(measureElement["attributes"]["key"]["fifths"].string)!)
+                /*let keySignature = KeySignature(rawValue: Int(measureElement["attributes"]["key"]["fifths"].string)!)
                 let timeSignature = TimeSignature(beats: Int(measureElement["attributes"]["time"]["beats"].string)!,
                                                   beatType: Int(measureElement["attributes"]["time"]["beat-type"].string)!)
-                let clef = Clef(rawValue: measureElement["attributes"]["clef"]["sign"].string)
+                let clef = Clef(rawValue: measureElement["attributes"]["clef"]["sign"].string)*/
                 
-                let measure = Measure(keySignature: keySignature!,
+                var measures = [Measure]()
+                
+                if let clefs = measureElement["attributes"]["clef"].all {
+                    for clefXML in clefs {
+                        let clef = Clef(rawValue: clefXML["sign"].string)!
+                        
+                        let measure = Measure(keySignature: previousKeySignature,
+                                              timeSignature: previousTimeSignature,
+                                              clef: clef)
+                        print(measure.keySignature.toString())
+                        print("beats: \(measure.timeSignature.beats)")
+                        print(measure.clef.rawValue)
+                        measures.append(measure)
+                    }
+                }
+                
+                /*let measure = Measure(keySignature: keySignature!,
                                       timeSignature: timeSignature,
-                                      clef: clef!)
+                                      clef: clef!)*/
+                
+                
+                
                 //                print(measure.keySignature.toString())
                 //                print("beats: \(measure.timeSignature.beats)")
                 //                print(measure.clef.rawValue)
                 
                 // Get notes and/or rests
-                if let notationElements = measureElement["note"].all {
+                /*if let notationElements = measureElement["note"].all {
                     for notationElement in notationElements {
                         //let notation = MusicNotation(type: RestNoteType.convert(notationElement["type"].string))
                         let type = RestNoteType.convert(notationElement["type"].string)
@@ -203,7 +236,7 @@ class Converter {
                     gStaff.addMeasure(measure)
                 } else if measure.clef == .F {
                     fStaff.addMeasure(measure)
-                }
+                }*/
             }
 
             composition.addStaff(gStaff)

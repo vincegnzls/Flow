@@ -110,7 +110,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         
         if let composition = self.musicSheet.composition {
             //FileHandler.instance.saveFile(composition: composition)
-            print(Converter.compositionToMusicXML(composition))
+            let xml = Converter.compositionToMusicXML(composition)
+            print(xml)
+            Converter.musicXMLtoComposition(xml)
         }
         
     }
