@@ -15,6 +15,7 @@ class KeySignaturePicker: UIPickerView {
     let customWidth:CGFloat = 100
     let customHeight: CGFloat = 100
 
+    var selectedKeySignature: KeySignature = .c
 }
 
 extension KeySignaturePicker: UIPickerViewDataSource {
@@ -61,5 +62,6 @@ extension KeySignaturePicker: UIPickerViewDelegate {
     // Listener when key signature is changed
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print(keySignatures[row].key.toString())
+        self.selectedKeySignature = keySignatures[row].key
     }
 }

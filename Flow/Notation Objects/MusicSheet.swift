@@ -125,6 +125,9 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_TIME_SIG, observer: Observer(id: "MusicSheet.editTimeSig", function: self.editTimeSig))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_KEY_SIG)
+        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editKeySig", function: self.editKeySig))
         
         EventBroadcaster.instance.removeObservers(event: EventNames.TITLE_CHANGED)
         EventBroadcaster.instance.addObserver(event: EventNames.TITLE_CHANGED, observer: Observer(id: "MusicSheet.titleChanged", function: self.titleChanged))
@@ -489,7 +492,10 @@ class MusicSheet: UIView {
 
         // get upper left point and lower right point of measure to keep track of location
         let measureCoord:GridSystem.MeasurePoints =
-            GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startY), lowerRightPoint: CGPoint(x: endX, y: startY-curSpace))
+            GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startY),
+                                     lowerRightPoint: CGPoint(x: endX, y: startY-curSpace),
+                                     upperLeftPointWithLedger: CGPoint(x: startX, y: startY+(lineSpace*3.5)),
+                                     lowerRightPointWithLedger: CGPoint(x: endX, y: startY-curSpace-(lineSpace*3.5)))
         
         measureCoords.append(measureCoord)
         
@@ -931,9 +937,9 @@ class MusicSheet: UIView {
     private func remapCurrentMeasure (location:CGPoint) {
         
         for measureCoord in measureCoords {
-            let r:CGRect = CGRect(x: measureCoord.upperLeftPoint.x, y: measureCoord.upperLeftPoint.y,
-                                  width: measureCoord.lowerRightPoint.x - measureCoord.upperLeftPoint.x,
-                                  height: measureCoord.lowerRightPoint.y - measureCoord.upperLeftPoint.y)
+            let r:CGRect = CGRect(x: measureCoord.upperLeftPointWithLedger.x, y: measureCoord.upperLeftPointWithLedger.y,
+                                  width: measureCoord.width,
+                                  height: measureCoord.heightWithLedger)
             
             //  LOCATION IS IN MEASURE
             if r.contains(location) {
@@ -1767,6 +1773,28 @@ class MusicSheet: UIView {
                             }
 
                             staff.measures[i].timeSignature = newMeasure.timeSignature
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public func editKeySig(params: Parameters) {
+        let newMeasure:Measure = params.get(key: KeyNames.NEW_MEASURE) as! Measure
+        let oldMeasure:Measure = params.get(key: KeyNames.OLD_MEASURE) as! Measure
+
+        var oldKeySignature = KeySignature(rawValue: 0)
+        oldKeySignature = oldMeasure.keySignature
+
+        if let index = searchMeasureIndex(measure: oldMeasure) {
+            if let staffs = composition?.staffList {
+                for staff in staffs {
+                    for i in index...staff.measures.count-1 {
+                        if staff.measures[i].keySignature == oldKeySignature {
+                            print(staff.measures[i].keySignature.toString())
+                            staff.measures[i].keySignature = newMeasure.keySignature
+                            print(staff.measures[i].keySignature.toString())
                         }
                     }
                 }
