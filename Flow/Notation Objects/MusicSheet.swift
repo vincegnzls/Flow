@@ -1381,7 +1381,7 @@ class MusicSheet: UIView {
         // check whether there are more upward notes and vice versa
         if upCount > downCount {
             let highestNote = getLowestOrHighestNote(highest: true, notations: notations)
-            let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 6
+            let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 4
             let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
             let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
 
@@ -1520,7 +1520,7 @@ class MusicSheet: UIView {
             let _ = self.drawLine(start: CGPoint(x: startX, y: highestY), end: CGPoint(x: endX, y: highestY), thickness: lineSpace / 2)
         } else {
             let lowestNote = getLowestOrHighestNote(highest: false, notations: notations)
-            let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 3
+            let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 5
             let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 0.5
             let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
 
@@ -1677,7 +1677,7 @@ class MusicSheet: UIView {
         self.addSubview(notationImageView)
 
         if isUpwards {
-            let _ = self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 5), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 5), thickness: 2.3)
+            let _ = self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 4), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 4), thickness: 2.3)
             //drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 23.9 + 22, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
         } else {
             let _ = self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + 3), end: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + stemHeight + 3), thickness: 2.3)
