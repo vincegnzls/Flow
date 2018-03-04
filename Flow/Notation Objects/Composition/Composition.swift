@@ -12,6 +12,7 @@ class Composition {
     // Holds information about the composition
     var compositionInfo: CompositionInfo
     var staffList: [Staff]
+
     var isEnsembleStaff: Bool {
         return self.staffList.count > 1
     }
@@ -46,6 +47,19 @@ class Composition {
     func addStaff(_ staff: Staff) {
         self.staffList.append(staff)
     }
+
+    func addGrandStaff() {
+        for _  in 1...2 {
+
+            for staff in staffList {
+
+                var lastMeasure = staff.measures[staff.measures.count - 1]
+
+                staff.addMeasure(Measure(keySignature: lastMeasure.keySignature, timeSignature: lastMeasure.timeSignature, clef: lastMeasure.clef))
+
+            }
+        }
+    }
     
     func getMeasureOfNote(note: MusicNotation) -> Measure? {
         for staff in staffList {
@@ -58,6 +72,17 @@ class Composition {
         
         return nil
     }
+
+    func isLastMeasureFull() -> Bool {
+        for staff in staffList {
+            if staff.measures[staff.measures.count - 1].timeSignature.getMaxBeatValue() == staff.measures[staff.measures.count - 1].getTotalBeats() {
+                return true
+            }
+        }
+
+        return false
+    }
+
     
     func getDivisions(at index: Int) -> Int{
         var divisions = 1
