@@ -37,7 +37,7 @@ class Converter {
                 fatalError("No measure found.")
             }
             
-            let firstMeasure = composition.staffList[0].measures[0]
+            let firstMeasure = composition.staffList[0].measures[i]
             
             let divisions = composition.getDivisions(at: i)
             
@@ -65,7 +65,11 @@ class Converter {
                 timeSignatureElement.addChild(name: "beats", value: "\(firstMeasure.timeSignature.beats)")
                 timeSignatureElement.addChild(name: "beat-type", value: "\(firstMeasure.timeSignature.beatType)")
                 
-                // Calculate divisions and set clefs
+                // Number of Staves
+                // <staves>2</staves>
+                attributesElement.addChild(name: "staves", value: "\(composition.staffList.count)")
+                
+                // Set clefs
                 for (index, staff) in composition.staffList.enumerated() {
                     guard staff.measures.count > 0 else {
                         fatalError("No measure found.")
@@ -80,7 +84,7 @@ class Converter {
                 }
             }
             
-            for staff in composition.staffList {
+            for (index, staff) in composition.staffList.enumerated() {
                 let measure = staff.measures[i]
                 /*let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(i + index + 1)"])
                 
@@ -123,6 +127,8 @@ class Converter {
                         notationElement.addChild(name: "rest")
                     }
                     
+                    notationElement.addChild(name: "staff", value: "\(index + 1)")
+                    
                     // Set duration and type
                     notationElement.addChild(name: "duration", value: "\(notation.type.getDuration(divisions: divisions))")
                     notationElement.addChild(name: "type", value: notation.type.toString())
@@ -162,6 +168,7 @@ class Converter {
             
             var previousKeySignature = KeySignature.c
             var previousTimeSignature = TimeSignature(beats: 4, beatType: 4 )
+            var clefs = [Clef]()
             
             for measureElement in measureElements {
                 if let keyInt = Int(measureElement["attributes"]["key"]["fifths"].string) {
@@ -183,18 +190,22 @@ class Converter {
                 
                 var measures = [Measure]()
                 
-                if let clefs = measureElement["attributes"]["clef"].all {
-                    for clefXML in clefs {
+                if let clefXMLs = measureElement["attributes"]["clef"].all {
+                    clefs.removeAll()
+                    for clefXML in clefXMLs {
                         let clef = Clef(rawValue: clefXML["sign"].string)!
-                        
-                        let measure = Measure(keySignature: previousKeySignature,
-                                              timeSignature: previousTimeSignature,
-                                              clef: clef)
-//                        print(measure.keySignature.toString())
-//                        print("beats: \(measure.timeSignature.beats)")
-//                        print(measure.clef.rawValue)
-                        measures.append(measure)
+                        clefs.append(clef)
                     }
+                }
+                
+                for clef in clefs {
+                    let measure = Measure(keySignature: previousKeySignature,
+                                          timeSignature: previousTimeSignature,
+                                          clef: clef)
+                    //                        print(measure.keySignature.toString())
+                    //                        print("beats: \(measure.timeSignature.beats)")
+                    //                        print(measure.clef.rawValue)
+                    measures.append(measure)
                 }
                 
                 /*let measure = Measure(keySignature: keySignature!,
@@ -208,12 +219,15 @@ class Converter {
                 //                print(measure.clef.rawValue)
                 
                 // Get notes and/or rests
-                var measureIndex = 0
+                //var measureIndex = 0
                 if let notationElements = measureElement["note"].all {
                     for notationElement in notationElements {
                         //let notation = MusicNotation(type: RestNoteType.convert(notationElement["type"].string))
                         
                         let type = RestNoteType.convert(notationElement["type"].string)
+                        
+                        let staffNum = Int(notationElement["staff"].string)! - 1
+                        let measure = measures[staffNum]
                         
                         if let step = notationElement["pitch"]["step"].value {
                             let pitch = Pitch(step: Step.convert(step),
@@ -224,20 +238,20 @@ class Converter {
                             //                            print("\(note.pitch.octave)")
                             //measure.notationObjects.append(note)
                             
-                            if !measures[measureIndex].isAddNoteValid(musicNotation: note.type) {
+                            /*if !measures[measureIndex].isAddNoteValid(musicNotation: note.type) {
                                 measureIndex += 1
-                            }
+                            }*/
                             
-                            measures[measureIndex].addToMeasure(note)
+                            measure.addToMeasure(note)
                         } else {
                             let rest = Rest(type: type)
                             //measure.notationObjects.append(rest)
                             
-                            if !measures[measureIndex].isAddNoteValid(musicNotation: rest.type) {
+                            /*if !measures[measureIndex].isAddNoteValid(musicNotation: rest.type) {
                                 measureIndex += 1
-                            }
+                            }*/
                             
-                            measures[measureIndex].addToMeasure(rest)
+                            measure.addToMeasure(rest)
                         }
                     }
                 }
