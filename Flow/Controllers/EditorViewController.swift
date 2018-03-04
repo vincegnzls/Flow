@@ -14,13 +14,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var height: NSLayoutConstraint!
     @IBOutlet weak var menuBar: MenuBar!
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var musicSheetHeight: NSLayoutConstraint!
     
     var composition: Composition?
     
     private var soundManager = SoundManager()
 
     required init?(coder aDecoder: NSCoder) {
-        
         GridSystem.instance.reset()
 
         // TODO: change this to load an existing composition if did not create a new comp
@@ -169,6 +169,16 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     GridSystem.instance.recentNotation = note
 
                     addAction.execute()
+
+                    if let currentComp = self.musicSheet.composition {
+                        if currentComp.isLastMeasureFull() {
+                            print("PREV HEIGHT \(self.musicSheetHeight.constant)")
+                            self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
+                            print("UPDATED HEIGHT \(self.musicSheetHeight.constant)")
+                            print("LAST MEASURE FULL")
+                            currentComp.addGrandStaff()
+                        }
+                    }
                     
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
