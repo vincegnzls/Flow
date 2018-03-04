@@ -18,6 +18,10 @@ class GridSystem {
     public var selectedMeasureCoord:MeasurePoints? {
         didSet {
             if (oldValue != selectedMeasureCoord) {
+
+                if let curMeasure = self.getCurrentMeasure() {
+                    //curMeasure.fillWithRests()
+                }
                 
                 if let measureCoord = selectedMeasureCoord {
                     if let newMeasure = getMeasureFromPoints(measurePoints: measureCoord) {

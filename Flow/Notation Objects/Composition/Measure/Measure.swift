@@ -38,6 +38,7 @@ class Measure: Equatable {
         self.bounds = Bounds()
         self.curBeatValue = 0
         self.validNotes = [RestNoteType]()
+        //self.fillWithRests()
     }
 
     // Equatable operators
@@ -163,5 +164,14 @@ class Measure: Equatable {
         }
 
         return totalBeats
+    }
+
+    func fillWithRests() {
+        while getTotalBeats() < timeSignature.getMaxBeatValue() {
+            for rest in RestNoteType.types {
+                let curRest = Rest(type: rest)
+                self.addToMeasure(curRest)
+            }
+        }
     }
 }
