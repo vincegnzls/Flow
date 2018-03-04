@@ -42,6 +42,7 @@ class MusicSheet: UIView {
     
     private let highlightRect = HighlightRect()
     private let sheetCursor = SheetCursor()
+    private let cursorXOffsetY:CGFloat = -95 // distance of starting y from measure
     
     public var composition: Composition?
     public var hoveredNotation: MusicNotation?
@@ -501,7 +502,7 @@ class MusicSheet: UIView {
             // the middle snap point
             GridSystem.instance.selectedCoord = snapPoints[11]
             
-            moveCursorX(location: CGPoint(x: snapPoints[0].x, y: sheetCursor.curYCursorLocation.y - 30))
+            moveCursorX(location: CGPoint(x: snapPoints[0].x, y: measureCoord.lowerRightPoint.y + cursorXOffsetY))
             moveCursorY(location: snapPoints[0])
         }
         
@@ -1180,9 +1181,8 @@ class MusicSheet: UIView {
                     // get first measure points of the
                     if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
                     
-                        // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
                         moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
-                                                      y: firstMeasurePoints.lowerRightPoint.y - 30))
+                                                      y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
                         moveCursorY(location: newSnapPoints[prevSnapIndex])
                         
                         scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
@@ -1242,9 +1242,8 @@ class MusicSheet: UIView {
                         // get first measure points of the
                         if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
                             
-                            // TODO: Declare an offset for the xCursor AKA fix the hardcoded -30 below
                             moveCursorX(location: CGPoint(x: newCoord.x,
-                                                          y: firstMeasurePoints.lowerRightPoint.y - 30))
+                                                          y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
                             moveCursorY(location: newCoord)
                             
                             scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
