@@ -66,7 +66,6 @@ class Converter {
                 timeSignatureElement.addChild(name: "beat-type", value: "\(firstMeasure.timeSignature.beatType)")
                 
                 // Number of Staves
-                // <staves>2</staves>
                 attributesElement.addChild(name: "staves", value: "\(composition.staffList.count)")
                 
                 // Set clefs
@@ -86,33 +85,6 @@ class Converter {
             
             for (index, staff) in composition.staffList.enumerated() {
                 let measure = staff.measures[i]
-                /*let measureElement = partElement.addChild(name: "measure", attributes: ["number": "\(i + index + 1)"])
-                
-                // Set attributes
-                let attributesElement = measureElement.addChild(name: "attributes")
-                
-                // Calculate divisions
-                var divisions = 1
-                for notation in measure.notationObjects {
-                    divisions = max(notation.type.getDivision(), divisions)
-                }
-                
-                // Set divisions
-                attributesElement.addChild(name: "divisions", value: "\(divisions)")
-                
-                // Key signature
-                let keyElement = attributesElement.addChild(name: "key")
-                keyElement.addChild(name: "fifths", value: "\(measure.keySignature.rawValue)")
-                
-                // Time signature
-                let timeSignatureElement = attributesElement.addChild(name: "time")
-                timeSignatureElement.addChild(name: "beats", value: "\(measure.timeSignature.beats)")
-                timeSignatureElement.addChild(name: "beat-type", value: "\(measure.timeSignature.beatType)")
-                
-                // Clef
-                let clefElement = attributesElement.addChild(name: "clef")
-                clefElement.addChild(name: "sign", value: measure.clef.rawValue)
-                clefElement.addChild(name: "line", value: "\(measure.clef.getStandardLine())")*/
                 
                 // Add notes and/or rests
                 for notation in measure.notationObjects {
@@ -202,9 +174,6 @@ class Converter {
                     let measure = Measure(keySignature: previousKeySignature,
                                           timeSignature: previousTimeSignature,
                                           clef: clef)
-                    //                        print(measure.keySignature.toString())
-                    //                        print("beats: \(measure.timeSignature.beats)")
-                    //                        print(measure.clef.rawValue)
                     measures.append(measure)
                 }
                 
@@ -222,8 +191,6 @@ class Converter {
                 //var measureIndex = 0
                 if let notationElements = measureElement["note"].all {
                     for notationElement in notationElements {
-                        //let notation = MusicNotation(type: RestNoteType.convert(notationElement["type"].string))
-                        
                         let type = RestNoteType.convert(notationElement["type"].string)
                         
                         let staffNum = Int(notationElement["staff"].string)! - 1
@@ -234,18 +201,9 @@ class Converter {
                                               octave: Int(notationElement["pitch"]["octave"].string)!)
                             let note = Note(pitch: pitch, type: type)
                             
-                            //                            print(note.pitch.step.toString())
-                            //                            print("\(note.pitch.octave)")
-                            //measure.notationObjects.append(note)
-                            
-                            /*if !measures[measureIndex].isAddNoteValid(musicNotation: note.type) {
-                                measureIndex += 1
-                            }*/
-                            
                             measure.addToMeasure(note)
                         } else {
                             let rest = Rest(type: type)
-                            //measure.notationObjects.append(rest)
                             
                             /*if !measures[measureIndex].isAddNoteValid(musicNotation: rest.type) {
                                 measureIndex += 1
