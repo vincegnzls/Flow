@@ -156,9 +156,13 @@ class SoundManager{
         for staff in composition.staffList{
             for measure in staff.measures{
                 for musicNotation in measure.notationObjects{
-                    if(musicNotation.type == Note){
-                        playSound(musicNotation)
-                    }
+                    //There was no way to form a note with notationObjects
+                    //Advise, function in Measure "addNoteInMeasure" does not add note in measure.
+                    //it adds lower level class MusicNotation which has properties that Note class
+                    //already has. Note class has even more
+                    var nextNoteToPlay = Note(pitch: Pitch(step: "C", octave: musicNotation.type), type: musicNotation.type, clef: "G")
+                    playSound(nextNoteToPlay)
+                    
                 }
             }
         }
