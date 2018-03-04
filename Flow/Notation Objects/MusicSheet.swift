@@ -201,7 +201,7 @@ class MusicSheet: UIView {
                             
                             GridSystem.instance.selectedCoord = nextSnapPoint
                             moveCursorY(location: nextSnapPoint)
-                            moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.x))
+                            moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
                             
                         }
                     }
@@ -497,7 +497,9 @@ class MusicSheet: UIView {
         // CHOOSE FIRST MEASURE COORD AS DEFAULT
         if GridSystem.instance.selectedMeasureCoord == nil {
             GridSystem.instance.selectedMeasureCoord = measureCoord
-            GridSystem.instance.selectedCoord = snapPoints[0]
+            
+            // the middle snap point
+            GridSystem.instance.selectedCoord = snapPoints[11]
             
             moveCursorX(location: CGPoint(x: snapPoints[0].x, y: sheetCursor.curYCursorLocation.y - 30))
             moveCursorY(location: snapPoints[0])
@@ -807,8 +809,13 @@ class MusicSheet: UIView {
     public func moveCursorY(location: CGPoint) {
         sheetCursor.moveCursorY(location: location)
         
+        if let measurePoints = GridSystem.instance.selectedMeasureCoord {
+            sheetCursor.showLedgerLinesGuide(measurePoints: measurePoints, upToLocation: location, lineSpace: lineSpace)
+        }
+        
         // in getting the hovered note
         if let measure = GridSystem.instance.getCurrentMeasure() {
+            
             for notation in measure.notationObjects {
                 // if note hovered
                 if CGPoint(x: location.x - adjustToXCenter * initialNoteSpace, y: location.y) == notation.screenCoordinates {
@@ -839,9 +846,6 @@ class MusicSheet: UIView {
                 
                 currentPoint = CGPoint(x:currentPoint.x, y: currentPoint.y - lineSpace)
             }
-            
-            print("current point y: \(currentPoint.y)")
-            print("upToLocation point y: \(upToLocation.y)")
             
         } else if upToLocation.y > measurePoints.upperLeftPoint.y {
             

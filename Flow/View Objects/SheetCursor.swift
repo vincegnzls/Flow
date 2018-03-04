@@ -17,6 +17,8 @@ class SheetCursor : CAShapeLayer {
     private let xCursor = CAShapeLayer()
     private let yCursor = CAShapeLayer()
     
+    private var ledgerLineGuides = [CAShapeLayer]()
+    
     public var curYCursorLocation = CGPoint(x: 0, y: 0)
     public var curXCursorLocation = CGPoint(x: 0, y: 0)
 
@@ -61,6 +63,20 @@ class SheetCursor : CAShapeLayer {
         curYCursorLocation = CGPoint(x: 300, y: 50)
         curXCursorLocation = CGPoint(x: 300, y: 50)
         
+        for _ in 0...2 {
+            let ledgerLine = UIBezierPath()
+            ledgerLine.move(to: CGPoint(x: 0, y: 0))
+            ledgerLine.addLine(to: CGPoint(x: 30, y: 0))
+            
+            let ledgerGuide = CAShapeLayer()
+            ledgerGuide.path = ledgerLine.cgPath
+            ledgerGuide.strokeColor = UIColor(red:0, green:0, blue:0, alpha:0.65).cgColor
+            ledgerGuide.lineWidth = 4
+            
+            self.addSublayer(ledgerGuide)
+            ledgerLineGuides.append(ledgerGuide)
+        }
+        
         self.addSublayer(yCursor)
         self.addSublayer(xCursor)
     }
@@ -73,6 +89,47 @@ class SheetCursor : CAShapeLayer {
     public func moveCursorY (location: CGPoint) {
         yCursor.position = location
         curYCursorLocation = location
+    }
+    
+    public func showLedgerLinesGuide (measurePoints: GridSystem.MeasurePoints, upToLocation: CGPoint, lineSpace:CGFloat) {
+        
+        for ledgerGuide in ledgerLineGuides {
+            ledgerGuide.opacity = 0
+            ledgerGuide.position = CGPoint(x: upToLocation.x - 5, y: (measurePoints.lowerRightPoint.y + measurePoints.upperLeftPoint.y)/2)
+        }
+        
+        if upToLocation.y < measurePoints.lowerRightPoint.y {
+            
+            var currentPoint = CGPoint(x:upToLocation.x, y: measurePoints.lowerRightPoint.y - lineSpace)
+            var currentGuideIndex = 0
+            
+            while currentPoint.y >= upToLocation.y-1.5 {
+                let currentGuide = ledgerLineGuides[currentGuideIndex]
+                
+                currentGuide.position = CGPoint(x: currentGuide.position.x, y: currentPoint.y)
+                currentGuide.opacity = 1
+                
+                currentPoint = CGPoint(x:currentPoint.x, y: currentPoint.y - lineSpace)
+                currentGuideIndex += 1
+            }
+            
+        } else if upToLocation.y > measurePoints.upperLeftPoint.y {
+            
+            var currentPoint = CGPoint(x:upToLocation.x, y: measurePoints.upperLeftPoint.y + lineSpace)
+            var currentGuideIndex = 0
+            
+            while currentPoint.y <= upToLocation.y {
+                let currentGuide = ledgerLineGuides[currentGuideIndex]
+                
+                currentGuide.position = CGPoint(x: currentGuide.position.x, y: currentPoint.y)
+                currentGuide.opacity = 1
+                
+                currentPoint = CGPoint(x:currentPoint.x, y: currentPoint.y + lineSpace)
+                currentGuideIndex += 1
+            }
+            
+        }
+        
     }
     
 }
