@@ -92,7 +92,10 @@ class MusicSheet: UIView {
         
         startY += sheetYOffset
         
+        highlightRect.zPosition = CGFloat.greatestFiniteMagnitude
         self.layer.addSublayer(self.highlightRect)
+        
+        sheetCursor.zPosition = CGFloat.greatestFiniteMagnitude - 1
         self.layer.addSublayer(self.sheetCursor)
         
         EventBroadcaster.instance.removeObservers(event: EventNames.ARROW_KEY_PRESSED)
@@ -490,8 +493,6 @@ class MusicSheet: UIView {
         
         measureCoords.append(measureCoord)
         
-        //GridSystem.sharedInstance?.assignMeasureToPoints(measurePoints: measureCoord, measure: grid[grid.count - 1])
-        // TODO: FIX HARDCODED PADDING FOR SNAP POINTS
         let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace, initialY: startY-curSpace-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
         GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
         
@@ -965,7 +966,7 @@ class MusicSheet: UIView {
 
             if let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord) {
                 
-                moveCursorX(location: CGPoint(x: sheetCursor.curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y - 30))
+                moveCursorX(location: CGPoint(x: sheetCursor.curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y + cursorXOffsetY))
                 
             }
         }
