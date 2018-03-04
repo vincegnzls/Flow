@@ -45,7 +45,7 @@ class Converter {
                         previousTimeSignature == firstMeasure.timeSignature  &&
                         previousDivisions == divisions
             
-            if !equal && i > 0 {
+            if !equal || i == 0 {
                 previousKeySignature = firstMeasure.keySignature
                 previousTimeSignature = firstMeasure.timeSignature
                 previousDivisions = divisions
@@ -66,12 +66,17 @@ class Converter {
                 timeSignatureElement.addChild(name: "beat-type", value: "\(firstMeasure.timeSignature.beatType)")
                 
                 // Calculate divisions and set clefs
-                for index in composition.staffList.indices {
+                for (index, staff) in composition.staffList.enumerated() {
+                    guard staff.measures.count > 0 else {
+                        fatalError("No measure found.")
+                    }
                     
+                    let clef = staff.measures[0].clef
+                     
                     // Clef
                     let clefElement = attributesElement.addChild(name: "clef", attributes: ["number": "\(index + 1)"])
-                    clefElement.addChild(name: "sign", value: firstMeasure.clef.rawValue)
-                    clefElement.addChild(name: "line", value: "\(firstMeasure.clef.getStandardLine())")
+                    clefElement.addChild(name: "sign", value: clef.rawValue)
+                    clefElement.addChild(name: "line", value: "\(clef.getStandardLine())")
                 }
             }
             
