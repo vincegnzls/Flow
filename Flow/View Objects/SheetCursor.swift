@@ -104,10 +104,13 @@ class SheetCursor : CAShapeLayer {
             var currentGuideIndex = 0
             
             while currentPoint.y >= upToLocation.y-1.5 {
-                let currentGuide = ledgerLineGuides[currentGuideIndex]
                 
-                currentGuide.position = CGPoint(x: currentGuide.position.x, y: currentPoint.y)
-                currentGuide.opacity = 1
+                if currentGuideIndex < 3 {
+                    let currentGuide = ledgerLineGuides[currentGuideIndex]
+                    
+                    currentGuide.position = CGPoint(x: currentGuide.position.x, y: currentPoint.y)
+                    currentGuide.opacity = 1
+                }
                 
                 currentPoint = CGPoint(x:currentPoint.x, y: currentPoint.y - lineSpace)
                 currentGuideIndex += 1
@@ -119,10 +122,12 @@ class SheetCursor : CAShapeLayer {
             var currentGuideIndex = 0
             
             while currentPoint.y <= upToLocation.y {
-                let currentGuide = ledgerLineGuides[currentGuideIndex]
-                
-                currentGuide.position = CGPoint(x: currentGuide.position.x, y: currentPoint.y)
-                currentGuide.opacity = 1
+                if currentGuideIndex < 3 {
+                    let currentGuide = ledgerLineGuides[currentGuideIndex]
+                    
+                    currentGuide.position = CGPoint(x: currentGuide.position.x, y: currentPoint.y)
+                    currentGuide.opacity = 1
+                }
                 
                 currentPoint = CGPoint(x:currentPoint.x, y: currentPoint.y + lineSpace)
                 currentGuideIndex += 1
