@@ -1368,7 +1368,7 @@ class MusicSheet: UIView {
         // check whether there are more upward notes and vice versa
         if upCount > downCount {
             let highestNote = getLowestOrHighestNote(highest: true, notations: notations)
-            let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 6
+            let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 4
             let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
             let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
 
@@ -1504,10 +1504,10 @@ class MusicSheet: UIView {
             }
 
             // draws the beam based on highest note
-            let _ = self.drawLine(start: CGPoint(x: startX, y: highestY + 2), end: CGPoint(x: endX, y: highestY + 2), thickness: lineSpace / 2)
+            let _ = self.drawLine(start: CGPoint(x: startX, y: highestY), end: CGPoint(x: endX, y: highestY), thickness: lineSpace / 2)
         } else {
             let lowestNote = getLowestOrHighestNote(highest: false, notations: notations)
-            let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 3
+            let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 5
             let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 0.5
             let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
 
@@ -1642,7 +1642,7 @@ class MusicSheet: UIView {
             }
 
             // draws the beam based on lowest note
-            let _ = self.drawLine(start: CGPoint(x: startX, y: lowestY + 2), end: CGPoint(x: endX, y: lowestY + 2), thickness: lineSpace / 2)
+            let _ = self.drawLine(start: CGPoint(x: startX, y: lowestY), end: CGPoint(x: endX, y: lowestY), thickness: lineSpace / 2)
         }
     }
 
