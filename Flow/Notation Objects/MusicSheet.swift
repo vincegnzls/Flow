@@ -489,7 +489,10 @@ class MusicSheet: UIView {
 
         // get upper left point and lower right point of measure to keep track of location
         let measureCoord:GridSystem.MeasurePoints =
-            GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startY), lowerRightPoint: CGPoint(x: endX, y: startY-curSpace))
+            GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startY),
+                                     lowerRightPoint: CGPoint(x: endX, y: startY-curSpace),
+                                     upperLeftPointWithLedger: CGPoint(x: startX, y: startY+(lineSpace*3.5)),
+                                     lowerRightPointWithLedger: CGPoint(x: endX, y: startY-curSpace-(lineSpace*3.5)))
         
         measureCoords.append(measureCoord)
         
@@ -931,9 +934,9 @@ class MusicSheet: UIView {
     private func remapCurrentMeasure (location:CGPoint) {
         
         for measureCoord in measureCoords {
-            let r:CGRect = CGRect(x: measureCoord.upperLeftPoint.x, y: measureCoord.upperLeftPoint.y,
-                                  width: measureCoord.lowerRightPoint.x - measureCoord.upperLeftPoint.x,
-                                  height: measureCoord.lowerRightPoint.y - measureCoord.upperLeftPoint.y)
+            let r:CGRect = CGRect(x: measureCoord.upperLeftPointWithLedger.x, y: measureCoord.upperLeftPointWithLedger.y,
+                                  width: measureCoord.width,
+                                  height: measureCoord.heightWithLedger)
             
             //  LOCATION IS IN MEASURE
             if r.contains(location) {

@@ -492,8 +492,10 @@ class GridSystem {
     }
     
     struct MeasurePoints : Hashable {
-        var upperLeftPoint:CGPoint
-        var lowerRightPoint:CGPoint
+        var upperLeftPoint:CGPoint // actually the lower left
+        var lowerRightPoint:CGPoint // actually the upper right
+        var upperLeftPointWithLedger:CGPoint
+        var lowerRightPointWithLedger:CGPoint
 
         var width:CGFloat {
             get {
@@ -501,15 +503,31 @@ class GridSystem {
             }
         }
         
+        var height:CGFloat {
+            get {
+                    return lowerRightPoint.y - upperLeftPoint.y
+            }
+        }
+        
+        var heightWithLedger:CGFloat {
+            get {
+                return lowerRightPointWithLedger.y - upperLeftPointWithLedger.y
+            }
+        }
+        
         public var hashValue: Int {
-            return upperLeftPoint.x.hashValue ^ upperLeftPoint.y.hashValue ^ lowerRightPoint.x.hashValue ^ lowerRightPoint.y.hashValue
+            return upperLeftPoint.x.hashValue ^ upperLeftPoint.y.hashValue ^ lowerRightPoint.x.hashValue ^ lowerRightPoint.y.hashValue ^ upperLeftPointWithLedger.x.hashValue ^ upperLeftPointWithLedger.y.hashValue ^ lowerRightPointWithLedger.x.hashValue ^ lowerRightPointWithLedger.y.hashValue
         }
         
         public static func == (lhs: MeasurePoints, rhs: MeasurePoints) -> Bool {
             return lhs.upperLeftPoint.x == rhs.upperLeftPoint.x &&
                     lhs.upperLeftPoint.y == rhs.upperLeftPoint.y &&
                     lhs.lowerRightPoint.x == rhs.lowerRightPoint.x &&
-                    lhs.lowerRightPoint.y == rhs.lowerRightPoint.y
+                    lhs.lowerRightPoint.y == rhs.lowerRightPoint.y &&
+                lhs.upperLeftPointWithLedger.x == rhs.upperLeftPointWithLedger.x &&
+                lhs.upperLeftPointWithLedger.y == rhs.upperLeftPointWithLedger.y &&
+                lhs.lowerRightPointWithLedger.x == rhs.lowerRightPointWithLedger.x &&
+                lhs.lowerRightPointWithLedger.y == rhs.lowerRightPointWithLedger.y
         }
 
     }
