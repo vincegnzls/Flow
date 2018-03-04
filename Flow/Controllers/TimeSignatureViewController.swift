@@ -56,6 +56,7 @@ class TimeSignatureViewController: UIViewController {
             let newMeasure = Measure()
 
             newMeasure.notationObjects = measure.notationObjects
+            newMeasure.keySignature = measure.keySignature
 
             newMeasure.timeSignature.beats = Int(self.nBeatsLabel!.text!)!
             newMeasure.timeSignature.beatType = Int(self.beatDurationLabel!.text!)!

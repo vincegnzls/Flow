@@ -57,14 +57,7 @@ class GridSystem {
     private var gClefPitches = [Pitch]()
     private var fClefPitches = [Pitch]()
     
-    public var recentNotation: MusicNotation? {
-        didSet {
-            if let note = recentNotation as? Note {
-                print("interacted note: \(note.pitch)")
-            }
-            
-        }
-    }
+    public var recentNotation: MusicNotation?
     
     private init() {
         //GridSystem.sharedInstance = self

@@ -184,42 +184,55 @@ class MusicSheet: UIView {
             // for redirecting the cursor after redrawing the whole composition
             if let recentNotation = GridSystem.instance.recentNotation {
                 
-                var coordForCurrentPoint:CGPoint?
-                
-                if let coord = recentNotation.screenCoordinates {
-                
-                    if recentNotation is Note {
-                        coordForCurrentPoint = coord
-                    } else if recentNotation is Rest {
-                        coordForCurrentPoint = sheetCursor.curYCursorLocation
-                    }
-                    
-                }
-                
-                if let noteScreenCoord = coordForCurrentPoint {
-                    
-                    if let snapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: noteScreenCoord) {
+                if let measure = GridSystem.instance.getCurrentMeasure() {
+                    if measure.notationObjects.contains(recentNotation) {
+                        var coordForCurrentPoint:CGPoint?
                         
-                        // get right again to go to the next
-                        if let nextSnapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: snapPoint) {
+                        if let coord = recentNotation.screenCoordinates {
+                            
+                            if recentNotation is Note {
+                                coordForCurrentPoint = coord
+                            } else if recentNotation is Rest {
+                                coordForCurrentPoint = sheetCursor.curYCursorLocation
+                            }
+                            
+                        }
+                        
+                        if let noteScreenCoord = coordForCurrentPoint {
+                            
+                            if let snapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: noteScreenCoord) {
+                                
+                                // get right again to go to the next
+                                if let nextSnapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: snapPoint) {
+                                    
+                                    GridSystem.instance.selectedCoord = nextSnapPoint
+                                    moveCursorY(location: nextSnapPoint)
+                                    moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
+                                    
+                                }
+                            }
+                            
+                        }
+                    } else {
+                        moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
+                    }
+                }
+            } else {
+                if let currentPoint = GridSystem.instance.selectedCoord {
+                    
+                    if let nextSnapPoint = GridSystem.instance.getLeftXSnapPoint(currentPoint: currentPoint) {
+                    
+                        if nextSnapPoint == currentPoint {
+                            
+                            moveCursorsToNearestSnapPoint(location: currentPoint)
+                            
+                        } else {
                             
                             GridSystem.instance.selectedCoord = nextSnapPoint
                             moveCursorY(location: nextSnapPoint)
                             moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
                             
                         }
-                    }
-                    
-                }
-                
-            } else {
-                if let currentPoint = GridSystem.instance.selectedCoord {
-                    
-                    if let nextSnapPoint = GridSystem.instance.getLeftXSnapPoint(currentPoint: currentPoint) {
-                    
-                        GridSystem.instance.selectedCoord = nextSnapPoint
-                        moveCursorY(location: nextSnapPoint)
-                        moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
                         
                     }
                 }
@@ -1775,6 +1788,8 @@ class MusicSheet: UIView {
                 }
             }
         }
+        
+        moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
     }
 
     public func editKeySig(params: Parameters) {
