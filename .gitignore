@@ -69,3 +69,13 @@ fastlane/test_output
 Flow/\.DS_Store
 
 \.DS_Store
+
+\.idea/xcode\.xml
+
+\.idea/codeStyles/Project\.xml
+
+\.idea/Flow\.iml
+
+\.idea/modules\.xml
+
+\.idea/vcs\.xml
