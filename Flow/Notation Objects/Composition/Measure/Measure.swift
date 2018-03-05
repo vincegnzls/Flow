@@ -27,6 +27,15 @@ class Measure: Equatable {
         return self.curBeatValue == self.timeSignature.getMaxBeatValue()
     }
     
+    var divisions: Int {
+        var divisions = 1
+        for notation in self.notationObjects {
+            divisions = max(notation.type.getDivision(), divisions)
+        }
+        
+        return divisions
+    }
+    
     init(keySignature: KeySignature = .c,
          timeSignature: TimeSignature = TimeSignature(),
          clef: Clef = .G,

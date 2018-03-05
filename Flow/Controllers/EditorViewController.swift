@@ -109,7 +109,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
         
         if let composition = self.musicSheet.composition {
-            print(composition.compositionInfo.name)
             FileHandler.instance.saveFile(composition: composition)
         }
         
