@@ -10,7 +10,19 @@ import Foundation
 
 class DeleteAction: Action {
     
+    var measures: [Measure]
+    var notes:[MusicNotation]
+    
+    init(measures: [Measure], notes: [MusicNotation]) {
+        self.measures = measures
+        self.notes = notes
+    }
+
     func execute() {
+        
+        for (note, measure) in zip(notes, measures) {
+            measure.deleteNoteInMeasure(note)
+        }
         
     }
     
@@ -21,6 +33,5 @@ class DeleteAction: Action {
     func redo() {
         
     }
-    
     
 }

@@ -16,7 +16,7 @@ class TestClass {
     }
     
     func testFunc(params: Parameters) {
-        let _ = params.get(key: KeyNames.ARROW_KEY_DIRECTION) // Used for objects
-        let _ = params.get(key: KeyNames.ARROW_KEY_DIRECTION, defaultValue: 5) // Primitive data types have default value
+        let val = params.get(key: KeyNames.ARROW_KEY_DIRECTION) // Used for objects
+        let val2 = params.get(key: KeyNames.ARROW_KEY_DIRECTION, defaultValue: 5) // Primitive data types have default value
     }
 }

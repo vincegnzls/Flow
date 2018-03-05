@@ -32,6 +32,20 @@ xcuserdata/
 timeline.xctimeline
 playground.xcworkspace
 
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+
+# Sensitive or high-churn files:
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.xml
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+
 # Swift Package Manager
 #
 # Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
@@ -69,3 +83,13 @@ fastlane/test_output
 Flow/\.DS_Store
 
 \.DS_Store
+
+\.idea/xcode\.xml
+
+\.idea/codeStyles/Project\.xml
+
+\.idea/Flow\.iml
+
+\.idea/modules\.xml
+
+\.idea/vcs\.xml

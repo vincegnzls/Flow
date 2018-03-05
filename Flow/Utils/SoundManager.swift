@@ -10,6 +10,8 @@ import Foundation
 import AVFoundation
 
 class SoundManager{
+    let folderName = "Support Objects/"
+    
     var url = Bundle.main.url(forResource: "a1-mf", withExtension: "mp3")
     
     var audioPlayer:AVAudioPlayer!
@@ -132,12 +134,12 @@ class SoundManager{
             break
         }
         
-        url = Bundle.main.url(forResource: resName, withExtension: "mp3")
+        url = Bundle.main.url(forResource: folderName + resName, withExtension: "mp3")
         
         do{
             audioPlayer = try AVAudioPlayer(contentsOf: url!)
             audioPlayer.prepareToPlay()
-            audioPlayer.currentTime = 0
+            audioPlayer.currentTime = 0.5
         }catch let error as NSError{            print(error.debugDescription)
         }
         

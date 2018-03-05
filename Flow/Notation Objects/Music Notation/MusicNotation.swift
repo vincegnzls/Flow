@@ -26,7 +26,6 @@ class MusicNotation {
         self.type = type
         self.isSelected = false
         self.setImage()
-
     }
     
     // Sets the image based on the music notation
