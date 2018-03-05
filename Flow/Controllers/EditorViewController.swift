@@ -18,39 +18,61 @@ class EditorViewController: UIViewController {
     private let composition: Composition?
 
     required init?(coder aDecoder: NSCoder) {
+        
+        GridSystem.instance.reset()
 
         // TODO: change this to load an existing composition if did not create a new comp
         // TODO: inline number of measures per staff also
         // CREATES A NEW COMPOSITION WITH DEFAULT LAYOUT OF 12 MEASURES, 3 GRAND STAVES, AND 2 MEASURES PER STAFF
         var measures = [Measure]()
 
-        for i in 1...12 {
-            if i%3 == 0 || i%4 == 0 {
-                measures.append(Measure(clef: Clef.F))
-            } else {
-                measures.append(Measure())
-            }
+        for _  in 1...6 {
+            let measure = Measure()
+
+            // dummy data
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.C, octave: 5), type: .quarter, clef: measure.clef))
+            //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .quarter, clef: measure.clef))
+
+            measuresForG.append(measure)
         }
-        composition = Composition(measures: measures)
+
+        for _ in 1...6 {
+            measuresForF.append(Measure(clef: Clef.F))
+        }
+
+        let GStaff = Staff(measures: measuresForG)
+        let FStaff = Staff(measures: measuresForF)
+
+        var staffArr = [Staff]()
+
+        staffArr.append(GStaff)
+        staffArr.append(FStaff)
+
+        composition = Composition(staffList: staffArr)
+
         // END OF CREATION
 
         // init
         super.init(coder: aDecoder)
 
+        EventBroadcaster.instance.removeObservers(event: EventNames.NOTATION_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.NOTATION_KEY_PRESSED,
-                observer: Observer(id: "EditorViewController", function: self.onNoteKeyPressed))
+                observer: Observer(id: "EditorViewController.onNoteKeyPressed", function: self.onNoteKeyPressed))
+        EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
+                                              observer: Observer(id: "EditorViewController.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let params = Parameters()
-        params.put(key: KeyNames.MEASURES_ARRAY, value: self.composition!.getMeasures())
+        //let params = Parameters()
+        //params.put(key: KeyNames.COMPOSITION, value: self.composition!)
 
-        EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
+        //EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
 
         if musicSheet != nil {
-           // musicSheet.addMusicNotation()
+            // set composition in music sheet
+            musicSheet.composition = composition
         }
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -87,28 +109,79 @@ class EditorViewController: UIViewController {
         let restNoteType:RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
         let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
 
-        // TODO: instantiate here the AddCommand
+        let note: MusicNotation
+
+        let parameters = Parameters()
+
+        // check if there is a selected measure coord
+        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
 
         if GridSystem.instance.selectedMeasureCoord! != nil {
 
-            if isRest {
-                if let measure:Measure = GridSystem.instance.getMeasureFromPoints(
-                        measurePoints: (GridSystem.instance.selectedMeasureCoord)!) {
-                    let rest:Rest = Rest(type: restNoteType)
-                    measure.addNoteInMeasure(musicNotation: rest)
+
+                // determine if rest or note
+                if isRest {
+                    note = Rest(type: restNoteType)
+                } else {
+                    // TODO: determine what is the correct pitch from the cursor's location
+                    if let coord = GridSystem.instance.selectedCoord {
+                        note = Note(pitch: GridSystem.instance.getPitchFromY(y: coord.y), type: restNoteType, clef: measure.clef)
+                    } else {
+                        note = Note(pitch: Pitch(step: Step.G, octave: 5), type: restNoteType, clef: measure.clef)
+                    }
                 }
 
-            } else {
-                if let measure:Measure = GridSystem.instance.getMeasureFromPoints(
-                        measurePoints: (GridSystem.instance.selectedMeasureCoord)!) {
-                    // TODO: locate cursor y for knowing pitch and adjust screen coordinates
-                    let note:Note = Note(pitch:Pitch(step: Step.C, octave: 4), type: restNoteType, clef: measure.clef)
-                    measure.addNoteInMeasure(musicNotation: note)
+                parameters.put(key: KeyNames.NOTE_DETAILS, value: note)
+
+                if musicSheet.selectedNotations.count > 0 {
+                    //edit selected notes
+                    
+                    editSelectedNotes(newNote: note)
+                    
+                } else {
+                    // instantiate add action
+                    let addAction = AddAction(measure: measure, note: note)
+
+                    addAction.execute()
+                    
+                    EventBroadcaster.instance.postEvent(event: EventNames.ADD_NEW_NOTE, params: parameters)
                 }
             }
 
         }
 
+    }
+    
+    func getNoteMeasures(notes: [MusicNotation]) -> [Measure] {
+        var measures = [Measure]()
+        
+        for note in notes {
+            if let measure = composition?.getMeasureOfNote(note: note) {
+                measures.append(measure)
+            }
+        }
+        
+        return measures
+    }
+    
+    func editSelectedNotes(newNote: MusicNotation) {
+        let oldNotes = musicSheet.selectedNotations
+        let noteMeasures = getNoteMeasures(notes: oldNotes)
+        
+        let editAction = EditAction(measures: noteMeasures, oldNotes: oldNotes, newNote: newNote)
+        editAction.execute()
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+    }
+    
+    func onDeleteKeyPressed () {
+        let selectedNotes = musicSheet.selectedNotations
+        let noteMeasures = getNoteMeasures(notes: selectedNotes)
+                
+        let delAction = DeleteAction(measures: noteMeasures, notes: selectedNotes)
+        delAction.execute()
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }
 }
 

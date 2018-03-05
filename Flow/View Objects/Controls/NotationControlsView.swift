@@ -32,6 +32,11 @@ class NotationControlsView: UIView {
         self.layer.shadowOpacity = 0.1
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 5
+        
+        EventBroadcaster.instance.addObserver(event: EventNames.UPDATE_INVALID_NOTES,
+                                              observer: Observer(id: "NotationControls.updateInvalidNotes", function: self.updateInvalidNotes))
+        EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_SWITCHED,
+                                              observer: Observer(id: "NotationControls.measureSwitched", function: self.measureSwitched))
     }
     
     @IBAction func wholeNote(_ sender: ButtonEffect) {
@@ -120,4 +125,48 @@ class NotationControlsView: UIView {
         params.put(key: KeyNames.IS_REST_KEY, value: isRest)
         EventBroadcaster.instance.postEvent(event: EventNames.NOTATION_KEY_PRESSED, params: params)
     }
+    
+    func toggleNoteButtons(note: RestNoteType, isEnabled: Bool) {
+        if note == RestNoteType.whole {
+            wholeNote.isEnabled = isEnabled
+            wholeRest.isEnabled = isEnabled
+        } else if note == RestNoteType.half {
+            halfNote.isEnabled = isEnabled
+            halfRest.isEnabled = isEnabled
+        } else if note == RestNoteType.quarter {
+            quarterNote.isEnabled = isEnabled
+            quarterRest.isEnabled = isEnabled
+        } else if note == RestNoteType.eighth {
+            eighthNote.isEnabled = isEnabled
+            eighthRest.isEnabled = isEnabled
+        } else if note == RestNoteType.sixteenth {
+            sixteenthNote.isEnabled = isEnabled
+            sixteenthRest.isEnabled = isEnabled
+        } else if note == RestNoteType.thirtySecond {
+            thirtySecondNote.isEnabled = isEnabled
+            thirtySecondRest.isEnabled = isEnabled
+        } else if note == RestNoteType.sixtyFourth {
+            sixtyFourthNote.isEnabled = isEnabled
+            sixtyFourthRest.isEnabled = isEnabled
+        }
+    }
+    
+    func measureSwitched(params: Parameters) {
+        let measure:Measure = params.get(key: KeyNames.NEW_MEASURE) as! Measure
+        
+        measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes())
+    }
+    
+    func updateInvalidNotes(params: Parameters) {
+        let invalidNotes:[RestNoteType] = params.get(key: KeyNames.INVALID_NOTES) as! [RestNoteType]
+        
+        for note in RestNoteType.types {
+            if invalidNotes.contains(note) {
+                toggleNoteButtons(note: note, isEnabled: false)
+            } else {
+                toggleNoteButtons(note: note, isEnabled: true)
+            }
+        }
+    }
+    
 }

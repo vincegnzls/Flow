@@ -18,12 +18,13 @@ class MusicNotation {
     }
     var image: UIImage?
     var imageView: UIImageView?
+    var isSelected: Bool
     
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType) {
         self.screenCoordinates = screenCoordinates
         self.type = type
-        
+        self.isSelected = false
         self.setImage()
     }
     

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<c:contact c:Version="1" xmlns:c="http://schemas.microsoft.com/Contact" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:MSP2P="http://schemas.microsoft.com/Contact/Extended/MSP2P">
-	<c:CreationDate>2017-12-13T00:44:26Z</c:CreationDate><c:Extended xsi:nil="true"/>
-	<c:ContactIDCollection><c:ContactID c:ElementID="6902ab96-4251-415e-b89a-7ba22a7b2114"><c:Value>5889197b-1548-48d2-9e6d-4f549817cd58</c:Value></c:ContactID></c:ContactIDCollection><c:NameCollection><c:Name c:ElementID="c3e36dff-5f89-4343-a6db-2eb9363f997c"><c:FormattedName>Mavic Reccion</c:FormattedName><c:FamilyName>Reccion</c:FamilyName><c:GivenName>Mavic</c:GivenName></c:Name></c:NameCollection><c:PhotoCollection><c:Photo c:ElementID="7d95d1fc-84bf-41ae-8c6a-b5b8bd254007"><c:LabelCollection><c:Label>UserTile</c:Label></c:LabelCollection></c:Photo></c:PhotoCollection></c:contact>

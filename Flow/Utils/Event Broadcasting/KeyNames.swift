@@ -12,4 +12,6 @@ struct KeyNames {
     static let IS_REST_KEY = "IS_REST_KEY"
     static let ARROW_KEY_DIRECTION = "ARROW_KEY_DIRECTION"
     static let DELETE_KEY = "DELETE_KEY"
+    static let INVALID_NOTES = "INVALID_NOTES"
+    static let NEW_MEASURE = "NEW_MEASURE"
 }
