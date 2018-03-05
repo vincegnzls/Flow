@@ -156,7 +156,7 @@ class SoundManager{
     
     func musicPlayback(_ composition: Composition){
         for staff in composition.staffList{
-            for measure in staff.measures{
+            for measure in staf{
                 for musicNotation in measure.notationObjects{
                     //There was no way to form a note with notationObjects
                     //Advise, function in Measure "addNoteInMeasure" does not add note in measure.
