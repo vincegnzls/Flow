@@ -130,7 +130,22 @@ class SoundManager{
         
         audioPlayer.play()
     }
-}
+    
+    func musicPlayback(_ composition: Composition){
+        for staff in composition.staffList{
+            for measure in staff.measures{
+                for musicNotation in measure.notationObjects{
+                    //There was no way to form a note with notationObjects
+                    //Advise, function in Measure "addNoteInMeasure" does not add note in measure.
+                    //it adds lower level class MusicNotation which has properties that Note class
+                    //already has. Note class has even more
+                    
+                    print(musicNotation.type.toString())
+                }
+            }
+        }
+        
+    }}
 
 
         

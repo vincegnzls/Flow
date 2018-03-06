@@ -47,6 +47,8 @@ class MusicSheet: UIView {
     public var composition: Composition?
     public var hoveredNotation: MusicNotation?
 
+    private var soundManager = SoundManager()
+    
     private var curScale: CGFloat = 1.0
     var originalCenter:CGPoint?
 
@@ -122,6 +124,9 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.PASTE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.PASTE_KEY_PRESSED, observer: Observer(id: "MusicSheet.paste", function: self.paste))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.PLAY_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_TIME_SIG, observer: Observer(id: "MusicSheet.editTimeSig", function: self.editTimeSig))
@@ -1715,6 +1720,15 @@ class MusicSheet: UIView {
         Clipboard.instance.cut(self.selectedNotations)
         self.selectedNotations.removeAll()
         self.updateMeasureDraw()
+        
+    }
+    
+    public func play() {
+        print("Play")
+        
+        if let comp = self.composition{
+            soundManager.musicPlayback(comp)
+        }
         
     }
 
