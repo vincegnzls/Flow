@@ -27,4 +27,9 @@ struct EventNames {
     static let EDIT_KEY_SIG = "EDIT_KEY_SIG"
 
     static let TITLE_CHANGED = "TITLE_CHANGED"
+
+    static let NATURALIZE_KEY_PRESSED = "NATURALIZE_KEY_PRESSED"
+    static let FLAT_KEY_PRESSED = "FLAT_KEY_PRESSED"
+    static let SHARP_KEY_PRESSED = "SHARP_KEY_PRESSED"
+    static let DSHARP_KEY_PRESSED = "DSHARP_KEY_PRESSED"
 }

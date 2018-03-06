@@ -131,7 +131,20 @@ class MusicSheet: UIView {
         
         EventBroadcaster.instance.removeObservers(event: EventNames.TITLE_CHANGED)
         EventBroadcaster.instance.addObserver(event: EventNames.TITLE_CHANGED, observer: Observer(id: "MusicSheet.titleChanged", function: self.titleChanged))
-        
+
+        // Add listeners for accidentals
+        EventBroadcaster.instance.removeObservers(event: EventNames.NATURALIZE_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.NATURALIZE_KEY_PRESSED, observer: Observer(id: "MusicSheet.naturalize", function: self.naturalize))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.FLAT_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.FLAT_KEY_PRESSED, observer: Observer(id: "MusicSheet.flat", function: self.flat))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.SHARP_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.SHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.sharp", function: self.sharp))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.DSHARP_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.DSHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.dsharp", function: self.dsharp))
+
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
@@ -1851,4 +1864,61 @@ class MusicSheet: UIView {
             composition.compositionInfo.name = params.get(key: KeyNames.NEW_TITLE, defaultValue: "Untitled Composition")
         }
     }
+
+    public func naturalize() {
+        if !self.selectedNotations.isEmpty {
+            for note in self.selectedNotations {
+                if note is Note {
+                    let curNote = note as! Note
+                    curNote.accidental = .natural
+                }
+            }
+        } else if let hovered = self.hoveredNotation {
+            let curNote = hovered as! Note
+            curNote.accidental = .natural
+        }
+    }
+
+    public func flat() {
+        if !self.selectedNotations.isEmpty {
+            for note in self.selectedNotations {
+                if note is Note {
+                    let curNote = note as! Note
+                    curNote.accidental = .flat
+                }
+            }
+        } else if let hovered = self.hoveredNotation {
+            let curNote = hovered as! Note
+            curNote.accidental = .flat
+        }
+    }
+
+    public func sharp() {
+        if !self.selectedNotations.isEmpty {
+            for note in self.selectedNotations {
+                if note is Note {
+                    let curNote = note as! Note
+                    curNote.accidental = .sharp
+                }
+            }
+        } else if let hovered = self.hoveredNotation {
+            let curNote = hovered as! Note
+            curNote.accidental = .sharp
+        }
+    }
+
+    public func dsharp() {
+        if !self.selectedNotations.isEmpty {
+            for note in self.selectedNotations {
+                if note is Note {
+                    let curNote = note as! Note
+                    curNote.accidental = .doubleSharp
+                }
+            }
+        } else if let hovered = self.hoveredNotation {
+            let curNote = hovered as! Note
+            curNote.accidental = .doubleSharp
+        }
+    }
+
 }
