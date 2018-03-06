@@ -19,8 +19,10 @@ class GridSystem {
         didSet {
             if (oldValue != selectedMeasureCoord) {
 
-                if let curMeasure = self.getCurrentMeasure() {
-                    //curMeasure.fillWithRests()
+                if let oldPoints = oldValue {
+                    if let oldMeasure = self.getMeasureFromPoints(measurePoints: oldPoints) {
+                        oldMeasure.fillWithRests()
+                    }
                 }
                 
                 if let measureCoord = selectedMeasureCoord {
@@ -33,7 +35,8 @@ class GridSystem {
                         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
                     }
                 }
-                
+
+                //EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 print ("Measure switched!")
             }
         }
