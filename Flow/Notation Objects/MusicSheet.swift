@@ -582,15 +582,25 @@ class MusicSheet: UIView {
                         }
                     }
                     
+                    let snapPointsRelativeToNotation = GridSystem.instance.createSnapPoints(
+                        initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
+                    
                     // snap points for added note
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
-                                                                  snapPoints: GridSystem.instance.createSnapPoints(
-                                                                    initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace))
+                                                                  snapPoints: snapPointsRelativeToNotation)
                     
                     // assign snap point to added note
-                    GridSystem.instance.assignSnapPointToNotation(
-                        snapPoint: CGPoint(x: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
-                        notation: note)
+                    if note is Note {
+                        GridSystem.instance.assignSnapPointToNotation(
+                            snapPoint: CGPoint(x: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
+                            notation: note)
+                    } else if note is Rest {
+                        for snapPoint in snapPointsRelativeToNotation {
+                            GridSystem.instance.assignSnapPointToNotation(
+                                snapPoint: snapPoint,
+                                notation: note)
+                        }
+                    }
                     
                     // if measure is not full, add more snapping points right next to new note added
                     if !measure.isFull {
@@ -629,14 +639,22 @@ class MusicSheet: UIView {
                             GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: prevX)
                         }
                         
-                        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
-                                                                      snapPoints: GridSystem.instance.createSnapPoints(
-                                                                        initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace))
+                        let snapPointsRelativeToNotation = GridSystem.instance.createSnapPoints(
+                            initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
                         
-                        GridSystem.instance.assignSnapPointToNotation(
-                            snapPoint: CGPoint(x: prevNoteCoordinates.x + notationSpace + adjustXToCenter,
-                                               y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
-                            notation: note)
+                        GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
+                                                                      snapPoints: snapPointsRelativeToNotation)
+                        
+                        if note is Note {
+                            GridSystem.instance.assignSnapPointToNotation(
+                                snapPoint: CGPoint(x: prevNoteCoordinates.x + notationSpace + adjustXToCenter,
+                                                   y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
+                                notation: note)
+                        } else if note is Rest {
+                            for snapPoint in snapPointsRelativeToNotation {
+                                GridSystem.instance.assignSnapPointToNotation(snapPoint: snapPoint, notation: note)
+                            }
+                        }
                         
                         // if measure is not full, add more snapping points right next to new note added
                         if !measure.isFull {
