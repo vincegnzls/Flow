@@ -47,7 +47,7 @@ class Measure: Equatable {
         self.bounds = Bounds()
         self.curBeatValue = 0
         self.validNotes = [RestNoteType]()
-        //self.fillWithRests()
+        self.fillWithRests()
     }
 
     // Equatable operators
@@ -65,7 +65,7 @@ class Measure: Equatable {
 
             notation.measure = self
             notationObjects.append(notation)
-
+            //self.fillWithRests()
         } else {
 
             print("INVALID ADD NOTE")
@@ -85,6 +85,7 @@ class Measure: Equatable {
                 print(notation.type.toString())
             }
             self.notationObjects.insert(notation, at: index)
+            //self.fillWithRests()
             print("after inserting:")
             for notation in notationObjects {
                 print(notation.type.toString())
@@ -101,6 +102,7 @@ class Measure: Equatable {
         if let index = notationObjects.index(of: musicNotation) {
             musicNotation.measure = nil
             notationObjects.remove(at: index)
+            //self.fillWithRests()
         }
 
     }
@@ -111,7 +113,7 @@ class Measure: Equatable {
             oldNote.measure = nil
             notationObjects[index] = newNote
             newNote.measure = self
-
+            //self.fillWithRests()
         }
 
     }
