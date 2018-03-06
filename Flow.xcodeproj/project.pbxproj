@@ -110,7 +110,6 @@
 		61B1316B1FE1513900ADCDF0 /* ButtonEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */; };
 		61EBB0321FE695B60015F7C2 /* KeySignatureDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
-		7A8D3F27201B845900692B66 /* Support Objects in Resources */ = {isa = PBXBuildFile; fileRef = 7A8D3F26201B845900692B66 /* Support Objects */; };
 		7ADDE1311FEA29FD0065523E /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADDE1301FEA29FD0065523E /* GridSystem.swift */; };
 		860ACC431FFCA25900A86D50 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860ACC421FFCA25900A86D50 /* SoundManager.swift */; };
 		8618F0741FED3D0400DF8A10 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8618F0731FED3D0400DF8A10 /* Action.swift */; };
@@ -133,7 +132,6 @@
 		864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A91FD3301E001FF059 /* Accidental.swift */; };
 		864CE5AC1FD33076001FF059 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5AB1FD33076001FF059 /* Note.swift */; };
 		864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B01FD330DA001FF059 /* GridCoordinates.swift */; };
-		865B22CA20050477009D0D11 /* HighlightRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865B22C920050477009D0D11 /* HighlightRect.swift */; };
 		8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A51FD4E8E800EB81BD /* Composition.swift */; };
 		8696A8A91FD4EA5800EB81BD /* FileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A81FD4EA5800EB81BD /* FileHandler.swift */; };
 		8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */; };
@@ -355,96 +353,96 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		14DEE7C31FF6E1D600A52E96 /* Support Objects */ = {
+		14A9881C204E3A42001AA45C /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				140FB2F1201890FF00239768 /* a1-mf.mp3 */,
-				140FB2D2201890E600239768 /* a2-mf.mp3 */,
-				140FB2D7201890EA00239768 /* a3-mf.mp3 */,
-				140FB3222018912900239768 /* a4-mf.mp3 */,
-				140FB2DA201890ED00239768 /* a5-mf.mp3 */,
-				140FB3142018911D00239768 /* a6-mf.mp3 */,
-				140FB2FC2018910700239768 /* a7-mf.mp3 */,
-				140FB3102018911A00239768 /* ab1-mf.mp3 */,
-				140FB2EF201890FD00239768 /* ab2-mf.mp3 */,
-				140FB3052018911100239768 /* ab3-mf.mp3 */,
-				140FB3042018911000239768 /* ab4-mf.mp3 */,
-				140FB30A2018911500239768 /* ab5-mf.mp3 */,
-				140FB31A2018912300239768 /* ab6-mf.mp3 */,
-				140FB2F22018910000239768 /* ab7-mf.mp3 */,
-				140FB2F92018910500239768 /* b0-mf.mp3 */,
-				140FB3232018912B00239768 /* b1-mf.mp3 */,
-				140FB2D0201890E500239768 /* b2-mf.mp3 */,
-				140FB2E6201890F600239768 /* b3-mf.mp3 */,
-				140FB30E2018911800239768 /* b4-mf.mp3 */,
-				140FB31E2018912600239768 /* b5-mf.mp3 */,
-				140FB2D3201890E700239768 /* b6-mf.mp3 */,
-				140FB2FA2018910600239768 /* b7-mf.mp3 */,
-				140FB2E7201890F700239768 /* bb1-mf.mp3 */,
-				140FB2CF201890E400239768 /* bb2-mf.mp3 */,
-				140FB3182018912200239768 /* bb3-mf.mp3 */,
-				140FB3022018910E00239768 /* bb4-mf.mp3 */,
-				140FB2D8201890EB00239768 /* bb5-mf.mp3 */,
-				140FB3122018911B00239768 /* bb6-mf.mp3 */,
-				140FB3112018911B00239768 /* bb7-mf.mp3 */,
-				140FB2FD2018910800239768 /* c1-mf.mp3 */,
-				140FB2DE201890EF00239768 /* c2-mf.mp3 */,
-				140FB2EC201890FB00239768 /* c3-mf.mp3 */,
-				140FB2E5201890F500239768 /* c4-mf.mp3 */,
-				140FB2FB2018910700239768 /* c5-mf.mp3 */,
-				140FB2ED201890FC00239768 /* c6-mf.mp3 */,
-				140FB2EE201890FC00239768 /* c7-mf.mp3 */,
-				140FB3202018912700239768 /* c8-mf.mp3 */,
-				140FB2F32018910100239768 /* d1-mf.mp3 */,
-				140FB3092018911400239768 /* d2-mf.mp3 */,
-				140FB31C2018912400239768 /* d3-mf.mp3 */,
-				140FB2DC201890EE00239768 /* d4-mf.mp3 */,
 				140FB3152018911E00239768 /* d5-mf.mp3 */,
-				140FB2F0201890FE00239768 /* d6-mf.mp3 */,
-				140FB2DF201890F000239768 /* d7-mf.mp3 */,
-				140FB2DD201890EE00239768 /* db1-mf.mp3 */,
-				140FB3082018911300239768 /* db2-mf.mp3 */,
-				140FB2E1201890F200239768 /* db3-mf.mp3 */,
-				140FB2D4201890E800239768 /* db4-mf.mp3 */,
-				140FB2D5201890E900239768 /* db5-mf.mp3 */,
-				140FB2F62018910300239768 /* db6-mf.mp3 */,
-				140FB3132018911C00239768 /* db7-mf.mp3 */,
-				140FB2E0201890F200239768 /* e1-mf.mp3 */,
-				140FB3002018910B00239768 /* e2-mf.mp3 */,
-				140FB3162018911F00239768 /* e3-mf.mp3 */,
-				140FB30B2018911600239768 /* e4-mf.mp3 */,
-				140FB2F42018910200239768 /* e5-mf.mp3 */,
-				140FB2E4201890F400239768 /* e6-mf.mp3 */,
-				140FB2F82018910400239768 /* e7-mf.mp3 */,
-				140FB3032018910F00239768 /* eb1-mf.mp3 */,
-				140FB2E9201890F800239768 /* eb2-mf.mp3 */,
-				140FB2E2201890F300239768 /* eb3-mf.mp3 */,
+				140FB31A2018912300239768 /* ab6-mf.mp3 */,
+				140FB3182018912200239768 /* bb3-mf.mp3 */,
+				140FB30A2018911500239768 /* ab5-mf.mp3 */,
 				140FB2D9201890EC00239768 /* eb4-mf.mp3 */,
-				140FB2EB201890FA00239768 /* eb5-mf.mp3 */,
-				140FB2FE2018910900239768 /* eb6-mf.mp3 */,
-				140FB30C2018911600239768 /* eb7-mf.mp3 */,
-				140FB3172018912100239768 /* f1-mf.mp3 */,
-				140FB3062018911200239768 /* f2-mf.mp3 */,
-				140FB31F2018912700239768 /* f4-mf.mp3 */,
-				140FB2F52018910200239768 /* f5-mf.mp3 */,
+				140FB3102018911A00239768 /* ab1-mf.mp3 */,
+				140FB2E7201890F700239768 /* bb1-mf.mp3 */,
+				140FB3232018912B00239768 /* b1-mf.mp3 */,
+				140FB2F0201890FE00239768 /* d6-mf.mp3 */,
+				140FB2F32018910100239768 /* d1-mf.mp3 */,
+				140FB3132018911C00239768 /* db7-mf.mp3 */,
+				140FB2ED201890FC00239768 /* c6-mf.mp3 */,
 				140FB2EA201890F900239768 /* f6-mf.mp3 */,
-				140FB2D1201890E500239768 /* f7-mf.mp3 */,
-				140FB2FF2018910A00239768 /* g1-mf.mp3 */,
+				140FB2F42018910200239768 /* e5-mf.mp3 */,
+				140FB2EE201890FC00239768 /* c7-mf.mp3 */,
+				140FB2D0201890E500239768 /* b2-mf.mp3 */,
+				140FB2F92018910500239768 /* b0-mf.mp3 */,
+				140FB3112018911B00239768 /* bb7-mf.mp3 */,
+				140FB2DC201890EE00239768 /* d4-mf.mp3 */,
+				140FB3092018911400239768 /* d2-mf.mp3 */,
+				140FB3222018912900239768 /* a4-mf.mp3 */,
 				140FB30D2018911800239768 /* g2-mf.mp3 */,
-				140FB3012018910D00239768 /* g3-mf.mp3 */,
-				140FB2E8201890F700239768 /* g4-mf.mp3 */,
-				140FB3192018912200239768 /* g5-mf.mp3 */,
+				140FB3162018911F00239768 /* e3-mf.mp3 */,
+				140FB2D5201890E900239768 /* db5-mf.mp3 */,
+				140FB31F2018912700239768 /* f4-mf.mp3 */,
+				140FB2FE2018910900239768 /* eb6-mf.mp3 */,
+				140FB3142018911D00239768 /* a6-mf.mp3 */,
+				140FB2D8201890EB00239768 /* bb5-mf.mp3 */,
+				140FB2D2201890E600239768 /* a2-mf.mp3 */,
+				140FB2E9201890F800239768 /* eb2-mf.mp3 */,
+				140FB2FA2018910600239768 /* b7-mf.mp3 */,
+				140FB2CF201890E400239768 /* bb2-mf.mp3 */,
+				140FB2E6201890F600239768 /* b3-mf.mp3 */,
 				140FB3072018911200239768 /* g6-mf.mp3 */,
-				140FB2F72018910300239768 /* g7-mf.mp3 */,
-				140FB30F2018911900239768 /* gb1-mf.mp3 */,
-				140FB31B2018912400239768 /* gb2-mf.mp3 */,
-				140FB2D6201890EA00239768 /* gb3-mf.mp3 */,
+				140FB3012018910D00239768 /* g3-mf.mp3 */,
+				140FB2F1201890FF00239768 /* a1-mf.mp3 */,
+				140FB2DE201890EF00239768 /* c2-mf.mp3 */,
+				140FB2E0201890F200239768 /* e1-mf.mp3 */,
+				140FB3032018910F00239768 /* eb1-mf.mp3 */,
+				140FB2D1201890E500239768 /* f7-mf.mp3 */,
+				140FB2DD201890EE00239768 /* db1-mf.mp3 */,
 				140FB3212018912800239768 /* gb4-mf.mp3 */,
-				140FB2E3201890F300239768 /* gb5-mf.mp3 */,
+				140FB3122018911B00239768 /* bb6-mf.mp3 */,
+				140FB2EF201890FD00239768 /* ab2-mf.mp3 */,
 				140FB2DB201890ED00239768 /* gb6-mf.mp3 */,
+				140FB3002018910B00239768 /* e2-mf.mp3 */,
+				140FB2FB2018910700239768 /* c5-mf.mp3 */,
+				140FB2EB201890FA00239768 /* eb5-mf.mp3 */,
+				140FB3022018910E00239768 /* bb4-mf.mp3 */,
+				140FB30F2018911900239768 /* gb1-mf.mp3 */,
+				140FB30B2018911600239768 /* e4-mf.mp3 */,
+				140FB2FC2018910700239768 /* a7-mf.mp3 */,
+				140FB3042018911000239768 /* ab4-mf.mp3 */,
 				140FB31D2018912500239768 /* gb7-mf.mp3 */,
+				140FB3052018911100239768 /* ab3-mf.mp3 */,
+				140FB2FF2018910A00239768 /* g1-mf.mp3 */,
+				140FB2D4201890E800239768 /* db4-mf.mp3 */,
+				140FB3082018911300239768 /* db2-mf.mp3 */,
+				140FB2D6201890EA00239768 /* gb3-mf.mp3 */,
+				140FB3192018912200239768 /* g5-mf.mp3 */,
+				140FB31E2018912600239768 /* b5-mf.mp3 */,
+				140FB2F62018910300239768 /* db6-mf.mp3 */,
+				140FB2F22018910000239768 /* ab7-mf.mp3 */,
+				140FB3202018912700239768 /* c8-mf.mp3 */,
+				140FB2D7201890EA00239768 /* a3-mf.mp3 */,
+				140FB30E2018911800239768 /* b4-mf.mp3 */,
+				140FB3172018912100239768 /* f1-mf.mp3 */,
+				140FB30C2018911600239768 /* eb7-mf.mp3 */,
+				140FB3062018911200239768 /* f2-mf.mp3 */,
+				140FB31B2018912400239768 /* gb2-mf.mp3 */,
+				140FB2E8201890F700239768 /* g4-mf.mp3 */,
+				140FB2E4201890F400239768 /* e6-mf.mp3 */,
+				140FB2FD2018910800239768 /* c1-mf.mp3 */,
+				140FB2E2201890F300239768 /* eb3-mf.mp3 */,
+				140FB2F72018910300239768 /* g7-mf.mp3 */,
+				140FB2E1201890F200239768 /* db3-mf.mp3 */,
+				140FB2EC201890FB00239768 /* c3-mf.mp3 */,
+				140FB2E3201890F300239768 /* gb5-mf.mp3 */,
+				140FB31C2018912400239768 /* d3-mf.mp3 */,
+				140FB2F82018910400239768 /* e7-mf.mp3 */,
+				140FB2DA201890ED00239768 /* a5-mf.mp3 */,
+				140FB2F52018910200239768 /* f5-mf.mp3 */,
+				140FB2E5201890F500239768 /* c4-mf.mp3 */,
+				140FB2DF201890F000239768 /* d7-mf.mp3 */,
+				140FB2D3201890E700239768 /* b6-mf.mp3 */,
 			);
-			path = "Support Objects";
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		610ECE321FE6D9B5009CC0F2 /* Controllers */ = {
@@ -460,7 +458,6 @@
 		611BFC9F1FE67928001511B2 /* IBDesignables */ = {
 			isa = PBXGroup;
 			children = (
-				611BFCA01FE67948001511B2 /* TimeSignaturePopupDesignable.swift */,
 				61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */,
 			);
 			path = IBDesignables;
@@ -487,6 +484,7 @@
 			children = (
 				61370E151F82A1CB002B6A09 /* Flow */,
 				61370E141F82A1CB002B6A09 /* Products */,
+				14A9881C204E3A42001AA45C /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -929,7 +927,6 @@
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
 				8696A8C01FD5898200EB81BD /* Parser.swift in Sources */,
 				861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */,
-				611BFCA11FE67948001511B2 /* TimeSignaturePopupDesignable.swift in Sources */,
 				613EE8D51F98EB5F004FD009 /* Staff.swift in Sources */,
 				8618F0781FED3D8C00DF8A10 /* EditAction.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
@@ -1102,11 +1099,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4XKYMS9BR8;
+				DEVELOPMENT_TEAM = 6D826ZAQ87;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow22;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -1121,11 +1118,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4XKYMS9BR8;
+				DEVELOPMENT_TEAM = 6D826ZAQ87;
 				INFOPLIST_FILE = Flow/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow22;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
