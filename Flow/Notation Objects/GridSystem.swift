@@ -51,6 +51,7 @@ class GridSystem {
     private var measureMap = [MeasurePoints: Measure]()
     private var weightsMap = [MeasurePoints: [CGPoint]]()
     private var snapPointsMap = [MeasurePoints: [CGPoint]]()
+    private var noteSnapPointsMap = [CGPoint: MusicNotation]()
     public var measurePointsInStaff = [[MeasurePoints]]() // array index reflects staff number
 
     private var YPitchMap = [CGFloat: Pitch]()
@@ -131,6 +132,14 @@ class GridSystem {
     
     public func assignSnapPointsToPoints(measurePoints:MeasurePoints, snapPoint:[CGPoint]) {
         snapPointsMap[measurePoints] = snapPoint
+    }
+    
+    public func assignSnapPointToNotation(snapPoint: CGPoint, notation: MusicNotation) {
+        noteSnapPointsMap[snapPoint] = notation
+    }
+    
+    public func getNotationFromSnapPoint(snapPoint: CGPoint) -> MusicNotation? {
+        return noteSnapPointsMap[snapPoint]
     }
 
     public func createNewMeasurePointsArray() {
@@ -527,4 +536,20 @@ class GridSystem {
 
     }
     
+}
+
+extension CGPoint : Hashable {
+    func distance(point: CGPoint) -> Float {
+        let dx = Float(x - point.x)
+        let dy = Float(y - point.y)
+        return sqrt((dx * dx) + (dy * dy))
+    }
+    
+    public var hashValue: Int {
+        return x.hashValue << 32 ^ y.hashValue
+    }
+    
+    public static func ==(lhs: CGPoint, rhs: CGPoint) -> Bool {
+        return lhs.distance(point: rhs) < 0.000001 //CGPointEqualToPoint(lhs, rhs)
+    }
 }

@@ -582,9 +582,15 @@ class MusicSheet: UIView {
                         }
                     }
                     
+                    // snap points for added note
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                                                                   snapPoints: GridSystem.instance.createSnapPoints(
                                                                     initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace))
+                    
+                    // assign snap point to added note
+                    GridSystem.instance.assignSnapPointToNotation(
+                        snapPoint: CGPoint(x: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
+                        notation: note)
                     
                     // if measure is not full, add more snapping points right next to new note added
                     if !measure.isFull {
@@ -626,6 +632,11 @@ class MusicSheet: UIView {
                         GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                                                                       snapPoints: GridSystem.instance.createSnapPoints(
                                                                         initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace))
+                        
+                        GridSystem.instance.assignSnapPointToNotation(
+                            snapPoint: CGPoint(x: prevNoteCoordinates.x + notationSpace + adjustXToCenter,
+                                               y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
+                            notation: note)
                         
                         // if measure is not full, add more snapping points right next to new note added
                         if !measure.isFull {
@@ -831,22 +842,12 @@ class MusicSheet: UIView {
             sheetCursor.showLedgerLinesGuide(measurePoints: measurePoints, upToLocation: location, lineSpace: lineSpace)
         }
         
-        // in getting the hovered note
-        if let measure = GridSystem.instance.getCurrentMeasure() {
-            
-            for notation in measure.notationObjects {
-                // if note hovered
-                if CGPoint(x: location.x - adjustToXCenter * initialNoteSpace, y: location.y) == notation.screenCoordinates {
-                    hoveredNotation = notation
-                    if let measure = notation.measure {
-                        measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
-                    }
-                    return
-                } else {
-                    hoveredNotation = nil
-                }
+        if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: location) {
+            hoveredNotation = notation
+            if let measure = notation.measure {
+                measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
             }
-            
+        } else {
             hoveredNotation = nil
         }
 
