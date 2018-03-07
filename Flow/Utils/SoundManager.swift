@@ -146,11 +146,16 @@ class SoundManager{
         
         audioPlayer.play()
         
+        print("playTime is: \(playTime)" )
+        
         if #available(iOS 10.0, *) {
-            Timer.scheduledTimer(withTimeInterval: playTime, repeats: false){
+            print("Timer is ticking")
+            Timer.scheduledTimer(withTimeInterval: playTime/1000, repeats: false){
                 (timer) in self.audioPlayer.stop()
+                print("Stopping Audio Player")
             }
         } else {
+            print("Nothing happened")
             // Fallback on earlier versions
         }
     }
@@ -165,6 +170,7 @@ class SoundManager{
                     //already has. Note class has even more
                     
                     if let curNote = musicNotation as? Note{
+                        print("Playing Note \(curNote.type.toString())")
                         playSound(curNote)
                     }
                 }
