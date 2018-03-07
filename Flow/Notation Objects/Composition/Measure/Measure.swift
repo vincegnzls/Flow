@@ -50,7 +50,7 @@ class Measure: Equatable {
 
         if let isLoading = loading {
             if !isLoading {
-                self.fillWithRests()
+                //self.fillWithRests()
             }
         }
     }
