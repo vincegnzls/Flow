@@ -17,27 +17,28 @@ class GridSystem {
 
     public var selectedMeasureCoord:MeasurePoints? {
         didSet {
-            if (oldValue != selectedMeasureCoord) {
+            
+            if oldValue != nil {
+            
+                if let oldPoints = oldValue, let newPoints = selectedMeasureCoord {
+                    if let oldMeasure = getMeasureFromPoints(measurePoints: oldPoints), let newMeasure = getMeasureFromPoints(measurePoints: newPoints) {
+                        if oldMeasure !== newMeasure {
+                            
+                            oldMeasure.fillWithRests()
+                            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
 
-                if let oldPoints = oldValue {
-                    if let oldMeasure = self.getMeasureFromPoints(measurePoints: oldPoints) {
-                        oldMeasure.fillWithRests()
+                            let params:Parameters = Parameters()
+                            params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
+                            
+                            print("KEY SIG: \(newMeasure.keySignature)")
+                            
+                            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+                            print ("Measure switched!")
+                            
+                        }
                     }
                 }
                 
-                if let measureCoord = selectedMeasureCoord {
-                    if let newMeasure = getMeasureFromPoints(measurePoints: measureCoord) {
-                        let params:Parameters = Parameters()
-                        params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
-
-                        print("KEY SIG: \(newMeasure.keySignature)")
-                        
-                        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
-                    }
-                }
-
-                //EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
-                print ("Measure switched!")
             }
         }
     }

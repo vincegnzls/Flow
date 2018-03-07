@@ -187,7 +187,7 @@ class MusicSheet: UIView {
                 if measure.isFull {
                     
                     if let measureCoord = GridSystem.instance.selectedMeasureCoord {
-                        self.moveCursorsToNextMeasure(measurePoints: measureCoord)
+                        //self.moveCursorsToNextMeasure(measurePoints: measureCoord) DISABLED FEATURE
                         return
                     }
                 }
@@ -420,6 +420,10 @@ class MusicSheet: UIView {
         return maxWidth
     }
     
+    private func drawKeySignature (startX:CGFloat, startY:CGFloat, keySignature:KeySignature) {
+        
+    }
+    
     // this is for getting the Maestro font style of the time signature
     private func getEquivalentNumberSymbol(n: Int) -> String? {
         
@@ -535,15 +539,6 @@ class MusicSheet: UIView {
             moveCursorX(location: CGPoint(x: snapPoints[0].x, y: measureCoord.lowerRightPoint.y + cursorXOffsetY))
             moveCursorY(location: snapPoints[0])
         }
-        
-        //draw line before measure
-        /*if withLeftLine {
-            bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
-            bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
-            bezierPath.stroke()
-            
-            measureXDivs.insert(startX)
-        }*/
         
         //draw line after measure
         bezierPath.move(to: CGPoint(x: endX, y: startY - curSpace))
@@ -1021,52 +1016,6 @@ class MusicSheet: UIView {
 
     }
 
-    /*func addNewNote(params: Parameters) {
-        let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
-        if let notePlacement = GridSystem.instance.getNotePlacement(notation: notation) {
-
-            notation.screenCoordinates = notePlacement.0
-
-            self.addMusicNotation(notation: notation)
-            
-            if let note = notation as? Note {
-                soundManager.playSound(note)
-            }
-
-            if let coord = GridSystem.instance.selectedMeasureCoord {
-
-                if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: coord) {
-                    
-                    GridSystem.instance.removeRelativeXSnapPoints(measurePoints: coord, relativeX: curYCursorLocation.x)
-
-                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
-                            snapPoints: GridSystem.instance.createSnapPoints(
-                                    initialX: notePlacement.0.x, initialY: coord.lowerRightPoint.y,
-                                    clef: measure.clef, lineSpace: lineSpace))
-
-                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
-                            snapPoints: GridSystem.instance.createSnapPoints(initialX: notePlacement.1.x,
-                                    initialY: coord.lowerRightPoint.y,
-                                    clef: measure.clef, lineSpace: lineSpace))
-
-
-                    if measure.isFull {
-                        
-                        moveCursorsToNextMeasure(measurePoints: coord)
-                        
-                    } else {
-                        GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
-                        
-                        moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
-                        moveCursorY(location: GridSystem.instance.selectedCoord!)
-                    }
-
-                }
-
-            }
-        }
-    }*/
-
     func updateMeasureDraw () {
         startY = 200 + sheetYOffset
         staffIndex = -1
@@ -1228,13 +1177,18 @@ class MusicSheet: UIView {
                     GridSystem.instance.selectedCoord = newSnapPoints[prevSnapIndex]
                     
                     // get first measure points of the
-                    if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
                     
-                        moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
-                                                      y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
-                        moveCursorY(location: newSnapPoints[prevSnapIndex])
+                    if indexJump < measureCoords.count {
+                    
+                        if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
                         
-                        scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                            moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
+                                                          y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
+                            moveCursorY(location: newSnapPoints[prevSnapIndex])
+                            
+                            scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                        }
+                        
                     }
                     
                 }
