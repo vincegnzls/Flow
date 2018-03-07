@@ -177,6 +177,17 @@ class Measure: Equatable {
         return totalBeats
     }
 
+    public func containsRest() -> Bool {
+        for note in notationObjects {
+            if let curNote = note as? Rest {
+                return true
+            }
+        }
+
+        return false
+    }
+
+
     func fillWithRests() {
         while getTotalBeats() < timeSignature.getMaxBeatValue() {
             for rest in RestNoteType.types {
