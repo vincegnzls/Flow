@@ -173,7 +173,7 @@ class Converter {
                 for clef in clefs {
                     let measure = Measure(keySignature: previousKeySignature,
                                           timeSignature: previousTimeSignature,
-                                          clef: clef)
+                                          clef: clef, loading: true)
                     measures.append(measure)
                 }
                 

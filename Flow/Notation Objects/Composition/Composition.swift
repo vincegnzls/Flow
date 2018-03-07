@@ -55,7 +55,7 @@ class Composition {
 
                 let lastMeasure = staff.measures[staff.measures.count - 1]
 
-                staff.addMeasure(Measure(keySignature: lastMeasure.keySignature, timeSignature: lastMeasure.timeSignature, clef: lastMeasure.clef))
+                staff.addMeasure(Measure(keySignature: lastMeasure.keySignature, timeSignature: lastMeasure.timeSignature, clef: lastMeasure.clef, loading: false))
 
             }
         }

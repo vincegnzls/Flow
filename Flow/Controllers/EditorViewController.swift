@@ -30,7 +30,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         var measuresForF = [Measure]()
 
         for _  in 1...6 {
-            let measure = Measure()
+            let measure = Measure(loading: false)
 
             // dummy data
             //measure.addNoteInMeasure(Note(pitch: Pitch(step: Step.B, octave: 4), type: .eighth, clef: measure.clef))
@@ -42,7 +42,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         }
 
         for _ in 1...6 {
-            measuresForF.append(Measure(clef: Clef.F))
+            measuresForF.append(Measure(clef: Clef.F, loading: false))
         }
 
         let GStaff = Staff(measures: measuresForG)

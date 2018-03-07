@@ -53,7 +53,7 @@ class TimeSignatureViewController: UIViewController {
     // When a user taps save
     @IBAction func onSavePress(_ sender: Any) {
         if let measure = GridSystem.instance.getCurrentMeasure() {
-            let newMeasure = Measure()
+            let newMeasure = Measure(loading: false)
 
             newMeasure.notationObjects = measure.notationObjects
             newMeasure.keySignature = measure.keySignature

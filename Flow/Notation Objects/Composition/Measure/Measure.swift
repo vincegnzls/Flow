@@ -39,7 +39,7 @@ class Measure: Equatable {
     init(keySignature: KeySignature = .c,
          timeSignature: TimeSignature = TimeSignature(),
          clef: Clef = .G,
-         notationObjects: [MusicNotation] = []) {
+         notationObjects: [MusicNotation] = [], loading: Bool?) {
         self.keySignature = keySignature
         self.timeSignature = timeSignature
         self.clef = clef
@@ -47,7 +47,12 @@ class Measure: Equatable {
         self.bounds = Bounds()
         self.curBeatValue = 0
         self.validNotes = [RestNoteType]()
-        self.fillWithRests()
+
+        if let isLoading = loading {
+            if !isLoading {
+                self.fillWithRests()
+            }
+        }
     }
 
     // Equatable operators
