@@ -182,22 +182,18 @@ class MusicSheet: UIView {
                 setupGrandStaff(startX: lefRightPadding, startY: startY, withTimeSig: false, measures: measureSplices[i])
             }
             
-            if let measure = GridSystem.instance.getCurrentMeasure() {
-                
-                if measure.isFull {
-                    
-                    if let measureCoord = GridSystem.instance.selectedMeasureCoord {
-                        //self.moveCursorsToNextMeasure(measurePoints: measureCoord) DISABLED FEATURE
-                        return
-                    }
-                }
-                
-            }
-            
             // for redirecting the cursor after redrawing the whole composition
             if let recentNotation = GridSystem.instance.recentNotation {
                 
                 if let measure = GridSystem.instance.getCurrentMeasure() {
+                    
+                    /*if measure.isFull {
+                        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+                            self.moveCursorsToNextMeasure(measurePoints: measureCoord)
+                            return
+                        }
+                    }*/
+                    
                     if measure.notationObjects.contains(recentNotation) {
                         var coordForCurrentPoint:CGPoint?
                         
@@ -222,7 +218,14 @@ class MusicSheet: UIView {
                                     moveCursorY(location: nextSnapPoint)
                                     moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
                                     
-                                }
+                                }/* else {
+                                    if measure.isFull {
+                                        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+                                            self.moveCursorsToNextMeasure(measurePoints: measureCoord)
+                                            //return
+                                        }
+                                    }
+                                }*/
                             }
                             
                         }
@@ -309,12 +312,23 @@ class MusicSheet: UIView {
 
         for i in 0...measures.count-1 {
             
-            // START OF DRAWING TIME SIGNATURE
-            var adjustTimeSig:CGFloat = 0
+            var adjustKeyTimeSig:CGFloat = 0
+            
+            if i > 0 {
+                adjustKeyTimeSig += 10
+            }
+            
+            // START OF DRAWING KEY SIGNATURE
+            
+            let keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
+            adjustKeyTimeSig += keyLabelWidth
+            
+            // END IF DRAWING KEY SIGNATURE
+            
             var timeLabelWidth:CGFloat?
             
             if i > 0 {
-                adjustTimeSig += 20
+                adjustKeyTimeSig += 20
             }
             
             if let staffList = composition?.staffList {
@@ -322,10 +336,10 @@ class MusicSheet: UIView {
                     if let measureIndex = staff.measures.index(of: measures[i]) {
                         if measureIndex > 0 {
                             if !self.sameTimeSignature(t1: (staff.measures[measureIndex - 1].timeSignature), t2: staff.measures[measureIndex].timeSignature) {
-                                timeLabelWidth = drawTimeLabel(startX: modStartX + adjustTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
+                                timeLabelWidth = drawTimeLabel(startX: modStartX + adjustKeyTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
                             }
                         } else if measureIndex == 0 {
-                            timeLabelWidth = drawTimeLabel(startX: modStartX + adjustTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
+                            timeLabelWidth = drawTimeLabel(startX: modStartX + adjustKeyTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
                         }
                     }
                 }
@@ -333,7 +347,7 @@ class MusicSheet: UIView {
             // END OF DRAWING TIME SIGNATURE
             
             if let timeLabelWidth = timeLabelWidth {
-                modStartX = modStartX + timeLabelWidth + adjustTimeSig
+                modStartX = modStartX + timeLabelWidth + adjustKeyTimeSig
                 //distance = distance - timeLabelWidth - adjustTimeSig
             }
             
@@ -362,6 +376,54 @@ class MusicSheet: UIView {
         }
 
         return false
+    }
+    
+    private func drawKeySignature (startX:CGFloat, startY:CGFloat, keySignature:KeySignature) -> CGFloat {
+        
+        if keySignature == .c {
+            return 0
+        } else {
+            
+            let numberOfAccidentals = abs(keySignature.rawValue)
+            let snapPointsForKeySig = GridSystem.instance.createSnapPointsForKeySig(initialX: startX, initialY: startY - (lineSpace*5.85), lineSpace: lineSpace)
+            
+            var space:CGFloat = 0
+            
+            for i in 0..<numberOfAccidentals {
+                
+                // sharps
+                if keySignature.rawValue < 0 {
+                    
+                    let snapPointSequence = [1, 4, 0, 3, 6, 2]
+                        
+                    let sharp = UIImage(named:"sharp")
+                    let currentSnapPoint = snapPointsForKeySig[snapPointSequence[i]]
+                    
+                    let sharpView = UIImageView(frame: CGRect(x: currentSnapPoint.x + space, y: currentSnapPoint.y, width: 56/3, height: 150/3))
+                    
+                    sharpView.image = sharp
+                    self.addSubview(sharpView)
+                    
+                    space += 15
+                
+                } else if keySignature.rawValue > 0 { // flats
+                    
+                    let snapPointSequence = [4, 7, 3, 6, 2, 5]
+                    
+                    for index in snapPointSequence {
+                        
+                    }
+                    
+                }
+                
+            }
+            
+            return space + 56/3
+            
+        }
+        
+        return 0
+        
     }
     
     // Draws the clef and time before the staff
@@ -418,10 +480,6 @@ class MusicSheet: UIView {
         self.addSubview(lowerTimeSig)
         
         return maxWidth
-    }
-    
-    private func drawKeySignature (startX:CGFloat, startY:CGFloat, keySignature:KeySignature) {
-        
     }
     
     // this is for getting the Maestro font style of the time signature
@@ -1025,6 +1083,7 @@ class MusicSheet: UIView {
         }
         
         measureCoords.removeAll()
+        GridSystem.instance.clearNotationSnapPointMap()
 
         self.setNeedsDisplay()
 

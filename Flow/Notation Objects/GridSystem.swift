@@ -14,6 +14,7 @@ class GridSystem {
     static let instance = GridSystem()
     
     let NUMBER_OF_SNAPPOINTS_PER_COLUMN = 22
+    let NUMBER_OF_SNAPPOINTS_PER_COLUMN_KEYSIG = 10 // for key sig
 
     public var selectedMeasureCoord:MeasurePoints? {
         didSet {
@@ -144,6 +145,10 @@ class GridSystem {
     
     public func getNotationFromSnapPoint(snapPoint: CGPoint) -> MusicNotation? {
         return noteSnapPointsMap[snapPoint]
+    }
+    
+    public func clearNotationSnapPointMap() {
+        noteSnapPointsMap.removeAll()
     }
 
     public func createNewMeasurePointsArray() {
@@ -391,7 +396,7 @@ class GridSystem {
         var currSnapPoint:CGPoint = CGPoint(x: initialX, y: initialY)
 
         var pitchArray = [Pitch]()
-
+        
         switch clef {
             case .G:
                 pitchArray = gClefPitches
@@ -410,6 +415,24 @@ class GridSystem {
             }
         }
 
+        return snapPoints
+    }
+    
+    public func createSnapPointsForKeySig (initialX: CGFloat, initialY: CGFloat, lineSpace: CGFloat) -> [CGPoint] {
+        var snapPoints = [CGPoint]()
+        
+        var currSnapPoint:CGPoint = CGPoint(x: initialX, y: initialY)
+        
+        for i in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN_KEYSIG {
+            snapPoints.append(currSnapPoint)
+            
+            if i % 2 == 0 {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + lineSpace/2 + 1.20)
+            } else {
+                currSnapPoint = CGPoint(x: currSnapPoint.x, y: currSnapPoint.y + lineSpace/2 - 1.3)
+            }
+        }
+        
         return snapPoints
     }
 
