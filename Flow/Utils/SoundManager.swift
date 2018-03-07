@@ -140,7 +140,9 @@ class SoundManager{
                     //it adds lower level class MusicNotation which has properties that Note class
                     //already has. Note class has even more
                     
-                    print(musicNotation.type.toString())
+                    if let curNote = musicNotation as? Note{
+                        playSound(curNote)
+                    }
                 }
             }
         }
