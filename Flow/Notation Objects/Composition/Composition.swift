@@ -75,7 +75,7 @@ class Composition {
 
     func isLastMeasureFull() -> Bool {
         for staff in staffList {
-            if staff.measures[staff.measures.count - 1].timeSignature.getMaxBeatValue() == staff.measures[staff.measures.count - 1].getTotalBeats() && !staff.measures[staff.measures.count - 1].containsRest() {
+            if staff.measures[staff.measures.count - 1].timeSignature.getMaxBeatValue() == staff.measures[staff.measures.count - 1].getTotalBeats() {
                 return true
             }
         }
