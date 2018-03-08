@@ -320,8 +320,21 @@ class MusicSheet: UIView {
             
             // START OF DRAWING KEY SIGNATURE
             
-            let keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
-            adjustKeyTimeSig += keyLabelWidth
+            if let staffList = composition?.staffList {
+                for staff in staffList {
+                    if let measureIndex = staff.measures.index(of: measures[i]) {
+                        if measureIndex > 0 {
+                            if staff.measures[measureIndex - 1].keySignature != staff.measures[measureIndex].keySignature {
+                                let keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
+                                adjustKeyTimeSig += keyLabelWidth
+                            }
+                        } else if measureIndex == 0 {
+                            let keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
+                            adjustKeyTimeSig += keyLabelWidth
+                        }
+                    }
+                }
+            }
             
             // END IF DRAWING KEY SIGNATURE
             
@@ -335,7 +348,7 @@ class MusicSheet: UIView {
                 for staff in staffList {
                     if let measureIndex = staff.measures.index(of: measures[i]) {
                         if measureIndex > 0 {
-                            if !self.sameTimeSignature(t1: (staff.measures[measureIndex - 1].timeSignature), t2: staff.measures[measureIndex].timeSignature) {
+                            if staff.measures[measureIndex - 1].timeSignature != staff.measures[measureIndex].timeSignature {
                                 timeLabelWidth = drawTimeLabel(startX: modStartX + adjustKeyTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
                             }
                         } else if measureIndex == 0 {
@@ -371,14 +384,6 @@ class MusicSheet: UIView {
         } else {
             return nil
         }
-    }
-
-    public func sameTimeSignature(t1: TimeSignature, t2: TimeSignature) -> Bool {
-        if t1.beats == t2.beats && t1.beatType == t2.beatType {
-            return true
-        }
-
-        return false
     }
     
     private func drawKeySignature (startX:CGFloat, startY:CGFloat, keySignature:KeySignature) -> CGFloat {
