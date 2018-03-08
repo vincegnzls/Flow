@@ -318,6 +318,8 @@ class MusicSheet: UIView {
                 adjustKeyTimeSig += 10
             }
             
+            var keyLabelWidth:CGFloat = 0
+            
             // START OF DRAWING KEY SIGNATURE
             
             if let staffList = composition?.staffList {
@@ -325,11 +327,11 @@ class MusicSheet: UIView {
                     if let measureIndex = staff.measures.index(of: measures[i]) {
                         if measureIndex > 0 {
                             if staff.measures[measureIndex - 1].keySignature != staff.measures[measureIndex].keySignature {
-                                let keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
+                                keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
                                 adjustKeyTimeSig += keyLabelWidth
                             }
                         } else if measureIndex == 0 {
-                            let keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
+                                keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
                             adjustKeyTimeSig += keyLabelWidth
                         }
                     }
@@ -340,7 +342,7 @@ class MusicSheet: UIView {
             
             var timeLabelWidth:CGFloat?
             
-            if i > 0 {
+            if keyLabelWidth > 0 {
                 adjustKeyTimeSig += 20
             }
             
@@ -349,6 +351,7 @@ class MusicSheet: UIView {
                     if let measureIndex = staff.measures.index(of: measures[i]) {
                         if measureIndex > 0 {
                             if staff.measures[measureIndex - 1].timeSignature != staff.measures[measureIndex].timeSignature {
+                                
                                 timeLabelWidth = drawTimeLabel(startX: modStartX + adjustKeyTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
                             }
                         } else if measureIndex == 0 {
@@ -1834,7 +1837,7 @@ class MusicSheet: UIView {
             if let staffs = composition?.staffList {
                 for staff in staffs {
                     for i in index...staff.measures.count-1 {
-                        if sameTimeSignature(t1: staff.measures[i].timeSignature, t2: oldTimeSig) {
+                        if staff.measures[i].timeSignature == oldTimeSig {
                             let curMeasure = staff.measures[i]
 
                             while newMaxBeatValue < curMeasure.getTotalBeats() {
