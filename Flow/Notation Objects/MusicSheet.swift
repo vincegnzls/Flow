@@ -304,7 +304,7 @@ class MusicSheet: UIView {
         let startMeasure:CGFloat = startX + 85
 
         // Track distance for each measure to be printed
-        let distance:CGFloat = (endX-startMeasure)/CGFloat(measures.count)
+        var distance:CGFloat = (endX-startMeasure)/CGFloat(measures.count)
 
         // Start drawing the measures
         var modStartX:CGFloat = startMeasure
@@ -347,9 +347,12 @@ class MusicSheet: UIView {
             // END OF DRAWING TIME SIGNATURE
             
             if let timeLabelWidth = timeLabelWidth {
-                modStartX = modStartX + timeLabelWidth + adjustKeyTimeSig
-                //distance = distance - timeLabelWidth - adjustTimeSig
+                modStartX = modStartX + timeLabelWidth
+                distance = distance - timeLabelWidth
             }
+            
+            modStartX += adjustKeyTimeSig
+            distance -= adjustKeyTimeSig
             
             // START OF DRAWING OF MEASURE
             measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
@@ -392,9 +395,9 @@ class MusicSheet: UIView {
             for i in 0..<numberOfAccidentals {
                 
                 // sharps
-                if keySignature.rawValue < 0 {
+                if keySignature.rawValue > 0 {
                     
-                    let snapPointSequence = [1, 4, 0, 3, 6, 2]
+                    let snapPointSequence = [1, 4, 0, 3, 6, 2, 5]
                         
                     let sharp = UIImage(named:"sharp")
                     let currentSnapPoint = snapPointsForKeySig[snapPointSequence[i]]
@@ -406,13 +409,19 @@ class MusicSheet: UIView {
                     
                     space += 15
                 
-                } else if keySignature.rawValue > 0 { // flats
+                } else if keySignature.rawValue < 0 { // flats
                     
-                    let snapPointSequence = [4, 7, 3, 6, 2, 5]
+                    let snapPointSequence = [5, 2, 6, 3, 7, 4, 8]
                     
-                    for index in snapPointSequence {
-                        
-                    }
+                    let flat = UIImage(named:"flat")
+                    let currentSnapPoint = snapPointsForKeySig[snapPointSequence[i]]
+                    
+                    let flatView = UIImageView(frame: CGRect(x: currentSnapPoint.x + space, y: currentSnapPoint.y, width: 56/3, height: 150/3))
+                    
+                    flatView.image = flat
+                    self.addSubview(flatView)
+                    
+                    space += 15
                     
                 }
                 
