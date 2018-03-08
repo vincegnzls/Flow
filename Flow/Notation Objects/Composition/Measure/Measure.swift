@@ -17,11 +17,13 @@ class Measure: Equatable {
         didSet{
             curBeatValue = getTotalBeats()
             updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls
+            updateGroups()
         }
     }
     var bounds: Bounds
     var curBeatValue: Float
     var validNotes: [RestNoteType]
+    var groups: [[MusicNotation]]
 
     var isFull: Bool {
         return self.curBeatValue == self.timeSignature.getMaxBeatValue()
@@ -47,6 +49,7 @@ class Measure: Equatable {
         self.bounds = Bounds()
         self.curBeatValue = 0
         self.validNotes = [RestNoteType]()
+        self.groups = [[MusicNotation]]()
         //self.fillWithRests()
     }
 
@@ -182,5 +185,88 @@ class Measure: Equatable {
                 self.addToMeasure(curRest)
             }
         }
+    }
+
+    func updateGroups() {
+        print("CALL UPDATE GROUP: \(notationObjects)")
+        self.groups.removeAll()
+
+        var curGroup = [MusicNotation]()
+
+        for note in notationObjects {
+            if !groupFull(group: curGroup, isEighth: note.type == .eighth) {
+                curGroup.append(note)
+            } else {
+                self.groups.append(curGroup)
+                curGroup.removeAll()
+                curGroup.append(note)
+            }
+        }
+
+        self.groups.append(curGroup)
+
+        /*var x = 0
+
+        if self.groups.count > 1 {
+            var curMerge = [[MusicNotation]]()
+
+            for group in self.groups {
+                if isPureEighth(group: group) && curMerge.count < 2 {
+                    curMerge.append(group)
+                } else if isPureEighth(group: group) && curMerge.count == 2 {
+                    //insert merge here
+
+
+                }
+
+                x = x + 1
+            }
+        }*/
+    }
+
+    func getIndexOfGroup(group: [MusicNotation]) -> Int {
+        var x = 0
+
+        for g in groups {
+            if g.elementsEqual(group) {
+                return x
+            }
+        }
+
+        return -1
+    }
+
+    func isPureEighth(group: [MusicNotation]) -> Bool {
+        for note in group {
+            if note.type != .eighth {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    func groupFull(group: [MusicNotation], isEighth: Bool) -> Bool {
+        var curBeatValue: Float = 0
+
+        for note in group {
+            curBeatValue = note.type.getBeatValue() + curBeatValue
+        }
+
+        /*if timeSignature.beatType == 4 && timeSignature.beats == 4 {
+            if isPureEighth(group: group) {
+                if isEighth {
+                    if curBeatValue < timeSignature.getMaxBeatValuePerGroup() * 2 {
+                        return false
+                    }
+                }
+            }
+        }*/
+
+        if curBeatValue < timeSignature.getMaxBeatValuePerGroup() {
+            return false
+        }
+
+        return true
     }
 }

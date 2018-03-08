@@ -656,11 +656,52 @@ class MusicSheet: UIView {
             }
 
             // beam notes of all measures TODO: change if beaming per group is implemented
-            beamNotes(notations: measure.notationObjects)
+            if !measure.groups.isEmpty {
+
+                var curMerge = [MusicNotation]()
+                var merge = [[MusicNotation]]()
+
+                var x = 0
+
+                if measure.groups.count > 1 {
+                    for group in measure.groups {
+                        if measure.timeSignature.beats == 4 && measure.timeSignature.beatType == 4 {
+                            if x < measure.groups.count {
+                                if x + 1 == measure.groups.count {
+                                    beamNotes(notations: measure.groups[x])
+                                } else {
+                                    if isPureEighth(group: measure.groups[x]) && measure.groups[x].count == 2 && isPureEighth(group: measure.groups[x + 1]) && measure.groups[x + 1].count == 2 {
+                                        beamNotes(notations: measure.groups[x] + measure.groups[x + 1])
+                                        x = x + 1
+                                    } else {
+                                        beamNotes(notations: measure.groups[x])
+                                    }
+
+                                    x = x + 1
+                                }
+                            }
+                        } else {
+                            beamNotes(notations: group)
+                        }
+                    }
+                } else {
+                    beamNotes(notations: measure.groups[0])
+                }
+            }
 
         }
 
         return measureCoord
+    }
+
+    func isPureEighth(group: [MusicNotation]) -> Bool {
+        for note in group {
+            if note.type != .eighth {
+                return false
+            }
+        }
+
+        return true
     }
     
     // Initializes the Grid System
