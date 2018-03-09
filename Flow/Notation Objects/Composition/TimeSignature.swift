@@ -20,6 +20,10 @@ struct TimeSignature: Equatable {
     func getMaxBeatValue() -> Float {
         return Float(Float(self.beats) / Float(self.beatType))
     }
+
+    func getMaxBeatValuePerGroup() -> Float {
+        return Float(Float(1) / Float(self.beatType))
+    }
     
     public var hashValue: Int {
         return beats.hashValue ^ beatType.hashValue

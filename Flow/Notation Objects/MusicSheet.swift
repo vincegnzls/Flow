@@ -47,6 +47,8 @@ class MusicSheet: UIView {
     public var composition: Composition?
     public var hoveredNotation: MusicNotation?
 
+    private var soundManager = SoundManager()
+    
     private var curScale: CGFloat = 1.0
     var originalCenter:CGPoint?
 
@@ -122,6 +124,9 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.PASTE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.PASTE_KEY_PRESSED, observer: Observer(id: "MusicSheet.paste", function: self.paste))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.PLAY_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_TIME_SIG, observer: Observer(id: "MusicSheet.editTimeSig", function: self.editTimeSig))
@@ -763,11 +768,52 @@ class MusicSheet: UIView {
             }
 
             // beam notes of all measures TODO: change if beaming per group is implemented
-            beamNotes(notations: measure.notationObjects)
+            if !measure.groups.isEmpty {
+
+                var curMerge = [MusicNotation]()
+                var merge = [[MusicNotation]]()
+
+                var x = 0
+
+                if measure.groups.count > 1 {
+                    for group in measure.groups {
+                        if measure.timeSignature.beats == 4 && measure.timeSignature.beatType == 4 {
+                            if x < measure.groups.count {
+                                if x + 1 == measure.groups.count {
+                                    beamNotes(notations: measure.groups[x])
+                                } else {
+                                    if isPureEighth(group: measure.groups[x]) && measure.groups[x].count == 2 && isPureEighth(group: measure.groups[x + 1]) && measure.groups[x + 1].count == 2 {
+                                        beamNotes(notations: measure.groups[x] + measure.groups[x + 1])
+                                        x = x + 1
+                                    } else {
+                                        beamNotes(notations: measure.groups[x])
+                                    }
+
+                                    x = x + 1
+                                }
+                            }
+                        } else {
+                            beamNotes(notations: group)
+                        }
+                    }
+                } else {
+                    beamNotes(notations: measure.groups[0])
+                }
+            }
 
         }
 
         return measureCoord
+    }
+
+    func isPureEighth(group: [MusicNotation]) -> Bool {
+        for note in group {
+            if note.type != .eighth {
+                return false
+            }
+        }
+
+        return true
     }
     
     // Initializes the Grid System
@@ -1777,6 +1823,15 @@ class MusicSheet: UIView {
         Clipboard.instance.cut(self.selectedNotations)
         self.selectedNotations.removeAll()
         self.updateMeasureDraw()
+        
+    }
+    
+    public func play() {
+        print("Play")
+        
+        if let comp = self.composition{
+            soundManager.musicPlayback(comp)
+        }
         
     }
 

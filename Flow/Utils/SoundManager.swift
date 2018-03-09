@@ -5,6 +5,7 @@
 //  Created by Kevin Chan on 03/01/2018.
 //  Copyright © 2018 MusicG. All rights reserved.
 //
+//
 
 import Foundation
 import AVFoundation
@@ -18,7 +19,22 @@ class SoundManager{
     
     var resName = "a1-mf"
     
+    var playTime = 1000.0
+    
     func playSound(_ note: Note){
+        
+        switch note.type.toString(){
+        case "64th": playTime = 75.0
+        case "32nd" : playTime = 125.0
+        case "16th" : playTime = 250.0
+        case "eigth" : playTime = 500.0
+        case "quarter" : playTime = 1000.0
+        case "half" : playTime = 2000.0
+        case "whole" : playTime = 4000.0
+        default:
+            playTime = 1000.0
+            break
+        }
         
         switch note.pitch.step.toString(){
         case "C":
@@ -124,12 +140,44 @@ class SoundManager{
             audioPlayer = try AVAudioPlayer(contentsOf: url!)
             audioPlayer.prepareToPlay()
             audioPlayer.currentTime = 0.5
-        }catch let error as NSError{            print(error.debugDescription)
+        }catch let error as NSError{
+            print(error.debugDescription)
         }
         
         audioPlayer.play()
+        
+        print("playTime is: \(playTime)" )
+        
+        if #available(iOS 10.0, *) {
+            print("Timer is ticking")
+            Timer.scheduledTimer(withTimeInterval: playTime/1000, repeats: false){
+                (timer) in self.audioPlayer.stop()
+                print("Stopping Audio Player")
+            }
+        } else {
+            print("Nothing happened")
+            // Fallback on earlier versions
+        }
     }
-}
+    
+    func musicPlayback(_ composition: Composition){
+        for staff in composition.staffList{
+            for measure in staff.measures{
+                for musicNotation in measure.notationObjects{
+                    //There was no way to form a note with notationObjects
+                    //Advise, function in Measure "addNoteInMeasure" does not add note in measure.
+                    //it adds lower level class MusicNotation which has properties that Note class
+                    //already has. Note class has even more
+                    
+                    if let curNote = musicNotation as? Note{
+                        print("Playing Note \(curNote.type.toString())")
+                        playSound(curNote)
+                    }
+                }
+            }
+        }
+        
+    }}
 
 
         
