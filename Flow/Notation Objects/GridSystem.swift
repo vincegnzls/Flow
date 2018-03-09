@@ -227,10 +227,12 @@ class GridSystem {
     }
 
     public func getRightXSnapPoint(currentPoint: CGPoint) -> CGPoint? {
+
         if let measureCoord = selectedMeasureCoord {
 
             var nearestPoint:CGPoint = currentPoint
             var leastDistance:CGFloat?
+
             if let snapPoints = snapPointsMap[measureCoord] {
 
                 for (index, snapPoint) in snapPoints.enumerated() {

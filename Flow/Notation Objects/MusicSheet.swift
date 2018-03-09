@@ -192,12 +192,12 @@ class MusicSheet: UIView {
                 
                 if let measure = GridSystem.instance.getCurrentMeasure() {
                     
-                    /*if measure.isFull {
+                    if measure.isFull {
                         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                             self.moveCursorsToNextMeasure(measurePoints: measureCoord)
                             return
                         }
-                    }*/
+                    }
                     
                     if measure.notationObjects.contains(recentNotation) {
                         var coordForCurrentPoint:CGPoint?
@@ -215,10 +215,14 @@ class MusicSheet: UIView {
                         if let noteScreenCoord = coordForCurrentPoint {
                             
                             if let snapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: noteScreenCoord) {
+
+                                print("get right \(snapPoint)")
                                 
                                 // get right again to go to the next
                                 if let nextSnapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: snapPoint) {
-                                    
+
+                                    print("get righter \(nextSnapPoint)")
+
                                     GridSystem.instance.selectedCoord = nextSnapPoint
                                     moveCursorY(location: nextSnapPoint)
                                     moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
@@ -377,14 +381,14 @@ class MusicSheet: UIView {
             
             // START OF DRAWING OF MEASURE
             measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
-            
+
             if let measureLocation = measureLocation {
                 GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation, measure: measures[i])
                 GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measureLocation)
+
+                modStartX = measureLocation.lowerRightPoint.x
             }
             // END OF DRAWING OF MEASURE
-
-            modStartX = modStartX + distance
         }
         
         if let measureLocation = measureLocation {
@@ -572,7 +576,7 @@ class MusicSheet: UIView {
         bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
         bezierPath.stroke()
         
-        measureXDivs.insert(startX)
+        //measureXDivs.insert(startX)
         
         // END Draw lines for clef
     }
@@ -598,17 +602,15 @@ class MusicSheet: UIView {
         curSpace -= lineSpace // THIS IS NECESSARY FOR ADJUSTING THE LEFT AND RIGHT LINES
 
         // get upper left point and lower right point of measure to keep track of location
-        let measureCoord:GridSystem.MeasurePoints =
+        var measureCoord:GridSystem.MeasurePoints =
             GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startY),
                                      lowerRightPoint: CGPoint(x: endX, y: startY-curSpace),
                                      upperLeftPointWithLedger: CGPoint(x: startX, y: startY+(lineSpace*3.5)),
                                      lowerRightPointWithLedger: CGPoint(x: endX, y: startY-curSpace-(lineSpace*3.5)))
         
-        measureCoords.append(measureCoord)
-        
         let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace, initialY: startY-curSpace-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
         GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
-        
+
         // CHOOSE FIRST MEASURE COORD AS DEFAULT
         if GridSystem.instance.selectedMeasureCoord == nil {
             GridSystem.instance.selectedMeasureCoord = measureCoord
@@ -619,14 +621,6 @@ class MusicSheet: UIView {
             moveCursorX(location: CGPoint(x: snapPoints[0].x, y: measureCoord.lowerRightPoint.y + cursorXOffsetY))
             moveCursorY(location: snapPoints[0])
         }
-        
-        //draw line after measure
-        bezierPath.move(to: CGPoint(x: endX, y: startY - curSpace))
-        bezierPath.addLine(to: CGPoint(x: endX, y: startY)) // change if staff space changes
-        bezierPath.stroke()
-        
-        // for the grand staff connection
-        measureXDivs.insert(endX)
 
         let measureWeights = initMeasureGrid(startX: startX, endX: endX, startY: startY-curSpace)
         GridSystem.instance.assignWeightsToPoints(measurePoints: measureCoord,
@@ -634,7 +628,7 @@ class MusicSheet: UIView {
         
         let adjustXToCenter = adjustToXCenter * initialNoteSpace
 
-//        var points = snapPoints
+        var lastXCoord:CGFloat?
 
         if measure.notationObjects.count > 0 {
             
@@ -669,6 +663,8 @@ class MusicSheet: UIView {
                             
                         }
                     }
+
+                    lastXCoord = measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter
                     
                     let snapPointsRelativeToNotation = GridSystem.instance.createSnapPoints(
                         initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
@@ -698,8 +694,9 @@ class MusicSheet: UIView {
                     
                         GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
                                                                       snapPoints: additionalSnapPoints)
-                        
+
                         prevX = measureCoord.upperLeftPoint.x + initialNoteSpace + notationSpace + adjustXToCenter
+                        lastXCoord = prevX
                         
                     }
                     
@@ -726,6 +723,8 @@ class MusicSheet: UIView {
                         if let prevX = prevX {
                             GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: prevX)
                         }
+
+                        lastXCoord = prevNoteCoordinates.x + notationSpace + adjustXToCenter
                         
                         let snapPointsRelativeToNotation = GridSystem.instance.createSnapPoints(
                             initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
@@ -754,6 +753,7 @@ class MusicSheet: UIView {
                                                                           snapPoints: additionalSnapPoints)
                             
                             prevX = prevNoteCoordinates.x + notationSpace*2 + adjustXToCenter
+                            lastXCoord = prevX
                             
                         }
                         
@@ -802,6 +802,63 @@ class MusicSheet: UIView {
             }
 
         }
+
+        if let lastCoord = lastXCoord {
+
+            // reassign old snap points to new measure coords
+            if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoord) {
+
+                GridSystem.instance.clearAllSnapPointsFromMeasure(measurePoints: measureCoord)
+
+                if let selectedMeasure = GridSystem.instance.getCurrentMeasure() {
+
+                    if measure == selectedMeasure {
+
+                        measureCoord =
+                                GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startY),
+                                        lowerRightPoint: CGPoint(x: lastCoord + 50, y: startY - curSpace),
+                                        upperLeftPointWithLedger: CGPoint(x: startX, y: startY + (lineSpace * 3.5)),
+                                        lowerRightPointWithLedger: CGPoint(x: lastCoord + 50, y: startY - curSpace - (lineSpace * 3.5)))
+
+                        GridSystem.instance.selectedMeasureCoord = measureCoord
+
+                    } else {
+
+                        measureCoord =
+                                GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startY),
+                                        lowerRightPoint: CGPoint(x: lastCoord + 50, y: startY - curSpace),
+                                        upperLeftPointWithLedger: CGPoint(x: startX, y: startY + (lineSpace * 3.5)),
+                                        lowerRightPointWithLedger: CGPoint(x: lastCoord + 50, y: startY - curSpace - (lineSpace * 3.5)))
+
+                    }
+
+                }
+
+                GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
+
+            }
+
+            //draw line after measure
+            bezierPath.move(to: CGPoint(x: lastCoord + 50, y: startY - curSpace))
+            bezierPath.addLine(to: CGPoint(x: lastCoord + 50, y: startY)) // change if staff space changes
+            bezierPath.stroke()
+
+            // for the grand staff connection
+            measureXDivs.insert(lastCoord + 50)
+
+        } else {
+
+            //draw line after measure
+            bezierPath.move(to: CGPoint(x: endX, y: startY - curSpace))
+            bezierPath.addLine(to: CGPoint(x: endX, y: startY)) // change if staff space changes
+            bezierPath.stroke()
+
+            // for the grand staff connection
+            measureXDivs.insert(endX)
+
+        }
+
+        measureCoords.append(measureCoord)
 
         return measureCoord
     }
@@ -856,7 +913,7 @@ class MusicSheet: UIView {
         UIColor.black.setStroke()
         bezierPath.lineWidth = 2
         
-        for x in measureXDivs {
+        /*for x in measureXDivs {
             bezierPath.move(to: CGPoint(x: x, y: startY))
             bezierPath.addLine(to: CGPoint(x: x, y: startY + staffSpace)) // change if staff space changes
             bezierPath.stroke()
@@ -865,6 +922,7 @@ class MusicSheet: UIView {
         staffConnection.path = bezierPath.cgPath
         staffConnection.strokeColor = UIColor.black.cgColor
         staffConnection.lineWidth = 2
+        */
         
         let brace = UIImage(named:"brace-185")
         let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: staffSpace + height))

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Measure: Equatable {
+class Measure: Hashable {
 
     var keySignature: KeySignature
     var timeSignature: TimeSignature
@@ -50,6 +50,22 @@ class Measure: Equatable {
         self.curBeatValue = 0
         self.validNotes = [RestNoteType]()
         self.groups = [[MusicNotation]]()
+    }
+    
+    public var hashValue: Int {
+        
+        var hashValueForNotations = 0
+        
+        for notation in notationObjects {
+            if let note = notation as? Note {
+                hashValueForNotations ^= note.pitch.hashValue ^ note.type.hashValue
+            } else if let rest = notation as? Rest {
+                hashValueForNotations ^= rest.type.hashValue
+            }
+        }
+        
+        return keySignature.hashValue ^ timeSignature.hashValue ^ clef.hashValue ^ curBeatValue.hashValue ^ hashValueForNotations
+        
     }
 
     // Equatable operators
