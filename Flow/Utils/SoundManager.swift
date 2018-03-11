@@ -14,28 +14,27 @@ class SoundManager{
     let folderName = "Support Objects/"
     
     var url = Bundle.main.url(forResource: "a1-mf", withExtension: "mp3")
+
+    var tempo: Double
+    var staffPlayer: [AVPlayer]
+    var staffPlayers: [[AVPlayer]]
+    
+    init() {
+        tempo = 120
+        self.staffPlayer = [AVPlayer]()
+        self.staffPlayers = [[AVPlayer]]()
+    }
     
     var audioPlayer:AVAudioPlayer!
     
     var resName = "a1-mf"
-    
-    var playTime = 1000.0
-    
-    func playSound(_ note: Note){
-        
-        switch note.type.toString(){
-        case "64th": playTime = 75.0
-        case "32nd" : playTime = 125.0
-        case "16th" : playTime = 250.0
-        case "eigth" : playTime = 500.0
-        case "quarter" : playTime = 1000.0
-        case "half" : playTime = 2000.0
-        case "whole" : playTime = 4000.0
-        default:
-            playTime = 1000.0
-            break
+
+    func getNoteUrl(note: Note) -> URL? {
+
+        if note.accidental == .sharp || note.accidental == .doubleSharp {
+            note.transposeUp()
         }
-        
+
         switch note.pitch.step.toString(){
         case "C":
             switch note.pitch.octave{
@@ -129,14 +128,49 @@ class SoundManager{
                 resName = "b0-mf"
             }
             break
-            
+
         default:
             break
         }
+
+        if note.accidental == .sharp || note.accidental == .flat {
+            resName.insert("b", at: resName.index(after: resName.startIndex))
+        }
+
+        if let url = Bundle.main.url(forResource: folderName + resName, withExtension: "mp3") {
+            return url
+        } else {
+            return nil
+        }
+    }
+    
+    func getNoteDurationInSeconds(note: Note) -> Double {
+
+        let playTime: Double
         
-        url = Bundle.main.url(forResource: folderName + resName, withExtension: "mp3")
+        switch note.type.toString(){
+        case "64th": playTime = 60 / tempo * 0.0625
+        case "32nd" : playTime = 60 / tempo * 0.125
+        case "16th" : playTime = 60 / tempo * 0.25
+        case "eigth" : playTime = 60 / tempo * 0.5
+        case "quarter" : playTime = 60 / tempo
+        case "half" : playTime = 60 / tempo * 2
+        case "whole" : playTime = 60 / tempo * 4
+        default:
+            playTime = 60 / tempo
+            break
+        }
+
+        return playTime
+
         
-        do{
+        /*if let url = Bundle.main.url(forResource: folderName + resName, withExtension: "mp3") {
+            print(url.absoluteString)
+            playTimes.append(playTime)
+            players.append(AVPlayer(playerItem: AVPlayerItem(url: url)))
+        }*/
+        
+        /*do{
             audioPlayer = try AVAudioPlayer(contentsOf: url!)
             audioPlayer.prepareToPlay()
             audioPlayer.currentTime = 0.5
@@ -157,27 +191,94 @@ class SoundManager{
         } else {
             print("Nothing happened")
             // Fallback on earlier versions
-        }
+        }*/
     }
-    
-    func musicPlayback(_ composition: Composition){
-        for staff in composition.staffList{
-            for measure in staff.measures{
-                for musicNotation in measure.notationObjects{
-                    //There was no way to form a note with notationObjects
-                    //Advise, function in Measure "addNoteInMeasure" does not add note in measure.
-                    //it adds lower level class MusicNotation which has properties that Note class
-                    //already has. Note class has even more
-                    
-                    if let curNote = musicNotation as? Note{
-                        print("Playing Note \(curNote.type.toString())")
-                        playSound(curNote)
+
+    func getStaffPlayer(staff: Staff) -> [AVPlayer] {
+        var staffPLayer = [AVPlayer]()
+        staffPlayer.removeAll()
+
+        for measure in staff.measures {
+            for notation in measure.notationObjects {
+                if let note = notation as? Note {
+                    if let url = getNoteUrl(note: note) {
+                        print(url.absoluteString)
+                        self.staffPlayer.append(AVPlayer(playerItem: AVPlayerItem(url: url)))
+                        print("player: \(self.staffPlayer.count)")
                     }
                 }
             }
         }
-        
-    }}
+
+        return staffPlayer
+    }
+
+    func getStaffNoteDurations(staff: Staff) -> [Double] {
+        var noteDurations = [Double]()
+
+        for measure in staff.measures {
+            for notation in measure.notationObjects {
+                if let note = notation as? Note {
+                    noteDurations.append(getNoteDurationInSeconds(note: note))
+                }
+            }
+        }
+
+        return noteDurations
+    }
+
+    /*func initStaffPlayers(staffList: [Staff]) {
+        self.staffPlayers.removeAll()
+
+        for staff in staffList {
+            self.staffPlayers.append(getStaffPlayer(staff: staff))
+        }
+    }
+
+    func initStaffNoteDurations(staffList: [Staff]) {
+        self.staffNoteDurations.removeAll()
+
+        for staff in staffList {
+            self.staffNoteDurations.append(getStaffNoteDurations(staff: staff))
+        }
+    }*/
+
+    func playStaff (staff: Staff, staffPlayer: [AVPlayer]) {
+        let staffNoteDurations = getStaffNoteDurations(staff: staff)
+
+        var curDuration: Double = 0
+
+        for (duration, player) in zip(staffNoteDurations, staffPlayer) {
+            if #available(iOS 10.0, *) {
+                Timer.scheduledTimer(withTimeInterval: curDuration, repeats: false){ _ in
+                    player.play()
+                }
+
+                curDuration = curDuration + duration
+                print("curDuration: \(curDuration)")
+            }
+        }
+    }
+    
+    func musicPlayback(_ composition: Composition){
+        staffPlayers.removeAll()
+
+        for staff in composition.staffList {
+            staffPlayers.append(getStaffPlayer(staff: staff))
+        }
+
+        for (staff, staffPlayer) in zip(composition.staffList, staffPlayers) {
+            if #available(iOS 10.0, *) {
+
+                Timer.scheduledTimer(withTimeInterval: 0, repeats: false) { _ in
+                    self.playStaff(staff: staff, staffPlayer: staffPlayer)
+                }
+
+            }
+
+        }
+    }
+}
 
 
         

@@ -162,7 +162,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     let addAction = AddAction(measure: measure, notation: note)
                     
                     if let note = note as? Note {
-                        soundManager.playSound(note)
+                        //soundManager.playSound(note)
                     }
                     
                     GridSystem.instance.recentNotation = note
