@@ -12,12 +12,13 @@ import AVFoundation
 
 class SoundManager{
     let folderName = "Support Objects/"
-    
     var url = Bundle.main.url(forResource: "a1-mf", withExtension: "mp3")
 
     var tempo: Double
     var staffPlayer: [AVPlayer]
     var staffPlayers: [[AVPlayer]]
+
+    var player = AVPlayer()
     
     init() {
         tempo = 120
@@ -141,6 +142,16 @@ class SoundManager{
             return url
         } else {
             return nil
+        }
+    }
+
+    func playNote(note: Note) {
+        if let url = getNoteUrl(note: note) {
+            print("ADD NOTE URL: \(url)")
+
+            self.player = AVPlayer(playerItem: AVPlayerItem(url: url))
+            self.player.play()
+
         }
     }
     
