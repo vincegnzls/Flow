@@ -355,9 +355,6 @@ class SoundManager {
         var gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
         var fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
 
-        print(gNotesMIDI)
-        print(fNotesMIDI)
-
         //Set the players
         let gNotePlayer = AKSampler()
 
@@ -416,6 +413,8 @@ class SoundManager {
                     timer.invalidate()
                 }*/
             }
+
+            RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
         }
 
     }
