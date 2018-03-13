@@ -163,10 +163,6 @@ class SoundManager {
 
         var MIDINum = 30
 
-        if note.accidental == .sharp || note.accidental == .doubleSharp {
-            note.transposeUp()
-        }
-
         switch note.pitch.step.toString(){
         case "A":
             switch note.pitch.octave{
@@ -286,6 +282,10 @@ class SoundManager {
         //Flat handling
         if note.accidental == .flat && (note.pitch.step.toString() == "B" || note.pitch.step.toString() == "E" || note.pitch.step.toString() == "A" || note.pitch.step.toString() == "D" || note.pitch.step.toString() == "G" || note.pitch.step.toString() == "C" || note.pitch.step.toString() == "F"){
             MIDINum -= 1
+        }
+
+        if note.accidental == .doubleSharp {
+            MIDINum += 2
         }
 
         return MIDINum
