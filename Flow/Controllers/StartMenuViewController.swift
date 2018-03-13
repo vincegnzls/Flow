@@ -64,6 +64,8 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             self.tableView.isHidden = false
             self.changeViewBtn.isEnabled = true
         }
+
+        SoundManager.instance.stopPlaying()
     }
     
     // MARK: Setup methods

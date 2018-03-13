@@ -46,8 +46,6 @@ class MusicSheet: UIView {
     
     public var composition: Composition?
     public var hoveredNotation: MusicNotation?
-
-    private var soundManager = SoundManager()
     
     private var curScale: CGFloat = 1.0
     var originalCenter:CGPoint?
@@ -1768,7 +1766,7 @@ class MusicSheet: UIView {
         print("Play")
         
         if let comp = self.composition{
-            soundManager.musicPlayback(comp)
+            SoundManager.instance.musicPlayback(comp)
         }
         
     }
