@@ -722,7 +722,7 @@ Tap '+' to create a new composition.</string>
                                             <segue destination="cUa-Ia-SFW" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="fAg-Li-uzT"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycl-gp-KaZ">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycl-gp-KaZ" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="1060" y="14" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Play" image="play-icon"/>
@@ -734,6 +734,7 @@ Tap '+' to create a new composition.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="compositionTitleButton" destination="atk-1G-Xla" id="HjF-pT-jZ9"/>
+                                    <outlet property="playBtn" destination="Ycl-gp-KaZ" id="PfC-LS-EAk"/>
                                 </connections>
                             </view>
                         </subviews>

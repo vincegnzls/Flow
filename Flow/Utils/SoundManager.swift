@@ -19,9 +19,11 @@ class SoundManager {
     var tempo: Double
     var player = AVPlayer()
     var timer = Timer()
+    var isPlaying: Bool
     
     init() {
-        tempo = 120
+        self.tempo = 120
+        self.isPlaying = false
     }
 
     func playNote(note: Note){
@@ -344,6 +346,7 @@ class SoundManager {
 
     func stopPlaying() {
         self.timer.invalidate()
+        EventBroadcaster.instance.postEvent(event: EventNames.STOP_PLAYBACK)
     }
     
     func musicPlayback(_ composition: Composition){
@@ -403,6 +406,11 @@ class SoundManager {
                 }
 
                 curBeat += 1
+
+                if curBeat > gNotesMIDI.count + 5 && curBeat > fNotesMIDI.count + 5 {
+                    self.stopPlaying()
+                    self.isPlaying = false
+                }
 
                 /*if Double(curBeat) > self.tempo * co {
                     timer.invalidate()

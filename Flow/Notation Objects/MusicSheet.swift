@@ -51,6 +51,8 @@ class MusicSheet: UIView {
     var originalCenter:CGPoint?
 
     var isZooming = false
+
+    var playBackTimer = Timer()
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -1764,11 +1766,23 @@ class MusicSheet: UIView {
     
     public func play() {
         print("Play")
-        
-        if let comp = self.composition{
-            SoundManager.instance.musicPlayback(comp)
+
+        if !SoundManager.instance.isPlaying {
+            if let comp = self.composition {
+                SoundManager.instance.musicPlayback(comp)
+            }
+        } else {
+            SoundManager.instance.stopPlaying()
         }
-        
+
+        if #available(iOS 10.0, *) {
+            playBackTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { _ in
+                /*xCursorNewLocation = CGPoint(x: sheetCursor.)
+
+                moveCursorX(location: sheetCursor.curXCursorLocation)*/
+            }
+        }
+
     }
 
     public func paste() {
