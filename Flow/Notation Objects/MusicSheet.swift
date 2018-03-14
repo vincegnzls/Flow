@@ -695,9 +695,6 @@ class MusicSheet: UIView {
             // beam notes of all measures TODO: change if beaming per group is implemented
             if !measure.groups.isEmpty {
 
-                var curMerge = [MusicNotation]()
-                var merge = [[MusicNotation]]()
-
                 var x = 0
 
                 if measure.groups.count > 1 {

@@ -78,6 +78,20 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         if self.musicSheet != nil {
             // set composition in music sheet
             self.musicSheet.composition = self.composition
+
+            if let comp = self.composition {
+                if comp.staffList[0].measures.count > 6 {
+                    var extraMeasuresCount = comp.staffList[0].measures.count - 6
+
+                    extraMeasuresCount /= 2
+
+                    print("EXTRA MEASURES: \(extraMeasuresCount)")
+
+                    for _ in 0...extraMeasuresCount - 1 {
+                        self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
+                    }
+                }
+            }
         }
         
         if let menuBar = self.menuBar, let composition = self.composition {
