@@ -80,8 +80,11 @@ class EditAction: Action {
         
         for i in newIndex..<self.newNotations.count {
             let notation = self.newNotations[i]
-            if !measures[measureIndex].isAddNoteValid(musicNotation: notation.type) {
-                measureIndex += 1
+            
+            if measureIndex < measures.count {
+                if !measures[measureIndex].isAddNoteValid(musicNotation: notation.type) {
+                    measureIndex += 1
+                }
             }
             
             if measureIndex >= measures.count {
