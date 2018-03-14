@@ -275,7 +275,7 @@ class MusicSheet: UIView {
 
         GridSystem.instance.createNewMeasurePointsArray()
 
-        let lowerStaffStart = measures.count/2
+        /*let lowerStaffStart = measures.count/2
 
         var upperStaffMeasures = [Measure]()
         var lowerStaffMeasures = [Measure]()
@@ -286,27 +286,14 @@ class MusicSheet: UIView {
 
         for i in lowerStaffStart...measures.count-1 {
             lowerStaffMeasures.append(measures[i])
-        }
+        }*/
 
         staffIndex += 1
         let startPoint = startY + staffSpace * staffIndex
 
-        var someMeasures = [Measure]()
+        let measureHeight = drawStaff(startX: lefRightPadding, startY: startY, measures:measures)
 
-        someMeasures.append(upperStaffMeasures[0])
-        someMeasures.append(lowerStaffMeasures[0])
-
-        // TEST
-        if upperStaffMeasures[0].notationObjects.count > 0 && lowerStaffMeasures[0].notationObjects.count > 0 {
-            drawParallelMeasures(measures: someMeasures, startX: 0, endX: 0, startY: 0, staffSpace: 0)
-        }
-
-        let measureHeight = drawStaff(startX: lefRightPadding, startY: startPoint,
-                clefType: upperStaffMeasures[0].clef, measures:upperStaffMeasures)
-
-        staffIndex += 1
-        let _ = drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex,
-                clefType: lowerStaffMeasures[0].clef, measures:lowerStaffMeasures)
+        //let _ = drawStaff(startX: lefRightPadding, startY: startY + staffSpace * staffIndex, measures:measures)
 
         if let height = measureHeight {
             drawStaffConnection(startX: lefRightPadding, startY: startPoint - height, height: height)
@@ -314,16 +301,28 @@ class MusicSheet: UIView {
     }
 
     // Draws a staff
-    private func drawStaff(startX:CGFloat, startY:CGFloat, clefType:Clef, measures:[Measure]) -> CGFloat? {
+    private func drawStaff(startX:CGFloat, startY:CGFloat, measures:[Measure]) -> CGFloat? {
 
-        // Handles adding of clef based on parameter
-        drawClefLabel(startX: startX, startY: startY, clefType: clefType)
+        let gMeasure = measures[0]
+        let fMeasure = measures[1]
+
+        var startYs = [CGFloat]()
+
+        let startPointG = startY + staffSpace * staffIndex
+        let gClefWidth = drawClefLabel(startX: startX, startY: startPointG, clefType: gMeasure.clef)
+
+        staffIndex += 1
+        let startPointF = startY + staffSpace * staffIndex
+        let fClefWidth = drawClefLabel(startX: startX, startY: startPointF, clefType: fMeasure.clef)
+
+        startYs.append(startPointG)
+        startYs.append(startPointF)
 
         // Adjust initial space for clef and time signature
         let startMeasure:CGFloat = startX + 85
 
         // Track distance for each measure to be printed
-        var distance:CGFloat = (endX-startMeasure)/CGFloat(measures.count)
+        var distance:CGFloat = (endX-startMeasure)
 
         // Start drawing the measures
         var modStartX:CGFloat = startMeasure
@@ -332,10 +331,6 @@ class MusicSheet: UIView {
         for i in 0...measures.count-1 {
 
             var adjustKeyTimeSig:CGFloat = 0
-
-            if i > 0 {
-                adjustKeyTimeSig += 10
-            }
 
             var keyLabelWidth:CGFloat = 0
 
@@ -346,11 +341,11 @@ class MusicSheet: UIView {
                     if let measureIndex = staff.measures.index(of: measures[i]) {
                         if measureIndex > 0 {
                             if staff.measures[measureIndex - 1].keySignature != staff.measures[measureIndex].keySignature {
-                                keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
+                                keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startYs[i], keySignature: measures[i].keySignature)
                                 adjustKeyTimeSig += keyLabelWidth
                             }
                         } else if measureIndex == 0 {
-                            keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startY, keySignature: measures[i].keySignature)
+                            keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startYs[i], keySignature: measures[i].keySignature)
                             adjustKeyTimeSig += keyLabelWidth
                         }
                     }
@@ -371,10 +366,10 @@ class MusicSheet: UIView {
                         if measureIndex > 0 {
                             if staff.measures[measureIndex - 1].timeSignature != staff.measures[measureIndex].timeSignature {
 
-                                timeLabelWidth = drawTimeLabel(startX: modStartX + adjustKeyTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
+                                timeLabelWidth = drawTimeLabel(startX: modStartX + adjustKeyTimeSig, startY: startYs[i], timeSignature: measures[i].timeSignature)
                             }
                         } else if measureIndex == 0 {
-                            timeLabelWidth = drawTimeLabel(startX: modStartX + adjustKeyTimeSig, startY: startY, timeSignature: measures[i].timeSignature)
+                            timeLabelWidth = drawTimeLabel(startX: modStartX + adjustKeyTimeSig, startY: startYs[i], timeSignature: measures[i].timeSignature)
                         }
                     }
                 }
@@ -383,23 +378,29 @@ class MusicSheet: UIView {
 
             if let timeLabelWidth = timeLabelWidth {
                 modStartX = modStartX + timeLabelWidth
-                distance = distance - timeLabelWidth
+                adjustKeyTimeSig += timeLabelWidth
             }
 
             modStartX += adjustKeyTimeSig
-            distance -= adjustKeyTimeSig
+            adjustKeyTimeSig += gClefWidth + fClefWidth
 
 
             // START OF DRAWING OF MEASURE
-            print ("Measure Width: \(getMeasureWidth(measure: measures[i]))" )
-            measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
+            //measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
 
-            if let measureLocation = measureLocation {
+            print("ADJUST POTA \(adjustKeyTimeSig)")
+
+            drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
+                    staffSpace: startPointG - startPointF, leftInnerPadding: adjustKeyTimeSig, rightInnerPadding: 15)
+
+            /*if let measureLocation = measureLocation {
                 GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation, measure: measures[i])
                 GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measureLocation)
 
-                modStartX = measureLocation.lowerRightPoint.x
-            }
+                modStartX = startMeasure
+            }*/
+
+            modStartX = startMeasure
             // END OF DRAWING OF MEASURE
         }
 
@@ -553,7 +554,7 @@ class MusicSheet: UIView {
     }
 
     // Draws the clef before the staff
-    private func drawClefLabel(startX: CGFloat, startY: CGFloat, clefType: Clef) {
+    private func drawClefLabel(startX: CGFloat, startY: CGFloat, clefType: Clef) -> CGFloat {
         var clef = UIImage(named:"treble-clef")
         var clefView = UIImageView(frame: CGRect(x: 110, y: 45 + startY - 167, width: 58.2, height: 154))
 
@@ -571,6 +572,8 @@ class MusicSheet: UIView {
         bezierPath.lineWidth = 2
 
         var curSpace:CGFloat = 0
+
+        return 58.2
 
         // Draws 5 lines
         /*for _ in 0..<5 {
@@ -875,8 +878,56 @@ class MusicSheet: UIView {
         return measureCoord
     }
 
-    private func drawParallelMeasures(measures: [Measure], startX: CGFloat, endX: CGFloat, startY: CGFloat, staffSpace: CGFloat)/* -> [GridSystem.MeasurePoints] */{
+    // ONLY WORKS FOR GRAND STAFF FOR NOW
+    private func drawParallelMeasures(measures: [Measure], startX: CGFloat, endX: CGFloat, startYs: [CGFloat], staffSpace: CGFloat,
+                                      leftInnerPadding: CGFloat, rightInnerPadding:CGFloat)/* -> [GridSystem.MeasurePoints] */{
 
+        let bezierPath = UIBezierPath()
+        UIColor.black.setStroke()
+        bezierPath.lineWidth = 2
+
+        var curSpace: CGFloat = 0
+
+        for startY in startYs {
+            curSpace = 0
+
+            //draw 5 lines
+            for _ in 0..<5 {
+                bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
+                bezierPath.addLine(to: CGPoint(x: endX, y: startY - curSpace))
+                bezierPath.stroke()
+
+                curSpace += lineSpace
+            }
+
+            curSpace -= lineSpace
+
+            bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
+            bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
+            bezierPath.stroke()
+
+            bezierPath.move(to: CGPoint(x: endX, y: startY - curSpace))
+            bezierPath.addLine(to: CGPoint(x: endX, y: startY)) // change if staff space changes
+            bezierPath.stroke()
+        }
+
+        for (index, measure) in measures.enumerated() {
+
+            let measureCoord:GridSystem.MeasurePoints =
+                    GridSystem.MeasurePoints(upperLeftPoint: CGPoint(x: startX, y: startYs[index]),
+                            lowerRightPoint: CGPoint(x: endX, y: startYs[index]-curSpace),
+                            upperLeftPointWithLedger: CGPoint(x: startX, y: startYs[index]+(lineSpace*3.5)),
+                            lowerRightPointWithLedger: CGPoint(x: endX, y: startYs[index]-curSpace-(lineSpace*3.5)))
+
+            let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace + leftInnerPadding,
+                    initialY: startYs[index]-curSpace-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
+            GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
+
+            measureCoords.append(measureCoord)
+
+        }
+
+        // start of notes parallel
         var gTally: Float = 0
         var fTally: Float = 0
 
@@ -1303,11 +1354,11 @@ class MusicSheet: UIView {
 
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
 
-            if let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord) {
+            /*if let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord) {
 
                 moveCursorX(location: CGPoint(x: sheetCursor.curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y + cursorXOffsetY))
 
-            }
+            }*/
         }
 
     }
