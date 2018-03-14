@@ -1833,6 +1833,7 @@ class MusicSheet: UIView {
                             }
 
                             staff.measures[i].timeSignature = newMeasure.timeSignature
+                            staff.measures[i].fillWithRests()
                         }
                     }
                 }

@@ -19,7 +19,10 @@ class Measure: Equatable {
     var clef: Clef
     var notationObjects: [MusicNotation] {
         didSet{
+            print("TOTAL BEATS: \(getTotalBeats())")
+            print("MAX BEATS: \(timeSignature.getMaxBeatValue())")
             curBeatValue = getTotalBeats()
+            print("INVALID NOTES: \(getInvalidNotes())")
             updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls
             updateGroups()
         }
@@ -54,6 +57,12 @@ class Measure: Equatable {
         self.curBeatValue = 0
         self.validNotes = [RestNoteType]()
         self.groups = [[MusicNotation]]()
+        if let isLoading = loading {
+            if !isLoading {
+                self.fillWithRests()
+                //self.fillWithRests()
+            }
+        }
     }
 
     // Equatable operators
@@ -77,7 +86,6 @@ class Measure: Equatable {
             print("INVALID ADD NOTE")
 
         }
-
     }
     
     public func addToMeasure(_ notation: MusicNotation, at index: Int) {
@@ -114,14 +122,13 @@ class Measure: Equatable {
     }
 
     public func editInMeasure(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
-
+        print("EDIT")
         if let index = notationObjects.index(of: oldNote) {
             oldNote.measure = nil
             notationObjects[index] = newNote
             newNote.measure = self
             //self.fillWithRests()
         }
-
     }
 
     public func getInvalidNotes() -> [RestNoteType] {
@@ -163,7 +170,6 @@ class Measure: Equatable {
 
         params.put(key: KeyNames.INVALID_NOTES, value: invalidNotes)
         EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_NOTES, params: params)
-
     }
 
     public func isAddNoteValid (musicNotation: RestNoteType) -> Bool {
@@ -179,6 +185,8 @@ class Measure: Equatable {
         for note in self.notationObjects {
             totalBeats = totalBeats + note.type.getBeatValue()
         }
+
+        print("NOTES: \(notationObjects)")
 
         return totalBeats
     }

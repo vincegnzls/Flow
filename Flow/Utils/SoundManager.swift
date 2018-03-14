@@ -377,6 +377,7 @@ class SoundManager {
         }
 
         let grandStaffMix = AKMixer(fNotePlayer, gNotePlayer)
+        grandStaffMix.volume = 5.0
 
         AudioKit.output = grandStaffMix
         do{
