@@ -136,7 +136,20 @@ class MusicSheet: UIView {
         
         EventBroadcaster.instance.removeObservers(event: EventNames.TITLE_CHANGED)
         EventBroadcaster.instance.addObserver(event: EventNames.TITLE_CHANGED, observer: Observer(id: "MusicSheet.titleChanged", function: self.titleChanged))
-        
+
+        // Add listeners for accidentals
+        EventBroadcaster.instance.removeObservers(event: EventNames.NATURALIZE_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.NATURALIZE_KEY_PRESSED, observer: Observer(id: "MusicSheet.naturalize", function: self.naturalize))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.FLAT_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.FLAT_KEY_PRESSED, observer: Observer(id: "MusicSheet.flat", function: self.flat))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.SHARP_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.SHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.sharp", function: self.sharp))
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.DSHARP_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.DSHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.dsharp", function: self.dsharp))
+
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
@@ -179,7 +192,7 @@ class MusicSheet: UIView {
                 if measure.isFull {
                     
                     if let measureCoord = GridSystem.instance.selectedMeasureCoord {
-                        self.moveCursorsToNextMeasure(measurePoints: measureCoord)
+                        //self.moveCursorsToNextMeasure(measurePoints: measureCoord) DISABLED FEATURE
                         return
                     }
                 }
@@ -412,6 +425,10 @@ class MusicSheet: UIView {
         return maxWidth
     }
     
+    private func drawKeySignature (startX:CGFloat, startY:CGFloat, keySignature:KeySignature) {
+        
+    }
+    
     // this is for getting the Maestro font style of the time signature
     private func getEquivalentNumberSymbol(n: Int) -> String? {
         
@@ -528,15 +545,6 @@ class MusicSheet: UIView {
             moveCursorY(location: snapPoints[0])
         }
         
-        //draw line before measure
-        /*if withLeftLine {
-            bezierPath.move(to: CGPoint(x: startX, y: startY - curSpace))
-            bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
-            bezierPath.stroke()
-            
-            measureXDivs.insert(startX)
-        }*/
-        
         //draw line after measure
         bezierPath.move(to: CGPoint(x: endX, y: startY - curSpace))
         bezierPath.addLine(to: CGPoint(x: endX, y: startY)) // change if staff space changes
@@ -587,9 +595,25 @@ class MusicSheet: UIView {
                         }
                     }
                     
+                    let snapPointsRelativeToNotation = GridSystem.instance.createSnapPoints(
+                        initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
+                    
+                    // snap points for added note
                     GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
-                                                                  snapPoints: GridSystem.instance.createSnapPoints(
-                                                                    initialX: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace))
+                                                                  snapPoints: snapPointsRelativeToNotation)
+                    
+                    // assign snap point to added note
+                    if note is Note {
+                        GridSystem.instance.assignSnapPointToNotation(
+                            snapPoint: CGPoint(x: measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter, y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
+                            notation: note)
+                    } else if note is Rest {
+                        for snapPoint in snapPointsRelativeToNotation {
+                            GridSystem.instance.assignSnapPointToNotation(
+                                snapPoint: snapPoint,
+                                notation: note)
+                        }
+                    }
                     
                     // if measure is not full, add more snapping points right next to new note added
                     if !measure.isFull {
@@ -628,9 +652,22 @@ class MusicSheet: UIView {
                             GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measureCoord, relativeX: prevX)
                         }
                         
+                        let snapPointsRelativeToNotation = GridSystem.instance.createSnapPoints(
+                            initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
+                        
                         GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measureCoord,
-                                                                      snapPoints: GridSystem.instance.createSnapPoints(
-                                                                        initialX: prevNoteCoordinates.x + notationSpace + adjustXToCenter, initialY: measureCoord.lowerRightPoint.y-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace))
+                                                                      snapPoints: snapPointsRelativeToNotation)
+                        
+                        if note is Note {
+                            GridSystem.instance.assignSnapPointToNotation(
+                                snapPoint: CGPoint(x: prevNoteCoordinates.x + notationSpace + adjustXToCenter,
+                                                   y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
+                                notation: note)
+                        } else if note is Rest {
+                            for snapPoint in snapPointsRelativeToNotation {
+                                GridSystem.instance.assignSnapPointToNotation(snapPoint: snapPoint, notation: note)
+                            }
+                        }
                         
                         // if measure is not full, add more snapping points right next to new note added
                         if !measure.isFull {
@@ -877,22 +914,12 @@ class MusicSheet: UIView {
             sheetCursor.showLedgerLinesGuide(measurePoints: measurePoints, upToLocation: location, lineSpace: lineSpace)
         }
         
-        // in getting the hovered note
-        if let measure = GridSystem.instance.getCurrentMeasure() {
-            
-            for notation in measure.notationObjects {
-                // if note hovered
-                if CGPoint(x: location.x - adjustToXCenter * initialNoteSpace, y: location.y) == notation.screenCoordinates {
-                    hoveredNotation = notation
-                    if let measure = notation.measure {
-                        measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
-                    }
-                    return
-                } else {
-                    hoveredNotation = nil
-                }
+        if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: location) {
+            hoveredNotation = notation
+            if let measure = notation.measure {
+                measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
             }
-            
+        } else {
             hoveredNotation = nil
         }
 
@@ -1034,52 +1061,6 @@ class MusicSheet: UIView {
         }
 
     }
-
-    /*func addNewNote(params: Parameters) {
-        let notation = params.get(key: KeyNames.NOTE_DETAILS) as! MusicNotation
-        if let notePlacement = GridSystem.instance.getNotePlacement(notation: notation) {
-
-            notation.screenCoordinates = notePlacement.0
-
-            self.addMusicNotation(notation: notation)
-            
-            if let note = notation as? Note {
-                soundManager.playSound(note)
-            }
-
-            if let coord = GridSystem.instance.selectedMeasureCoord {
-
-                if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: coord) {
-                    
-                    GridSystem.instance.removeRelativeXSnapPoints(measurePoints: coord, relativeX: curYCursorLocation.x)
-
-                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
-                            snapPoints: GridSystem.instance.createSnapPoints(
-                                    initialX: notePlacement.0.x, initialY: coord.lowerRightPoint.y,
-                                    clef: measure.clef, lineSpace: lineSpace))
-
-                    GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: coord,
-                            snapPoints: GridSystem.instance.createSnapPoints(initialX: notePlacement.1.x,
-                                    initialY: coord.lowerRightPoint.y,
-                                    clef: measure.clef, lineSpace: lineSpace))
-
-
-                    if measure.isFull {
-                        
-                        moveCursorsToNextMeasure(measurePoints: coord)
-                        
-                    } else {
-                        GridSystem.instance.selectedCoord = CGPoint(x: notePlacement.1.x, y: curYCursorLocation.y)
-                        
-                        moveCursorX(location: CGPoint(x: notePlacement.1.x, y: curXCursorLocation.y))
-                        moveCursorY(location: GridSystem.instance.selectedCoord!)
-                    }
-
-                }
-
-            }
-        }
-    }*/
 
     func updateMeasureDraw () {
         startY = 200 + sheetYOffset
@@ -1242,13 +1223,18 @@ class MusicSheet: UIView {
                     GridSystem.instance.selectedCoord = newSnapPoints[prevSnapIndex]
                     
                     // get first measure points of the
-                    if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
                     
-                        moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
-                                                      y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
-                        moveCursorY(location: newSnapPoints[prevSnapIndex])
+                    if indexJump < measureCoords.count {
+                    
+                        if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
                         
-                        scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                            moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
+                                                          y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
+                            moveCursorY(location: newSnapPoints[prevSnapIndex])
+                            
+                            scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
+                        }
+                        
                     }
                     
                 }
@@ -1899,4 +1885,61 @@ class MusicSheet: UIView {
             composition.compositionInfo.name = params.get(key: KeyNames.NEW_TITLE, defaultValue: "Untitled Composition")
         }
     }
+
+    public func naturalize() {
+        if !self.selectedNotations.isEmpty {
+            for note in self.selectedNotations {
+                if note is Note {
+                    let curNote = note as! Note
+                    curNote.accidental = .natural
+                }
+            }
+        } else if let hovered = self.hoveredNotation {
+            let curNote = hovered as! Note
+            curNote.accidental = .natural
+        }
+    }
+
+    public func flat() {
+        if !self.selectedNotations.isEmpty {
+            for note in self.selectedNotations {
+                if note is Note {
+                    let curNote = note as! Note
+                    curNote.accidental = .flat
+                }
+            }
+        } else if let hovered = self.hoveredNotation {
+            let curNote = hovered as! Note
+            curNote.accidental = .flat
+        }
+    }
+
+    public func sharp() {
+        if !self.selectedNotations.isEmpty {
+            for note in self.selectedNotations {
+                if note is Note {
+                    let curNote = note as! Note
+                    curNote.accidental = .sharp
+                }
+            }
+        } else if let hovered = self.hoveredNotation {
+            let curNote = hovered as! Note
+            curNote.accidental = .sharp
+        }
+    }
+
+    public func dsharp() {
+        if !self.selectedNotations.isEmpty {
+            for note in self.selectedNotations {
+                if note is Note {
+                    let curNote = note as! Note
+                    curNote.accidental = .doubleSharp
+                }
+            }
+        } else if let hovered = self.hoveredNotation {
+            let curNote = hovered as! Note
+            curNote.accidental = .doubleSharp
+        }
+    }
+
 }

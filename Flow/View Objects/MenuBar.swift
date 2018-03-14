@@ -106,5 +106,24 @@ class MenuBar: UIView {
         EventBroadcaster.instance.postEvent(event: EventNames.PASTE_KEY_PRESSED)
     }
     
+    @IBAction func touchNaturalize(_ sender: UIButton) {
+        print("naturalize")
+        EventBroadcaster.instance.postEvent(event: EventNames.NATURALIZE_KEY_PRESSED)
+    }
+    
+    @IBAction func touchFlat(_ sender: UIButton) {
+        print("flat")
+        EventBroadcaster.instance.postEvent(event: EventNames.FLAT_KEY_PRESSED)
+    }
+    
+    @IBAction func touchSharp(_ sender: UIButton) {
+        print("sharp")
+        EventBroadcaster.instance.postEvent(event: EventNames.SHARP_KEY_PRESSED)
+    }
+
+    @IBAction func touchDSharp(_ sender: UIButton) {
+        print("dsharp")
+        EventBroadcaster.instance.postEvent(event: EventNames.DSHARP_KEY_PRESSED)
+    }
     
 }

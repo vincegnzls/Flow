@@ -660,7 +660,7 @@ Tap '+' to create a new composition.</string>
                                             <action selector="touchCompositionTitle:" destination="VHe-OH-6BV" eventType="touchUpInside" id="kGJ-6r-s9C"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgc-3s-wZs">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgc-3s-wZs" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="331" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="copy-icon"/>
@@ -668,7 +668,7 @@ Tap '+' to create a new composition.</string>
                                             <action selector="touchCopy:" destination="VHe-OH-6BV" eventType="touchUpInside" id="vc0-EB-ehF"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Eq-5K-fxN">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Eq-5K-fxN" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="372" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="cut-icon"/>
@@ -676,7 +676,7 @@ Tap '+' to create a new composition.</string>
                                             <action selector="touchCut:" destination="VHe-OH-6BV" eventType="touchUpInside" id="1UQ-as-xtz"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JB1-ip-x0z">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JB1-ip-x0z" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="409" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="paste-icon"/>
@@ -694,25 +694,37 @@ Tap '+' to create a new composition.</string>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="redo-icon"/>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uE4-6g-BJV">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uE4-6g-BJV" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="600" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="natural"/>
+                                        <connections>
+                                            <action selector="touchNaturalize:" destination="VHe-OH-6BV" eventType="touchUpInside" id="85K-9K-9ja"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HO1-ae-mut">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HO1-ae-mut" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="637" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="flat"/>
+                                        <connections>
+                                            <action selector="touchFlat:" destination="VHe-OH-6BV" eventType="touchUpInside" id="rZm-Zp-pHO"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofh-iv-b6S">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofh-iv-b6S" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="669" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="sharp"/>
+                                        <connections>
+                                            <action selector="touchSharp:" destination="VHe-OH-6BV" eventType="touchUpInside" id="ucH-Ej-LXM"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NBh-oB-XfU">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NBh-oB-XfU" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="701" y="20" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="double-sharp"/>
+                                        <connections>
+                                            <action selector="touchDSharp:" destination="VHe-OH-6BV" eventType="touchUpInside" id="am8-PH-i3P"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-B0-Oho">
                                         <rect key="frame" x="978" y="15" width="30" height="30"/>

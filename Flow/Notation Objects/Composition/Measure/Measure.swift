@@ -45,7 +45,7 @@ class Measure: Equatable {
     init(keySignature: KeySignature = .c,
          timeSignature: TimeSignature = TimeSignature(),
          clef: Clef = .G,
-         notationObjects: [MusicNotation] = []) {
+         notationObjects: [MusicNotation] = [], loading: Bool?) {
         self.keySignature = keySignature
         self.timeSignature = timeSignature
         self.clef = clef
@@ -54,7 +54,6 @@ class Measure: Equatable {
         self.curBeatValue = 0
         self.validNotes = [RestNoteType]()
         self.groups = [[MusicNotation]]()
-        //self.fillWithRests()
     }
 
     // Equatable operators
@@ -72,7 +71,7 @@ class Measure: Equatable {
 
             notation.measure = self
             notationObjects.append(notation)
-
+            //self.fillWithRests()
         } else {
 
             print("INVALID ADD NOTE")
@@ -92,6 +91,7 @@ class Measure: Equatable {
                 print(notation.type.toString())
             }
             self.notationObjects.insert(notation, at: index)
+            //self.fillWithRests()
             print("after inserting:")
             for notation in notationObjects {
                 print(notation.type.toString())
@@ -108,6 +108,7 @@ class Measure: Equatable {
         if let index = notationObjects.index(of: musicNotation) {
             musicNotation.measure = nil
             notationObjects.remove(at: index)
+            //self.fillWithRests()
         }
 
     }
@@ -118,7 +119,7 @@ class Measure: Equatable {
             oldNote.measure = nil
             notationObjects[index] = newNote
             newNote.measure = self
-
+            //self.fillWithRests()
         }
 
     }
@@ -181,6 +182,17 @@ class Measure: Equatable {
 
         return totalBeats
     }
+
+    public func containsRest() -> Bool {
+        for note in notationObjects {
+            if let curNote = note as? Rest {
+                return true
+            }
+        }
+
+        return false
+    }
+
 
     func fillWithRests() {
         while getTotalBeats() < timeSignature.getMaxBeatValue() {
