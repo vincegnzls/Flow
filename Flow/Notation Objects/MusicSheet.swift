@@ -45,7 +45,17 @@ class MusicSheet: UIView {
     private let cursorXOffsetY:CGFloat = -95 // distance of starting y from measure
     
     public var composition: Composition?
-    public var hoveredNotation: MusicNotation?
+    public var hoveredNotation: MusicNotation? {
+        didSet {
+            if let note = hoveredNotation as? Note {
+                if let accidental = note.accidental {
+                    print("PITCH: \(note.pitch) + \(accidental)")
+                } else {
+                    print("PITCH: \(note.pitch) + no accidental")
+                }
+            }
+        }
+    }
     
     private var curScale: CGFloat = 1.0
     var originalCenter:CGPoint?
@@ -1751,8 +1761,8 @@ class MusicSheet: UIView {
         print("Play")
 
         if !SoundManager.instance.isPlaying {
-            if let comp = self.composition {
-                SoundManager.instance.musicPlayback(comp)
+            if let composition = self.composition {
+                SoundManager.instance.musicPlayback(composition)
             }
         } else {
             SoundManager.instance.stopPlaying()
@@ -1857,7 +1867,7 @@ class MusicSheet: UIView {
                         if staff.measures[i].keySignature == oldKeySignature {
                             print(staff.measures[i].keySignature.toString())
                             staff.measures[i].keySignature = newMeasure.keySignature
-                            print(staff.measures[i].keySignature.toString())
+                            print("staff.measures[i].keySignature.toString()")
                         }
                     }
                 }

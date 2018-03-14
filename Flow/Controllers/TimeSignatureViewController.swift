@@ -27,6 +27,7 @@ class TimeSignatureViewController: UIViewController {
             nBeatsLabel.text = String(measure.timeSignature.beats)
             beatDurationLabel.text = String(measure.timeSignature.beatType)
 
+            keySignatureHandler.selectedKeySignature = measure.keySignature
             keySignaturePicker.selectRow(KeySignatureData.getIndexOf(ks: measure.keySignature), inComponent: 0, animated: false)
         }
     }
@@ -67,6 +68,7 @@ class TimeSignatureViewController: UIViewController {
             params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
 
             if keySignatureHandler.selectedKeySignature != measure.keySignature {
+
                 newMeasure.keySignature = keySignatureHandler.selectedKeySignature
                 EventBroadcaster.instance.postEvent(event: EventNames.EDIT_KEY_SIG, params: params)
                 EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)

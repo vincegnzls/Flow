@@ -25,6 +25,7 @@ class Measure: Equatable {
             print("INVALID NOTES: \(getInvalidNotes())")
             updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls
             updateGroups()
+            updateKeySignature()
         }
     }
     var bounds: Bounds
@@ -63,6 +64,8 @@ class Measure: Equatable {
                 //self.fillWithRests()
             }
         }
+
+        updateKeySignature()
     }
 
     // Equatable operators

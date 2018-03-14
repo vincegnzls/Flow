@@ -30,6 +30,8 @@ class SoundManager {
         print("MIDI Piano Note")
 
         let FMPiano = AKSampler()
+        
+        FMPiano.volume = 5.0
 
         do{
             try FMPiano.loadWav("Support Objects/Grand Piano")
@@ -45,117 +47,122 @@ class SoundManager {
         }catch let error as NSError{
             print(error.debugDescription)
         }
+        
+        var noteNumber: MIDINoteNumber = 0
 
         switch note.pitch.step.toString(){
         case "A":
             switch note.pitch.octave{
-            case 0: FMPiano.play(noteNumber: 21)
-            case 1: FMPiano.play(noteNumber: 33)
-            case 2: FMPiano.play(noteNumber: 45)
-            case 3: FMPiano.play(noteNumber: 57)
-            case 4: FMPiano.play(noteNumber: 69)
-            case 5: FMPiano.play(noteNumber: 81)
-            case 6: FMPiano.play(noteNumber: 93)
-            case 7: FMPiano.play(noteNumber: 105)
-            case 8: FMPiano.play(noteNumber: 117)
+            case 0: noteNumber = 21
+            case 1: noteNumber = 33
+            case 2: noteNumber = 45
+            case 3: noteNumber = 57
+            case 4: noteNumber = 69
+            case 5: noteNumber = 81
+            case 6: noteNumber = 93
+            case 7: noteNumber = 105
+            case 8: noteNumber = 117
             default:
-                FMPiano.play(noteNumber: 30)
+                noteNumber = 30
             }
             break
         case "B":
             switch note.pitch.octave{
-            case 0: FMPiano.play(noteNumber: 23)
-            case 1: FMPiano.play(noteNumber: 35)
-            case 2: FMPiano.play(noteNumber: 47)
-            case 3: FMPiano.play(noteNumber: 59)
-            case 4: FMPiano.play(noteNumber: 71)
-            case 5: FMPiano.play(noteNumber: 83)
-            case 6: FMPiano.play(noteNumber: 95)
-            case 7: FMPiano.play(noteNumber: 107)
-            case 8: FMPiano.play(noteNumber: 119)
+            case 0: noteNumber = 23
+            case 1: noteNumber = 35
+            case 2: noteNumber = 47
+            case 3: noteNumber = 59
+            case 4: noteNumber = 71
+            case 5: noteNumber = 83
+            case 6: noteNumber = 95
+            case 7: noteNumber = 107
+            case 8: noteNumber = 119
             default:
-                FMPiano.play(noteNumber: 30)
+                noteNumber = 30
             }
             break
         case "C":
             switch note.pitch.octave{
-            case 0: FMPiano.play(noteNumber: 12)
-            case 1: FMPiano.play(noteNumber: 24)
-            case 2: FMPiano.play(noteNumber: 36)
-            case 3: FMPiano.play(noteNumber: 48)
-            case 4: FMPiano.play(noteNumber: 60)
-            case 5: FMPiano.play(noteNumber: 72)
-            case 6: FMPiano.play(noteNumber: 84)
-            case 7: FMPiano.play(noteNumber: 96)
-            case 8: FMPiano.play(noteNumber: 108)
+            case 0: noteNumber = 12
+            case 1: noteNumber = 24
+            case 2: noteNumber = 36
+            case 3: noteNumber = 48
+            case 4: noteNumber = 60
+            case 5: noteNumber = 72
+            case 6: noteNumber = 84
+            case 7: noteNumber = 96
+            case 8: noteNumber = 108
             default:
-                FMPiano.play(noteNumber: 30)
+                noteNumber = 30
             }
             break
         case "D":
             switch note.pitch.octave{
-            case 0: FMPiano.play(noteNumber: 14)
-            case 1: FMPiano.play(noteNumber: 26)
-            case 2: FMPiano.play(noteNumber: 38)
-            case 3: FMPiano.play(noteNumber: 50)
-            case 4: FMPiano.play(noteNumber: 62)
-            case 5: FMPiano.play(noteNumber: 74)
-            case 6: FMPiano.play(noteNumber: 86)
-            case 7: FMPiano.play(noteNumber: 98)
-            case 8: FMPiano.play(noteNumber: 110)
+            case 0: noteNumber = 14
+            case 1: noteNumber = 26
+            case 2: noteNumber = 38
+            case 3: noteNumber = 50
+            case 4: noteNumber = 62
+            case 5: noteNumber = 74
+            case 6: noteNumber = 86
+            case 7: noteNumber = 98
+            case 8: noteNumber = 110
             default:
-                FMPiano.play(noteNumber: 30)
+                noteNumber = 30
             }
             break
         case "E":
             switch note.pitch.octave{
-            case 0: FMPiano.play(noteNumber: 16)
-            case 1: FMPiano.play(noteNumber: 28)
-            case 2: FMPiano.play(noteNumber: 40)
-            case 3: FMPiano.play(noteNumber: 52)
-            case 4: FMPiano.play(noteNumber: 64)
-            case 5: FMPiano.play(noteNumber: 76)
-            case 6: FMPiano.play(noteNumber: 88)
-            case 7: FMPiano.play(noteNumber: 100)
-            case 8: FMPiano.play(noteNumber: 112)
+            case 0: noteNumber = 16
+            case 1: noteNumber = 28
+            case 2: noteNumber = 40
+            case 3: noteNumber = 52
+            case 4: noteNumber = 64
+            case 5: noteNumber = 76
+            case 6: noteNumber = 88
+            case 7: noteNumber = 100
+            case 8: noteNumber = 112
             default:
-                FMPiano.play(noteNumber: 30)
+                noteNumber = 30
             }
             break
         case "F":
             switch note.pitch.octave{
-            case 0: FMPiano.play(noteNumber: 17)
-            case 1: FMPiano.play(noteNumber: 29)
-            case 2: FMPiano.play(noteNumber: 41)
-            case 3: FMPiano.play(noteNumber: 53)
-            case 4: FMPiano.play(noteNumber: 65)
-            case 5: FMPiano.play(noteNumber: 77)
-            case 6: FMPiano.play(noteNumber: 89)
-            case 7: FMPiano.play(noteNumber: 101)
-            case 8: FMPiano.play(noteNumber: 113)
+            case 0: noteNumber = 17
+            case 1: noteNumber = 29
+            case 2: noteNumber = 41
+            case 3: noteNumber = 53
+            case 4: noteNumber = 65
+            case 5: noteNumber = 77
+            case 6: noteNumber = 89
+            case 7: noteNumber = 101
+            case 8: noteNumber = 113
             default:
-                FMPiano.play(noteNumber: 30)
+                noteNumber = 30
             }
             break
         case "G":
             switch note.pitch.octave{
-            case 0: FMPiano.play(noteNumber: 19)
-            case 1: FMPiano.play(noteNumber: 31)
-            case 2: FMPiano.play(noteNumber: 43)
-            case 3: FMPiano.play(noteNumber: 55)
-            case 4: FMPiano.play(noteNumber: 67)
-            case 5: FMPiano.play(noteNumber: 79)
-            case 6: FMPiano.play(noteNumber: 91)
-            case 7: FMPiano.play(noteNumber: 103)
-            case 8: FMPiano.play(noteNumber: 115)
+            case 0: noteNumber = 19
+            case 1: noteNumber = 31
+            case 2: noteNumber = 43
+            case 3: noteNumber = 55
+            case 4: noteNumber = 67
+            case 5: noteNumber = 79
+            case 6: noteNumber = 91
+            case 7: noteNumber = 103
+            case 8: noteNumber = 115
             default:
-                FMPiano.play(noteNumber: 30)
+                noteNumber = 30
             }
             break
 
         default:
             break
         }
+        
+        noteNumber -= 9
+        FMPiano.play(noteNumber: noteNumber)
 
     }
 
@@ -275,7 +282,7 @@ class SoundManager {
         }
 
         //Sharp handling
-        if note.accidental == .sharp && (note.pitch.step.toString() == "C" || note.pitch.step.toString() == "D" || note.pitch.step.toString() == "F" || note.pitch.step.toString() == "G" || note.pitch.step.toString() == "A"){
+        if note.accidental == .sharp && (note.pitch.step == .C || note.pitch.step.toString() == "D" || note.pitch.step.toString() == "F" || note.pitch.step.toString() == "G" || note.pitch.step.toString() == "A"){
             MIDINum += 1
         }
 
@@ -288,7 +295,7 @@ class SoundManager {
             MIDINum += 2
         }
 
-        return MIDINum
+        return MIDINum - 9
     }
 
     func addNotation(notation: MusicNotation) -> [Int?] {
@@ -354,6 +361,12 @@ class SoundManager {
 
         var gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
         var fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
+
+        for midi in gNotesMIDI {
+            if let m = midi {
+                print("MIDI NUMBER: \(m)")
+            }
+        }
 
         //Set the players
         let gNotePlayer = AKSampler()
