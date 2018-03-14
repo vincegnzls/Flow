@@ -326,7 +326,7 @@ class SoundManager {
         for beat in 0..<x {
             if let note = notation as? Note {
                 if beat >= 1 {
-                    print("Note Added. Adding the Trailing 0s")
+                    //print("Note Added. Adding the Trailing 0s")
                     notePlayer.append(nil)
                 } else {
                     notePlayer.append(getNoteMIDINum(note: note))
