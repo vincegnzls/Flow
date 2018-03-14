@@ -312,7 +312,7 @@ class Measure: Equatable {
                     if let note = notation as? Note {
                         let notePitch = note.pitch.step
 
-                        if notePitch == .B || notePitch == .E || notePitchp == .A {
+                        if notePitch == .B || notePitch == .E || notePitch == .A {
                             note.accidental = .flat
                         }
                     }
@@ -357,7 +357,7 @@ class Measure: Equatable {
                         let notePitch = note.pitch.step
 
                         if notePitch == .B || notePitch == .E || notePitch == .A || notePitch == .D || notePitch == .G || notePitch == .C || notePitch == .F {
-                            note.accidental = .flat || note.pitch.
+                            note.accidental = .flat
                         }
                     }
                 }

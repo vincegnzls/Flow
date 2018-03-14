@@ -22,7 +22,7 @@ class SoundManager {
     var isPlaying: Bool
     
     init() {
-        self.tempo = 120
+        self.tempo = 100
         self.isPlaying = false
     }
 
