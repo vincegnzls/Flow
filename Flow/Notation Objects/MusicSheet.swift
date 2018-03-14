@@ -45,14 +45,24 @@ class MusicSheet: UIView {
     private let cursorXOffsetY:CGFloat = -95 // distance of starting y from measure
     
     public var composition: Composition?
-    public var hoveredNotation: MusicNotation?
-
-    private var soundManager = SoundManager()
+    public var hoveredNotation: MusicNotation? {
+        didSet {
+            if let note = hoveredNotation as? Note {
+                if let accidental = note.accidental {
+                    print("PITCH: \(note.pitch) + \(accidental)")
+                } else {
+                    print("PITCH: \(note.pitch) + no accidental")
+                }
+            }
+        }
+    }
     
     private var curScale: CGFloat = 1.0
     var originalCenter:CGPoint?
 
     var isZooming = false
+
+    var playBackTimer = Timer()
     
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
@@ -694,9 +704,6 @@ class MusicSheet: UIView {
 
             // beam notes of all measures TODO: change if beaming per group is implemented
             if !measure.groups.isEmpty {
-
-                var curMerge = [MusicNotation]()
-                var merge = [[MusicNotation]]()
 
                 var x = 0
 
@@ -1752,11 +1759,23 @@ class MusicSheet: UIView {
     
     public func play() {
         print("Play")
-        
-        if let comp = self.composition{
-            soundManager.musicPlayback(comp)
+
+        if !SoundManager.instance.isPlaying {
+            if let composition = self.composition {
+                SoundManager.instance.musicPlayback(composition)
+            }
+        } else {
+            SoundManager.instance.stopPlaying()
         }
-        
+
+        if #available(iOS 10.0, *) {
+            playBackTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { _ in
+                /*xCursorNewLocation = CGPoint(x: sheetCursor.)
+
+                moveCursorX(location: sheetCursor.curXCursorLocation)*/
+            }
+        }
+
     }
 
     public func paste() {
@@ -1824,6 +1843,7 @@ class MusicSheet: UIView {
                             }
 
                             staff.measures[i].timeSignature = newMeasure.timeSignature
+                            staff.measures[i].fillWithRests()
                         }
                     }
                 }
@@ -1847,7 +1867,7 @@ class MusicSheet: UIView {
                         if staff.measures[i].keySignature == oldKeySignature {
                             print(staff.measures[i].keySignature.toString())
                             staff.measures[i].keySignature = newMeasure.keySignature
-                            print(staff.measures[i].keySignature.toString())
+                            print("staff.measures[i].keySignature.toString()")
                         }
                     }
                 }

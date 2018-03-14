@@ -10,14 +10,22 @@ import Foundation
 
 class Measure: Equatable {
 
-    var keySignature: KeySignature
+    var keySignature: KeySignature {
+        didSet {
+            updateKeySignature()
+        }
+    }
     var timeSignature: TimeSignature
     var clef: Clef
     var notationObjects: [MusicNotation] {
         didSet{
+            print("TOTAL BEATS: \(getTotalBeats())")
+            print("MAX BEATS: \(timeSignature.getMaxBeatValue())")
             curBeatValue = getTotalBeats()
+            print("INVALID NOTES: \(getInvalidNotes())")
             updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls
             updateGroups()
+            updateKeySignature()
         }
     }
     var bounds: Bounds
@@ -50,6 +58,14 @@ class Measure: Equatable {
         self.curBeatValue = 0
         self.validNotes = [RestNoteType]()
         self.groups = [[MusicNotation]]()
+        if let isLoading = loading {
+            if !isLoading {
+                self.fillWithRests()
+                //self.fillWithRests()
+            }
+        }
+
+        updateKeySignature()
     }
 
     // Equatable operators
@@ -73,7 +89,6 @@ class Measure: Equatable {
             print("INVALID ADD NOTE")
 
         }
-
     }
     
     public func addToMeasure(_ notation: MusicNotation, at index: Int) {
@@ -110,14 +125,13 @@ class Measure: Equatable {
     }
 
     public func editInMeasure(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
-
+        print("EDIT")
         if let index = notationObjects.index(of: oldNote) {
             oldNote.measure = nil
             notationObjects[index] = newNote
             newNote.measure = self
             //self.fillWithRests()
         }
-
     }
 
     public func getInvalidNotes() -> [RestNoteType] {
@@ -159,7 +173,6 @@ class Measure: Equatable {
 
         params.put(key: KeyNames.INVALID_NOTES, value: invalidNotes)
         EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_NOTES, params: params)
-
     }
 
     public func isAddNoteValid (musicNotation: RestNoteType) -> Bool {
@@ -175,6 +188,8 @@ class Measure: Equatable {
         for note in self.notationObjects {
             totalBeats = totalBeats + note.type.getBeatValue()
         }
+
+        print("NOTES: \(notationObjects)")
 
         return totalBeats
     }
@@ -280,5 +295,173 @@ class Measure: Equatable {
         }
 
         return true
+    }
+
+    func updateKeySignature() {
+        switch(self.keySignature) {
+            case .c:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        if let accidental = note.accidental {
+                            note.accidental = nil
+                        }
+                    }
+                }
+                break
+            case .f:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .B {
+                            note.accidental = .flat
+                        }
+                    }
+                }
+                break
+            case .bFlat:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .B || notePitch == .E {
+                            note.accidental = .flat
+                        }
+                    }
+                }
+                break
+            case .eFlat:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .B || notePitch == .E || notePitch == .A {
+                            note.accidental = .flat
+                        }
+                    }
+                }
+                break
+            case .aFlat:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .B || notePitch == .E || notePitch == .A || notePitch == .D {
+                            note.accidental = .flat
+                        }
+                    }
+                }
+                break
+            case .dFlat:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .B || notePitch == .E || notePitch == .A || notePitch == .D || notePitch == .G {
+                            note.accidental = .flat
+                        }
+                    }
+                }
+                break
+            case .gFlat:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .B || notePitch == .E || notePitch == .A || notePitch == .D || notePitch == .G || notePitch == .C {
+                            note.accidental = .flat
+                        }
+                    }
+                }
+                break
+            case .cFlat:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .B || notePitch == .E || notePitch == .A || notePitch == .D || notePitch == .G || notePitch == .C || notePitch == .F {
+                            note.accidental = .flat
+                        }
+                    }
+                }
+                break
+            case .g:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .F {
+                            note.accidental = .sharp
+                        }
+                    }
+                }
+                break
+            case .d:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .F || notePitch == .C {
+                            note.accidental = .sharp
+                        }
+                    }
+                }
+                break
+            case .a:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .F || notePitch == .C || notePitch == .G {
+                            note.accidental = .sharp
+                        }
+                    }
+                }
+                break
+            case .e:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .F || notePitch == .C || notePitch == .G || notePitch == .D {
+                            note.accidental = .sharp
+                        }
+                    }
+                }
+                break
+            case .b:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .F || notePitch == .C || notePitch == .G || notePitch == .D || notePitch == .A {
+                            note.accidental = .sharp
+                        }
+                    }
+                }
+                break
+            case .fSharp:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .F || notePitch == .C || notePitch == .G || notePitch == .D || notePitch == .A || notePitch == .E {
+                            note.accidental = .sharp
+                        }
+                    }
+                }
+                break
+            case .cSharp:
+                for notation in self.notationObjects {
+                    if let note = notation as? Note {
+                        let notePitch = note.pitch.step
+
+                        if notePitch == .F || notePitch == .C || notePitch == .G || notePitch == .D || notePitch == .A || notePitch == .E || notePitch == .B {
+                            note.accidental = .sharp
+                        }
+                    }
+                }
+                break
+        }
     }
 }

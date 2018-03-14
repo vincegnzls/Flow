@@ -9,178 +9,433 @@
 
 import Foundation
 import AVFoundation
+import AudioKit
+import AudioKitUI
 
-class SoundManager{
-    let folderName = "Support Objects/"
+class SoundManager {
+
+    static let instance = SoundManager()
+
+    var tempo: Double
+    var player = AVPlayer()
+    var timer = Timer()
+    var isPlaying: Bool
     
-    var url = Bundle.main.url(forResource: "a1-mf", withExtension: "mp3")
-    
-    var audioPlayer:AVAudioPlayer!
-    
-    var resName = "a1-mf"
-    
-    var playTime = 1000.0
-    
-    func playSound(_ note: Note){
+    init() {
+        self.tempo = 100
+        self.isPlaying = false
+    }
+
+    func playNote(note: Note){
+        print("MIDI Piano Note")
+
+        let FMPiano = AKSampler()
         
-        switch note.type.toString(){
-        case "64th": playTime = 75.0
-        case "32nd" : playTime = 125.0
-        case "16th" : playTime = 250.0
-        case "eigth" : playTime = 500.0
-        case "quarter" : playTime = 1000.0
-        case "half" : playTime = 2000.0
-        case "whole" : playTime = 4000.0
-        default:
-            playTime = 1000.0
-            break
-        }
-        
-        switch note.pitch.step.toString(){
-        case "C":
-            switch note.pitch.octave{
-            case 1: resName = "c1-mf"
-            case 2: resName = "c2-mf"
-            case 3: resName = "c3-mf"
-            case 4: resName = "c4-mf"
-            case 5: resName = "c5-mf"
-            case 6: resName = "c6-mf"
-            case 7: resName = "c7-mf"
-            case 8: resName = "c8-mf"
-            default:
-                resName = "c1-mf"
-            }
-            break
-        case "D":
-            switch note.pitch.octave{
-            case 1: resName = "d1-mf"
-            case 2: resName = "d2-mf"
-            case 3: resName = "d3-mf"
-            case 4: resName = "d4-mf"
-            case 5: resName = "d5-mf"
-            case 6: resName = "d6-mf"
-            case 7: resName = "d7-mf"
-            default:
-                resName = "d1-mf"
-            }
-            break
-        case "E":
-            switch note.pitch.octave{
-            case 1: resName = "e1-mf"
-            case 2: resName = "e2-mf"
-            case 3: resName = "e3-mf"
-            case 4: resName = "e4-mf"
-            case 5: resName = "e5-mf"
-            case 6: resName = "e6-mf"
-            case 7: resName = "e7-mf"
-            default:
-                resName = "e1-mf"
-            }
-            break
-        case "F":
-            switch note.pitch.octave{
-            case 1: resName = "f1-mf"
-            case 2: resName = "f2-mf"
-            case 4: resName = "f4-mf"
-            case 5: resName = "f5-mf"
-            case 6: resName = "f6-mf"
-            case 7: resName = "f7-mf"
-            default:
-                resName = "f1-mf"
-            }
-            break
-        case "G":
-            switch note.pitch.octave{
-            case 1: resName = "g1-mf"
-            case 2: resName = "g2-mf"
-            case 3: resName = "g3-mf"
-            case 4: resName = "g4-mf"
-            case 5: resName = "g5-mf"
-            case 6: resName = "g6-mf"
-            case 7: resName = "g7-mf"
-            default:
-                resName = "g1-mf"
-            }
-            break
-        case "A":
-            switch note.pitch.octave{
-            case 1: resName = "a1-mf"
-            case 2: resName = "a2-mf"
-            case 3: resName = "a3-mf"
-            case 4: resName = "a4-mf"
-            case 5: resName = "a5-mf"
-            case 6: resName = "a6-mf"
-            case 7: resName = "a7-mf"
-            default:
-                resName = "a1-mf"
-            }
-            break
-        case "B":
-            switch note.pitch.octave{
-            case 0: resName = "b0-mf"
-            case 1: resName = "b1-mf"
-            case 2: resName = "b2-mf"
-            case 3: resName = "b3-mf"
-            case 4: resName = "b4-mf"
-            case 5: resName = "b5-mf"
-            case 6: resName = "b6-mf"
-            case 7: resName = "b7-mf"
-            default:
-                resName = "b0-mf"
-            }
-            break
-            
-        default:
-            break
-        }
-        
-        url = Bundle.main.url(forResource: folderName + resName, withExtension: "mp3")
-        
+        FMPiano.volume = 5.0
+
         do{
-            audioPlayer = try AVAudioPlayer(contentsOf: url!)
-            audioPlayer.prepareToPlay()
-            audioPlayer.currentTime = 0.5
+            try FMPiano.loadWav("Support Objects/Grand Piano")
+            print("WAV Loaded")
+        }catch{
+            AKLog("File not found")
+            return
+        }
+
+        AudioKit.output = FMPiano
+        do{
+            try AudioKit.start()
         }catch let error as NSError{
             print(error.debugDescription)
         }
         
-        audioPlayer.play()
-        
-        print("playTime is: \(playTime)" )
-        
-        if #available(iOS 10.0, *) {
-            print("Timer is ticking")
-            Timer.scheduledTimer(withTimeInterval: playTime/1000, repeats: false){
-                (timer) in self.audioPlayer.stop()
-                print("Stopping Audio Player")
+        var noteNumber: MIDINoteNumber = 0
+
+        switch note.pitch.step.toString(){
+        case "A":
+            switch note.pitch.octave{
+            case 0: noteNumber = 21
+            case 1: noteNumber = 33
+            case 2: noteNumber = 45
+            case 3: noteNumber = 57
+            case 4: noteNumber = 69
+            case 5: noteNumber = 81
+            case 6: noteNumber = 93
+            case 7: noteNumber = 105
+            case 8: noteNumber = 117
+            default:
+                noteNumber = 30
             }
-        } else {
-            print("Nothing happened")
-            // Fallback on earlier versions
+            break
+        case "B":
+            switch note.pitch.octave{
+            case 0: noteNumber = 23
+            case 1: noteNumber = 35
+            case 2: noteNumber = 47
+            case 3: noteNumber = 59
+            case 4: noteNumber = 71
+            case 5: noteNumber = 83
+            case 6: noteNumber = 95
+            case 7: noteNumber = 107
+            case 8: noteNumber = 119
+            default:
+                noteNumber = 30
+            }
+            break
+        case "C":
+            switch note.pitch.octave{
+            case 0: noteNumber = 12
+            case 1: noteNumber = 24
+            case 2: noteNumber = 36
+            case 3: noteNumber = 48
+            case 4: noteNumber = 60
+            case 5: noteNumber = 72
+            case 6: noteNumber = 84
+            case 7: noteNumber = 96
+            case 8: noteNumber = 108
+            default:
+                noteNumber = 30
+            }
+            break
+        case "D":
+            switch note.pitch.octave{
+            case 0: noteNumber = 14
+            case 1: noteNumber = 26
+            case 2: noteNumber = 38
+            case 3: noteNumber = 50
+            case 4: noteNumber = 62
+            case 5: noteNumber = 74
+            case 6: noteNumber = 86
+            case 7: noteNumber = 98
+            case 8: noteNumber = 110
+            default:
+                noteNumber = 30
+            }
+            break
+        case "E":
+            switch note.pitch.octave{
+            case 0: noteNumber = 16
+            case 1: noteNumber = 28
+            case 2: noteNumber = 40
+            case 3: noteNumber = 52
+            case 4: noteNumber = 64
+            case 5: noteNumber = 76
+            case 6: noteNumber = 88
+            case 7: noteNumber = 100
+            case 8: noteNumber = 112
+            default:
+                noteNumber = 30
+            }
+            break
+        case "F":
+            switch note.pitch.octave{
+            case 0: noteNumber = 17
+            case 1: noteNumber = 29
+            case 2: noteNumber = 41
+            case 3: noteNumber = 53
+            case 4: noteNumber = 65
+            case 5: noteNumber = 77
+            case 6: noteNumber = 89
+            case 7: noteNumber = 101
+            case 8: noteNumber = 113
+            default:
+                noteNumber = 30
+            }
+            break
+        case "G":
+            switch note.pitch.octave{
+            case 0: noteNumber = 19
+            case 1: noteNumber = 31
+            case 2: noteNumber = 43
+            case 3: noteNumber = 55
+            case 4: noteNumber = 67
+            case 5: noteNumber = 79
+            case 6: noteNumber = 91
+            case 7: noteNumber = 103
+            case 8: noteNumber = 115
+            default:
+                noteNumber = 30
+            }
+            break
+
+        default:
+            break
         }
+        
+        noteNumber -= 9
+        FMPiano.play(noteNumber: noteNumber)
+
+    }
+
+    func getNoteMIDINum(note: Note) -> Int {
+
+        var MIDINum = 30
+
+        switch note.pitch.step.toString(){
+        case "A":
+            switch note.pitch.octave{
+            case 0: MIDINum = 21
+            case 1: MIDINum = 33
+            case 2: MIDINum = 45
+            case 3: MIDINum = 57
+            case 4: MIDINum = 69
+            case 5: MIDINum = 81
+            case 6: MIDINum = 93
+            case 7: MIDINum = 105
+            case 8: MIDINum = 117
+            default:
+                MIDINum = 30
+            }
+            break
+        case "B":
+            switch note.pitch.octave{
+            case 0: MIDINum = 23
+            case 1: MIDINum = 35
+            case 2: MIDINum = 47
+            case 3: MIDINum = 59
+            case 4: MIDINum = 71
+            case 5: MIDINum = 83
+            case 6: MIDINum = 95
+            case 7: MIDINum = 107
+            case 8: MIDINum = 119
+            default:
+                MIDINum = 30
+            }
+            break
+        case "C":
+            switch note.pitch.octave{
+            case 0: MIDINum = 12
+            case 1: MIDINum = 24
+            case 2: MIDINum = 36
+            case 3: MIDINum = 48
+            case 4: MIDINum = 60
+            case 5: MIDINum = 72
+            case 6: MIDINum = 84
+            case 7: MIDINum = 96
+            case 8: MIDINum = 108
+            default:
+                MIDINum = 30
+            }
+            break
+        case "D":
+            switch note.pitch.octave{
+            case 0: MIDINum = 14
+            case 1: MIDINum = 26
+            case 2: MIDINum = 38
+            case 3: MIDINum = 50
+            case 4: MIDINum = 62
+            case 5: MIDINum = 74
+            case 6: MIDINum = 86
+            case 7: MIDINum = 98
+            case 8: MIDINum = 110
+            default:
+                MIDINum = 30
+            }
+            break
+        case "E":
+            switch note.pitch.octave{
+            case 0: MIDINum = 16
+            case 1: MIDINum = 28
+            case 2: MIDINum = 40
+            case 3: MIDINum = 52
+            case 4: MIDINum = 64
+            case 5: MIDINum = 76
+            case 6: MIDINum = 88
+            case 7: MIDINum = 100
+            case 8: MIDINum = 112
+            default:
+                MIDINum = 30
+            }
+            break
+        case "F":
+            switch note.pitch.octave{
+            case 0: MIDINum = 17
+            case 1: MIDINum = 29
+            case 2: MIDINum = 41
+            case 3: MIDINum = 53
+            case 4: MIDINum = 65
+            case 5: MIDINum = 77
+            case 6: MIDINum = 89
+            case 7: MIDINum = 101
+            case 8: MIDINum = 113
+            default:
+                MIDINum = 30
+            }
+            break
+        case "G":
+            switch note.pitch.octave{
+            case 0: MIDINum = 19
+            case 1: MIDINum = 31
+            case 2: MIDINum = 43
+            case 3: MIDINum = 55
+            case 4: MIDINum = 67
+            case 5: MIDINum = 79
+            case 6: MIDINum = 91
+            case 7: MIDINum = 103
+            case 8: MIDINum = 115
+            default:
+                MIDINum = 30
+            }
+            break
+
+        default:
+            break
+        }
+
+        //Sharp handling
+        if note.accidental == .sharp && (note.pitch.step == .C || note.pitch.step.toString() == "D" || note.pitch.step.toString() == "F" || note.pitch.step.toString() == "G" || note.pitch.step.toString() == "A"){
+            MIDINum += 1
+        }
+
+        //Flat handling
+        if note.accidental == .flat && (note.pitch.step.toString() == "B" || note.pitch.step.toString() == "E" || note.pitch.step.toString() == "A" || note.pitch.step.toString() == "D" || note.pitch.step.toString() == "G" || note.pitch.step.toString() == "C" || note.pitch.step.toString() == "F"){
+            MIDINum -= 1
+        }
+
+        if note.accidental == .doubleSharp {
+            MIDINum += 2
+        }
+
+        return MIDINum - 9
+    }
+
+    func addNotation(notation: MusicNotation) -> [Int?] {
+
+        var notePlayer = [Int?]()
+
+        var x = 0
+
+        switch notation.type.toString() {
+            case "64th":
+                x = 1
+            case "32nd":
+                x = 2
+            case "16th":
+                x = 4
+            case "eigth":
+                x = 8
+            case "quarter":
+                x = 16
+            case "half":
+                x = 32
+            case "whole":
+                x = 64
+            default:
+                x = 8
+        }
+
+        for beat in 0..<x {
+            if let note = notation as? Note {
+                if beat >= 1 {
+                    print("Note Added. Adding the Trailing 0s")
+                    notePlayer.append(nil)
+                } else {
+                    notePlayer.append(getNoteMIDINum(note: note))
+                }
+            } else {
+                notePlayer.append(nil)
+            }
+        }
+
+        return notePlayer
+    }
+
+    func preProcessStaff(staff: Staff) -> [Int?] {
+        var staffPlayer = [Int?]()
+
+        for measure in staff.measures {
+            for notation in measure.notationObjects {
+                staffPlayer.append(contentsOf: addNotation(notation: notation))
+            }
+        }
+
+        return staffPlayer
+    }
+
+    func stopPlaying() {
+        self.timer.invalidate()
+        EventBroadcaster.instance.postEvent(event: EventNames.STOP_PLAYBACK)
     }
     
     func musicPlayback(_ composition: Composition){
-        for staff in composition.staffList{
-            for measure in staff.measures{
-                for musicNotation in measure.notationObjects{
-                    //There was no way to form a note with notationObjects
-                    //Advise, function in Measure "addNoteInMeasure" does not add note in measure.
-                    //it adds lower level class MusicNotation which has properties that Note class
-                    //already has. Note class has even more
-                    
-                    if let curNote = musicNotation as? Note{
-                        print("Playing Note \(curNote.type.toString())")
-                        playSound(curNote)
-                    }
-                }
+        self.timer.invalidate()
+
+        var gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
+        var fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
+
+        for midi in gNotesMIDI {
+            if let m = midi {
+                print("MIDI NUMBER: \(m)")
             }
         }
-        
-    }}
+
+        //Set the players
+        let gNotePlayer = AKSampler()
+
+        do{
+            try gNotePlayer.loadWav("Support Objects/Grand Piano")
+            print("G Player Ready")
+        } catch{
+            AKLog("File not found")
+            return
+        }
+
+        let fNotePlayer = AKSampler()
+
+        do{
+            try fNotePlayer.loadWav("Support Objects/Grand Piano")
+            print("F Player Ready")
+        } catch{
+            AKLog("File not found")
+            return
+        }
+
+        let grandStaffMix = AKMixer(fNotePlayer, gNotePlayer)
+        grandStaffMix.volume = 5.0
+
+        AudioKit.output = grandStaffMix
+        do{
+            try AudioKit.start()
+        }catch let error as NSError{
+            print(error.debugDescription)
+        }
+
+        var curBeat = 0
+
+        if #available(iOS 10.0, *) {
+            timer = Timer.scheduledTimer(withTimeInterval: 60 / tempo * 0.0625, repeats: true) {_ in
+
+                if !gNotesMIDI.isEmpty && curBeat < gNotesMIDI.count {
+                    if let noteNumber = gNotesMIDI[curBeat] {
+                        gNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
+                    }
+                }
+
+                if !fNotesMIDI.isEmpty && curBeat < fNotesMIDI.count {
+                    if let noteNumber = fNotesMIDI[curBeat] {
+                        fNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
+                    }
+                }
+
+                curBeat += 1
+
+                if curBeat > gNotesMIDI.count + 5 && curBeat > fNotesMIDI.count + 5 {
+                    self.stopPlaying()
+                    self.isPlaying = false
+                }
+
+                /*if Double(curBeat) > self.tempo * co {
+                    timer.invalidate()
+                }*/
+            }
+
+            RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
+        }
+
+    }
+}
 
 
-        
+
 
 
 

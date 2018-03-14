@@ -220,6 +220,9 @@ class Converter {
                     } else if measure.clef == .F {
                         fStaff.addMeasure(measure)
                     }
+                    
+                    /*measure.updateKeySignature()
+                    measure.updateGroups()*/
                 }
             }
 

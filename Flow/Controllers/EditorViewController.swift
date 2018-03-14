@@ -17,8 +17,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var musicSheetHeight: NSLayoutConstraint!
     
     var composition: Composition?
-    
-    private var soundManager = SoundManager()
 
     required init?(coder aDecoder: NSCoder) {
         GridSystem.instance.reset()
@@ -78,6 +76,20 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         if self.musicSheet != nil {
             // set composition in music sheet
             self.musicSheet.composition = self.composition
+
+            if let comp = self.composition {
+                if comp.staffList[0].measures.count > 6 {
+                    var extraMeasuresCount = comp.staffList[0].measures.count - 6
+
+                    extraMeasuresCount /= 2
+
+                    print("EXTRA MEASURES: \(extraMeasuresCount)")
+
+                    for _ in 0...extraMeasuresCount - 1 {
+                        self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
+                    }
+                }
+            }
         }
         
         if let menuBar = self.menuBar, let composition = self.composition {
@@ -151,8 +163,11 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     //edit selected notes
                     print("at selectedNotations.count > 0")
                     editNotations(old: self.musicSheet.selectedNotations, new: [note])
-//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                     
+//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                    if let note = note as? Note {
+                        SoundManager.instance.playNote(note: note)
+                    }
                 } else if let hovered = self.musicSheet.hoveredNotation {
                     //EditAction editAction = EditAction(old: [hovered], new: note)
                     self.editNotations(old: [hovered], new: [note])
@@ -165,13 +180,17 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                             currentComp.addGrandStaff()
                         }
                     }
+                    
+                    if let note = note as? Note {
+                        SoundManager.instance.playNote(note: note)
+                    }
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 } else {
                     // instantiate add action
                     let addAction = AddAction(measure: measure, notation: note)
                     
                     if let note = note as? Note {
-                        soundManager.playSound(note)
+                        SoundManager.instance.playNote(note: note)
                     }
                     
                     GridSystem.instance.recentNotation = note
