@@ -337,10 +337,12 @@ class MusicSheet: UIView {
         // Start drawing the measures
         var modStartX:CGFloat = startMeasure
         var measurePoints = [GridSystem.MeasurePoints]()
+        
+        var adjustKeyTimeSig: CGFloat = 0
 
-        for i in 0...measures.count-1 {
+        for i in 0..<measures.count {
 
-            var adjustKeyTimeSig:CGFloat = 0
+            adjustKeyTimeSig = 0
 
             var keyLabelWidth:CGFloat = 0
 
@@ -398,13 +400,6 @@ class MusicSheet: UIView {
             // START OF DRAWING OF MEASURE
             //measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
 
-            measurePoints = drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
-                    staffSpace: startPointG - startPointF, leftInnerPadding: adjustKeyTimeSig, rightInnerPadding: 15)
-
-            for measurePoint in measurePoints {
-                GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measurePoint)
-            }
-
             /*if let measureLocation = measureLocation{
                 GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation, measure: measures[i])
                 GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measureLocation)
@@ -414,6 +409,13 @@ class MusicSheet: UIView {
 
             modStartX = startMeasure
             // END OF DRAWING OF MEASURE
+        }
+        
+        measurePoints = drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
+                                             staffSpace: startPointG - startPointF, leftInnerPadding: adjustKeyTimeSig, rightInnerPadding: 15)
+        
+        for measurePoint in measurePoints {
+            GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measurePoint)
         }
 
         if !measurePoints.isEmpty {
