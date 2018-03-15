@@ -955,13 +955,29 @@ class MusicSheet: UIView {
 
         var gIndex = 0
         var fIndex = 0
+        
+        var gReachedEnd = false
+        var fReachedEnd = false
+        
+        var gAlreadyAdded = false
+        var fAlreadyAdded = false
 
         var notesToBePrinted = [MusicNotation]()
 
         let noteSpace: CGFloat = 50
         var currentStartX: CGFloat = startX + initialNoteSpace + leftInnerPadding
-        for _ in 0..<max {
+        while !(gReachedEnd && fReachedEnd) {
+            gAlreadyAdded = false
+            fAlreadyAdded = false
             notesToBePrinted.removeAll()
+            
+            if gIndex == gNotations.count {
+                gReachedEnd = true
+            }
+            
+            if fIndex == fNotations.count {
+                fReachedEnd = true
+            }
 
             if gTally == fTally {
                 if gIndex < gNotations.count {
@@ -969,12 +985,16 @@ class MusicSheet: UIView {
                     notesToBePrinted.append(gNotations[gIndex])
 
                     gIndex += 1
+                    
+                    gAlreadyAdded = true
                 }
                 if fIndex < fNotations.count {
                     fTally += fNotations[fIndex].type.getBeatValue()
                     notesToBePrinted.append(fNotations[fIndex])
 
                     fIndex += 1
+                    
+                    fAlreadyAdded = true
                 }
             } else if gTally < fTally {
                 if gIndex < gNotations.count {
@@ -982,6 +1002,8 @@ class MusicSheet: UIView {
                     notesToBePrinted.append(gNotations[gIndex])
 
                     gIndex += 1
+                    
+                    gAlreadyAdded = true
                 }
             } else if fTally < gTally {
                 if fIndex < fNotations.count {
@@ -989,8 +1011,27 @@ class MusicSheet: UIView {
                     notesToBePrinted.append(fNotations[fIndex])
 
                     fIndex += 1
+                    
+                    fAlreadyAdded = true
                 }
             }
+            
+            if gReachedEnd && !fReachedEnd && !fAlreadyAdded {
+                if fIndex < fNotations.count {
+                    fTally += fNotations[fIndex].type.getBeatValue()
+                    notesToBePrinted.append(fNotations[fIndex])
+                    
+                    fIndex += 1
+                }
+            } else if fReachedEnd && !gReachedEnd && !gAlreadyAdded {
+                if gIndex < gNotations.count {
+                    gTally += gNotations[gIndex].type.getBeatValue()
+                    notesToBePrinted.append(gNotations[gIndex])
+                    
+                    gIndex += 1
+                }
+            }
+            
             for note in notesToBePrinted {
                 if let measure = note.measure {
                     if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
