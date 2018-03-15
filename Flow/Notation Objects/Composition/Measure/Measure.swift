@@ -204,7 +204,6 @@ class Measure: Equatable {
         return false
     }
 
-
     func fillWithRests() {
         while getTotalBeats() < timeSignature.getMaxBeatValue() {
             for rest in RestNoteType.types {
