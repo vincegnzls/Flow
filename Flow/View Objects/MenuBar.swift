@@ -11,6 +11,8 @@ import UIKit
 class MenuBar: UIView {
     
     @IBOutlet weak var compositionTitleButton: UIButton!
+    @IBOutlet weak var playBtn: UIButton!
+    
     var compositionInfo: CompositionInfo? {
         didSet {
             self.compositionTitleButton.setTitle(compositionInfo?.name, for: .normal)
@@ -33,6 +35,9 @@ class MenuBar: UIView {
         self.layer.shadowOpacity = 0.1
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 5
+
+        EventBroadcaster.instance.removeObservers(event: EventNames.STOP_PLAYBACK)
+        EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.stop", function: self.stop))
     }
     
     @IBAction func touchCompositionTitle(_ sender: UIButton) {
@@ -77,6 +82,24 @@ class MenuBar: UIView {
     
     @IBAction func touchPlay(_ sender: UIButton) {
         EventBroadcaster.instance.postEvent(event: EventNames.PLAY_KEY_PRESSED)
+
+        SoundManager.instance.isPlaying = !SoundManager.instance.isPlaying
+
+        if SoundManager.instance.isPlaying {
+            if let image = UIImage(named: "stop-icon") {
+                playBtn.setImage(image, for: .normal)
+            }
+        } else {
+            if let image = UIImage(named: "play-icon") {
+                playBtn.setImage(image, for: .normal)
+            }
+        }
+    }
+
+    func stop() {
+        if let image = UIImage(named: "play-icon") {
+            playBtn.setImage(image, for: .normal)
+        }
     }
     
     @IBAction func touchPaste(_ sender: UIButton) {
