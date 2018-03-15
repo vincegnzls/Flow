@@ -35,4 +35,6 @@ struct EventNames {
     static let FLAT_KEY_PRESSED = "FLAT_KEY_PRESSED"
     static let SHARP_KEY_PRESSED = "SHARP_KEY_PRESSED"
     static let DSHARP_KEY_PRESSED = "DSHARP_KEY_PRESSED"
+
+    static let ADD_GRAND_STAFF = "ADD_GRAND_STAFF"
 }

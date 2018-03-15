@@ -65,6 +65,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         EventBroadcaster.instance.removeObservers(event: EventNames.NOTATION_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.NOTATION_KEY_PRESSED,
                 observer: Observer(id: "EditorViewController.onNoteKeyPressed", function: self.onNoteKeyPressed))
+        EventBroadcaster.instance.removeObservers(event: EventNames.ADD_GRAND_STAFF)
+        EventBroadcaster.instance.addObserver(event: EventNames.ADD_GRAND_STAFF,
+                observer: Observer(id: "EditorViewController.addGrandStaff", function: self.addGrandStaff))
+        EventBroadcaster.instance.removeObservers(event: EventNames.DELETE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
                                               observer: Observer(id: "EditorViewController.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
         
@@ -148,7 +152,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         if self.tempoSliderView.isHidden {
             self.tempoSliderView.isHidden = false
             UIView.animate(withDuration: 0.1, animations: {
-                self.tempoSliderView.alpha = 0.5
+                self.tempoSliderView.alpha = 0.8
             }, completion:  nil)
         } else {
             UIView.animate(withDuration: 0.1, animations: {
@@ -312,6 +316,18 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.musicSheet
+    }
+
+    func addGrandStaff() {
+        if let currentComp = self.musicSheet.composition {
+            if currentComp.isLastMeasureFull() {
+                print("PREV HEIGHT \(self.musicSheetHeight.constant)")
+                self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
+                print("UPDATED HEIGHT \(self.musicSheetHeight.constant)")
+                print("LAST MEASURE FULL")
+                currentComp.addGrandStaff()
+            }
+        }
     }
 }
 

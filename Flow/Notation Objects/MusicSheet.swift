@@ -1806,6 +1806,8 @@ class MusicSheet: UIView {
             let firstNotation = self.selectedNotations[0]
             if let startIndex = startMeasure.notationObjects.index(of: firstNotation) {
                 Clipboard.instance.paste(measures: measures, at: startIndex)
+
+                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
             }
             
         } else if let selectedMeasure = GridSystem.instance.getCurrentMeasure() {
@@ -1821,9 +1823,13 @@ class MusicSheet: UIView {
             if let hovered = self.hoveredNotation {
                 if let startIndex = startMeasure.notationObjects.index(of: hovered) {
                     Clipboard.instance.paste(measures: measures, at: startIndex)
+
+                    EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
                 }
             } else {
                 Clipboard.instance.paste(measures: measures, at: startMeasure.notationObjects.count)
+
+                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
             }
         }
         
