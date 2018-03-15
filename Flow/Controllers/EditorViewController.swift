@@ -102,9 +102,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         }
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.tempoSliderView.isHidden = true
-        self.tempoSlider.setValue(Float(SoundManager.instance.tempo), animated: false)
-        self.tempoLabel.text = "= " + String(Int(SoundManager.instance.tempo))
+        initTempo()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapTempo))
         self.tempoBtn.addGestureRecognizer(tapGesture)
@@ -140,7 +138,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     
     @IBAction func tempoSliderChange(_ sender: UISlider) {
         self.tempoLabel.text = "= " + String(Int(sender.value))
-        SoundManager.instance.tempo = Double(sender.value)
+        
+        if let comp = self.composition {
+            comp.tempo = Double(sender.value)
+        }
     }
     
     @objc func tapTempo() {
@@ -156,6 +157,15 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                 (value: Bool) in
                 self.tempoSliderView.isHidden = true
             })
+        }
+    }
+    
+    func initTempo() {
+        
+        if let comp = self.composition {
+            self.tempoSliderView.isHidden = true
+            self.tempoSlider.setValue(Float(comp.tempo), animated: false)
+            self.tempoLabel.text = "= " + String(Int(comp.tempo))
         }
     }
 

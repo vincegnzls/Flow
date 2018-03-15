@@ -398,6 +398,8 @@ class SoundManager {
     func musicPlayback(_ composition: Composition){
         //self.timer.invalidate()
         
+        self.tempo = composition.tempo
+        
         self.loadSound()
         
         self.gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
