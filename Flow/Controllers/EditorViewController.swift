@@ -15,6 +15,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var menuBar: MenuBar!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var musicSheetHeight: NSLayoutConstraint!
+    @IBOutlet weak var tempoBtn: UIView!
+    @IBOutlet weak var tempoSliderView: UIView!
+    @IBOutlet weak var tempoLabel: UILabel!
+    @IBOutlet weak var tempoSlider: UISlider!
     
     var composition: Composition?
 
@@ -63,6 +67,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                 observer: Observer(id: "EditorViewController.onNoteKeyPressed", function: self.onNoteKeyPressed))
         EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
                                               observer: Observer(id: "EditorViewController.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
+        
     }
 
     override func viewDidLoad() {
@@ -96,6 +101,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
             menuBar.compositionInfo = composition.compositionInfo
         }
         // Do any additional setup after loading the view, typically from a nib.
+        
+        self.tempoSliderView.isHidden = true
+        self.tempoSlider.setValue(Float(SoundManager.instance.tempo), animated: false)
+        self.tempoLabel.text = "= " + String(Int(SoundManager.instance.tempo))
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapTempo))
+        self.tempoBtn.addGestureRecognizer(tapGesture)
     }
     
     override func viewWillLayoutSubviews() {
@@ -124,6 +136,27 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
             FileHandler.instance.saveFile(composition: composition)
         }
         
+    }
+    
+    @IBAction func tempoSliderChange(_ sender: UISlider) {
+        self.tempoLabel.text = "= " + String(Int(sender.value))
+        SoundManager.instance.tempo = Double(sender.value)
+    }
+    
+    @objc func tapTempo() {
+        if self.tempoSliderView.isHidden {
+            self.tempoSliderView.isHidden = false
+            UIView.animate(withDuration: 0.1, animations: {
+                self.tempoSliderView.alpha = 0.5
+            }, completion:  nil)
+        } else {
+            UIView.animate(withDuration: 0.1, animations: {
+                self.tempoSliderView.alpha = 0
+            }, completion:  {
+                (value: Bool) in
+                self.tempoSliderView.isHidden = true
+            })
+        }
     }
 
     func onNoteKeyPressed (params:Parameters) {

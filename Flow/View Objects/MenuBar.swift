@@ -125,5 +125,4 @@ class MenuBar: UIView {
         print("dsharp")
         EventBroadcaster.instance.postEvent(event: EventNames.DSHARP_KEY_PRESSED)
     }
-    
 }

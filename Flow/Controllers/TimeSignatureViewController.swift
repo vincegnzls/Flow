@@ -13,6 +13,9 @@ class TimeSignatureViewController: UIViewController {
     @IBOutlet weak var nBeatsLabel: UILabel!
     @IBOutlet weak var beatDurationLabel: UILabel!
     @IBOutlet weak var keySignaturePicker: UIPickerView!
+    @IBOutlet weak var nBeatsSlider: UISlider!
+    @IBOutlet weak var beatDurationSlider: UISlider!
+    
     
     let keySignatureHandler = KeySignaturePicker()
     var rotationAngle: CGFloat = 0
@@ -26,6 +29,9 @@ class TimeSignatureViewController: UIViewController {
         if let measure = GridSystem.instance.getCurrentMeasure() {
             nBeatsLabel.text = String(measure.timeSignature.beats)
             beatDurationLabel.text = String(measure.timeSignature.beatType)
+            
+            nBeatsSlider.setValue(Float(measure.timeSignature.beats), animated: false)
+            beatDurationSlider.setValue(Float(measure.timeSignature.beatType), animated: false)
 
             keySignatureHandler.selectedKeySignature = measure.keySignature
             keySignaturePicker.selectRow(KeySignatureData.getIndexOf(ks: measure.keySignature), inComponent: 0, animated: false)
