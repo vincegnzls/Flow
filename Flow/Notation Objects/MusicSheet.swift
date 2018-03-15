@@ -336,7 +336,7 @@ class MusicSheet: UIView {
 
         // Start drawing the measures
         var modStartX:CGFloat = startMeasure
-        var measureLocation:GridSystem.MeasurePoints?
+        var measurePoints = [GridSystem.MeasurePoints]()
 
         for i in 0...measures.count-1 {
 
@@ -398,7 +398,7 @@ class MusicSheet: UIView {
             // START OF DRAWING OF MEASURE
             //measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
 
-            drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
+            measurePoints = drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
                     staffSpace: startPointG - startPointF, leftInnerPadding: adjustKeyTimeSig, rightInnerPadding: 15)
 
             /*if let measureLocation = measureLocation {
@@ -412,8 +412,8 @@ class MusicSheet: UIView {
             // END OF DRAWING OF MEASURE
         }
 
-        if let measureLocation = measureLocation {
-            return measureLocation.upperLeftPoint.y - measureLocation.lowerRightPoint.y
+        if !measurePoints.isEmpty {
+            return measurePoints[0].upperLeftPoint.y - measurePoints[0].lowerRightPoint.y
         } else {
             return nil
         }
@@ -885,13 +885,16 @@ class MusicSheet: UIView {
 
     // ONLY WORKS FOR GRAND STAFF FOR NOW
     private func drawParallelMeasures(measures: [Measure], startX: CGFloat, endX: CGFloat, startYs: [CGFloat], staffSpace: CGFloat,
-                                      leftInnerPadding: CGFloat, rightInnerPadding:CGFloat)/* -> [GridSystem.MeasurePoints] */{
+                                      leftInnerPadding: CGFloat, rightInnerPadding:CGFloat) -> [GridSystem.MeasurePoints] {
 
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
         bezierPath.lineWidth = 2
 
         var curSpace: CGFloat = 0
+
+        measureXDivs.insert(startX)
+        measureXDivs.insert(endX)
 
         for startY in startYs {
             curSpace = 0
@@ -916,6 +919,8 @@ class MusicSheet: UIView {
             bezierPath.stroke()
         }
 
+        var grandStaffMeasurePoints = [GridSystem.MeasurePoints]()
+
         for (index, measure) in measures.enumerated() {
 
             let measureCoord:GridSystem.MeasurePoints =
@@ -923,6 +928,8 @@ class MusicSheet: UIView {
                             lowerRightPoint: CGPoint(x: endX, y: startYs[index]-curSpace),
                             upperLeftPointWithLedger: CGPoint(x: startX, y: startYs[index]+(lineSpace*3.5)),
                             lowerRightPointWithLedger: CGPoint(x: endX, y: startYs[index]-curSpace-(lineSpace*3.5)))
+
+            grandStaffMeasurePoints.append(measureCoord)
 
             let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace + leftInnerPadding,
                     initialY: startYs[index]-curSpace-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
@@ -983,6 +990,8 @@ class MusicSheet: UIView {
                 print (notes.type.toString())
             }
         }
+
+        return grandStaffMeasurePoints
     }
 
     private func getMeasureWidth(measure: Measure, withClef: Bool? = true, withKeySig: Bool? = true, withTimeSig: Bool? = true) -> CGFloat {
@@ -1087,16 +1096,11 @@ class MusicSheet: UIView {
         UIColor.black.setStroke()
         bezierPath.lineWidth = 2
 
-        /*for x in measureXDivs {
+        for x in measureXDivs {
             bezierPath.move(to: CGPoint(x: x, y: startY))
             bezierPath.addLine(to: CGPoint(x: x, y: startY + staffSpace)) // change if staff space changes
             bezierPath.stroke()
         }
-
-        staffConnection.path = bezierPath.cgPath
-        staffConnection.strokeColor = UIColor.black.cgColor
-        staffConnection.lineWidth = 2
-        */
 
         let brace = UIImage(named:"brace-185")
         let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: staffSpace + height))
