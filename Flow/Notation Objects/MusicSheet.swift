@@ -398,8 +398,6 @@ class MusicSheet: UIView {
             // START OF DRAWING OF MEASURE
             //measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
 
-            print("ADJUST POTA \(adjustKeyTimeSig)")
-
             drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
                     staffSpace: startPointG - startPointF, leftInnerPadding: adjustKeyTimeSig, rightInnerPadding: 15)
 
@@ -929,6 +927,7 @@ class MusicSheet: UIView {
             let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace + leftInnerPadding,
                     initialY: startYs[index]-curSpace-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
             GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
+            GridSystem.instance.assignMeasureToPoints(measurePoints: measureCoord, measure: measure)
 
             measureCoords.append(measureCoord)
 
@@ -1335,6 +1334,9 @@ class MusicSheet: UIView {
             //  LOCATION IS IN MEASURE
             if r.contains(location) {
                 GridSystem.instance.selectedMeasureCoord = measureCoord
+                if let measure = GridSystem.instance.getCurrentMeasure() {
+                    print("A MEASURE HAS BEEN SELECTED TITE")
+                }
                 break
             }
         }
