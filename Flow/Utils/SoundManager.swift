@@ -193,7 +193,7 @@ class SoundManager {
             break
         }
         
-        noteNumber -= 9
+        noteNumber += 3
         FMPiano.play(noteNumber: noteNumber)
 
     }
@@ -327,7 +327,7 @@ class SoundManager {
             MIDINum += 2
         }
 
-        return MIDINum - 9
+        return MIDINum + 3
     }
 
     func addNotation(notation: MusicNotation) -> [Int?] {
