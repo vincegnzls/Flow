@@ -196,7 +196,7 @@ class Measure: Equatable {
 
     public func containsRest() -> Bool {
         for note in notationObjects {
-            if let curNote = note as? Rest {
+            if let _ = note as? Rest {
                 return true
             }
         }
@@ -302,7 +302,7 @@ class Measure: Equatable {
             case .c:
                 for notation in self.notationObjects {
                     if let note = notation as? Note {
-                        if let accidental = note.accidental {
+                        if let _ = note.accidental {
                             note.accidental = nil
                         }
                     }

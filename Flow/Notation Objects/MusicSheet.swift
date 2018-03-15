@@ -1763,19 +1763,31 @@ class MusicSheet: UIView {
         if !SoundManager.instance.isPlaying {
             if let composition = self.composition {
                 SoundManager.instance.musicPlayback(composition)
+                
+                if #available(iOS 10.0, *) {
+                    playBackTimer = Timer.scheduledTimer(withTimeInterval: 60 / SoundManager.instance.tempo * 0.0625, repeats: true) { _ in
+                        self.updateTime()
+                    }
+                } else {
+                    playBackTimer = Timer.scheduledTimer(timeInterval: 60 / SoundManager.instance.tempo * 0.0625,
+                                         target: self,
+                                         selector: #selector(self.updateTime),
+                                         userInfo: nil,
+                                         repeats: true)
+                }
+                
+                RunLoop.main.add(playBackTimer, forMode: RunLoopMode.commonModes)
             }
         } else {
             SoundManager.instance.stopPlaying()
+            playBackTimer.invalidate()
         }
 
-        if #available(iOS 10.0, *) {
-            playBackTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { _ in
-                /*xCursorNewLocation = CGPoint(x: sheetCursor.)
-
-                moveCursorX(location: sheetCursor.curXCursorLocation)*/
-            }
-        }
-
+    }
+    
+    @objc
+    func updateTime() {
+        //TODO: IMPLEMENT PLAYBACK FRONTEND
     }
 
     public func paste() {
