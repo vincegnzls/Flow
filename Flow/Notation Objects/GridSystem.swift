@@ -54,6 +54,7 @@ class GridSystem {
     }
 
     private var measureMap = [MeasurePoints: Measure]()
+    private var parallelMeasureMap = [Measure: MeasurePoints]()
     private var weightsMap = [MeasurePoints: [CGPoint]]()
     private var snapPointsMap = [MeasurePoints: [CGPoint]]()
     private var noteSnapPointsMap = [CGPoint: MusicNotation]()
@@ -114,6 +115,10 @@ class GridSystem {
         return measureMap[measurePoints]
     }
 
+    public func getPointsFromMeasure(measure: Measure) -> MeasurePoints? {
+        return parallelMeasureMap[measure]
+    }
+
     public func getCurrentMeasure() -> Measure? {
         if let measurePoints = self.selectedMeasureCoord {
             if let measure = self.getMeasureFromPoints(measurePoints: measurePoints) {
@@ -133,6 +138,7 @@ class GridSystem {
     
     public func assignMeasureToPoints(measurePoints:MeasurePoints, measure:Measure) {
         measureMap[measurePoints] = measure
+        parallelMeasureMap[measure] = measurePoints
     }
     
     public func assignSnapPointsToPoints(measurePoints:MeasurePoints, snapPoint:[CGPoint]) {
@@ -497,7 +503,7 @@ class GridSystem {
 
             for i in 0..<snapPoints.count {
                 //print(pitches[i])
-                pitchToPointMap[pitches[i]] = snapPoints[i]
+                pitchToPointMap[pitches[i%(NUMBER_OF_SNAPPOINTS_PER_COLUMN+1)]] = snapPoints[i]
             }
 
             if let corresPoint = pitchToPointMap[note.pitch] {

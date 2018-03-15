@@ -401,7 +401,11 @@ class MusicSheet: UIView {
             measurePoints = drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
                     staffSpace: startPointG - startPointF, leftInnerPadding: adjustKeyTimeSig, rightInnerPadding: 15)
 
-            /*if let measureLocation = measureLocation {
+            for measurePoint in measurePoints {
+                GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measurePoint)
+            }
+
+            /*if let measureLocation = measureLocation{
                 GridSystem.instance.assignMeasureToPoints(measurePoints: measureLocation, measure: measures[i])
                 GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measureLocation)
 
@@ -928,13 +932,13 @@ class MusicSheet: UIView {
                             lowerRightPoint: CGPoint(x: endX, y: startYs[index]-curSpace),
                             upperLeftPointWithLedger: CGPoint(x: startX, y: startYs[index]+(lineSpace*3.5)),
                             lowerRightPointWithLedger: CGPoint(x: endX, y: startYs[index]-curSpace-(lineSpace*3.5)))
+            GridSystem.instance.assignMeasureToPoints(measurePoints: measureCoord, measure: measure)
 
             grandStaffMeasurePoints.append(measureCoord)
 
             let snapPoints = GridSystem.instance.createSnapPoints(initialX: startX + initialNoteSpace + leftInnerPadding,
-                    initialY: startYs[index]-curSpace-(lineSpace*3.5), clef: measure.clef, lineSpace: lineSpace)
+                    initialY: startYs[index] - curSpace - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
             GridSystem.instance.assignSnapPointsToPoints(measurePoints: measureCoord, snapPoint: snapPoints)
-            GridSystem.instance.assignMeasureToPoints(measurePoints: measureCoord, measure: measure)
 
             measureCoords.append(measureCoord)
 
@@ -946,13 +950,16 @@ class MusicSheet: UIView {
 
         let gNotations = measures[0].notationObjects
         let fNotations = measures[1].notationObjects
-        
+
         let max = gNotations.count + fNotations.count
 
         var gIndex = 0
         var fIndex = 0
 
         var notesToBePrinted = [MusicNotation]()
+
+        let noteSpace: CGFloat = 50
+        var currentStartX: CGFloat = startX + initialNoteSpace + leftInnerPadding
         for _ in 0..<max {
             notesToBePrinted.removeAll()
 
@@ -960,13 +967,13 @@ class MusicSheet: UIView {
                 if gIndex < gNotations.count {
                     gTally += gNotations[gIndex].type.getBeatValue()
                     notesToBePrinted.append(gNotations[gIndex])
-                    
+
                     gIndex += 1
                 }
                 if fIndex < fNotations.count {
                     fTally += fNotations[fIndex].type.getBeatValue()
                     notesToBePrinted.append(fNotations[fIndex])
-                    
+
                     fIndex += 1
                 }
             } else if gTally < fTally {
@@ -984,10 +991,101 @@ class MusicSheet: UIView {
                     fIndex += 1
                 }
             }
+            for note in notesToBePrinted {
+                if let measure = note.measure {
+                    if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
+                        if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints) {
+                            if note is Note {
+                                note.screenCoordinates =
+                                        CGPoint(x: currentStartX,
+                                                y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
+                            } else if note is Rest {
 
-            print ("\(gTally), \(fTally)")
-            for notes in notesToBePrinted {
-                print (notes.type.toString())
+                                if let height = note.image?.size.height {
+
+                                    note.screenCoordinates =
+                                            CGPoint(x: currentStartX,
+                                                    y: (measurePoints.upperLeftPoint.y + measurePoints.lowerRightPoint.y) / 2 - (height / restHeightAlter / 2))
+
+                                }
+                            }
+
+                            //lastXCoord = measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter
+
+                            let snapPointsRelativeToNotation = GridSystem.instance.createSnapPoints(
+                                    initialX: currentStartX + adjustToXCenter * initialNoteSpace, initialY: measurePoints.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
+
+                            // snap points for added note
+                            GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measurePoints,
+                                    snapPoints: snapPointsRelativeToNotation)
+
+                            if currentStartX == startX + initialNoteSpace + leftInnerPadding {
+                                GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measurePoints, relativeX: currentStartX)
+                            }
+
+                            // assign snap point to added note
+                            if note is Note {
+                                GridSystem.instance.assignSnapPointToNotation(
+                                        snapPoint: CGPoint(x: currentStartX + adjustToXCenter * initialNoteSpace, y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
+                                        notation: note)
+                            } else if note is Rest {
+                                for snapPoint in snapPointsRelativeToNotation {
+                                    GridSystem.instance.assignSnapPointToNotation(
+                                            snapPoint: snapPoint,
+                                            notation: note)
+                                }
+                            }
+
+                            // if measure is not full, add more snapping points right next to new note added
+                            if !measure.isFull {
+
+                                let additionalSnapPoints = GridSystem.instance.createSnapPoints(
+                                        initialX: currentStartX + noteSpace, initialY: measurePoints.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
+
+                                GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measurePoints,
+                                        snapPoints: additionalSnapPoints)
+
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+
+            currentStartX += noteSpace
+        }
+
+        for measure in measures {
+            if !measure.groups.isEmpty {
+
+                var x = 0
+
+                if measure.groups.count > 1 {
+                    for group in measure.groups {
+                        if measure.timeSignature.beats == 4 && measure.timeSignature.beatType == 4 {
+                            if x < measure.groups.count {
+                                if x + 1 == measure.groups.count {
+                                    beamNotes(notations: measure.groups[x])
+                                } else {
+                                    if isPureEighth(group: measure.groups[x]) && measure.groups[x].count == 2 && isPureEighth(group: measure.groups[x + 1]) && measure.groups[x + 1].count == 2 {
+                                        beamNotes(notations: measure.groups[x] + measure.groups[x + 1])
+                                        x = x + 1
+                                    } else {
+                                        beamNotes(notations: measure.groups[x])
+                                    }
+
+                                    x = x + 1
+                                }
+                            }
+                        } else {
+                            beamNotes(notations: group)
+                        }
+                    }
+                } else {
+                    beamNotes(notations: measure.groups[0])
+                }
             }
         }
 
@@ -1117,10 +1215,21 @@ class MusicSheet: UIView {
 
         var notationImageView: UIImageView?
 
-        if notation is Note {
-            notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
-        } else if notation is Rest {
-            notationImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + restYOffset, width: (notation.image?.size.width)! / restWidthAlter, height: (notation.image?.size.height)! / restHeightAlter))
+        if let note = notation as? Note {
+            
+            if let screenCoordinates = note.screenCoordinates, let image = note.image {
+                
+                notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
+                
+            }
+            
+        } else if let rest = notation as? Rest {
+            
+            if let screenCoordinates = rest.screenCoordinates, let image = rest.image {
+            
+                notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                
+            }
         }
 
         if let notationImageView = notationImageView {
@@ -1338,9 +1447,6 @@ class MusicSheet: UIView {
             //  LOCATION IS IN MEASURE
             if r.contains(location) {
                 GridSystem.instance.selectedMeasureCoord = measureCoord
-                if let measure = GridSystem.instance.getCurrentMeasure() {
-                    print("A MEASURE HAS BEEN SELECTED TITE")
-                }
                 break
             }
         }
@@ -1367,11 +1473,11 @@ class MusicSheet: UIView {
 
         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
 
-            /*if let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord) {
+            if let firstMeasureCoord = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoord) {
 
                 moveCursorX(location: CGPoint(x: sheetCursor.curYCursorLocation.x, y: firstMeasureCoord.lowerRightPoint.y + cursorXOffsetY))
 
-            }*/
+            }
         }
 
     }
