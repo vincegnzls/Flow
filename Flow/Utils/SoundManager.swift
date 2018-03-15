@@ -21,9 +21,41 @@ class SoundManager {
     var timer = Timer()
     var isPlaying: Bool
     
+    var gNotesMIDI: [Int?]
+    var fNotesMIDI: [Int?]
+    
+    let gNotePlayer: AKSampler
+    let fNotePlayer: AKSampler
+    
+    var grandStaffMixer: AKMixer
+    
+    var curBeat: Int
+    
     init() {
-        self.tempo = 100
+        self.tempo = 120
         self.isPlaying = false
+        self.gNotesMIDI = [Int?]()
+        self.fNotesMIDI = [Int?]()
+        self.curBeat = 0
+        self.gNotePlayer = AKSampler()
+        self.fNotePlayer = AKSampler()
+        self.grandStaffMixer = AKMixer()
+        self.setup()
+    }
+    
+    func setup() {
+        self.grandStaffMixer = AKMixer(self.fNotePlayer, self.gNotePlayer)
+        self.grandStaffMixer.volume = 5.0
+        AudioKit.output = self.grandStaffMixer
+    }
+    
+    func loadSound () {
+        do{
+            try self.gNotePlayer.loadWav("Support Objects/Grand Piano")
+            try self.fNotePlayer.loadWav("Support Objects/Grand Piano")
+        } catch {
+            return
+        }
     }
 
     func playNote(note: Note){
@@ -353,84 +385,77 @@ class SoundManager {
 
     func stopPlaying() {
         self.timer.invalidate()
+        do {
+            /*try AudioKit.stop()
+            gNotePlayer.stop()
+            fNotePlayer.stop()*/
+        } catch let error as NSError{
+            print(error.debugDescription)
+        }
         EventBroadcaster.instance.postEvent(event: EventNames.STOP_PLAYBACK)
     }
     
     func musicPlayback(_ composition: Composition){
-        self.timer.invalidate()
+        //self.timer.invalidate()
+        
+        self.loadSound()
+        
+        self.gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
+        self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
 
-        var gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
-        var fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
-
-        for midi in gNotesMIDI {
+        /*for midi in gNotesMIDI {
             if let m = midi {
                 print("MIDI NUMBER: \(m)")
             }
-        }
-
-        //Set the players
-        let gNotePlayer = AKSampler()
-
-        do{
-            try gNotePlayer.loadWav("Support Objects/Grand Piano")
-            print("G Player Ready")
-        } catch{
-            AKLog("File not found")
-            return
-        }
-
-        let fNotePlayer = AKSampler()
-
-        do{
-            try fNotePlayer.loadWav("Support Objects/Grand Piano")
-            print("F Player Ready")
-        } catch{
-            AKLog("File not found")
-            return
-        }
-
-        let grandStaffMix = AKMixer(fNotePlayer, gNotePlayer)
-        grandStaffMix.volume = 5.0
-
-        AudioKit.output = grandStaffMix
-        do{
+        }*/
+        
+        do {
             try AudioKit.start()
-        }catch let error as NSError{
+        } catch let error as NSError{
             print(error.debugDescription)
         }
 
-        var curBeat = 0
+        self.curBeat = 0
 
         if #available(iOS 10.0, *) {
-            timer = Timer.scheduledTimer(withTimeInterval: 60 / tempo * 0.0625, repeats: true) {_ in
-
-                if !gNotesMIDI.isEmpty && curBeat < gNotesMIDI.count {
-                    if let noteNumber = gNotesMIDI[curBeat] {
-                        gNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
-                    }
-                }
-
-                if !fNotesMIDI.isEmpty && curBeat < fNotesMIDI.count {
-                    if let noteNumber = fNotesMIDI[curBeat] {
-                        fNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
-                    }
-                }
-
-                curBeat += 1
-
-                if curBeat > gNotesMIDI.count + 5 && curBeat > fNotesMIDI.count + 5 {
-                    self.stopPlaying()
-                    self.isPlaying = false
-                }
-
-                /*if Double(curBeat) > self.tempo * co {
-                    timer.invalidate()
-                }*/
+            self.timer = Timer.scheduledTimer(withTimeInterval: 60 / tempo * 0.0625, repeats: true) {_ in
+                self.updateTime()
             }
-
-            RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
+        } else {
+            self.timer = Timer.scheduledTimer(timeInterval: 60 / tempo * 0.0625,
+                                 target: self,
+                                 selector: #selector(self.updateTime),
+                                 userInfo: nil,
+                                 repeats: true)
         }
 
+        RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
+    }
+    
+    @objc
+    func updateTime() {
+        if !self.gNotesMIDI.isEmpty && self.curBeat < self.gNotesMIDI.count {
+            if let noteNumber = self.gNotesMIDI[self.curBeat] {
+                self.gNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
+            }
+        }
+        
+        if !self.fNotesMIDI.isEmpty && self.curBeat < self.fNotesMIDI.count {
+            if let noteNumber = self.fNotesMIDI[self.curBeat] {
+                self.fNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
+            }
+        }
+        
+        self.curBeat += 1
+        
+        if self.curBeat > self.gNotesMIDI.count + 5 && self.curBeat > self.fNotesMIDI.count + 5 {
+            self.stopPlaying()
+            self.isPlaying = false
+        }
+        
+        /*if Double(curBeat) > self.tempo * co {
+         timer.invalidate()
+         }*/
     }
 }
 
