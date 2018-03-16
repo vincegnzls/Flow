@@ -218,15 +218,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                 } else if let hovered = self.musicSheet.hoveredNotation {
                     //EditAction editAction = EditAction(old: [hovered], new: note)
                     self.editNotations(old: [hovered], new: [note])
-                    if let currentComp = self.musicSheet.composition {
-                        if currentComp.isLastMeasureFull() {
-                            print("PREV HEIGHT \(self.musicSheetHeight.constant)")
-                            self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
-                            print("UPDATED HEIGHT \(self.musicSheetHeight.constant)")
-                            print("LAST MEASURE FULL")
-                            currentComp.addGrandStaff()
-                        }
-                    }
+
+                    addGrandStaff()
                     
                     if let note = note as? Note {
                         SoundManager.instance.playNote(note: note)
@@ -244,15 +237,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
 
                     addAction.execute()
 
-                    if let currentComp = self.musicSheet.composition {
-                        if currentComp.isLastMeasureFull() {
-                            print("PREV HEIGHT \(self.musicSheetHeight.constant)")
-                            self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
-                            print("UPDATED HEIGHT \(self.musicSheetHeight.constant)")
-                            print("LAST MEASURE FULL")
-                            currentComp.addGrandStaff()
-                        }
-                    }
+                    addGrandStaff()
                     
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
