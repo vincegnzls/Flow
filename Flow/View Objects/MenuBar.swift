@@ -36,7 +36,7 @@ class MenuBar: UIView {
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 5
 
-        EventBroadcaster.instance.removeObservers(event: EventNames.STOP_PLAYBACK)
+        EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.stop", function: self.stop))
         EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.stop", function: self.stop))
     }
     

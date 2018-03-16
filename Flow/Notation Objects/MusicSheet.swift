@@ -135,7 +135,7 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.PASTE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.PASTE_KEY_PRESSED, observer: Observer(id: "MusicSheet.paste", function: self.paste))
         
-        EventBroadcaster.instance.removeObservers(event: EventNames.PLAY_KEY_PRESSED)
+        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
         EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
@@ -1777,10 +1777,13 @@ class MusicSheet: UIView {
                 }
                 
                 RunLoop.main.add(playBackTimer, forMode: RunLoopMode.commonModes)
+
+                self.isUserInteractionEnabled = false
             }
         } else {
             SoundManager.instance.stopPlaying()
             playBackTimer.invalidate()
+            self.isUserInteractionEnabled = true
         }
 
     }
