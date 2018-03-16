@@ -22,8 +22,11 @@ class CursorControlsView: DraggableView {
     }
 
     func setup() {
-        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "CursorControls.disableInteractionOnPlay", function: self.hideOnPlay))
-        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "CursorControls.disableInteractionOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "CursorControls.hideOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "CursorControls.hideOnPlay", function: self.hideOnPlay))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "CursorControls.hideOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "CursorControls.hideOnPlay", function: self.hideOnPlay))
     }
 
     override var keyTag: String {

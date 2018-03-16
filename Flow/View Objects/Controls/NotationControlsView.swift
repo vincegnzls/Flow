@@ -57,8 +57,11 @@ class NotationControlsView: DraggableView {
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_SWITCHED,
                                               observer: Observer(id: "NotationControls.measureSwitched", function: self.measureSwitched))
 
-        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.disableInteractionOnPlay", function: self.hideOnPlay))
-        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.disableInteractionOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
     }
     
     @IBAction func wholeNote(_ sender: UIButton) {
