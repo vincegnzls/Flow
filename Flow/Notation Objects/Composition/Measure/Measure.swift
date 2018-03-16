@@ -77,21 +77,21 @@ class Measure: Equatable {
         return lhs !== rhs
     }
 
-    public func addToMeasure(_ notation: MusicNotation) {
+    public func addToMeasure(_ notation: MusicNotation) -> Bool {
         if(isAddNoteValid(musicNotation: notation.type)) {
             print("ADD NOTE VALID")
 
             notation.measure = self
             notationObjects.append(notation)
+            return  true
             //self.fillWithRests()
         } else {
-
             print("INVALID ADD NOTE")
-
+            return false
         }
     }
     
-    public func addToMeasure(_ notation: MusicNotation, at index: Int) {
+    public func addToMeasure(_ notation: MusicNotation, at index: Int) -> Bool {
         if(isAddNoteValid(musicNotation: notation.type)) {
             print("ADD NOTE VALID")
             
@@ -107,8 +107,10 @@ class Measure: Equatable {
             for notation in notationObjects {
                 print(notation.type.toString())
             }
+
+            return  true
         } else {
-            
+            return false
             print("INVALID ADD NOTE")
             
         }
@@ -205,10 +207,21 @@ class Measure: Equatable {
     }
 
     func fillWithRests() {
-        while getTotalBeats() < timeSignature.getMaxBeatValue() {
+
+        var invalidCount = 0
+
+        var stop = false
+
+        while getTotalBeats() < timeSignature.getMaxBeatValue() && !stop {
             for rest in RestNoteType.types {
                 let curRest = Rest(type: rest)
-                self.addToMeasure(curRest)
+                if !self.addToMeasure(curRest) {
+                    invalidCount += 1
+                }
+            }
+
+            if invalidCount > RestNoteType.types.count {
+                stop = true
             }
         }
     }

@@ -42,8 +42,8 @@ class NotationControlsView: DraggableView {
 
     private func setup() {
         // Set up border
-        self.layer.borderWidth = 1.5
-        self.layer.borderColor = UIColor.black.cgColor
+        //self.layer.borderWidth = 1.5
+        //self.layer.borderColor = UIColor.black.cgColor
         //self.layer.cornerRadius = 10
         
         // Set up shadow

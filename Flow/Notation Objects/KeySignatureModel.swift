@@ -13,11 +13,11 @@ class KeySignatureModel {
     var key: KeySignature
     var image: UIImage = UIImage()
     
-    init(key:KeySignature) {
+    init(key: KeySignature) {
         self.key = key
     }
     
-    init(key:KeySignature, image:UIImage) {
+    init(key: KeySignature, image: UIImage) {
         self.key = key
         self.image = image
     }
