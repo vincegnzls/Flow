@@ -1945,8 +1945,10 @@ class MusicSheet: UIView {
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            let curNote = hovered as! Note
-            curNote.accidental = .flat
+            if hovered is Note {
+                let curNote = hovered as! Note
+                curNote.accidental = .flat
+            }
         }
     }
 
@@ -1959,8 +1961,10 @@ class MusicSheet: UIView {
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            let curNote = hovered as! Note
-            curNote.accidental = .sharp
+            if hovered is Note {
+                let curNote = hovered as! Note
+                curNote.accidental = .sharp
+            }
         }
     }
 
@@ -1973,8 +1977,10 @@ class MusicSheet: UIView {
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            let curNote = hovered as! Note
-            curNote.accidental = .doubleSharp
+            if hovered is Note {
+                let curNote = hovered as! Note
+                curNote.accidental = .doubleSharp
+            }
         }
     }
 
