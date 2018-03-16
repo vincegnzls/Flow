@@ -12,7 +12,7 @@ class Measure: Equatable {
 
     var keySignature: KeySignature {
         didSet {
-            updateKeySignature()
+            //updateKeySignature()
         }
     }
     var timeSignature: TimeSignature
@@ -25,7 +25,7 @@ class Measure: Equatable {
             print("INVALID NOTES: \(getInvalidNotes())")
             updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls
             updateGroups()
-            updateKeySignature()
+            //updateKeySignature()
         }
     }
     var bounds: Bounds
@@ -65,7 +65,7 @@ class Measure: Equatable {
             }
         }
 
-        updateKeySignature()
+        //updateKeySignature()
     }
 
     // Equatable operators
