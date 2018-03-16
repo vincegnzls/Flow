@@ -61,7 +61,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             self.changeViewBtn.isEnabled = false
         } else {
             self.noCompsLabel.isHidden = true
-            self.tableView.isHidden = false
+            self.tableView.isHidden = self.isCollectionViewShowing
             self.changeViewBtn.isEnabled = true
         }
 
