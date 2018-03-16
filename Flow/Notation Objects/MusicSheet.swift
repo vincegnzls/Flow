@@ -160,6 +160,9 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.DSHARP_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.DSHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.dsharp", function: self.dsharp))
 
+        EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
+        EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
+
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
@@ -1786,6 +1789,10 @@ class MusicSheet: UIView {
             self.isUserInteractionEnabled = true
         }
 
+    }
+
+    func enableInteraction() {
+        self.isUserInteractionEnabled = true
     }
     
     @objc
