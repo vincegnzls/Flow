@@ -37,4 +37,7 @@ struct EventNames {
     static let DSHARP_KEY_PRESSED = "DSHARP_KEY_PRESSED"
 
     static let ADD_GRAND_STAFF = "ADD_GRAND_STAFF"
+
+    static let DISABLE_ACCIDENTALS = "DISABLE_ACCIDENTALS"
+    static let ENABLE_ACCIDENTALS = "ENABLE_ACCIDENTALS"
 }
