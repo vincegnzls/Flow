@@ -57,8 +57,8 @@ class NotationControlsView: DraggableView {
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_SWITCHED,
                                               observer: Observer(id: "NotationControls.measureSwitched", function: self.measureSwitched))
 
-        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.disableInteractionOnPlay", function: self.disableInteractionOnPlay))
-        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.disableInteractionOnPlay", function: self.disableInteractionOnPlay))
+        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.disableInteractionOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.disableInteractionOnPlay", function: self.hideOnPlay))
     }
     
     @IBAction func wholeNote(_ sender: UIButton) {
@@ -191,14 +191,14 @@ class NotationControlsView: DraggableView {
         }
     }
 
-    func disableInteractionOnPlay() {
+    func hideOnPlay() {
 
         print("wtf")
 
         if !SoundManager.instance.isPlaying {
-            self.isUserInteractionEnabled = false
+            self.isHidden = true
         } else {
-            self.isUserInteractionEnabled = true
+            self.isHidden = false
         }
     }
 
