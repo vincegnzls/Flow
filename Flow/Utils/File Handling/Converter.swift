@@ -24,6 +24,9 @@ class Converter {
         // Part
         let partElement = scoreElement.addChild(name: "part", attributes: ["id": "P1"])
         
+        // Tempo
+        let tempo = composition.tempo
+        
         var previousKeySignature = KeySignature.c
         var previousTimeSignature = TimeSignature(beats: 4, beatType: 4 )
         var previousDivisions = 1
@@ -67,6 +70,10 @@ class Converter {
                 
                 // Number of Staves
                 attributesElement.addChild(name: "staves", value: "\(composition.staffList.count)")
+                
+                if i == 0 {
+                    attributesElement.addChild(name: "sound", attributes: ["tempo": "\(Int(tempo))"])
+                }
                 
                 // Set clefs
                 for (index, staff) in composition.staffList.enumerated() {
@@ -152,6 +159,12 @@ class Converter {
                 if let beats = Int(measureElement["attributes"]["time"]["beats"].string),
                     let beatType = Int(measureElement["attributes"]["time"]["beat-type"].string) {
                     previousTimeSignature = TimeSignature(beats: beats, beatType: beatType)
+                }
+                
+                if let tempoString = measureElement["attributes"]["sound"].attributes["tempo"] {
+                    if let tempo = Double(tempoString) {
+                        composition.tempo = tempo
+                    }
                 }
                 
                 // Get attributes
