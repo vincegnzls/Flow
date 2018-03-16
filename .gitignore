@@ -83,3 +83,7 @@ fastlane/test_output
 Flow/\.DS_Store
 
 \.DS_Store
+
+AudioKitUI\.framework/
+
+AudioKit\.framework/
