@@ -11,4 +11,22 @@ enum Accidental {
         sharp,
         flat,
         doubleSharp
+    
+    func toString() -> String {
+        switch self {
+        case .sharp: return "sharp"
+        case .flat: return "flat"
+        case .doubleSharp: return "double-sharp"
+        default: return "natural"
+        }
+    }
+    
+    static func convert(_ accidental: String) -> Accidental {
+        switch accidental {
+        case "sharp": return .sharp
+        case "flat": return .flat
+        case "double-sharp": return .doubleSharp
+        default: return .natural
+        }
+    }
 }

@@ -102,6 +102,11 @@ class Converter {
                         let pitchElement = notationElement.addChild(name: "pitch")
                         pitchElement.addChild(name: "step", value: note.pitch.step.toString())
                         pitchElement.addChild(name: "octave", value: "\(note.pitch.octave)")
+                        
+                        if let accidental = note.accidental {
+                            notationElement.addChild(name: "accidental", value: accidental.toString())
+                        }
+                        
                     } else if notation is Rest {
                         notationElement.addChild(name: "rest")
                     }
@@ -129,6 +134,8 @@ class Converter {
         var index = xmlString.index(of: ">")!
         index = xmlString.index(index, offsetBy: 1, limitedBy: xmlString.endIndex)!
         xmlString.insert(contentsOf: doctype, at: index)
+        
+        print(xmlString)
         
         return xmlString
     }
@@ -212,9 +219,16 @@ class Converter {
                         if let step = notationElement["pitch"]["step"].value {
                             let pitch = Pitch(step: Step.convert(step),
                                               octave: Int(notationElement["pitch"]["octave"].string)!)
-                            let note = Note(pitch: pitch, type: type)
                             
-                            measure.addToMeasure(note)
+                            if let accidentalString = notationElement["accidental"].value {
+                                let accidental = Accidental.convert(accidentalString)
+                                let note = Note(pitch: pitch, type: type, accidental: accidental)
+                                measure.addToMeasure(note)
+                            } else {
+                                let note = Note(pitch: pitch, type: type)
+                                measure.addToMeasure(note)
+                            }
+
                         } else {
                             let rest = Rest(type: type)
                             
