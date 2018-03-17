@@ -2419,106 +2419,97 @@ class MusicSheet: UIView {
 
     public func naturalize() {
         if !self.selectedNotations.isEmpty {
-            for note in self.selectedNotations {
-                if note is Note {
-                    let curNote = note as! Note
-
+            var newNotations = [MusicNotation]()
+            for notation in self.selectedNotations {
+                if let curNote = notation as? Note {
                     let newNote = curNote.duplicate()
                     newNote.accidental = .natural
-
+                    
                     let editAction = EditAction(old: [curNote], new: [newNote])
-
+                    
                     editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            if hovered is Note {
-                let curNote = hovered as! Note
-
+            if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
                 newNote.accidental = .natural
-
+                
                 let editAction = EditAction(old: [curNote], new: [newNote])
-
+                
                 editAction.execute()
             }
         }
+        self.updateMeasureDraw()
     }
 
     public func flat() {
         if !self.selectedNotations.isEmpty {
-            for note in self.selectedNotations {
-                if note is Note {
-                    let curNote = note as! Note
-
+            var newNotations = [MusicNotation]()
+            for notation in self.selectedNotations {
+                if let curNote = notation as? Note {
                     let newNote = curNote.duplicate()
                     newNote.accidental = .flat
-
+                    
                     let editAction = EditAction(old: [curNote], new: [newNote])
-
+                    
                     editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            if hovered is Note {
-                let curNote = hovered as! Note
-
+            if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
                 newNote.accidental = .flat
-
+                
                 let editAction = EditAction(old: [curNote], new: [newNote])
-
+                
                 editAction.execute()
             }
         }
+        self.updateMeasureDraw()
     }
 
     public func sharp() {
         if !self.selectedNotations.isEmpty {
-            for note in self.selectedNotations {
-                if note is Note {
-                    let curNote = note as! Note
-
+            var newNotations = [MusicNotation]()
+            for notation in self.selectedNotations {
+                if let curNote = notation as? Note {
                     let newNote = curNote.duplicate()
                     newNote.accidental = .sharp
-
+                    
                     let editAction = EditAction(old: [curNote], new: [newNote])
-
+                    
                     editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            if hovered is Note {
-                let curNote = hovered as! Note
-
+            if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
                 newNote.accidental = .sharp
-
+                
                 let editAction = EditAction(old: [curNote], new: [newNote])
-
+                
                 editAction.execute()
             }
         }
+        self.updateMeasureDraw()
     }
 
     public func dsharp() {
         if !self.selectedNotations.isEmpty {
-            for note in self.selectedNotations {
-                if note is Note {
-                    let curNote = note as! Note
-
+            var newNotations = [MusicNotation]()
+            for notation in self.selectedNotations {
+                if let curNote = notation as? Note {
                     let newNote = curNote.duplicate()
                     newNote.accidental = .doubleSharp
-
+                    
                     let editAction = EditAction(old: [curNote], new: [newNote])
-
+                    
                     editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            if hovered is Note {
-                let curNote = hovered as! Note
-
+            if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
                 newNote.accidental = .doubleSharp
 
@@ -2527,6 +2518,7 @@ class MusicSheet: UIView {
                 editAction.execute()
             }
         }
+        self.updateMeasureDraw()
     }
 
 }
