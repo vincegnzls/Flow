@@ -1932,13 +1932,25 @@ class MusicSheet: UIView {
             for note in self.selectedNotations {
                 if note is Note {
                     let curNote = note as! Note
-                    curNote.accidental = .natural
+
+                    let newNote = curNote.duplicate()
+                    newNote.accidental = .natural
+
+                    let editAction = EditAction(old: [curNote], new: [newNote])
+
+                    editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
             if hovered is Note {
                 let curNote = hovered as! Note
-                curNote.accidental = .natural
+
+                let newNote = curNote.duplicate()
+                newNote.accidental = .natural
+
+                let editAction = EditAction(old: [curNote], new: [newNote])
+
+                editAction.execute()
             }
         }
     }
@@ -1948,13 +1960,25 @@ class MusicSheet: UIView {
             for note in self.selectedNotations {
                 if note is Note {
                     let curNote = note as! Note
-                    curNote.accidental = .flat
+
+                    let newNote = curNote.duplicate()
+                    newNote.accidental = .flat
+
+                    let editAction = EditAction(old: [curNote], new: [newNote])
+
+                    editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
             if hovered is Note {
                 let curNote = hovered as! Note
-                curNote.accidental = .flat
+
+                let newNote = curNote.duplicate()
+                newNote.accidental = .flat
+
+                let editAction = EditAction(old: [curNote], new: [newNote])
+
+                editAction.execute()
             }
         }
     }
@@ -1964,13 +1988,25 @@ class MusicSheet: UIView {
             for note in self.selectedNotations {
                 if note is Note {
                     let curNote = note as! Note
-                    curNote.accidental = .sharp
+
+                    let newNote = curNote.duplicate()
+                    newNote.accidental = .sharp
+
+                    let editAction = EditAction(old: [curNote], new: [newNote])
+
+                    editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
             if hovered is Note {
                 let curNote = hovered as! Note
-                curNote.accidental = .sharp
+
+                let newNote = curNote.duplicate()
+                newNote.accidental = .sharp
+
+                let editAction = EditAction(old: [curNote], new: [newNote])
+
+                editAction.execute()
             }
         }
     }
@@ -1980,13 +2016,25 @@ class MusicSheet: UIView {
             for note in self.selectedNotations {
                 if note is Note {
                     let curNote = note as! Note
-                    curNote.accidental = .doubleSharp
+
+                    let newNote = curNote.duplicate()
+                    newNote.accidental = .doubleSharp
+
+                    let editAction = EditAction(old: [curNote], new: [newNote])
+
+                    editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
             if hovered is Note {
                 let curNote = hovered as! Note
-                curNote.accidental = .doubleSharp
+
+                let newNote = curNote.duplicate()
+                newNote.accidental = .doubleSharp
+
+                let editAction = EditAction(old: [curNote], new: [newNote])
+
+                editAction.execute()
             }
         }
     }
