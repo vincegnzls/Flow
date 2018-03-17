@@ -33,6 +33,7 @@ class MusicSheet: UIView {
     private let sharpAccidentalYOffset: CGFloat = -26
     private let flatAccidentalYOffset: CGFloat = -35
     private let naturalAccidentalYOffset: CGFloat = -26
+    private let doubleSharpAccidentalYOffset: CGFloat = -10
 
     private let initialNoteSpace: CGFloat = 10
     private let adjustToXCenter: CGFloat = 1.3
@@ -1316,18 +1317,22 @@ class MusicSheet: UIView {
                     
                     var accidentalImageView:UIImageView?
                     
-                    if accidental == .sharp, let image = UIImage(named: "sharp") {
+                    if accidental == .sharp, let accImage = UIImage(named: "sharp") {
                         accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
                         
-                        accidentalImageView!.image = image
-                    } else if accidental == .flat, let image = UIImage(named: "flat") {
+                        accidentalImageView!.image = accImage
+                    } else if accidental == .flat, let accImage = UIImage(named: "flat") {
                         accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
                         
-                        accidentalImageView!.image = image
-                    } else if accidental == .natural, let image = UIImage(named: "natural") {
+                        accidentalImageView!.image = accImage
+                    } else if accidental == .natural, let accImage = UIImage(named: "natural") {
                         accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
                         
-                        accidentalImageView!.image = image
+                        accidentalImageView!.image = accImage
+                    } else if accidental == .doubleSharp, let accImage = UIImage(named: "double-sharp"), let noteHead = UIImage(named: "quarter-head") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - 8, y: screenCoordinates.y + doubleSharpAccidentalYOffset, width: noteHead.size.height/9.5, height: noteHead.size.height/9.5))
+                        
+                        accidentalImageView!.image = accImage
                     }
                     
                     if let accidentalImageView = accidentalImageView {
@@ -1696,6 +1701,10 @@ class MusicSheet: UIView {
                         accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
                         
                         accidentalImageView!.image = image
+                    } else if accidental == .doubleSharp, let accImage = UIImage(named: "double-sharp"), let noteHead = UIImage(named: "quarter-head") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - 8, y: screenCoordinates.y + doubleSharpAccidentalYOffset, width: noteHead.size.height/9.5, height: noteHead.size.height/9.5))
+                        
+                        accidentalImageView!.image = accImage
                     }
                     
                     if let accidentalImageView = accidentalImageView {
