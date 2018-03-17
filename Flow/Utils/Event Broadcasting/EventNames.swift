@@ -40,4 +40,6 @@ struct EventNames {
 
     static let DISABLE_ACCIDENTALS = "DISABLE_ACCIDENTALS"
     static let ENABLE_ACCIDENTALS = "ENABLE_ACCIDENTALS"
+    
+    static let CHANGES_MADE = "CHANGES_MADE"
 }

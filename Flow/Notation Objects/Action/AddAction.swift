@@ -46,6 +46,8 @@ class AddAction: Action {
             
             measure.addToMeasure(notation)
         }
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.CHANGES_MADE)
     }
     
     func undo() {
