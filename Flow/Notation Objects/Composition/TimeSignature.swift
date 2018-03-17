@@ -34,8 +34,9 @@ struct TimeSignature: Equatable {
             lhs.beats == rhs.beats
     }
     
-    public static func != (lhs: TimeSignature, rhs: TimeSignature) -> Bool {
+    /*public static func != (lhs: TimeSignature, rhs: TimeSignature) -> Bool {
         return lhs.beatType != rhs.beatType &&
             lhs.beats != rhs.beats
-    }
+    }*/
+    
 }

@@ -91,14 +91,12 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
             self.musicSheet.composition = self.composition
 
             if let comp = self.composition {
-                if comp.staffList[0].measures.count > 6 {
-                    var extraMeasuresCount = comp.staffList[0].measures.count - 6
-
-                    extraMeasuresCount /= 2
+                if comp.staffList[0].measures.count > 3 {
+                    let extraMeasuresCount = comp.staffList[0].measures.count - 3
 
                     print("EXTRA MEASURES: \(extraMeasuresCount)")
 
-                    for _ in 0...extraMeasuresCount - 1 {
+                    for _ in 0..<extraMeasuresCount {
                         self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
                     }
                 }
@@ -221,6 +219,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     }
                 } else if let hovered = self.musicSheet.hoveredNotation {
                     //EditAction editAction = EditAction(old: [hovered], new: note)
+                    
+                    GridSystem.instance.recentNotation = note
+                    
                     self.editNotations(old: [hovered], new: [note])
 
                     addGrandStaff()

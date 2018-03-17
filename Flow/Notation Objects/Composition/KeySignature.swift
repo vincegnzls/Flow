@@ -26,6 +26,10 @@ enum KeySignature: Int {
         fSharp  = 6,
         cSharp  = 7
     
+    public static func == (lhs: KeySignature, rhs: KeySignature) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+    
     func toString() -> String {
         switch self {
         case .c:        return "C"

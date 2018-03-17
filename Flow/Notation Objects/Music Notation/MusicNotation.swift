@@ -57,4 +57,29 @@ class MusicNotation: Equatable {
     static func == (lhs: MusicNotation, rhs: MusicNotation) -> Bool {
         return lhs === rhs
     }
+
+    func getBaseNotationSpace() -> CGFloat {
+
+        // TODO: adjust this if dotted or with accidentals
+
+        let noteHeadWidth = UIImage(named: "quarter-head")!.size.width - 3
+
+        switch type {
+            case .whole:
+                return 14 * noteHeadWidth
+            case .half:
+                return 7 * noteHeadWidth
+            case .quarter:
+                return 3.5 * noteHeadWidth
+            case .eighth:
+                return 1.75 * noteHeadWidth
+            case .sixteenth:
+                return 0.875 * noteHeadWidth
+            case .thirtySecond:
+                return 0.4375 * noteHeadWidth
+            case .sixtyFourth:
+                return 0.21875 * noteHeadWidth
+        }
+    }
+
 }
