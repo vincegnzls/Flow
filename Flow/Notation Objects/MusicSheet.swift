@@ -54,10 +54,14 @@ class MusicSheet: UIView {
                     measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
                 }
 
-                EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
+                /*if notation is Note {
+                    EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
+                } else {
+                    EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
+                }*/
             } else {
                 //disable accidentals
-                EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
+                //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             }
         }
     }
@@ -79,16 +83,27 @@ class MusicSheet: UIView {
         didSet {
             print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
             if selectedNotations.count == 0 {
+
                 if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                     if let newMeasure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
                         let params:Parameters = Parameters()
                         params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
 
                         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
+
+
                     }
                 }
+
+                //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             } else {
                 selectedNotes()
+
+                /*if !allRests(notations: selectedNotations) {
+                    EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
+                } else {
+                    EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
+                }*/
             }
         }
     }
@@ -103,6 +118,16 @@ class MusicSheet: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
+    }
+
+    func allRests(notations: [MusicNotation]) -> Bool {
+        for notation in notations {
+            if notation is Note {
+                return false
+            }
+        }
+
+        return true
     }
 
     private func setup() {
@@ -2428,8 +2453,12 @@ class MusicSheet: UIView {
                     let editAction = EditAction(old: [curNote], new: [newNote])
                     
                     editAction.execute()
+
+                    newNotations.append(newNote)
                 }
             }
+
+            self.selectedNotations = newNotations
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
@@ -2438,6 +2467,8 @@ class MusicSheet: UIView {
                 let editAction = EditAction(old: [curNote], new: [newNote])
                 
                 editAction.execute()
+
+                self.hoveredNotation = newNote
             }
         }
         self.updateMeasureDraw()
@@ -2454,8 +2485,12 @@ class MusicSheet: UIView {
                     let editAction = EditAction(old: [curNote], new: [newNote])
                     
                     editAction.execute()
+
+                    newNotations.append(newNote)
                 }
             }
+
+            self.selectedNotations = newNotations
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
@@ -2464,6 +2499,8 @@ class MusicSheet: UIView {
                 let editAction = EditAction(old: [curNote], new: [newNote])
                 
                 editAction.execute()
+
+                self.hoveredNotation = newNote
             }
         }
         self.updateMeasureDraw()
@@ -2480,8 +2517,12 @@ class MusicSheet: UIView {
                     let editAction = EditAction(old: [curNote], new: [newNote])
                     
                     editAction.execute()
+
+                    newNotations.append(newNote)
                 }
             }
+
+            self.selectedNotations = newNotations
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
@@ -2490,6 +2531,8 @@ class MusicSheet: UIView {
                 let editAction = EditAction(old: [curNote], new: [newNote])
                 
                 editAction.execute()
+
+                self.hoveredNotation = newNote
             }
         }
         self.updateMeasureDraw()
@@ -2506,8 +2549,12 @@ class MusicSheet: UIView {
                     let editAction = EditAction(old: [curNote], new: [newNote])
                     
                     editAction.execute()
+
+                    newNotations.append(newNote)
                 }
             }
+
+            self.selectedNotations = newNotations
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
@@ -2516,6 +2563,8 @@ class MusicSheet: UIView {
                 let editAction = EditAction(old: [curNote], new: [newNote])
 
                 editAction.execute()
+
+                self.hoveredNotation = newNote
             }
         }
         self.updateMeasureDraw()
