@@ -15,6 +15,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var menuBar: MenuBar!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var musicSheetHeight: NSLayoutConstraint!
+    @IBOutlet weak var tempoBtn: UIView!
+    @IBOutlet weak var tempoSliderView: UIView!
+    @IBOutlet weak var tempoLabel: UILabel!
+    @IBOutlet weak var tempoSlider: UISlider!
     
     var composition: Composition?
 
@@ -61,8 +65,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         EventBroadcaster.instance.removeObservers(event: EventNames.NOTATION_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.NOTATION_KEY_PRESSED,
                 observer: Observer(id: "EditorViewController.onNoteKeyPressed", function: self.onNoteKeyPressed))
+        EventBroadcaster.instance.removeObservers(event: EventNames.ADD_GRAND_STAFF)
+        EventBroadcaster.instance.addObserver(event: EventNames.ADD_GRAND_STAFF,
+                observer: Observer(id: "EditorViewController.addGrandStaff", function: self.addGrandStaff))
+        EventBroadcaster.instance.removeObservers(event: EventNames.DELETE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
                                               observer: Observer(id: "EditorViewController.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
+        
     }
 
     override func viewDidLoad() {
@@ -96,6 +105,11 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
             menuBar.compositionInfo = composition.compositionInfo
         }
         // Do any additional setup after loading the view, typically from a nib.
+        
+        initTempo()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapTempo))
+        self.tempoBtn.addGestureRecognizer(tapGesture)
     }
     
     override func viewWillLayoutSubviews() {
@@ -108,7 +122,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         let heightScale = size.height / musicSheet.bounds.height
         let minScale = min(widthScale, heightScale)
         
-        scrollView.minimumZoomScale = 1
+        scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 2
         scrollView.zoomScale = minScale
     }
@@ -124,6 +138,39 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
             FileHandler.instance.saveFile(composition: composition)
         }
         
+    }
+    
+    @IBAction func tempoSliderChange(_ sender: UISlider) {
+        self.tempoLabel.text = "= " + String(Int(sender.value))
+        
+        if let comp = self.composition {
+            comp.tempo = Double(sender.value)
+        }
+    }
+    
+    @objc func tapTempo() {
+        if self.tempoSliderView.isHidden {
+            self.tempoSliderView.isHidden = false
+            UIView.animate(withDuration: 0.1, animations: {
+                self.tempoSliderView.alpha = 0.8
+            }, completion:  nil)
+        } else {
+            UIView.animate(withDuration: 0.1, animations: {
+                self.tempoSliderView.alpha = 0
+            }, completion:  {
+                (value: Bool) in
+                self.tempoSliderView.isHidden = true
+            })
+        }
+    }
+    
+    func initTempo() {
+        
+        if let comp = self.composition {
+            self.tempoSliderView.isHidden = true
+            self.tempoSlider.setValue(Float(comp.tempo), animated: false)
+            self.tempoLabel.text = "= " + String(Int(comp.tempo))
+        }
     }
 
     func onNoteKeyPressed (params:Parameters) {
@@ -166,7 +213,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                     if let note = note as? Note {
-                        SoundManager.instance.playNote(note: note)
+                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
                 } else if let hovered = self.musicSheet.hoveredNotation {
                     //EditAction editAction = EditAction(old: [hovered], new: note)
@@ -174,18 +221,11 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     GridSystem.instance.recentNotation = note
                     
                     self.editNotations(old: [hovered], new: [note])
-                    if let currentComp = self.musicSheet.composition {
-                        if currentComp.isLastMeasureFull() {
-                            print("PREV HEIGHT \(self.musicSheetHeight.constant)")
-                            self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
-                            print("UPDATED HEIGHT \(self.musicSheetHeight.constant)")
-                            print("LAST MEASURE FULL")
-                            currentComp.addGrandStaff()
-                        }
-                    }
+
+                    addGrandStaff()
                     
                     if let note = note as? Note {
-                        SoundManager.instance.playNote(note: note)
+                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 } else {
@@ -193,22 +233,14 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     let addAction = AddAction(measure: measure, notation: note)
                     
                     if let note = note as? Note {
-                        SoundManager.instance.playNote(note: note)
+                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
                     
                     GridSystem.instance.recentNotation = note
 
                     addAction.execute()
 
-                    if let currentComp = self.musicSheet.composition {
-                        if currentComp.isLastMeasureFull() {
-                            print("PREV HEIGHT \(self.musicSheetHeight.constant)")
-                            self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
-                            print("UPDATED HEIGHT \(self.musicSheetHeight.constant)")
-                            print("LAST MEASURE FULL")
-                            currentComp.addGrandStaff()
-                        }
-                    }
+                    addGrandStaff()
                     
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
@@ -262,9 +294,28 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         
         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }
-    
+
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        if musicSheet.frame.width <= scrollView.frame.width {
+            let shiftWidth = scrollView.frame.width/2.0 - scrollView.contentSize.width/2.0
+            scrollView.contentInset.left = shiftWidth
+        } else { scrollView.contentInset.top = 0 }
+    }
+
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.musicSheet
+    }
+
+    func addGrandStaff() {
+        if let currentComp = self.musicSheet.composition {
+            if currentComp.isLastMeasureFull() {
+                print("PREV HEIGHT \(self.musicSheetHeight.constant)")
+                self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
+                print("UPDATED HEIGHT \(self.musicSheetHeight.constant)")
+                print("LAST MEASURE FULL")
+                currentComp.addGrandStaff()
+            }
+        }
     }
 }
 

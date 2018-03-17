@@ -42,8 +42,8 @@ class NotationControlsView: DraggableView {
 
     private func setup() {
         // Set up border
-        self.layer.borderWidth = 1.5
-        self.layer.borderColor = UIColor.black.cgColor
+        //self.layer.borderWidth = 1.5
+        //self.layer.borderColor = UIColor.black.cgColor
         //self.layer.cornerRadius = 10
         
         // Set up shadow
@@ -56,6 +56,12 @@ class NotationControlsView: DraggableView {
                                               observer: Observer(id: "NotationControls.updateInvalidNotes", function: self.updateInvalidNotes))
         EventBroadcaster.instance.addObserver(event: EventNames.MEASURE_SWITCHED,
                                               observer: Observer(id: "NotationControls.measureSwitched", function: self.measureSwitched))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
     }
     
     @IBAction func wholeNote(_ sender: UIButton) {
@@ -185,6 +191,17 @@ class NotationControlsView: DraggableView {
             } else {
                 toggleNoteButtons(note: note, isEnabled: true)
             }
+        }
+    }
+
+    func hideOnPlay() {
+
+        print("wtf")
+
+        if !SoundManager.instance.isPlaying {
+            self.isHidden = true
+        } else {
+            self.isHidden = false
         }
     }
 

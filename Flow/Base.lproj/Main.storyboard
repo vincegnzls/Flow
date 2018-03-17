@@ -11,6 +11,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="TimesNewRomanBold.ttf">
+            <string>TimesNewRomanPS-BoldMT</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="154-Sg-OxG">
@@ -323,12 +328,12 @@ Tap '+' to create a new composition.</string>
                                     </button>
                                 </subviews>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLW-3Y-Rf2" customClass="NotationControlsView" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="450" y="545" width="344" height="135"/>
+                            <view alpha="0.94999999999999996" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLW-3Y-Rf2" customClass="NotationControlsView" customModule="Flow" customModuleProvider="target">
+                                <rect key="frame" x="450" y="545" width="400" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yvv-DJ-7yL" userLabel="NotesView">
-                                        <rect key="frame" x="0.0" y="0.0" width="344" height="135"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="344" height="99"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XXc-Jk-4Ze" userLabel="Whole">
@@ -611,22 +616,21 @@ Tap '+' to create a new composition.</string>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qos-Jd-pgr">
-                                                <rect key="frame" x="0.0" y="98" width="344" height="37"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Delete"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                        <integer key="value" value="1"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="deleteNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="zG3-BC-F6e"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qos-Jd-pgr">
+                                        <rect key="frame" x="350" y="0.0" width="50" height="99"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="1" green="0.1972741642609912" blue="0.14941221948879158" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="15"/>
+                                        <state key="normal" title="DEL">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="deleteNote:" destination="pLW-3Y-Rf2" eventType="touchUpInside" id="zG3-BC-F6e"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
@@ -742,12 +746,56 @@ Tap '+' to create a new composition.</string>
                                             <action selector="touchPlay:" destination="VHe-OH-6BV" eventType="touchUpInside" id="kJY-BR-Y3P"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yi3-eV-UmB" userLabel="Tempo">
+                                        <rect key="frame" x="871" y="12" width="92" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="= 120" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wPq-zV-MYY">
+                                                <rect key="frame" x="31" y="0.0" width="71" height="37"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="TimesNewRomanPS-BoldMT" family="Times New Roman" pointSize="20"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="quarter-note-icon" translatesAutoresizingMaskIntoConstraints="NO" id="jId-Vn-oos">
+                                                <rect key="frame" x="-12" y="-41" width="55" height="117"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" button="YES"/>
+                                        </accessibility>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="compositionTitleButton" destination="atk-1G-Xla" id="HjF-pT-jZ9"/>
+                                    <outlet property="dSharpBtn" destination="NBh-oB-XfU" id="Ucn-7H-fiF"/>
+                                    <outlet property="flatBtn" destination="HO1-ae-mut" id="m9Q-1U-792"/>
+                                    <outlet property="naturalizeBtn" destination="uE4-6g-BJV" id="ruX-st-90t"/>
                                     <outlet property="playBtn" destination="Ycl-gp-KaZ" id="PfC-LS-EAk"/>
+                                    <outlet property="sharpBtn" destination="ofh-iv-b6S" id="u0B-2T-jm2"/>
                                 </connections>
+                            </view>
+                            <view alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vvK-lH-hA9" userLabel="Tempo Slider">
+                                <rect key="frame" x="815" y="117" width="174" height="53"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="30" maxValue="200" translatesAutoresizingMaskIntoConstraints="NO" id="Q0u-RV-0u3">
+                                        <rect key="frame" x="28" y="12" width="118" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="tempoSliderChange:" destination="ldS-Qo-c4z" eventType="valueChanged" id="qf9-MJ-PKV"/>
+                                        </connections>
+                                    </slider>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -782,6 +830,10 @@ Tap '+' to create a new composition.</string>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
                         <outlet property="musicSheetHeight" destination="xo5-Y1-ev2" id="qsl-wN-zx1"/>
                         <outlet property="scrollView" destination="9Me-FI-wrK" id="TfR-zs-wl6"/>
+                        <outlet property="tempoBtn" destination="yi3-eV-UmB" id="ZZm-tD-4CE"/>
+                        <outlet property="tempoLabel" destination="wPq-zV-MYY" id="yqa-AO-XI0"/>
+                        <outlet property="tempoSlider" destination="Q0u-RV-0u3" id="RWk-I1-jfO"/>
+                        <outlet property="tempoSliderView" destination="vvK-lH-hA9" id="CZ6-M1-wif"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2W-99-FM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -838,7 +890,7 @@ Tap '+' to create a new composition.</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Number of Beats:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4gt-QU-C0q">
-                                            <rect key="frame" x="111" y="90" width="203" height="21"/>
+                                            <rect key="frame" x="111" y="90" width="202" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -865,15 +917,15 @@ Tap '+' to create a new composition.</string>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="0rU-pP-1Nh">
-                                            <rect key="frame" x="58" y="260" width="317" height="30"/>
+                                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2" minValue="1" maxValue="32" translatesAutoresizingMaskIntoConstraints="NO" id="0rU-pP-1Nh">
+                                            <rect key="frame" x="57" y="260" width="318" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <connections>
                                                 <action selector="onChangeBeatDuration:" destination="cUa-Ia-SFW" eventType="valueChanged" id="1gE-v6-CEa"/>
                                             </connections>
                                         </slider>
                                         <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="7Ks-c6-edb">
-                                            <rect key="frame" x="58" y="156" width="317" height="30"/>
+                                            <rect key="frame" x="57" y="156" width="318" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <connections>
                                                 <action selector="onChangeNBeats:" destination="cUa-Ia-SFW" eventType="valueChanged" id="Mq6-yV-s3B"/>
@@ -887,7 +939,7 @@ Tap '+' to create a new composition.</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xol-jn-CnT" customClass="KeySignaturePicker" customModule="Flow" customModuleProvider="target">
-                                            <rect key="frame" x="521" y="30" width="100" height="290"/>
+                                            <rect key="frame" x="520" y="30" width="100" height="290"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         </pickerView>
                                     </subviews>
@@ -911,8 +963,10 @@ Tap '+' to create a new composition.</string>
                     </visualEffectView>
                     <connections>
                         <outlet property="beatDurationLabel" destination="YxG-qy-psA" id="Pkj-7G-kKS"/>
+                        <outlet property="beatDurationSlider" destination="0rU-pP-1Nh" id="4IV-HB-EgV"/>
                         <outlet property="keySignaturePicker" destination="Xol-jn-CnT" id="sdd-y3-mBP"/>
                         <outlet property="nBeatsLabel" destination="cMO-fH-QBP" id="RLI-Nk-x5B"/>
+                        <outlet property="nBeatsSlider" destination="7Ks-c6-edb" id="c1K-6X-9E7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kZZ-rP-7o3" userLabel="First Responder" sceneMemberID="firstResponder"/>

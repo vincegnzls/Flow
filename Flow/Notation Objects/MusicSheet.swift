@@ -53,17 +53,22 @@ class MusicSheet: UIView {
                 if let measure = notation.measure {
                     measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
                 }
+
+                EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
+            } else {
+                //disable accidentals
+                EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             }
         }
     }
-    
+
     private var curScale: CGFloat = 1.0
     var originalCenter:CGPoint?
 
     var isZooming = false
 
     var playBackTimer = Timer()
-    
+
     private var endX: CGFloat {
         return bounds.width - lefRightPadding
     }
@@ -135,7 +140,7 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.PASTE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.PASTE_KEY_PRESSED, observer: Observer(id: "MusicSheet.paste", function: self.paste))
 
-        EventBroadcaster.instance.removeObservers(event: EventNames.PLAY_KEY_PRESSED)
+        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
         EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
@@ -159,6 +164,9 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.DSHARP_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.DSHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.dsharp", function: self.dsharp))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
+        EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
 
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -2354,19 +2362,38 @@ class MusicSheet: UIView {
         if !SoundManager.instance.isPlaying {
             if let composition = self.composition {
                 SoundManager.instance.musicPlayback(composition)
+
+                if #available(iOS 10.0, *) {
+                    playBackTimer = Timer.scheduledTimer(withTimeInterval: 60 / SoundManager.instance.tempo * 0.0625, repeats: true) { _ in
+                        self.updateTime()
+                    }
+                } else {
+                    playBackTimer = Timer.scheduledTimer(timeInterval: 60 / SoundManager.instance.tempo * 0.0625,
+                                         target: self,
+                                         selector: #selector(self.updateTime),
+                                         userInfo: nil,
+                                         repeats: true)
+                }
+
+                RunLoop.main.add(playBackTimer, forMode: RunLoopMode.commonModes)
+
+                self.isUserInteractionEnabled = false
             }
         } else {
             SoundManager.instance.stopPlaying()
+            playBackTimer.invalidate()
+            self.isUserInteractionEnabled = true
         }
 
-        if #available(iOS 10.0, *) {
-            playBackTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { _ in
-                /*xCursorNewLocation = CGPoint(x: sheetCursor.)
+    }
 
-                moveCursorX(location: sheetCursor.curXCursorLocation)*/
-            }
-        }
+    func enableInteraction() {
+        self.isUserInteractionEnabled = true
+    }
 
+    @objc
+    func updateTime() {
+        //TODO: IMPLEMENT PLAYBACK FRONTEND
     }
 
     public func paste() {
@@ -2385,6 +2412,8 @@ class MusicSheet: UIView {
             let firstNotation = self.selectedNotations[0]
             if let startIndex = startMeasure.notationObjects.index(of: firstNotation) {
                 Clipboard.instance.paste(measures: measures, at: startIndex)
+
+                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
             }
 
         } else if let selectedMeasure = GridSystem.instance.getCurrentMeasure() {
@@ -2400,9 +2429,13 @@ class MusicSheet: UIView {
             if let hovered = self.hoveredNotation {
                 if let startIndex = startMeasure.notationObjects.index(of: hovered) {
                     Clipboard.instance.paste(measures: measures, at: startIndex)
+
+                    EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
                 }
             } else {
                 Clipboard.instance.paste(measures: measures, at: startMeasure.notationObjects.count)
+
+                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
             }
         }
 
@@ -2490,12 +2523,26 @@ class MusicSheet: UIView {
             for note in self.selectedNotations {
                 if note is Note {
                     let curNote = note as! Note
-                    curNote.accidental = .natural
+
+                    let newNote = curNote.duplicate()
+                    newNote.accidental = .natural
+
+                    let editAction = EditAction(old: [curNote], new: [newNote])
+
+                    editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            let curNote = hovered as! Note
-            curNote.accidental = .natural
+            if hovered is Note {
+                let curNote = hovered as! Note
+
+                let newNote = curNote.duplicate()
+                newNote.accidental = .natural
+
+                let editAction = EditAction(old: [curNote], new: [newNote])
+
+                editAction.execute()
+            }
         }
     }
 
@@ -2504,12 +2551,26 @@ class MusicSheet: UIView {
             for note in self.selectedNotations {
                 if note is Note {
                     let curNote = note as! Note
-                    curNote.accidental = .flat
+
+                    let newNote = curNote.duplicate()
+                    newNote.accidental = .flat
+
+                    let editAction = EditAction(old: [curNote], new: [newNote])
+
+                    editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            let curNote = hovered as! Note
-            curNote.accidental = .flat
+            if hovered is Note {
+                let curNote = hovered as! Note
+
+                let newNote = curNote.duplicate()
+                newNote.accidental = .flat
+
+                let editAction = EditAction(old: [curNote], new: [newNote])
+
+                editAction.execute()
+            }
         }
     }
 
@@ -2518,12 +2579,26 @@ class MusicSheet: UIView {
             for note in self.selectedNotations {
                 if note is Note {
                     let curNote = note as! Note
-                    curNote.accidental = .sharp
+
+                    let newNote = curNote.duplicate()
+                    newNote.accidental = .sharp
+
+                    let editAction = EditAction(old: [curNote], new: [newNote])
+
+                    editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            let curNote = hovered as! Note
-            curNote.accidental = .sharp
+            if hovered is Note {
+                let curNote = hovered as! Note
+
+                let newNote = curNote.duplicate()
+                newNote.accidental = .sharp
+
+                let editAction = EditAction(old: [curNote], new: [newNote])
+
+                editAction.execute()
+            }
         }
     }
 
@@ -2532,12 +2607,26 @@ class MusicSheet: UIView {
             for note in self.selectedNotations {
                 if note is Note {
                     let curNote = note as! Note
-                    curNote.accidental = .doubleSharp
+
+                    let newNote = curNote.duplicate()
+                    newNote.accidental = .doubleSharp
+
+                    let editAction = EditAction(old: [curNote], new: [newNote])
+
+                    editAction.execute()
                 }
             }
         } else if let hovered = self.hoveredNotation {
-            let curNote = hovered as! Note
-            curNote.accidental = .doubleSharp
+            if hovered is Note {
+                let curNote = hovered as! Note
+
+                let newNote = curNote.duplicate()
+                newNote.accidental = .doubleSharp
+
+                let editAction = EditAction(old: [curNote], new: [newNote])
+
+                editAction.execute()
+            }
         }
     }
 

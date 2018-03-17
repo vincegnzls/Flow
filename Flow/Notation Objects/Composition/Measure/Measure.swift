@@ -12,7 +12,7 @@ class Measure: Hashable {
 
     var keySignature: KeySignature {
         didSet {
-            updateKeySignature()
+            //updateKeySignature()
         }
     }
     var timeSignature: TimeSignature
@@ -25,7 +25,7 @@ class Measure: Hashable {
             print("INVALID NOTES: \(getInvalidNotes())")
             updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls
             updateGroups()
-            updateKeySignature()
+            //updateKeySignature()
         }
     }
     var bounds: Bounds
@@ -65,7 +65,7 @@ class Measure: Hashable {
             }
         }
 
-        updateKeySignature()
+        //updateKeySignature()
     }
     
     public var hashValue: Int {
@@ -93,21 +93,21 @@ class Measure: Hashable {
         return lhs !== rhs
     }
 
-    public func addToMeasure(_ notation: MusicNotation) {
+    public func addToMeasure(_ notation: MusicNotation) -> Bool {
         if(isAddNoteValid(musicNotation: notation.type)) {
             print("ADD NOTE VALID")
 
             notation.measure = self
             notationObjects.append(notation)
+            return  true
             //self.fillWithRests()
         } else {
-
             print("INVALID ADD NOTE")
-
+            return false
         }
     }
     
-    public func addToMeasure(_ notation: MusicNotation, at index: Int) {
+    public func addToMeasure(_ notation: MusicNotation, at index: Int) -> Bool {
         if(isAddNoteValid(musicNotation: notation.type)) {
             print("ADD NOTE VALID")
             
@@ -123,8 +123,10 @@ class Measure: Hashable {
             for notation in notationObjects {
                 print(notation.type.toString())
             }
+
+            return  true
         } else {
-            
+            return false
             print("INVALID ADD NOTE")
             
         }
@@ -212,7 +214,7 @@ class Measure: Hashable {
 
     public func containsRest() -> Bool {
         for note in notationObjects {
-            if let curNote = note as? Rest {
+            if let _ = note as? Rest {
                 return true
             }
         }
@@ -220,12 +222,22 @@ class Measure: Hashable {
         return false
     }
 
-
     func fillWithRests() {
-        while getTotalBeats() < timeSignature.getMaxBeatValue() {
+
+        var invalidCount = 0
+
+        var stop = false
+
+        while getTotalBeats() < timeSignature.getMaxBeatValue() && !stop {
             for rest in RestNoteType.types {
                 let curRest = Rest(type: rest)
-                self.addToMeasure(curRest)
+                if !self.addToMeasure(curRest) {
+                    invalidCount += 1
+                }
+            }
+
+            if invalidCount > RestNoteType.types.count {
+                stop = true
             }
         }
     }
@@ -318,7 +330,7 @@ class Measure: Hashable {
             case .c:
                 for notation in self.notationObjects {
                     if let note = notation as? Note {
-                        if let accidental = note.accidental {
+                        if let _ = note.accidental {
                             note.accidental = nil
                         }
                     }

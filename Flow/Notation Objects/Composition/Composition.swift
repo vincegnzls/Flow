@@ -12,6 +12,7 @@ class Composition {
     // Holds information about the composition
     var compositionInfo: CompositionInfo
     var staffList: [Staff]
+    public var tempo: Double
 
     var isEnsembleStaff: Bool {
         return self.staffList.count > 1
@@ -42,6 +43,7 @@ class Composition {
     init(compositionInfo: CompositionInfo = CompositionInfo(), staffList: [Staff] = []) {
         self.compositionInfo = compositionInfo
         self.staffList = staffList
+        self.tempo = 120
     }
     
     func addStaff(_ staff: Staff) {
@@ -76,7 +78,9 @@ class Composition {
     func isLastMeasureFull() -> Bool {
         for staff in staffList {
             if staff.measures[staff.measures.count - 1].timeSignature.getMaxBeatValue() == staff.measures[staff.measures.count - 1].getTotalBeats() {
-                return true
+                if !staff.measures[staff.measures.count - 1].containsRest() {
+                    return true
+                }
             }
         }
 
