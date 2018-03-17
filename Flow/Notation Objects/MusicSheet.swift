@@ -28,6 +28,11 @@ class MusicSheet: UIView {
     private let restYOffset: CGFloat = -0.5
     private let restWidthAlter: CGFloat = 1.7
     private let restHeightAlter: CGFloat = 1.7
+    
+    private let accidentalXOffset: CGFloat = -12
+    private let sharpAccidentalYOffset: CGFloat = -26
+    private let flatAccidentalYOffset: CGFloat = -35
+    private let naturalAccidentalYOffset: CGFloat = -26
 
     private let initialNoteSpace: CGFloat = 10
     private let adjustToXCenter: CGFloat = 1.3
@@ -1299,8 +1304,6 @@ class MusicSheet: UIView {
 
     public func addMusicNotation(notation: MusicNotation) {
 
-        //drawBeam(notations: self.composition!.staffList[0].measures[0].notationObjects)
-
         var notationImageView: UIImageView?
 
         if let note = notation as? Note {
@@ -1308,6 +1311,30 @@ class MusicSheet: UIView {
             if let screenCoordinates = note.screenCoordinates, let image = note.image {
                 
                 notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
+                
+                if let accidental = note.accidental {
+                    
+                    var accidentalImageView:UIImageView?
+                    
+                    if accidental == .sharp, let image = UIImage(named: "sharp") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .flat, let image = UIImage(named: "flat") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .natural, let image = UIImage(named: "natural") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    }
+                    
+                    if let accidentalImageView = accidentalImageView {
+                        self.addSubview(accidentalImageView)
+                    }
+                    
+                }
                 
             }
             
@@ -1325,8 +1352,7 @@ class MusicSheet: UIView {
 
             self.addSubview(notationImageView)
         }
-
-        //self.assembleNoteForBeaming(notation: notation, stemHeight: 100)
+        
     }
 
     func onArrowKeyPressed(params: Parameters) {
@@ -1646,14 +1672,61 @@ class MusicSheet: UIView {
     }
 
     func highlightNotation(_ notation: MusicNotation) {
-        let noteImageView = UIImageView(frame: CGRect(x: ((notation.screenCoordinates)?.x)! + noteXOffset, y: ((notation.screenCoordinates)?.y)! + noteYOffset, width: (notation.image?.size.width)! + noteWidthAlter, height: (notation.image?.size.height)! + noteHeightAlter))
-
-        noteImageView.image = notation.image
-        noteImageView.image = noteImageView.image!.withRenderingMode(.alwaysTemplate)
-        noteImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-        noteImageView.tag = HIGHLIGHTED_NOTES_TAG
-
-        self.addSubview(noteImageView)
+        var notationImageView: UIImageView?
+        
+        if let note = notation as? Note {
+            
+            if let screenCoordinates = note.screenCoordinates, let image = note.image {
+                
+                notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
+                
+                if let accidental = note.accidental {
+                    
+                    var accidentalImageView:UIImageView?
+                    
+                    if accidental == .sharp, let image = UIImage(named: "sharp") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .flat, let image = UIImage(named: "flat") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .natural, let image = UIImage(named: "natural") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    }
+                    
+                    if let accidentalImageView = accidentalImageView {
+                        accidentalImageView.image = accidentalImageView.image!.withRenderingMode(.alwaysTemplate)
+                        accidentalImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                        accidentalImageView.tag = HIGHLIGHTED_NOTES_TAG
+                        
+                        self.addSubview(accidentalImageView)
+                    }
+                    
+                }
+                
+            }
+            
+        } else if let rest = notation as? Rest {
+            
+            if let screenCoordinates = rest.screenCoordinates, let image = rest.image {
+                
+                notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                
+            }
+        }
+        
+        if let notationImageView = notationImageView {
+            notationImageView.image = notation.image
+            notationImageView.image = notationImageView.image!.withRenderingMode(.alwaysTemplate)
+            notationImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+            notationImageView.tag = HIGHLIGHTED_NOTES_TAG
+            
+            self.addSubview(notationImageView)
+        }
     }
 
     public func selectedNotes() {
