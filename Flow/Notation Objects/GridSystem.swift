@@ -26,7 +26,7 @@ class GridSystem {
                         if oldMeasure !== newMeasure {
                             
                             oldMeasure.fillWithRests()
-                            //EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
 
                             let params:Parameters = Parameters()
                             params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)

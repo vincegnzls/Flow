@@ -199,12 +199,12 @@ class MusicSheet: UIView {
 
                 if let measure = GridSystem.instance.getCurrentMeasure() {
 
-                    if measure.isFull {
+                    /*if measure.isFull {
                         if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                             self.moveCursorsToNextMeasure(measurePoints: measureCoord)
                             return
                         }
-                    }
+                    }*/
 
                     if measure.notationObjects.contains(recentNotation) {
                         var coordForCurrentPoint:CGPoint?
@@ -960,14 +960,28 @@ class MusicSheet: UIView {
         var gAlreadyAdded = false
         var fAlreadyAdded = false
 
-        var notesToBePrinted = [MusicNotation]()
+        var grpdNotesToBePrinted = [[MusicNotation]]()
 
-        let noteSpace: CGFloat = 50
-        var currentStartX: CGFloat = startX + initialNoteSpace + leftInnerPadding
+        /*var max = 0
+
+        if measures[0].notationObjects.count >= measures[1].notationObjects.count {
+            max = measures[0].notationObjects.count
+        } else {
+            max = measures[1].notationObjects.count
+        }
+
+        var noteSpace = grandStaffMeasurePoints[0].width / CGFloat(measures[0].timeSignature.beats) // not still sure about this
+
+        if measures[0].notationObjects.count < measures[0].timeSignature.beats {
+            // TODO: LESSEN SPACE HERE
+        } else if max > measures[0].timeSignature.beats {
+            noteSpace = grandStaffMeasurePoints[0].width / CGFloat(max+1)
+        }*/
+
         while !(gReachedEnd && fReachedEnd) {
             gAlreadyAdded = false
             fAlreadyAdded = false
-            notesToBePrinted.removeAll()
+            var notesToBePrinted = [MusicNotation]()
             
             if gIndex == gNotations.count {
                 gReachedEnd = true
@@ -1029,7 +1043,21 @@ class MusicSheet: UIView {
                     gIndex += 1
                 }
             }
-            
+
+            grpdNotesToBePrinted.append(notesToBePrinted)
+
+        }
+
+        var noteSpace: CGFloat = 0
+
+        if !measures[0].isFull || !measures[1].isFull {
+            noteSpace = (grandStaffMeasurePoints[0].width - (CGFloat(grpdNotesToBePrinted.count * 7))) / CGFloat(grpdNotesToBePrinted.count + 1) // not still sure about this
+        } else {
+            noteSpace = (grandStaffMeasurePoints[0].width - (CGFloat(grpdNotesToBePrinted.count * 7))) / CGFloat(grpdNotesToBePrinted.count) // not still sure about this
+        }
+
+        var currentStartX: CGFloat = startX + initialNoteSpace + leftInnerPadding
+        for notesToBePrinted in grpdNotesToBePrinted {
             for note in notesToBePrinted {
                 if let measure = note.measure {
                     if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
@@ -1058,9 +1086,7 @@ class MusicSheet: UIView {
                             GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measurePoints,
                                     snapPoints: snapPointsRelativeToNotation)
 
-                            if currentStartX == startX + initialNoteSpace + leftInnerPadding {
-                                GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measurePoints, relativeX: currentStartX)
-                            }
+                            GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measurePoints, relativeX: currentStartX)
 
                             // assign snap point to added note
                             if note is Note {
