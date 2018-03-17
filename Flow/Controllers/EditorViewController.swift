@@ -213,7 +213,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                     if let note = note as? Note {
-                        SoundManager.instance.playNote(note: note)
+                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
                 } else if let hovered = self.musicSheet.hoveredNotation {
                     //EditAction editAction = EditAction(old: [hovered], new: note)
@@ -222,7 +222,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     addGrandStaff()
                     
                     if let note = note as? Note {
-                        SoundManager.instance.playNote(note: note)
+                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 } else {
@@ -230,7 +230,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     let addAction = AddAction(measure: measure, notation: note)
                     
                     if let note = note as? Note {
-                        SoundManager.instance.playNote(note: note)
+                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
                     
                     GridSystem.instance.recentNotation = note
