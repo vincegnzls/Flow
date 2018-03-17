@@ -42,6 +42,8 @@ class MusicSheet: UIView {
     private var gMeasurePoints = [GridSystem.MeasurePoints]()
     private var fMeasurePoints = [GridSystem.MeasurePoints]()
 
+    private var curLayers = [CALayer]()
+
     private let highlightRect = HighlightRect()
     private let sheetCursor = SheetCursor()
     private let cursorXOffsetY:CGFloat = -95 // distance of starting y from measure
@@ -204,6 +206,12 @@ class MusicSheet: UIView {
     }
 
     override func draw(_ rect: CGRect) {
+        for beamLine in self.curLayers {
+            beamLine.removeFromSuperlayer()
+        }
+
+        self.curLayers.removeAll()
+
         if let composition = composition {
             var measureSplices = [[Measure]]()
 
@@ -919,6 +927,10 @@ class MusicSheet: UIView {
     private func drawParallelMeasures(measures: [Measure], startX: CGFloat, endX: CGFloat, startYs: [CGFloat], staffSpace: CGFloat,
                                       leftInnerPadding: CGFloat, rightInnerPadding:CGFloat) -> [GridSystem.MeasurePoints] {
 
+        let staffLine = CAShapeLayer()
+        staffLine.strokeColor = UIColor.black.cgColor
+        staffLine.lineWidth = 2
+
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
         bezierPath.lineWidth = 2
@@ -937,6 +949,11 @@ class MusicSheet: UIView {
                 bezierPath.addLine(to: CGPoint(x: endX, y: startY - curSpace))
                 bezierPath.stroke()
 
+                staffLine.path = bezierPath.cgPath
+
+                self.layer.addSublayer(staffLine)
+                self.curLayers.append(staffLine)
+
                 curSpace += lineSpace
             }
 
@@ -946,9 +963,19 @@ class MusicSheet: UIView {
             bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
             bezierPath.stroke()
 
+            staffLine.path = bezierPath.cgPath
+
+            self.layer.addSublayer(staffLine)
+            self.curLayers.append(staffLine)
+
             bezierPath.move(to: CGPoint(x: endX, y: startY - curSpace))
             bezierPath.addLine(to: CGPoint(x: endX, y: startY)) // change if staff space changes
             bezierPath.stroke()
+
+            staffLine.path = bezierPath.cgPath
+
+            self.layer.addSublayer(staffLine)
+            self.curLayers.append(staffLine)
         }
 
         var grandStaffMeasurePoints = [GridSystem.MeasurePoints]()
@@ -1304,6 +1331,7 @@ class MusicSheet: UIView {
     private func drawStaffConnection(startX:CGFloat, startY:CGFloat, height:CGFloat) {
         let staffConnection = CAShapeLayer()
         let bezierPath = UIBezierPath()
+
         UIColor.black.setStroke()
         bezierPath.lineWidth = 2
 
@@ -1312,6 +1340,13 @@ class MusicSheet: UIView {
             bezierPath.addLine(to: CGPoint(x: x, y: startY + staffSpace)) // change if staff space changes
             bezierPath.stroke()
         }
+
+        staffConnection.path = bezierPath.cgPath
+        staffConnection.strokeColor = UIColor.black.cgColor
+        staffConnection.lineWidth = 2
+
+        self.layer.addSublayer(staffConnection)
+        self.curLayers.append(staffConnection)
 
         let brace = UIImage(named:"brace-185")
         let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: staffSpace + height))
@@ -1871,11 +1906,20 @@ class MusicSheet: UIView {
 
     public func drawLine(start: CGPoint, end: CGPoint, thickness: CGFloat) -> UIBezierPath {
         let path = UIBezierPath()
+        let line = CAShapeLayer()
+
+        line.strokeColor = UIColor.black.cgColor
+        line.lineWidth = thickness
 
         path.lineWidth = thickness
         path.move(to: start)
         path.addLine(to: end)
         path.stroke()
+
+        line.path = path.cgPath
+
+        self.layer.addSublayer(line)
+        self.curLayers.append(line)
 
         return path
     }
