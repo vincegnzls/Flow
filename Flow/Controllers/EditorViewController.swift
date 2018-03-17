@@ -170,6 +170,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                     }
                 } else if let hovered = self.musicSheet.hoveredNotation {
                     //EditAction editAction = EditAction(old: [hovered], new: note)
+                    
+                    GridSystem.instance.recentNotation = note
+                    
                     self.editNotations(old: [hovered], new: [note])
                     if let currentComp = self.musicSheet.composition {
                         if currentComp.isLastMeasureFull() {
