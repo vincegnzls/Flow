@@ -51,7 +51,7 @@ class Composition {
     }
 
     func addGrandStaff() {
-        for _  in 1...2 {
+        //for _  in 1...2 {
 
             for staff in staffList {
 
@@ -60,7 +60,7 @@ class Composition {
                 staff.addMeasure(Measure(keySignature: lastMeasure.keySignature, timeSignature: lastMeasure.timeSignature, clef: lastMeasure.clef, loading: false))
 
             }
-        }
+        //}
     }
     
     func getMeasureOfNote(note: MusicNotation) -> Measure? {

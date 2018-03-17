@@ -949,6 +949,16 @@ class MusicSheet: UIView {
                 fMeasurePoints.append(measureCoord)
             }
             measureCoords.append(measureCoord)
+            
+            if GridSystem.instance.selectedMeasureCoord == nil {
+                GridSystem.instance.selectedMeasureCoord = measureCoord
+                
+                // the middle snap point
+                GridSystem.instance.selectedCoord = snapPoints[11]
+                
+                moveCursorX(location: CGPoint(x: snapPoints[0].x, y: measureCoord.lowerRightPoint.y + cursorXOffsetY))
+                moveCursorY(location: snapPoints[11])
+            }
 
         }
 
@@ -1565,6 +1575,8 @@ class MusicSheet: UIView {
         }
 
         measureCoords.removeAll()
+        gMeasurePoints.removeAll()
+        fMeasurePoints.removeAll()
         GridSystem.instance.clearNotationSnapPointMap()
 
         self.setNeedsDisplay()
@@ -1698,7 +1710,7 @@ class MusicSheet: UIView {
             if let clefMeasurePoints = clefMeasurePoints {
                 if let index = clefMeasurePoints.index(of: currentMeasurePoints) {
 
-                    if index + 1 < clefMeasurePoints.count {
+                    if (index + 1) < clefMeasurePoints.count {
 
                         if let currentSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: currentMeasurePoints) {
 
@@ -1736,61 +1748,6 @@ class MusicSheet: UIView {
             }
             
         }
-        
-       /*if let currIndex = measureCoords.index(of: measurePoints) {
-
-            // get previous snap points
-            let prevSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints)
-
-            // get current index of previous snap points
-            if let prevSnapIndex = prevSnapPoints?.index(where: {$0.y == sheetCursor.curYCursorLocation.y}) {
-
-                let indexJump:Int
-
-                // for jumping to relative measure with the same clef
-                if currIndex % NUM_MEASURES_PER_STAFF == NUM_MEASURES_PER_STAFF-1 {
-                    indexJump = currIndex + NUM_MEASURES_PER_STAFF + 1
-
-                    if indexJump >= measureCoords.count {
-                        return
-                    }
-
-                    GridSystem.instance.currentStaffIndex =
-                        GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: measureCoords[indexJump])
-                } else {
-                    indexJump = currIndex+1
-
-                    if indexJump >= measureCoords.count {
-                        return
-                    }
-                }
-
-                // get new snap points from next measure
-                if let newSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoords[indexJump]) {
-
-                    GridSystem.instance.selectedMeasureCoord = measureCoords[indexJump]
-                    GridSystem.instance.selectedCoord = newSnapPoints[prevSnapIndex]
-
-                    // get first measure points of the
-
-                    if indexJump < measureCoords.count {
-
-                        if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
-
-                            moveCursorX(location: CGPoint(x: newSnapPoints[prevSnapIndex].x,
-                                                          y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
-                            moveCursorY(location: newSnapPoints[prevSnapIndex])
-
-                            scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
-         
-                        }
-
-                    }
-
-                }
-
-            }
-        }*/
     }
 
     // ONLY USE THIS IF YOU ARE SELECTING SNAP POINTS IN THE FIRST COLUMN
@@ -1821,7 +1778,7 @@ class MusicSheet: UIView {
 
                                 if let newSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: newMeasurePoints) {
 
-                                    let newPoint = newSnapPoints[(newSnapPoints.count-1) - (GridSystem.instance.NUMBER_OF_SNAPPOINTS_PER_COLUMN - prevSnapIndex)]
+                                    let newPoint = newSnapPoints[(newSnapPoints.count-1) - prevSnapIndex]
 
                                     GridSystem.instance.selectedMeasureCoord = newMeasurePoints
                                     GridSystem.instance.selectedCoord = newPoint
@@ -1850,65 +1807,7 @@ class MusicSheet: UIView {
             }
 
         }
-
-        /*if let currIndex = measureCoords.index(of: measurePoints) {
-
-            // get previous snap points
-            if let prevSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints){
-
-                // get current index of previous snap points
-
-                if let prevSnapIndex = prevSnapPoints.index(where: {$0.y == sheetCursor.curYCursorLocation.y}) {
-                    let indexJump:Int
-
-                    // for jumping to relative measure with the same clef
-                    if currIndex % NUM_MEASURES_PER_STAFF == 0 {
-
-                        indexJump = currIndex - (NUM_MEASURES_PER_STAFF + 1)
-
-                        if indexJump < 0 {
-                            return
-                        }
-
-                        GridSystem.instance.currentStaffIndex =
-                            GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: measureCoords[indexJump])
-
-                    } else {
-
-                        indexJump = currIndex-1
-
-                        if indexJump < 0 {
-                            return
-                        }
-
-                    }
-
-                    // get new snap points from next measure
-                    if let newSnapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measureCoords[indexJump]) {
-
-                        GridSystem.instance.selectedMeasureCoord = measureCoords[indexJump]
-
-                        let newCoord = newSnapPoints[(newSnapPoints.count-1) - (GridSystem.instance.NUMBER_OF_SNAPPOINTS_PER_COLUMN - prevSnapIndex)]
-
-                        print(newCoord)
-
-                        GridSystem.instance.selectedCoord = newCoord
-
-                        // get first measure points of the
-                        if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: measureCoords[indexJump]) {
-
-                            moveCursorX(location: CGPoint(x: newCoord.x,
-                                                          y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
-                            moveCursorY(location: newCoord)
-
-                            scrollMusicSheetToY(y: measureCoords[indexJump].lowerRightPoint.y - 140)
-
-                        }
-                    }
-
-                }
-            }
-        }*/
+        
     }
 
     private func scrollMusicSheetToY (y: CGFloat) {
