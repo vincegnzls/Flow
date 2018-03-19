@@ -1429,6 +1429,8 @@ class MusicSheet: UIView {
 
                                 currIndex -= 1
                             }
+                        } else {
+                            printAccidental = false
                         }
                     }
                 }
