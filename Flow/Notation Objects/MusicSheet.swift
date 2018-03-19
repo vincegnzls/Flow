@@ -48,6 +48,8 @@ class MusicSheet: UIView {
     private var gMeasurePoints = [GridSystem.MeasurePoints]()
     private var fMeasurePoints = [GridSystem.MeasurePoints]()
 
+    private var curLayers = [CALayer]()
+
     private let highlightRect = HighlightRect()
     private let sheetCursor = SheetCursor()
     private let cursorXOffsetY:CGFloat = -95 // distance of starting y from measure
@@ -60,7 +62,11 @@ class MusicSheet: UIView {
                     measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
                 }
 
-                EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
+                if notation is Note {
+                    EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
+                } else {
+                    EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
+                }
             } else {
                 //disable accidentals
                 EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
@@ -85,6 +91,7 @@ class MusicSheet: UIView {
         didSet {
             print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
             if selectedNotations.count == 0 {
+
                 if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                     if let newMeasure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
                         let params:Parameters = Parameters()
@@ -94,6 +101,8 @@ class MusicSheet: UIView {
                         EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
                     }
                 }
+
+                //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             } else {
                 selectedNotes()
 
@@ -112,6 +121,16 @@ class MusicSheet: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
+    }
+
+    func allRests(notations: [MusicNotation]) -> Bool {
+        for notation in notations {
+            if notation is Note {
+                return false
+            }
+        }
+
+        return true
     }
 
     private func setup() {
@@ -188,6 +207,12 @@ class MusicSheet: UIView {
     }
 
     override func draw(_ rect: CGRect) {
+        for beamLine in self.curLayers {
+            beamLine.removeFromSuperlayer()
+        }
+
+        self.curLayers.removeAll()
+
         if let composition = composition {
             var measureSplices = [[Measure]]()
 
@@ -903,6 +928,10 @@ class MusicSheet: UIView {
     private func drawParallelMeasures(measures: [Measure], startX: CGFloat, endX: CGFloat, startYs: [CGFloat], staffSpace: CGFloat,
                                       leftInnerPadding: CGFloat, rightInnerPadding:CGFloat) -> [GridSystem.MeasurePoints] {
 
+        let staffLine = CAShapeLayer()
+        staffLine.strokeColor = UIColor.black.cgColor
+        staffLine.lineWidth = 2
+
         let bezierPath = UIBezierPath()
         UIColor.black.setStroke()
         bezierPath.lineWidth = 2
@@ -921,6 +950,11 @@ class MusicSheet: UIView {
                 bezierPath.addLine(to: CGPoint(x: endX, y: startY - curSpace))
                 bezierPath.stroke()
 
+                staffLine.path = bezierPath.cgPath
+
+                self.layer.addSublayer(staffLine)
+                self.curLayers.append(staffLine)
+
                 curSpace += lineSpace
             }
 
@@ -930,9 +964,19 @@ class MusicSheet: UIView {
             bezierPath.addLine(to: CGPoint(x: startX, y: startY)) // change if staff space changes
             bezierPath.stroke()
 
+            staffLine.path = bezierPath.cgPath
+
+            self.layer.addSublayer(staffLine)
+            self.curLayers.append(staffLine)
+
             bezierPath.move(to: CGPoint(x: endX, y: startY - curSpace))
             bezierPath.addLine(to: CGPoint(x: endX, y: startY)) // change if staff space changes
             bezierPath.stroke()
+
+            staffLine.path = bezierPath.cgPath
+
+            self.layer.addSublayer(staffLine)
+            self.curLayers.append(staffLine)
         }
 
         var grandStaffMeasurePoints = [GridSystem.MeasurePoints]()
@@ -1288,6 +1332,7 @@ class MusicSheet: UIView {
     private func drawStaffConnection(startX:CGFloat, startY:CGFloat, height:CGFloat) {
         let staffConnection = CAShapeLayer()
         let bezierPath = UIBezierPath()
+
         UIColor.black.setStroke()
         bezierPath.lineWidth = 2
 
@@ -1296,6 +1341,13 @@ class MusicSheet: UIView {
             bezierPath.addLine(to: CGPoint(x: x, y: startY + staffSpace)) // change if staff space changes
             bezierPath.stroke()
         }
+
+        staffConnection.path = bezierPath.cgPath
+        staffConnection.strokeColor = UIColor.black.cgColor
+        staffConnection.lineWidth = 2
+
+        self.layer.addSublayer(staffConnection)
+        self.curLayers.append(staffConnection)
 
         let brace = UIImage(named:"brace-185")
         let braceView = UIImageView(frame: CGRect(x: lefRightPadding - 25, y: startY, width: 22.4, height: staffSpace + height))
@@ -1997,11 +2049,20 @@ class MusicSheet: UIView {
 
     public func drawLine(start: CGPoint, end: CGPoint, thickness: CGFloat) -> UIBezierPath {
         let path = UIBezierPath()
+        let line = CAShapeLayer()
+
+        line.strokeColor = UIColor.black.cgColor
+        line.lineWidth = thickness
 
         path.lineWidth = thickness
         path.move(to: start)
         path.addLine(to: end)
         path.stroke()
+
+        line.path = path.cgPath
+
+        self.layer.addSublayer(line)
+        self.curLayers.append(line)
 
         return path
     }
@@ -2589,12 +2650,10 @@ class MusicSheet: UIView {
             }
 
         } else if let hovered = self.hoveredNotation {
-            if hovered is Note {
-                let curNote = hovered as! Note
-
+            if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
                 newNote.accidental = .natural
-
+                
                 let editAction = EditAction(old: [curNote], new: [newNote])
 
                 editAction.execute()
@@ -2622,13 +2681,12 @@ class MusicSheet: UIView {
                     self.updateMeasureDraw()
                 }
             }
-        } else if let hovered = self.hoveredNotation {
-            if hovered is Note {
-                let curNote = hovered as! Note
 
+        } else if let hovered = self.hoveredNotation {
+            if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
                 newNote.accidental = .flat
-
+                
                 let editAction = EditAction(old: [curNote], new: [newNote])
 
                 editAction.execute()
@@ -2656,13 +2714,12 @@ class MusicSheet: UIView {
                     self.updateMeasureDraw()
                 }
             }
-        } else if let hovered = self.hoveredNotation {
-            if hovered is Note {
-                let curNote = hovered as! Note
 
+        } else if let hovered = self.hoveredNotation {
+            if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
                 newNote.accidental = .sharp
-
+                
                 let editAction = EditAction(old: [curNote], new: [newNote])
 
                 editAction.execute()
@@ -2690,10 +2747,9 @@ class MusicSheet: UIView {
                     self.updateMeasureDraw()
                 }
             }
-        } else if let hovered = self.hoveredNotation {
-            if hovered is Note {
-                let curNote = hovered as! Note
 
+        } else if let hovered = self.hoveredNotation {
+            if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
                 newNote.accidental = .doubleSharp
 

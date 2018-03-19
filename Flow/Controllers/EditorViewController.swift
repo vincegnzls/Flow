@@ -72,6 +72,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
                                               observer: Observer(id: "EditorViewController.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
         
+        EventBroadcaster.instance.removeObservers(event: EventNames.CHANGES_MADE)
+        EventBroadcaster.instance.addObserver(event: EventNames.CHANGES_MADE,
+                                              observer: Observer(id: "EditorViewController.changesMade", function: self.changesMade))
+        
     }
 
     override func viewDidLoad() {
@@ -314,6 +318,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                 currentComp.addGrandStaff()
             }
         }
+    }
+    
+    func changesMade() {
+        
     }
 }
 

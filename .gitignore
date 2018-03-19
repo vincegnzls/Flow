@@ -84,6 +84,30 @@ Flow/\.DS_Store
 
 \.DS_Store
 
-AudioKitUI\.framework/
+AudioKit\.framework/_CodeSignature/
 
-AudioKit\.framework/
+AudioKit\.framework/AudioKit
+
+AudioKit\.framework/Modules/AudioKit\.swiftmodule/arm\.swiftmodule
+
+AudioKit\.framework/Modules/AudioKit\.swiftmodule/arm64\.swiftmodule
+
+AudioKit\.framework/Modules/AudioKit\.swiftmodule/i386\.swiftmodule
+
+AudioKit\.framework/Modules/AudioKit\.swiftmodule/x86_64\.swiftmodule
+
+AudioKitUI\.framework/_CodeSignature/CodeDirectory
+
+AudioKitUI\.framework/_CodeSignature/CodeRequirements-1
+
+AudioKitUI\.framework/_CodeSignature/CodeResources
+
+AudioKitUI\.framework/AudioKitUI
+
+AudioKitUI\.framework/Modules/AudioKitUI\.swiftmodule/arm\.swiftmodule
+
+AudioKitUI\.framework/Modules/AudioKitUI\.swiftmodule/arm64\.swiftmodule
+
+AudioKitUI\.framework/Modules/AudioKitUI\.swiftmodule/i386\.swiftmodule
+
+AudioKitUI\.framework/Modules/AudioKitUI\.swiftmodule/x86_64\.swiftmodule
