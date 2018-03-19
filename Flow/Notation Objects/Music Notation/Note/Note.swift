@@ -58,11 +58,31 @@ class Note: MusicNotation {
     }
     
     func transposeUp() {
-        self.pitch.transposeUp()
+        if let clef = self.measure?.clef {
+            if clef == .G {
+                if pitch.octave * 8 + pitch.step.rawValue < 51 {
+                    self.pitch.transposeUp()
+                }
+            } else {
+                if pitch.octave * 8 + pitch.step.rawValue < 37 {
+                    self.pitch.transposeUp()
+                }
+            }
+        }
     }
     
     func transposeDown() {
-        self.pitch.transposeDown()
+        if let clef = self.measure?.clef {
+            if clef == .G {
+                if pitch.octave * 8 + pitch.step.rawValue > 26 {
+                    self.pitch.transposeDown()
+                }
+            } else {
+                if pitch.octave * 8 + pitch.step.rawValue > 12 {
+                    self.pitch.transposeDown()
+                }
+            }
+        }
     }
 
     override func duplicate() -> Note {
