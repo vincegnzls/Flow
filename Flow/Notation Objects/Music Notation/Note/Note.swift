@@ -37,7 +37,7 @@ class Note: MusicNotation {
     override func setImage() {
 
         if let clef = self.measure?.clef {
-            if clef == .G {
+            if clef == .F {
                 isUpwards = pitch.octave < 5
             } else {
                 isUpwards = pitch.octave < 2

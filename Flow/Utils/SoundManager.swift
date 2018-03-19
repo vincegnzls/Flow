@@ -23,6 +23,8 @@ class SoundManager {
     
     var gNotesMIDI: [Int?]
     var fNotesMIDI: [Int?]
+
+    var compMeasures: [Measure]
     
     let gNotePlayer: AKSampler
     let fNotePlayer: AKSampler
@@ -36,6 +38,7 @@ class SoundManager {
         self.isPlaying = false
         self.gNotesMIDI = [Int?]()
         self.fNotesMIDI = [Int?]()
+        self.compMeasures = [Measure]()
         self.curBeat = 0
         self.gNotePlayer = AKSampler()
         self.fNotePlayer = AKSampler()
@@ -659,6 +662,43 @@ class SoundManager {
         return staffPlayer
     }
 
+    func getCompMeasures (comp: Composition) -> [Measure] {
+        var measures = [Measure]()
+
+        if let firstStaff = comp.staffList.first {
+            for measure in firstStaff.measures {
+                for notation in measure.notationObjects {
+                    var x = 0
+
+                    switch notation.type.toString() {
+                    case "64th":
+                        x = 1
+                    case "32nd":
+                        x = 2
+                    case "16th":
+                        x = 4
+                    case "eigth":
+                        x = 8
+                    case "quarter":
+                        x = 16
+                    case "half":
+                        x = 32
+                    case "whole":
+                        x = 64
+                    default:
+                        x = 8
+                    }
+
+                    for beat in 0..<x {
+                        measures.append(measure)
+                    }
+                }
+            }
+        }
+
+        return measures
+    }
+
     func stopPlaying() {
         self.timer.invalidate()
         do {
@@ -679,6 +719,8 @@ class SoundManager {
         
         self.gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
         self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
+
+        self.compMeasures = getCompMeasures(comp: composition)
 
         /*for midi in gNotesMIDI {
             if let m = midi {
@@ -722,6 +764,11 @@ class SoundManager {
                 self.fNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
             }
         }
+
+        let params = Parameters()
+        params.put(key: KeyNames.HIGHLIGHT_MEASURE, value: self.compMeasures[self.curBeat])
+
+        EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_MEASURE, params: params)
         
         self.curBeat += 1
         

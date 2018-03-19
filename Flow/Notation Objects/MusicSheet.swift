@@ -57,6 +57,10 @@ class MusicSheet: UIView {
     public var composition: Composition?
     public var hoveredNotation: MusicNotation? {
         didSet {
+            while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
+                highlightView.removeFromSuperview()
+            }
+
             if let notation = hoveredNotation{
                 if let measure = notation.measure {
                     measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
@@ -67,6 +71,8 @@ class MusicSheet: UIView {
                 } else {
                     EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
                 }
+
+                self.highlightNotation(notation, true)
             } else {
                 //disable accidentals
                 //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
@@ -311,7 +317,7 @@ class MusicSheet: UIView {
             }
 
             for notation in self.selectedNotations {
-                self.highlightNotation(notation)
+                self.highlightNotation(notation, false)
             }
 
         }
@@ -1830,43 +1836,64 @@ class MusicSheet: UIView {
                     if rect.contains(coor) {
                         notation.isSelected = true
                         self.selectedNotations.append(notation)
-                        self.highlightNotation(notation)
-
-
+                        self.highlightNotation(notation, false)
                     }
                 }
             }
         }
     }
 
-    func highlightNotation(_ notation: MusicNotation) {
+    func highlightNotation(_ notation: MusicNotation, _ hovered: Bool) {
         var notationImageView: UIImageView?
+
+        var image: UIImage? = nil
         
         if let note = notation as? Note {
             
-            if let screenCoordinates = note.screenCoordinates, let image = note.image {
-                
-                notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
-                drawAccidentalByNote(note: note, highlighted: true)
+            if let screenCoordinates = note.screenCoordinates {
+
+                image = note.image
+
+                if note.type.getBeatValue() < RestNoteType.whole.getBeatValue() {
+                    image = UIImage(named: "quarter-head")
+                }
+
+                if let image = image {
+                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
+                    drawAccidentalByNote(note: note, highlighted: true)
+                }
                 
             }
             
         } else if let rest = notation as? Rest {
             
-            if let screenCoordinates = rest.screenCoordinates, let image = rest.image {
-                
-                notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+            if let screenCoordinates = rest.screenCoordinates {
+
+                image = rest.image
+
+                if let image = image {
+                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                }
                 
             }
         }
         
         if let notationImageView = notationImageView {
-            notationImageView.image = notation.image
-            notationImageView.image = notationImageView.image!.withRenderingMode(.alwaysTemplate)
-            notationImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-            notationImageView.tag = HIGHLIGHTED_NOTES_TAG
-            
-            self.addSubview(notationImageView)
+            if let image = image {
+
+                var color =  UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 1.0)
+
+                if hovered {
+                    color = UIColor(red: 0.0, green: 175.0 / 255.0, blue: 1.0, alpha: 1.0)
+                }
+
+                notationImageView.image = image
+                notationImageView.image = notationImageView.image!.withRenderingMode(.alwaysTemplate)
+                notationImageView.tintColor = color
+                notationImageView.tag = HIGHLIGHTED_NOTES_TAG
+
+                self.addSubview(notationImageView)
+            }
         }
     }
 
