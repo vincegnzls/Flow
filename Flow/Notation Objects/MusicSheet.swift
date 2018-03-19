@@ -1390,68 +1390,133 @@ class MusicSheet: UIView {
     }
 
     private func drawAccidentalByNote (note: Note, highlighted: Bool = false) {
-        if let accidental = note.accidental, let screenCoordinates = note.screenCoordinates {
-            var printAccidental = true
+        if let screenCoordinates = note.screenCoordinates {
+            if let accidental = note.accidental {
 
-            if let measure = note.measure {
-                if let noteIndex = measure.notationObjects.index(of: note) {
-                    if noteIndex != 0 {
-                        var currIndex = noteIndex - 1
+                var printAccidental = true
 
-                        while currIndex > -1 {
+                if let measure = note.measure {
+                    if let noteIndex = measure.notationObjects.index(of: note) {
+                        if noteIndex != 0 {
+                            var currIndex = noteIndex - 1
 
-                            if let prevNote = measure.notationObjects[currIndex] as? Note {
+                            while currIndex > -1 {
 
-                                if prevNote.pitch == note.pitch {
-                                    if let prevAccidental = prevNote.accidental {
+                                if let prevNote = measure.notationObjects[currIndex] as? Note {
 
-                                        if prevAccidental == accidental {
-                                            printAccidental = false
+                                    if prevNote.pitch == note.pitch {
+                                        if let prevAccidental = prevNote.accidental {
+
+                                            if prevAccidental == accidental {
+                                                printAccidental = false
+                                            }
+
+                                            break
+
+                                        } else {
+
+                                            if accidental == .natural {
+                                                printAccidental = false
+                                            } else {
+                                                printAccidental = true
+                                            }
+                                            break
                                         }
-
-                                        break
-
                                     }
+
                                 }
 
+                                currIndex -= 1
                             }
-
-                            currIndex -= 1
                         }
                     }
                 }
-            }
 
-            if printAccidental {
-                var accidentalImageView:UIImageView?
+                if printAccidental {
+                    var accidentalImageView:UIImageView?
 
-                if accidental == .sharp, let image = UIImage(named: "sharp") {
-                    accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
+                    if accidental == .sharp, let image = UIImage(named: "sharp") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
 
-                    accidentalImageView!.image = image
-                } else if accidental == .flat, let image = UIImage(named: "flat") {
-                    accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
+                        accidentalImageView!.image = image
+                    } else if accidental == .flat, let image = UIImage(named: "flat") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
 
-                    accidentalImageView!.image = image
-                } else if accidental == .natural, let image = UIImage(named: "natural") {
-                    accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
+                        accidentalImageView!.image = image
+                    } else if accidental == .natural, let image = UIImage(named: "natural") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
 
-                    accidentalImageView!.image = image
-                } else if accidental == .doubleSharp, let accImage = UIImage(named: "double-sharp"), let noteHead = UIImage(named: "quarter-head") {
-                    accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - 8, y: screenCoordinates.y + doubleSharpAccidentalYOffset, width: noteHead.size.height/9.5, height: noteHead.size.height/9.5))
+                        accidentalImageView!.image = image
+                    } else if accidental == .doubleSharp, let accImage = UIImage(named: "double-sharp"), let noteHead = UIImage(named: "quarter-head") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - 8, y: screenCoordinates.y + doubleSharpAccidentalYOffset, width: noteHead.size.height/9.5, height: noteHead.size.height/9.5))
 
-                    accidentalImageView!.image = accImage
-                }
-
-                if let accidentalImageView = accidentalImageView {
-                    if highlighted {
-                        accidentalImageView.image = accidentalImageView.image!.withRenderingMode(.alwaysTemplate)
-                        accidentalImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-                        accidentalImageView.tag = HIGHLIGHTED_NOTES_TAG
+                        accidentalImageView!.image = accImage
                     }
 
-                    self.addSubview(accidentalImageView)
+                    if let accidentalImageView = accidentalImageView {
+                        if highlighted {
+                            accidentalImageView.image = accidentalImageView.image!.withRenderingMode(.alwaysTemplate)
+                            accidentalImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                            accidentalImageView.tag = HIGHLIGHTED_NOTES_TAG
+                        }
+
+                        self.addSubview(accidentalImageView)
+                    }
                 }
+            } else {
+
+                var printNatural = false
+
+                if let measure = note.measure {
+                    if let noteIndex = measure.notationObjects.index(of: note) {
+                        if noteIndex != 0 {
+                            var currIndex = noteIndex - 1
+
+                            while currIndex > -1 {
+
+                                if let prevNote = measure.notationObjects[currIndex] as? Note {
+
+                                    if prevNote.pitch == note.pitch {
+                                        if let prevAccidental = prevNote.accidental {
+
+                                            if prevAccidental != .natural {
+                                                printNatural = true
+                                            }
+
+                                            break
+                                        } else {
+                                            break
+                                        }
+                                    }
+
+                                }
+
+                                currIndex -= 1
+                            }
+                        }
+                    }
+                }
+
+                var accidentalImageView:UIImageView?
+
+                if printNatural {
+                    if let image = UIImage(named: "natural") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
+
+                        accidentalImageView!.image = image
+                    }
+
+                    if let accidentalImageView = accidentalImageView {
+                        if highlighted {
+                            accidentalImageView.image = accidentalImageView.image!.withRenderingMode(.alwaysTemplate)
+                            accidentalImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                            accidentalImageView.tag = HIGHLIGHTED_NOTES_TAG
+                        }
+
+                        self.addSubview(accidentalImageView)
+                    }
+                }
+
             }
         }
     }
