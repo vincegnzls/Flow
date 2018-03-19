@@ -1041,22 +1041,6 @@ class MusicSheet: UIView {
 
         var grpdNotesToBePrinted = [[MusicNotation]]()
 
-        /*var max = 0
-
-        if measures[0].notationObjects.count >= measures[1].notationObjects.count {
-            max = measures[0].notationObjects.count
-        } else {
-            max = measures[1].notationObjects.count
-        }
-
-        var noteSpace = grandStaffMeasurePoints[0].width / CGFloat(measures[0].timeSignature.beats) // not still sure about this
-
-        if measures[0].notationObjects.count < measures[0].timeSignature.beats {
-            // TODO: LESSEN SPACE HERE
-        } else if max > measures[0].timeSignature.beats {
-            noteSpace = grandStaffMeasurePoints[0].width / CGFloat(max+1)
-        }*/
-
         while !(gReachedEnd && fReachedEnd) {
             gAlreadyAdded = false
             fAlreadyAdded = false
@@ -1130,9 +1114,11 @@ class MusicSheet: UIView {
         var noteSpace: CGFloat = 0
 
         if !measures[0].isFull || !measures[1].isFull {
-            noteSpace = (grandStaffMeasurePoints[0].width - (CGFloat(grpdNotesToBePrinted.count * 7))) / CGFloat(grpdNotesToBePrinted.count + 1) // not still sure about this
+            noteSpace = (grandStaffMeasurePoints[0].width - initialNoteSpace - leftInnerPadding - CGFloat(grpdNotesToBePrinted.count)) /
+                    CGFloat(grpdNotesToBePrinted.count) // not still sure about this
         } else {
-            noteSpace = (grandStaffMeasurePoints[0].width - (CGFloat(grpdNotesToBePrinted.count * 7))) / CGFloat(grpdNotesToBePrinted.count) // not still sure about this
+            noteSpace = (grandStaffMeasurePoints[0].width - initialNoteSpace - leftInnerPadding - CGFloat(grpdNotesToBePrinted.count)) /
+                    CGFloat(grpdNotesToBePrinted.count - 1)
         }
 
         var currentStartX: CGFloat = startX + initialNoteSpace + leftInnerPadding
@@ -1159,7 +1145,8 @@ class MusicSheet: UIView {
                             //lastXCoord = measureCoord.upperLeftPoint.x + initialNoteSpace + adjustXToCenter
 
                             let snapPointsRelativeToNotation = GridSystem.instance.createSnapPoints(
-                                    initialX: currentStartX + adjustToXCenter * initialNoteSpace, initialY: measurePoints.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
+                                    initialX: currentStartX + adjustToXCenter * initialNoteSpace,
+                                    initialY: measurePoints.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
 
                             // snap points for added note
                             GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measurePoints,
@@ -1170,7 +1157,8 @@ class MusicSheet: UIView {
                             // assign snap point to added note
                             if note is Note {
                                 GridSystem.instance.assignSnapPointToNotation(
-                                        snapPoint: CGPoint(x: currentStartX + adjustToXCenter * initialNoteSpace, y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
+                                        snapPoint: CGPoint(x: currentStartX + adjustToXCenter * initialNoteSpace,
+                                                y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
                                         notation: note)
                             } else if note is Rest {
                                 for snapPoint in snapPointsRelativeToNotation {
@@ -1184,7 +1172,8 @@ class MusicSheet: UIView {
                             if !measure.isFull {
 
                                 let additionalSnapPoints = GridSystem.instance.createSnapPoints(
-                                        initialX: currentStartX + noteSpace, initialY: measurePoints.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
+                                        initialX: currentStartX + adjustToXCenter * initialNoteSpace + noteSpace,
+                                        initialY: measurePoints.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
 
                                 GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measurePoints,
                                         snapPoints: additionalSnapPoints)
@@ -1218,7 +1207,8 @@ class MusicSheet: UIView {
                                 if x + 1 == measure.groups.count {
                                     beamNotes(notations: measure.groups[x])
                                 } else {
-                                    if isPureEighth(group: measure.groups[x]) && measure.groups[x].count == 2 && isPureEighth(group: measure.groups[x + 1]) && measure.groups[x + 1].count == 2 {
+                                    if isPureEighth(group: measure.groups[x]) && measure.groups[x].count ==
+                                            2 && isPureEighth(group: measure.groups[x + 1]) && measure.groups[x + 1].count == 2 {
                                         beamNotes(notations: measure.groups[x] + measure.groups[x + 1])
                                         x = x + 1
                                     } else {
