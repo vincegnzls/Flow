@@ -38,11 +38,13 @@ class Note: MusicNotation {
     // Set the image based on the note type and location in the staff
     override func setImage() {
 
+        print("PITCH NUMBER: \(pitch.octave * 8 + pitch.step.rawValue)")
+
         if let clef = self.measure?.clef {
-            if clef == .F {
-                isUpwards = pitch.octave < 5
+            if clef == .G {
+                isUpwards = pitch.octave * 8 + pitch.step.rawValue < 38
             } else {
-                isUpwards = pitch.octave < 2
+                isUpwards = pitch.octave * 8 + pitch.step.rawValue < 25
             }
         }
 
