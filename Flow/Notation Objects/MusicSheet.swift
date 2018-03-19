@@ -388,11 +388,11 @@ class MusicSheet: UIView {
                     if let measureIndex = staff.measures.index(of: measures[i]) {
                         if measureIndex > 0 {
                             if staff.measures[measureIndex - 1].keySignature != staff.measures[measureIndex].keySignature {
-                                keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startYs[i], keySignature: measures[i].keySignature)
+                                keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startYs[i], keySignature: measures[i].keySignature, clef: measures[i].clef)
                                 adjustKeyTimeSig += keyLabelWidth
                             }
                         } else if measureIndex == 0 {
-                            keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startYs[i], keySignature: measures[i].keySignature)
+                            keyLabelWidth = drawKeySignature(startX: modStartX + adjustKeyTimeSig, startY: startYs[i], keySignature: measures[i].keySignature, clef: measures[i].clef)
                             adjustKeyTimeSig += keyLabelWidth
                         }
                     }
@@ -460,14 +460,22 @@ class MusicSheet: UIView {
         }
     }
 
-    private func drawKeySignature (startX:CGFloat, startY:CGFloat, keySignature:KeySignature) -> CGFloat {
+    private func drawKeySignature (startX:CGFloat, startY:CGFloat, keySignature:KeySignature, clef: Clef) -> CGFloat {
 
         if keySignature == .c {
             return 0
         } else {
 
+            var startYForKeySig = startY
+
+            if clef == .G {
+                startYForKeySig = startYForKeySig - (lineSpace*5.85)
+            } else if clef == .F {
+                startYForKeySig = startYForKeySig - (lineSpace*5.30)
+            }
+
             let numberOfAccidentals = abs(keySignature.rawValue)
-            let snapPointsForKeySig = GridSystem.instance.createSnapPointsForKeySig(initialX: startX, initialY: startY - (lineSpace*5.85), lineSpace: lineSpace)
+            let snapPointsForKeySig = GridSystem.instance.createSnapPointsForKeySig(initialX: startX, initialY: startYForKeySig, lineSpace: lineSpace)
 
             var space:CGFloat = 0
 
