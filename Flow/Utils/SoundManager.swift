@@ -776,7 +776,9 @@ class SoundManager {
             }
         }
 
-        currentMeasurePlaying = self.compMeasures[self.curBeat]
+        if self.curBeat < self.compMeasures.count {
+            currentMeasurePlaying = self.compMeasures[self.curBeat]
+        }
         
         self.curBeat += 1
         

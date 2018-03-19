@@ -2531,6 +2531,10 @@ class MusicSheet: UIView {
         print("Play")
 
         if !SoundManager.instance.isPlaying {
+            
+            sheetCursor.yVisible = false
+            sheetCursor.xVisible = false
+            
             if let composition = self.composition {
                 SoundManager.instance.musicPlayback(composition)
 
@@ -2553,26 +2557,25 @@ class MusicSheet: UIView {
         } else {
             SoundManager.instance.stopPlaying()
             playBackTimer.invalidate()
-            self.isUserInteractionEnabled = true
-
-            sheetCursor.yVisible = true
-            sheetCursor.xVisible = true
             
-            playbackHighlightRect.path = nil
+            self.enableInteraction()
+            
         }
 
     }
 
     func enableInteraction() {
         self.isUserInteractionEnabled = true
+        
+        self.sheetCursor.yVisible = true
+        self.sheetCursor.xVisible = true
+        
+        self.playbackHighlightRect.path = nil
     }
 
     @objc
     func updateTime() {
         //TODO: IMPLEMENT PLAYBACK FRONTEND
-
-        sheetCursor.yVisible = false
-        sheetCursor.xVisible = false
 
         /*let xIterate: CGFloat = CGFloat(SoundManager.instance.tempo / 10)
 
@@ -2580,7 +2583,6 @@ class MusicSheet: UIView {
 
     }
 
-    private var counter = 0
     private func highlightParallelMeasures(parameters: Parameters) {
         let currentPlayingMeasure:Measure = parameters.get(key: KeyNames.HIGHLIGHT_MEASURE) as! Measure
 
@@ -2591,8 +2593,6 @@ class MusicSheet: UIView {
 
                 if let gMeasurePoints = GridSystem.instance.getPointsFromMeasure(measure: currentPlayingMeasure),
                    let fMeasurePoints = GridSystem.instance.getPointsFromMeasure(measure: parallelPlayingMeasure) {
-                    
-                    print (counter)
                 
                     scrollMusicSheetToY(y: gMeasurePoints.lowerRightPointWithLedger.y)
                     
@@ -2611,8 +2611,6 @@ class MusicSheet: UIView {
 
             }
         }
-        
-        counter += 1
 
     }
 
