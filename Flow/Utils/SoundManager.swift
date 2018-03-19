@@ -751,6 +751,17 @@ class SoundManager {
         RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
     }
     
+    private var currentMeasurePlaying: Measure? {
+        didSet {
+            if currentMeasurePlaying != oldValue {
+                let params = Parameters()
+                params.put(key: KeyNames.HIGHLIGHT_MEASURE, value: currentMeasurePlaying)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_MEASURE, params: params)
+            }
+        }
+    }
+    
     @objc
     func updateTime() {
         if !self.gNotesMIDI.isEmpty && self.curBeat < self.gNotesMIDI.count {
@@ -765,10 +776,7 @@ class SoundManager {
             }
         }
 
-        let params = Parameters()
-        params.put(key: KeyNames.HIGHLIGHT_MEASURE, value: self.compMeasures[self.curBeat])
-
-        EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_MEASURE, params: params)
+        currentMeasurePlaying = self.compMeasures[self.curBeat]
         
         self.curBeat += 1
         

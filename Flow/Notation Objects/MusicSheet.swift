@@ -53,7 +53,10 @@ class MusicSheet: UIView {
     private let highlightRect = HighlightRect()
     private let sheetCursor = SheetCursor()
     private let cursorXOffsetY:CGFloat = -95 // distance of starting y from measure
-
+    
+    private let playbackHighlightRect = CAShapeLayer()
+    private var playbackScrollLock = false
+    
     public var composition: Composition?
     public var hoveredNotation: MusicNotation? {
         didSet {
@@ -202,6 +205,9 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
         EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
 
+        EventBroadcaster.instance.removeObservers(event: EventNames.HIGHLIGHT_MEASURE)
+        EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_MEASURE, observer: Observer(id: "MusicSheet.highlightParallelMeasures", function: self.highlightParallelMeasures))
+
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
@@ -249,13 +255,6 @@ class MusicSheet: UIView {
 
                 if let measure = GridSystem.instance.getCurrentMeasure() {
 
-                    /*if measure.isFull {
-                        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
-                            self.moveCursorsToNextMeasure(measurePoints: measureCoord)
-                            return
-                        }
-                    }*/
-
                     if measure.notationObjects.contains(recentNotation) {
                         var coordForCurrentPoint:CGPoint?
 
@@ -282,14 +281,8 @@ class MusicSheet: UIView {
                                     moveCursorY(location: nextSnapPoint)
                                     moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
 
-                                }/* else {
-                                    if measure.isFull {
-                                        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
-                                            self.moveCursorsToNextMeasure(measurePoints: measureCoord)
-                                            //return
-                                        }
-                                    }
-                                }*/
+                                }
+                                
                             }
 
                         }
@@ -2053,11 +2046,19 @@ class MusicSheet: UIView {
         
     }
 
-    private func scrollMusicSheetToY (y: CGFloat) {
+    private func scrollMusicSheetToY (y: CGFloat, animated: Bool = true) {
         if let outerScrollView = self.superview as? UIScrollView {
             outerScrollView.setContentOffset(
-                CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: true)
+                CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: animated)
         }
+    }
+    
+    private func scrollViewYIsEqualToY(y: CGFloat) -> Bool {
+        if let outerScrollView = self.superview as? UIScrollView {
+            return outerScrollView.contentOffset.y == y
+        }
+        
+        return false
     }
 
     public func getMeasureFromPoint (point: CGPoint) -> Measure? {
@@ -2553,6 +2554,11 @@ class MusicSheet: UIView {
             SoundManager.instance.stopPlaying()
             playBackTimer.invalidate()
             self.isUserInteractionEnabled = true
+
+            sheetCursor.yVisible = true
+            sheetCursor.xVisible = true
+            
+            playbackHighlightRect.path = nil
         }
 
     }
@@ -2564,6 +2570,50 @@ class MusicSheet: UIView {
     @objc
     func updateTime() {
         //TODO: IMPLEMENT PLAYBACK FRONTEND
+
+        sheetCursor.yVisible = false
+        sheetCursor.xVisible = false
+
+        /*let xIterate: CGFloat = CGFloat(SoundManager.instance.tempo / 10)
+
+        sheetCursor.moveCursorX(location: CGPoint(x: sheetCursor.curXCursorLocation.x + xIterate, y: sheetCursor.curXCursorLocation.y))*/
+
+    }
+
+    private var counter = 0
+    private func highlightParallelMeasures(parameters: Parameters) {
+        let currentPlayingMeasure:Measure = parameters.get(key: KeyNames.HIGHLIGHT_MEASURE) as! Measure
+
+        if let composition = self.composition {
+            if let measureIndex = composition.staffList[0].measures.index(of: currentPlayingMeasure) {
+
+                let parallelPlayingMeasure: Measure = composition.staffList[1].measures[measureIndex]
+
+                if let gMeasurePoints = GridSystem.instance.getPointsFromMeasure(measure: currentPlayingMeasure),
+                   let fMeasurePoints = GridSystem.instance.getPointsFromMeasure(measure: parallelPlayingMeasure) {
+                    
+                    print (counter)
+                
+                    scrollMusicSheetToY(y: gMeasurePoints.lowerRightPointWithLedger.y)
+                    
+                    let r: CGRect = CGRect(x: fMeasurePoints.upperLeftPoint.x, y: fMeasurePoints.upperLeftPoint.y,
+                            width: gMeasurePoints.width,
+                            height: gMeasurePoints.lowerRightPoint.y - fMeasurePoints.lowerRightPoint.y + gMeasurePoints.height)
+
+                    let path = CGPath(rect: r, transform: nil)
+                    playbackHighlightRect.path = path
+
+                    let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
+                    playbackHighlightRect.fillColor = highlightColor.cgColor
+                    
+                    self.layer.addSublayer(playbackHighlightRect)
+                }
+
+            }
+        }
+        
+        counter += 1
+
     }
 
     public func paste() {

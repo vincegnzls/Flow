@@ -10,13 +10,30 @@ import Foundation
 import UIKit
 
 class SheetCursor : CAShapeLayer {
-    
-    var isXVisible = true
-    var isYVisible = true
-    
+
     private let xCursor = CAShapeLayer()
     private let yCursor = CAShapeLayer()
-    
+
+    var xVisible = true {
+        didSet {
+            if xVisible {
+                xCursor.opacity = 100
+            } else {
+                xCursor.opacity = 0
+            }
+        }
+    }
+    var yVisible = true {
+        didSet {
+            if yVisible {
+                yCursor.opacity = 100
+            } else {
+                yCursor.opacity = 0
+            }
+        }
+    }
+
+
     private var ledgerLineGuides = [CAShapeLayer]()
     
     public var curYCursorLocation = CGPoint(x: 0, y: 0)
