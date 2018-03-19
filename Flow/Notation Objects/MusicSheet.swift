@@ -1122,6 +1122,7 @@ class MusicSheet: UIView {
         }
 
         var currentStartX: CGFloat = startX + initialNoteSpace + leftInnerPadding
+
         for notesToBePrinted in grpdNotesToBePrinted {
             for note in notesToBePrinted {
                 if let measure = note.measure {
@@ -1152,7 +1153,10 @@ class MusicSheet: UIView {
                             GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measurePoints,
                                     snapPoints: snapPointsRelativeToNotation)
 
-                            GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measurePoints, relativeX: currentStartX)
+                            GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measurePoints,
+                                    relativeX: startX + initialNoteSpace + leftInnerPadding)
+                            GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measurePoints,
+                                    relativeX: currentStartX - noteSpace + adjustToXCenter * initialNoteSpace + 35)
 
                             // assign snap point to added note
                             if note is Note {
@@ -1172,7 +1176,7 @@ class MusicSheet: UIView {
                             if !measure.isFull {
 
                                 let additionalSnapPoints = GridSystem.instance.createSnapPoints(
-                                        initialX: currentStartX + adjustToXCenter * initialNoteSpace + noteSpace,
+                                        initialX: currentStartX + adjustToXCenter * initialNoteSpace + 35,
                                         initialY: measurePoints.lowerRightPoint.y - (lineSpace * 3.5), clef: measure.clef, lineSpace: lineSpace)
 
                                 GridSystem.instance.addMoreSnapPointsToPoints(measurePoints: measurePoints,
@@ -1365,68 +1369,7 @@ class MusicSheet: UIView {
             if let screenCoordinates = note.screenCoordinates, let image = note.image {
                 
                 notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
-                
-                if let accidental = note.accidental {
-
-                    var printAccidental = true
-
-                    if let measure = note.measure {
-                        if let noteIndex = measure.notationObjects.index(of: note) {
-                            if noteIndex != 0 {
-                                var currIndex = noteIndex - 1
-
-                                while currIndex > -1 {
-
-                                    if let prevNote = measure.notationObjects[currIndex] as? Note {
-
-                                        if prevNote.pitch == note.pitch {
-                                            if let prevAccidental = prevNote.accidental {
-
-                                                if prevAccidental == accidental {
-                                                    printAccidental = false
-                                                }
-
-                                                break
-
-                                            }
-                                        }
-
-                                    }
-
-                                    currIndex -= 1
-                                }
-                            }
-                        }
-                    }
-                    
-                    if printAccidental {
-                        var accidentalImageView:UIImageView?
-
-                        if accidental == .sharp, let accImage = UIImage(named: "sharp") {
-                            accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
-
-                            accidentalImageView!.image = accImage
-                        } else if accidental == .flat, let accImage = UIImage(named: "flat") {
-                            accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
-
-                            accidentalImageView!.image = accImage
-                        } else if accidental == .natural, let accImage = UIImage(named: "natural") {
-                            accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
-
-                            accidentalImageView!.image = accImage
-                        } else if accidental == .doubleSharp, let accImage = UIImage(named: "double-sharp"), let noteHead = UIImage(named: "quarter-head") {
-                            accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - 8, y: screenCoordinates.y + doubleSharpAccidentalYOffset, width: noteHead.size.height/9.5, height: noteHead.size.height/9.5))
-
-                            accidentalImageView!.image = accImage
-                        }
-
-                        if let accidentalImageView = accidentalImageView {
-                            self.addSubview(accidentalImageView)
-                        }
-                    }
-                    
-                }
-                
+                drawAccidentalByNote(note: note)
             }
             
         } else if let rest = notation as? Rest {
@@ -1444,6 +1387,73 @@ class MusicSheet: UIView {
             self.addSubview(notationImageView)
         }
         
+    }
+
+    private func drawAccidentalByNote (note: Note, highlighted: Bool = false) {
+        if let accidental = note.accidental, let screenCoordinates = note.screenCoordinates {
+            var printAccidental = true
+
+            if let measure = note.measure {
+                if let noteIndex = measure.notationObjects.index(of: note) {
+                    if noteIndex != 0 {
+                        var currIndex = noteIndex - 1
+
+                        while currIndex > -1 {
+
+                            if let prevNote = measure.notationObjects[currIndex] as? Note {
+
+                                if prevNote.pitch == note.pitch {
+                                    if let prevAccidental = prevNote.accidental {
+
+                                        if prevAccidental == accidental {
+                                            printAccidental = false
+                                        }
+
+                                        break
+
+                                    }
+                                }
+
+                            }
+
+                            currIndex -= 1
+                        }
+                    }
+                }
+            }
+
+            if printAccidental {
+                var accidentalImageView:UIImageView?
+
+                if accidental == .sharp, let image = UIImage(named: "sharp") {
+                    accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
+
+                    accidentalImageView!.image = image
+                } else if accidental == .flat, let image = UIImage(named: "flat") {
+                    accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
+
+                    accidentalImageView!.image = image
+                } else if accidental == .natural, let image = UIImage(named: "natural") {
+                    accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
+
+                    accidentalImageView!.image = image
+                } else if accidental == .doubleSharp, let accImage = UIImage(named: "double-sharp"), let noteHead = UIImage(named: "quarter-head") {
+                    accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - 8, y: screenCoordinates.y + doubleSharpAccidentalYOffset, width: noteHead.size.height/9.5, height: noteHead.size.height/9.5))
+
+                    accidentalImageView!.image = accImage
+                }
+
+                if let accidentalImageView = accidentalImageView {
+                    if highlighted {
+                        accidentalImageView.image = accidentalImageView.image!.withRenderingMode(.alwaysTemplate)
+                        accidentalImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                        accidentalImageView.tag = HIGHLIGHTED_NOTES_TAG
+                    }
+
+                    self.addSubview(accidentalImageView)
+                }
+            }
+        }
     }
 
     func onArrowKeyPressed(params: Parameters) {
@@ -1534,6 +1544,8 @@ class MusicSheet: UIView {
 
     public func moveCursorY(location: CGPoint) {
         sheetCursor.moveCursorY(location: location)
+
+        print(location)
 
         if let measurePoints = GridSystem.instance.selectedMeasureCoord {
             sheetCursor.showLedgerLinesGuide(measurePoints: measurePoints, upToLocation: location, lineSpace: lineSpace)
@@ -1770,71 +1782,7 @@ class MusicSheet: UIView {
             if let screenCoordinates = note.screenCoordinates, let image = note.image {
                 
                 notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
-                
-                if let accidental = note.accidental {
-                    var printAccidental = true
-
-                    if let measure = note.measure {
-                        if let noteIndex = measure.notationObjects.index(of: note) {
-                            if noteIndex != 0 {
-                                var currIndex = noteIndex - 1
-
-                                while currIndex > -1 {
-
-                                    if let prevNote = measure.notationObjects[currIndex] as? Note {
-
-                                        if prevNote.pitch == note.pitch {
-                                            if let prevAccidental = prevNote.accidental {
-
-                                                if prevAccidental == accidental {
-                                                    printAccidental = false
-                                                }
-
-                                                break
-
-                                            }
-                                        }
-
-                                    }
-
-                                    currIndex -= 1
-                                }
-                            }
-                        }
-                    }
-
-                    if printAccidental {
-                        var accidentalImageView:UIImageView?
-
-                        if accidental == .sharp, let image = UIImage(named: "sharp") {
-                            accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
-
-                            accidentalImageView!.image = image
-                        } else if accidental == .flat, let image = UIImage(named: "flat") {
-                            accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
-
-                            accidentalImageView!.image = image
-                        } else if accidental == .natural, let image = UIImage(named: "natural") {
-                            accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
-
-                            accidentalImageView!.image = image
-                        } else if accidental == .doubleSharp, let accImage = UIImage(named: "double-sharp"), let noteHead = UIImage(named: "quarter-head") {
-                            accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - 8, y: screenCoordinates.y + doubleSharpAccidentalYOffset, width: noteHead.size.height/9.5, height: noteHead.size.height/9.5))
-
-                            accidentalImageView!.image = accImage
-                        }
-
-                        if let accidentalImageView = accidentalImageView {
-                            accidentalImageView.image = accidentalImageView.image!.withRenderingMode(.alwaysTemplate)
-                            accidentalImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-                            accidentalImageView.tag = HIGHLIGHTED_NOTES_TAG
-
-                            self.addSubview(accidentalImageView)
-                        }
-                    }
-
-                    
-                }
+                drawAccidentalByNote(note: note, highlighted: true)
                 
             }
             
@@ -2422,6 +2370,9 @@ class MusicSheet: UIView {
         notationImageView.image = noteHead
 
         self.addSubview(notationImageView)
+        if let note = notation as? Note {
+            drawAccidentalByNote(note: note)
+        }
 
         if isUpwards {
             let _ = self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 4), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 4), thickness: 2.3)
@@ -2659,7 +2610,7 @@ class MusicSheet: UIView {
                 self.updateMeasureDraw()
             }
         }
-        self.updateMeasureDraw()
+
     }
 
     public func flat() {
@@ -2693,7 +2644,7 @@ class MusicSheet: UIView {
                 self.updateMeasureDraw()
             }
         }
-        self.updateMeasureDraw()
+
     }
 
     public func sharp() {
@@ -2727,7 +2678,7 @@ class MusicSheet: UIView {
                 self.updateMeasureDraw()
             }
         }
-        self.updateMeasureDraw()
+
     }
 
     public func dsharp() {
@@ -2761,7 +2712,7 @@ class MusicSheet: UIView {
                 self.updateMeasureDraw()
             }
         }
-        self.updateMeasureDraw()
+
     }
 
 }
