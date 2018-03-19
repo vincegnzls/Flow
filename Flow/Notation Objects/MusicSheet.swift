@@ -217,6 +217,8 @@ class MusicSheet: UIView {
             beamLine.removeFromSuperlayer()
         }
 
+        self.resetBeamedNotes()
+
         self.curLayers.removeAll()
 
         if let composition = composition {
@@ -1854,7 +1856,7 @@ class MusicSheet: UIView {
 
                 image = note.image
 
-                if note.type.getBeatValue() < RestNoteType.whole.getBeatValue() {
+                if note.type.getBeatValue() <= RestNoteType.eighth.getBeatValue() && note.beamed {
                     image = UIImage(named: "quarter-head")
                 }
 
@@ -2144,6 +2146,20 @@ class MusicSheet: UIView {
         }
     }
 
+    func resetBeamedNotes() {
+        if let comp = self.composition {
+            for staff in comp.staffList {
+                for measure in staff.measures {
+                    for notation in measure.notationObjects {
+                        if let note = notation as? Note {
+                            note.beamed = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // DRAWS
     public func drawBeam(notations: [MusicNotation]) {
         var upCount: Int = 0
@@ -2158,6 +2174,8 @@ class MusicSheet: UIView {
                 } else {
                     downCount = downCount + 1
                 }
+
+                note.beamed = true
             }
 
             if notation.type == RestNoteType.sixtyFourth {

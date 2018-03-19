@@ -21,6 +21,7 @@ class Note: MusicNotation {
         }
     }
     var isUpwards: Bool
+    var beamed: Bool
     
     init(screenCoordinates: CGPoint? = nil,
          pitch: Pitch,
@@ -30,6 +31,7 @@ class Note: MusicNotation {
         self.pitch = pitch
         self.accidental = accidental
         self.isUpwards = true
+        self.beamed = false
         super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
     }
     
