@@ -69,7 +69,7 @@ class MusicSheet: UIView {
                 }
             } else {
                 //disable accidentals
-                EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
+                //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             }
         }
     }
@@ -2661,6 +2661,7 @@ class MusicSheet: UIView {
                 self.updateMeasureDraw()
             }
         }
+        self.updateMeasureDraw()
     }
 
     public func flat() {
@@ -2694,6 +2695,7 @@ class MusicSheet: UIView {
                 self.updateMeasureDraw()
             }
         }
+        self.updateMeasureDraw()
     }
 
     public func sharp() {
@@ -2727,6 +2729,7 @@ class MusicSheet: UIView {
                 self.updateMeasureDraw()
             }
         }
+        self.updateMeasureDraw()
     }
 
     public func dsharp() {
@@ -2760,6 +2763,7 @@ class MusicSheet: UIView {
                 self.updateMeasureDraw()
             }
         }
+        self.updateMeasureDraw()
     }
 
 }
