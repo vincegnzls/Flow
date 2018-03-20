@@ -144,6 +144,10 @@ class MusicSheet: UIView {
 
     private func setup() {
 
+        while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
+            highlightView.removeFromSuperview()
+        }
+
         startY += sheetYOffset
 
         highlightRect.zPosition = CGFloat.greatestFiniteMagnitude

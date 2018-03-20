@@ -36,6 +36,16 @@ class Measure: Hashable {
     var isFull: Bool {
         return self.curBeatValue == self.timeSignature.getMaxBeatValue()
     }
+
+    var isFullWithNotes: Bool {
+        for notation in self.notationObjects {
+            if let _ = notation as? Rest {
+                return false
+            }
+        }
+
+        return self.curBeatValue == self.timeSignature.getMaxBeatValue()
+    }
     
     var divisions: Int {
         var divisions = 1
@@ -99,6 +109,12 @@ class Measure: Hashable {
 
             notation.measure = self
             notationObjects.append(notation)
+
+            if self.isFullWithNotes {
+                let params = Parameters()
+                params.put(key: KeyNames.ARROW_KEY_DIRECTION, value: ArrowKey.right)
+                EventBroadcaster.instance.postEvent(event: EventNames.ARROW_KEY_PRESSED, params: params)
+            }
             return  true
             //self.fillWithRests()
         } else {
@@ -122,6 +138,12 @@ class Measure: Hashable {
             print("after inserting:")
             for notation in notationObjects {
                 print(notation.type.toString())
+            }
+
+            if self.isFullWithNotes {
+                let params = Parameters()
+                params.put(key: KeyNames.ARROW_KEY_DIRECTION, value: ArrowKey.right)
+                EventBroadcaster.instance.postEvent(event: EventNames.ARROW_KEY_PRESSED, params: params)
             }
 
             return  true
