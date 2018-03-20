@@ -72,7 +72,7 @@ class Converter {
                 attributesElement.addChild(name: "staves", value: "\(composition.staffList.count)")
                 
                 if i == 0 {
-                    attributesElement.addChild(name: "sound", attributes: ["tempo": "\(Int(tempo))"])
+                    measureElement.addChild(name: "sound", attributes: ["tempo": "\(Int(tempo))"])
                 }
                 
                 // Set clefs
