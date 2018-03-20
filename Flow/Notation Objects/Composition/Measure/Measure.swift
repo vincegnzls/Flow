@@ -220,6 +220,24 @@ class Measure: Hashable {
         return self.curBeatValue + musicNotation.getBeatValue() <= self.timeSignature.getMaxBeatValue()
 
     }
+    
+    public func isEditNoteValid (oldNotations: [RestNoteType], newNotations: [RestNoteType]) -> Bool {
+        
+        var oldBeats: Float = 0
+        
+        for oldType in oldNotations {
+            oldBeats += oldType.getBeatValue()
+        }
+        
+        var newBeats: Float = 0
+        
+        for newType in newNotations {
+            newBeats += newType.getBeatValue()
+        }
+        
+        return self.curBeatValue - oldBeats + newBeats <= self.timeSignature.getMaxBeatValue()
+        
+    }
 
     public func getTotalBeats() -> Float {
 

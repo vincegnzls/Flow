@@ -50,9 +50,12 @@ class Clipboard {
         var newNotations = [MusicNotation]()
 
         for item in self.items {
-            if !measures[measureIndex].isAddNoteValid(musicNotation: item.type) {
-                measureIndex += 1
-                noteIndex = 0
+            if noteIndex < measures[measureIndex].notationObjects.count {
+                if !measures[measureIndex].isEditNoteValid(
+                    oldNotations: [measures[measureIndex].notationObjects[noteIndex].type], newNotations: [item.type]) {
+                    measureIndex += 1
+                    noteIndex = 0
+                }
             }
 
             if measureIndex >= measures.count {
@@ -68,6 +71,7 @@ class Clipboard {
             }
             
             newNotations.append(item.duplicate())
+            
             noteIndex += 1
         }
         
