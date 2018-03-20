@@ -69,11 +69,11 @@ class MusicSheet: UIView {
                     measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
                 }
 
-                if notation is Note {
+                /*if notation is Note {
                     EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
                 } else {
                     EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
-                }
+                }*/
 
                 self.highlightNotation(notation, true)
             } else {
@@ -107,7 +107,7 @@ class MusicSheet: UIView {
                         params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
 
                         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
-                        EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
+                        //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
                     }
                 }
 
@@ -115,7 +115,7 @@ class MusicSheet: UIView {
             } else {
                 selectedNotes()
 
-                EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
+                //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
         }
     }
