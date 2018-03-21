@@ -20,7 +20,7 @@ class Rest: MusicNotation {
         self.image = type.getRestImage()
     }
 
-    override func duplicate() -> MusicNotation {
-        return super.duplicate()
+    override func duplicate() -> Rest {
+        return Rest(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure)
     }
 }
