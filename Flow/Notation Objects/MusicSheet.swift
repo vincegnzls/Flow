@@ -2623,6 +2623,8 @@ class MusicSheet: UIView {
     }
 
     public func paste() {
+        selectedNotations.removeAll()
+
         print("Paste")
         var measures = [Measure]()
         if !self.selectedNotations.isEmpty {
