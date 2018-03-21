@@ -40,6 +40,7 @@ class EditAction: Action {
                 measure.deleteInMeasure(notation)
             }
         }*/
+
         var newIndex = 0
         for old in self.oldNotations {
             if let measure = old.measure {

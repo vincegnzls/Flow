@@ -107,8 +107,31 @@ class Measure: Hashable {
         if(isAddNoteValid(musicNotation: notation.type)) {
             print("ADD NOTE VALID")
 
-            notation.measure = self
-            notationObjects.append(notation)
+            //CHECKING OF NOTE PITCH OUT OF BOUNDS
+            if let note = notation as? Note {
+                notationObjects.append(note)
+                note.measure = self
+
+                print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
+                if let noteMeasure = note.measure {
+                    if noteMeasure.clef == .G {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                            note.pitch.octave -= 1
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                            note.pitch.octave += 1
+                        }
+                    } else if noteMeasure.clef == .F {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                            note.pitch.octave += 1
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                            note.pitch.octave -= 1
+                        }
+                    }
+                }
+            } else {
+                notationObjects.append(notation)
+                notation.measure = self
+            }
 
             if self.isFullWithNotes {
                 let params = Parameters()
@@ -133,7 +156,33 @@ class Measure: Hashable {
             for notation in notationObjects {
                 print(notation.type.toString())
             }
-            self.notationObjects.insert(notation, at: index)
+
+            //CHECKING OF NOTE PITCH OUT OF BOUNDS
+            if let note = notation as? Note {
+                self.notationObjects.insert(notation, at: index)
+                note.measure = self
+
+                print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
+                if let noteMeasure = note.measure {
+                    if noteMeasure.clef == .G {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                            note.pitch.octave -= 1
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                            note.pitch.octave += 1
+                        }
+                    } else if noteMeasure.clef == .F {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                            note.pitch.octave += 1
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                            note.pitch.octave -= 1
+                        }
+                    }
+                }
+            } else {
+                self.notationObjects.insert(notation, at: index)
+                notation.measure = self
+            }
+
             //self.fillWithRests()
             print("after inserting:")
             for notation in notationObjects {
@@ -168,8 +217,32 @@ class Measure: Hashable {
         print("EDIT")
         if let index = notationObjects.index(of: oldNote) {
             oldNote.measure = nil
-            notationObjects[index] = newNote
-            newNote.measure = self
+
+            //CHECKING OF NOTE PITCH OUT OF BOUNDS
+            if let note = newNote as? Note {
+                notationObjects[index] = note
+                note.measure = self
+
+                print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
+                if let noteMeasure = note.measure {
+                    if noteMeasure.clef == .G {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                            note.pitch.octave -= 1
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                            note.pitch.octave += 1
+                        }
+                    } else if noteMeasure.clef == .F {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                            note.pitch.octave += 1
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                            note.pitch.octave -= 1
+                        }
+                    }
+                }
+            } else {
+                notationObjects[index] = newNote
+                newNote.measure = self
+            }
             //self.fillWithRests()
         }
     }
