@@ -25,6 +25,9 @@ class SoundManager {
     var fNotesMIDI: [Int?]
 
     var compMeasures: [Measure]
+
+    var gNotations: [MusicNotation]
+    var fNotations: [MusicNotation]
     
     let gNotePlayer: AKSampler
     let fNotePlayer: AKSampler
@@ -32,6 +35,30 @@ class SoundManager {
     var grandStaffMixer: AKMixer
     
     var curBeat: Int
+
+    private var currentMeasurePlaying: Measure? {
+        didSet {
+            if currentMeasurePlaying != oldValue {
+                let params = Parameters()
+                params.put(key: KeyNames.HIGHLIGHT_MEASURE, value: currentMeasurePlaying)
+
+                EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_MEASURE, params: params)
+            }
+        }
+    }
+
+    private var currentNotePlaying: MusicNotation? {
+        didSet {
+            if currentNotePlaying != oldValue {
+                let params = Parameters()
+
+                print("CURRENT NOTE: \(currentNotePlaying?.type)")
+                //params.put(key: KeyNames.HIGHLIGHT_MEASURE, value: currentMeasurePlaying)
+
+                //EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_MEASURE, params: params)
+            }
+        }
+    }
     
     init() {
         self.tempo = 120
@@ -39,6 +66,8 @@ class SoundManager {
         self.gNotesMIDI = [Int?]()
         self.fNotesMIDI = [Int?]()
         self.compMeasures = [Measure]()
+        self.gNotations = [MusicNotation]()
+        self.fNotations = [MusicNotation]()
         self.curBeat = 0
         self.gNotePlayer = AKSampler()
         self.fNotePlayer = AKSampler()
@@ -662,6 +691,41 @@ class SoundManager {
         return staffPlayer
     }
 
+    func getStaffNotations (staff: Staff) -> [MusicNotation] {
+        var notations = [MusicNotation]()
+
+        for measure in staff.measures {
+            for notation in measure.notationObjects {
+                var x = 0
+
+                switch notation.type.toString() {
+                case "64th":
+                    x = 1
+                case "32nd":
+                    x = 2
+                case "16th":
+                    x = 4
+                case "eigth":
+                    x = 8
+                case "quarter":
+                    x = 16
+                case "half":
+                    x = 32
+                case "whole":
+                    x = 64
+                default:
+                    x = 8
+                }
+
+                for beat in 0..<x {
+                    notations.append(notation)
+                }
+            }
+        }
+
+        return notations
+    }
+
     func getCompMeasures (comp: Composition) -> [Measure] {
         var measures = [Measure]()
 
@@ -712,6 +776,9 @@ class SoundManager {
     }
     
     func musicPlayback(_ composition: Composition){
+
+        self.currentNotePlaying = nil
+        //self.currentMeasurePlaying = nil
         //self.timer.invalidate()
         self.tempo = composition.tempo
         
@@ -721,6 +788,9 @@ class SoundManager {
         self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
 
         self.compMeasures = getCompMeasures(comp: composition)
+
+        self.gNotations = getStaffNotations(staff: composition.staffList[0])
+        self.fNotations = getStaffNotations(staff: composition.staffList[1])
 
         /*for midi in gNotesMIDI {
             if let m = midi {
@@ -751,17 +821,6 @@ class SoundManager {
         RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
     }
     
-    private var currentMeasurePlaying: Measure? {
-        didSet {
-            if currentMeasurePlaying != oldValue {
-                let params = Parameters()
-                params.put(key: KeyNames.HIGHLIGHT_MEASURE, value: currentMeasurePlaying)
-                
-                EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_MEASURE, params: params)
-            }
-        }
-    }
-    
     @objc
     func updateTime() {
         if !self.gNotesMIDI.isEmpty && self.curBeat < self.gNotesMIDI.count {
@@ -777,7 +836,15 @@ class SoundManager {
         }
 
         if self.curBeat < self.compMeasures.count {
-            currentMeasurePlaying = self.compMeasures[self.curBeat]
+            self.currentMeasurePlaying = self.compMeasures[self.curBeat]
+        }
+
+        if self.curBeat < self.gNotations.count && self.curBeat < self.fNotations.count {
+            if self.gNotations[curBeat].type.getBeatValue() > self.fNotations[curBeat].type.getBeatValue() {
+                self.currentNotePlaying = self.gNotations[curBeat]
+            } else {
+                self.currentNotePlaying = self.fNotations[curBeat]
+            }
         }
         
         self.curBeat += 1
