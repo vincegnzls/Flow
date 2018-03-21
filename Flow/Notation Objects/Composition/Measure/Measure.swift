@@ -116,15 +116,23 @@ class Measure: Hashable {
                 if let noteMeasure = note.measure {
                     if noteMeasure.clef == .G {
                         if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
-                            note.pitch.octave -= 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                                note.pitch.octave -= 1
+                            }
                         } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
-                            note.pitch.octave += 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                                note.pitch.octave += 1
+                            }
                         }
                     } else if noteMeasure.clef == .F {
                         if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
-                            note.pitch.octave += 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                                note.pitch.octave += 1
+                            }
                         } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
-                            note.pitch.octave -= 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                                note.pitch.octave -= 1
+                            }
                         }
                     }
                 }
@@ -166,15 +174,23 @@ class Measure: Hashable {
                 if let noteMeasure = note.measure {
                     if noteMeasure.clef == .G {
                         if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
-                            note.pitch.octave -= 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                                note.pitch.octave -= 1
+                            }
                         } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
-                            note.pitch.octave += 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                                note.pitch.octave += 1
+                            }
                         }
                     } else if noteMeasure.clef == .F {
                         if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
-                            note.pitch.octave += 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                                note.pitch.octave += 1
+                            }
                         } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
-                            note.pitch.octave -= 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                                note.pitch.octave -= 1
+                            }
                         }
                     }
                 }
@@ -227,15 +243,23 @@ class Measure: Hashable {
                 if let noteMeasure = note.measure {
                     if noteMeasure.clef == .G {
                         if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
-                            note.pitch.octave -= 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                                note.pitch.octave -= 1
+                            }
                         } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
-                            note.pitch.octave += 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                                note.pitch.octave += 1
+                            }
                         }
                     } else if noteMeasure.clef == .F {
                         if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
-                            note.pitch.octave += 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                                note.pitch.octave += 1
+                            }
                         } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
-                            note.pitch.octave -= 1
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                                note.pitch.octave -= 1
+                            }
                         }
                     }
                 }
