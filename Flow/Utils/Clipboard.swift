@@ -63,14 +63,37 @@ class Clipboard {
             }
 
             let measure = measures[measureIndex]
+
+            item.measure = measure
             
             if noteIndex < measure.notationObjects.count {
                 let oldNotation = measure.notationObjects[noteIndex]
                 
                 oldNotations.append(oldNotation)
             }
-            
-            newNotations.append(item.duplicate())
+
+           if let note = item as? Note {
+               print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
+               if let noteMeasure = note.measure {
+                   if noteMeasure.clef == .G {
+                       if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                           note.pitch.octave -= 1
+                       } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                           note.pitch.octave += 1
+                       }
+                   } else if noteMeasure.clef == .F {
+                       if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                           note.pitch.octave += 1
+                       } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                           note.pitch.octave -= 1
+                       }
+                   }
+               }
+
+               newNotations.append(note.duplicate())
+           } else {
+               newNotations.append(item.duplicate())
+           }
             
             noteIndex += 1
         }
