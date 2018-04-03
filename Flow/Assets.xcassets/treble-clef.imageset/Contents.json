@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "treble-clef-10.png"
+      "filename" : "g-clef.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "treble-clef-20.png"
+      "filename" : "g-clef-1.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "treble-clef-30.png"
+      "filename" : "g-clef-2.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

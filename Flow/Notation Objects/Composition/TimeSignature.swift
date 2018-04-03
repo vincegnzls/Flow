@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TimeSignature {
+struct TimeSignature: Equatable {
     var beats: Int // Top number
     var beatType: Int // Bottom number
     
@@ -18,6 +18,25 @@ struct TimeSignature {
     }
     
     func getMaxBeatValue() -> Float {
-        return Float(self.beats / self.beatType)
+        return Float(Float(self.beats) / Float(self.beatType))
     }
+
+    func getMaxBeatValuePerGroup() -> Float {
+        return Float(Float(1) / Float(self.beatType))
+    }
+    
+    public var hashValue: Int {
+        return beats.hashValue ^ beatType.hashValue
+    }
+    
+    public static func == (lhs: TimeSignature, rhs: TimeSignature) -> Bool {
+        return lhs.beatType == rhs.beatType &&
+            lhs.beats == rhs.beats
+    }
+    
+    /*public static func != (lhs: TimeSignature, rhs: TimeSignature) -> Bool {
+        return lhs.beatType != rhs.beatType &&
+            lhs.beats != rhs.beats
+    }*/
+    
 }

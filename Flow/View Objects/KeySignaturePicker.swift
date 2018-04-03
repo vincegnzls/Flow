@@ -15,6 +15,7 @@ class KeySignaturePicker: UIPickerView {
     let customWidth:CGFloat = 100
     let customHeight: CGFloat = 100
 
+    var selectedKeySignature: KeySignature = .c
 }
 
 extension KeySignaturePicker: UIPickerViewDataSource {
@@ -46,10 +47,17 @@ extension KeySignaturePicker: UIPickerViewDelegate {
         view.addSubview(keySignatureLabel)
         
         // Adds the key signature image
-        let keySignatureImage = UIImage(named: "sharp-white") // change to keySignatures[row].image
-        let keySignatureImageView = UIImageView(frame: CGRect(x: (customWidth / 2) - ((keySignatureImage?.size.width)! / 2), y: 40, width: (keySignatureImage?.size.width)!, height: (keySignatureImage?.size.height)!))
-        keySignatureImageView.image = keySignatureImage
-        view.addSubview(keySignatureImageView)
+        var keySignatureImage: UIImage?
+        
+        if let image = keySignatures[row].image {
+            keySignatureImage = image
+        }
+        
+        if let keySignatureImage = keySignatureImage {
+            let keySignatureImageView = UIImageView(frame: CGRect(x: (customWidth / 2) - (keySignatureImage.size.width / 2), y: 40, width: keySignatureImage.size.width, height: keySignatureImage.size.height))
+            keySignatureImageView.image = keySignatureImage
+            view.addSubview(keySignatureImageView)
+        }
         
         // Rotate each key signature view for horizontal orientation
         view.transform = CGAffineTransform(rotationAngle: (90 * (.pi / 180)))
@@ -61,5 +69,6 @@ extension KeySignaturePicker: UIPickerViewDelegate {
     // Listener when key signature is changed
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print(keySignatures[row].key.toString())
+        self.selectedKeySignature = keySignatures[row].key
     }
 }

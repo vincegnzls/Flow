@@ -20,35 +20,72 @@ class Note: MusicNotation {
             self.setImage()
         }
     }
-    var clef: Clef {
-        didSet {
-            self.setImage()
-        }
-    }
     var isUpwards: Bool
+    var beamed: Bool
     
     init(screenCoordinates: CGPoint? = nil,
-         gridCoordinates: GridCoordinates? = nil,
          pitch: Pitch,
          type: RestNoteType,
-         accidental: Accidental? = nil,
-         clef: Clef) {
+         measure: Measure? = nil,
+         accidental: Accidental? = nil) {
         self.pitch = pitch
         self.accidental = accidental
-        self.clef = clef
-        self.isUpwards = false
-        super.init(screenCoordinates: screenCoordinates, type: type)
+        self.isUpwards = true
+        self.beamed = false
+        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
     }
     
     // Set the image based on the note type and location in the staff
     override func setImage() {
-        
-        if clef == .G {
-            isUpwards = pitch.octave < 5
-        } else {
-            isUpwards = pitch.octave < 2
+
+        print("PITCH NUMBER: \(pitch.octave * 8 + pitch.step.rawValue)")
+
+        if let clef = self.measure?.clef {
+            if clef == .G {
+                isUpwards = pitch.octave * 8 + pitch.step.rawValue < 38
+            } else {
+                isUpwards = pitch.octave * 8 + pitch.step.rawValue < 25
+            }
         }
-         
+
         self.image = type.getNoteImage(isUpwards: isUpwards)
+        
+        /*if self.isSelected {
+            if let imageView = self.imageView {
+                imageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+            }
+        }*/
+    }
+    
+    func transposeUp() {
+        if let clef = self.measure?.clef {
+            if clef == .G {
+                if pitch.octave * 8 + pitch.step.rawValue < 51 {
+                    self.pitch.transposeUp()
+                }
+            } else {
+                if pitch.octave * 8 + pitch.step.rawValue < 37 {
+                    self.pitch.transposeUp()
+                }
+            }
+        }
+    }
+    
+    func transposeDown() {
+        if let clef = self.measure?.clef {
+            if clef == .G {
+                if pitch.octave * 8 + pitch.step.rawValue > 26 {
+                    self.pitch.transposeDown()
+                }
+            } else {
+                if pitch.octave * 8 + pitch.step.rawValue > 12 {
+                    self.pitch.transposeDown()
+                }
+            }
+        }
+    }
+
+    override func duplicate() -> Note {
+        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental)
     }
 }

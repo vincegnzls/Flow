@@ -24,17 +24,6 @@ class ControlsView: UIView {
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         self.addGestureRecognizer(panGesture)
-        
-//        // Set up border
-//        self.layer.borderWidth = 1.5
-//        self.layer.borderColor = UIColor.black.cgColor
-//        self.layer.cornerRadius = 10
-//        
-//        // Set up shadow
-//        self.layer.shadowColor = UIColor.black.cgColor
-//        self.layer.shadowOpacity = 0.1
-//        self.layer.shadowOffset = CGSize.zero
-//        self.layer.shadowRadius = 5
     }
     
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {

@@ -50,10 +50,33 @@ class FileHandler {
         let writeString = Converter.compositionToMusicXML(composition)
         do {
             try writeString.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+            
+            if !self.compositions.contains(composition.compositionInfo) {
+                self.compositions.append(composition.compositionInfo)
+            } else {
+                let index = self.compositions.index(of: composition.compositionInfo)!
+                composition.compositionInfo.lastEdited = Date()
+                self.compositions[index] = composition.compositionInfo
+            }
+            
+            self.saveCompositionList()
+            
         } catch let error as NSError {
             print("Failed to write to file \(composition.compositionInfo.name) with id \(composition.compositionInfo.id)")
             print(error)
         }
+    }
+    
+    func export(_ compositionInfo: CompositionInfo) -> URL? {
+        // 4
+        guard let _ = FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask).first else {
+                return nil
+        }
+        
+        // 5
+        let fileURL = documentsDirectory.appendingPathComponent(compositionInfo.id).appendingPathExtension("xml")
+        return fileURL
     }
     
     private func retrieveCompositionList() {
@@ -69,6 +92,7 @@ class FileHandler {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(compositions){
             UserDefaults.standard.set(encoded, forKey: FileHandler.KEY_COMPOSITION_LIST)
+            print("saved composition list")
         }
     }
 
@@ -81,10 +105,9 @@ class FileHandler {
         // delete composition
         do {
             try FileManager.default.removeItem(at: fileURL)
+            self.saveCompositionList()
         } catch let error as NSError {
             print("Error: \(error.domain)")
         }
-
-        self.saveCompositionList()
     }
 }

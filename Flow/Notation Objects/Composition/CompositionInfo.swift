@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CompositionInfo: Codable {
+struct CompositionInfo: Codable, Equatable {
     var name: String
     var lastEdited: Date
     var id: String
@@ -17,9 +17,17 @@ struct CompositionInfo: Codable {
         return lastEdited.toString(withFormat: "E, MMM d, yyyy h:mm a")
     }
     
-    init(name: String = "Untitled", lastEdited: Date = Date(), id: String = UUID().uuidString) {
+    init(name: String = "Untitled Composition", lastEdited: Date = Date(), id: String = UUID().uuidString) {
         self.name = name
         self.lastEdited = lastEdited
         self.id = id
+    }
+    
+    static func == (lhs: CompositionInfo, rhs: CompositionInfo) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    static func != (lhs: CompositionInfo, rhs: CompositionInfo) -> Bool {
+        return lhs.id != rhs.id
     }
 }

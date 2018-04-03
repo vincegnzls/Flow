@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "half-up-10.png",
+      "filename" : "half-note-up.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "half-up-20.png",
+      "filename" : "half-note-up-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "half-up-30.png",
+      "filename" : "half-note-up-2.png",
       "scale" : "3x"
     }
   ],

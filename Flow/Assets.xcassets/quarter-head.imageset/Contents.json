@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "quarter-head-10.png"
+      "filename" : "quarter-note-head.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "quarter-head-20.png"
+      "filename" : "quarter-note-head-1.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "quarter-head-30.png"
+      "filename" : "quarter-note-head-2.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

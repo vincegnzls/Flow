@@ -9,22 +9,30 @@
 import UIKit
 
 @IBDesignable
-class CursorControlsView: UIView {
+class CursorControlsView: DraggableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.setup()
     }
 
-    private func setup() {
+    func setup() {
+        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "CursorControls.hideOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "CursorControls.hideOnPlay", function: self.hideOnPlay))
 
+        EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "CursorControls.hideOnPlay", function: self.hideOnPlay))
+        EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "CursorControls.hideOnPlay", function: self.hideOnPlay))
     }
-    
+
+    override var keyTag: String {
+        return "CursorControlsView"
+    }
+
     private func animate(_ sender: UIButton) {
         sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         
@@ -66,5 +74,16 @@ class CursorControlsView: UIView {
         let params = Parameters()
         params.put(key: KeyNames.ARROW_KEY_DIRECTION, value: direction)
         EventBroadcaster.instance.postEvent(event: EventNames.ARROW_KEY_PRESSED, params: params)
+    }
+
+    func hideOnPlay() {
+
+        print("wtf")
+
+        if !SoundManager.instance.isPlaying {
+            self.isHidden = true
+        } else {
+            self.isHidden = false
+        }
     }
 }

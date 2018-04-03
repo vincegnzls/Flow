@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "half-rest-10.png"
+      "filename" : "whole-half-rest.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "half-rest-20.png"
+      "filename" : "whole-half-rest-1.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "half-rest-30.png"
+      "filename" : "whole-half-rest-2.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

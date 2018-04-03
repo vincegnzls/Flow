@@ -11,14 +11,13 @@ import UIKit
 class KeySignatureModel {
     
     var key: KeySignature
-    var image: UIImage = UIImage()
+    var image: UIImage?
     
-    init(key:KeySignature) {
+    init(key: KeySignature, image: UIImage?) {
         self.key = key
-    }
-    
-    init(key:KeySignature, image:UIImage) {
-        self.key = key
-        self.image = image
+        
+        if let image = image {
+            self.image = image
+        }
     }
 }
