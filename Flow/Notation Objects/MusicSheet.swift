@@ -2705,17 +2705,66 @@ class MusicSheet: UIView {
                         if staff.measures[i].timeSignature == oldTimeSig {
                             let curMeasure = staff.measures[i]
 
-                            while newMaxBeatValue < curMeasure.getTotalBeats() {
+                            /*while newMaxBeatValue < curMeasure.getTotalBeats() {
                                 curMeasure.deleteInMeasure(curMeasure.notationObjects[curMeasure.notationObjects.count - 1])
-                            }
+                            }*/
 
                             staff.measures[i].timeSignature = newMeasure.timeSignature
-                            staff.measures[i].fillWithRests()
+                            //staff.measures[i].fillWithRests()
                         }
                     }
                 }
             }
         }
+
+        var oldStaffs = [Staff]()
+
+        var oldStaffsNotations = [[MusicNotation]]()
+
+        if let staffs = composition?.staffList {
+            for staff in staffs {
+                oldStaffs.append(staff.duplicate())
+            }
+        }
+
+        for oldStaff in oldStaffs {
+            oldStaffsNotations.append([MusicNotation]())
+        }
+
+        var oldStaffIndex = 0
+
+        for oldStaff in oldStaffs {
+            for measure in oldStaff.measures {
+                for notation in measure.notationObjects {
+                    oldStaffsNotations[oldStaffIndex].append(notation)
+                }
+            }
+
+            oldStaffIndex += 1
+        }
+
+        if let staffs = composition?.staffList {
+            for staff in staffs {
+                for measure in staff.measures {
+                    measure.deleteAllNotes()
+                }
+            }
+        }
+
+        var index = 0
+
+        if let staffs = composition?.staffList {
+            for (staff, notations) in zip(staffs, oldStaffsNotations) {
+                for measure in staff.measures {
+                    while index < notations.count && measure.addToMeasure(notations[index]) {
+                        index += 1
+                    }
+
+                    measure.fillWithRests()
+                }
+            }
+        }
+
 
         moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
     }

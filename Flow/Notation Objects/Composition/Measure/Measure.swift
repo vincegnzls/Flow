@@ -438,6 +438,10 @@ class Measure: Hashable {
         return true
     }
 
+    func deleteAllNotes() {
+        self.notationObjects.removeAll()
+    }
+
     func groupFull(group: [MusicNotation], isEighth: Bool) -> Bool {
         var curBeatValue: Float = 0
 
