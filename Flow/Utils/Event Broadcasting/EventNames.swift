@@ -44,4 +44,5 @@ struct EventNames {
     static let CHANGES_MADE = "CHANGES_MADE"
 
     static let HIGHLIGHT_MEASURE = "HIGHLIGHT_MEASURE"
+    static let HIDE_TEMPO_MENU = "HIDE_TEMPO_MENU"
 }

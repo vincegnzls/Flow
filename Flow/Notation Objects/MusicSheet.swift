@@ -1663,6 +1663,18 @@ class MusicSheet: UIView {
     public func moveCursorX(location: CGPoint) {
         sheetCursor.moveCursorX(location: location)
     }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TEMPO_MENU)
+        
+        super.touchesMoved(touches, with: event)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TEMPO_MENU)
+        
+        super.touchesBegan(touches, with: event)
+    }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
@@ -1788,6 +1800,9 @@ class MusicSheet: UIView {
     }
 
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TEMPO_MENU)
+        
         if sender.state == UIGestureRecognizerState.began {
             let locationOfBeganTap = sender.location(in: self)
             self.highlightRect.highlightingStartPoint = locationOfBeganTap

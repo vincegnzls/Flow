@@ -21,6 +21,17 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var tempoSlider: UISlider!
     
     var composition: Composition?
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch: UITouch? = touches.first
+        //location is relative to the current view
+        // do something with the touched point
+        if touch?.view != tempoSliderView {
+            hideTempo()
+        }
+        
+        super.touchesBegan(touches, with: event)
+    }
 
     required init?(coder aDecoder: NSCoder) {
         GridSystem.instance.reset()
@@ -68,6 +79,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         EventBroadcaster.instance.removeObservers(event: EventNames.ADD_GRAND_STAFF)
         EventBroadcaster.instance.addObserver(event: EventNames.ADD_GRAND_STAFF,
                 observer: Observer(id: "EditorViewController.addGrandStaff", function: self.addGrandStaff))
+        EventBroadcaster.instance.removeObservers(event: EventNames.HIDE_TEMPO_MENU)
+        EventBroadcaster.instance.addObserver(event: EventNames.HIDE_TEMPO_MENU,
+                                              observer: Observer(id: "EditorViewController.hideTempo", function: self.hideTempo))
         EventBroadcaster.instance.removeObservers(event: EventNames.DELETE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
                                               observer: Observer(id: "EditorViewController.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
@@ -157,6 +171,17 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
                 self.tempoSliderView.alpha = 0.8
             }, completion:  nil)
         } else {
+            UIView.animate(withDuration: 0.1, animations: {
+                self.tempoSliderView.alpha = 0
+            }, completion:  {
+                (value: Bool) in
+                self.tempoSliderView.isHidden = true
+            })
+        }
+    }
+    
+    func hideTempo() {
+        if !self.tempoSliderView.isHidden {
             UIView.animate(withDuration: 0.1, animations: {
                 self.tempoSliderView.alpha = 0
             }, completion:  {
