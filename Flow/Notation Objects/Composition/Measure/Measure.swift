@@ -115,22 +115,22 @@ class Measure: Hashable {
                 print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
                 if let noteMeasure = note.measure {
                     if noteMeasure.clef == .G {
-                        if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue > 51 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 51 {
                                 note.pitch.octave -= 1
                             }
-                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 26 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 26 {
                                 note.pitch.octave += 1
                             }
                         }
                     } else if noteMeasure.clef == .F {
-                        if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue < 12 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 12 {
                                 note.pitch.octave += 1
                             }
-                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 37 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 37 {
                                 note.pitch.octave -= 1
                             }
                         }
@@ -173,22 +173,22 @@ class Measure: Hashable {
                 print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
                 if let noteMeasure = note.measure {
                     if noteMeasure.clef == .G {
-                        if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue > 51 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 51 {
                                 note.pitch.octave -= 1
                             }
-                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 26 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 26 {
                                 note.pitch.octave += 1
                             }
                         }
                     } else if noteMeasure.clef == .F {
-                        if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue < 12 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 12 {
                                 note.pitch.octave += 1
                             }
-                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 37 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 37 {
                                 note.pitch.octave -= 1
                             }
                         }
@@ -242,22 +242,22 @@ class Measure: Hashable {
                 print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
                 if let noteMeasure = note.measure {
                     if noteMeasure.clef == .G {
-                        if note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 50 {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue > 51 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 51 {
                                 note.pitch.octave -= 1
                             }
-                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 27 {
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue < 26 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 26 {
                                 note.pitch.octave += 1
                             }
                         }
                     } else if noteMeasure.clef == .F {
-                        if note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 13 {
+                        if note.pitch.octave * 8 + note.pitch.step.rawValue < 12 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue < 12 {
                                 note.pitch.octave += 1
                             }
-                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
-                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 36 {
+                        } else if note.pitch.octave * 8 + note.pitch.step.rawValue > 37 {
+                            while note.pitch.octave * 8 + note.pitch.step.rawValue > 37 {
                                 note.pitch.octave -= 1
                             }
                         }
