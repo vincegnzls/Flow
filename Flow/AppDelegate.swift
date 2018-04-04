@@ -16,6 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Setup toasts
+        var style = ToastStyle()
+        style.messageFont = UIFont(name: style.messageFont.fontName, size: 22)!
+        style.verticalPadding = 15
+        style.messageAlignment = .center
+        ToastManager.shared.style = style
+        ToastManager.shared.isQueueEnabled = false
+        
         return true
     }
 
