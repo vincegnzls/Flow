@@ -18,6 +18,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var tempoBtn: UIView!
     @IBOutlet weak var tempoSliderView: UIView!
     @IBOutlet weak var tempoLabel: UILabel!
+    @IBOutlet weak var tempoTextField: UITextField!
     @IBOutlet weak var tempoSlider: UISlider!
     
     var composition: Composition?
@@ -156,8 +157,17 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         
     }
     
+    @IBAction func editingChanged(_ sender: UITextField) {
+        print("CHAAANGE")
+        if let comp = self.composition {
+            if let tempo = Double(sender.text!) {
+                comp.tempo = tempo
+            }
+        }
+    }
+    
     @IBAction func tempoSliderChange(_ sender: UISlider) {
-        self.tempoLabel.text = "= " + String(Int(sender.value))
+        self.tempoTextField.text = String(Int(sender.value))
         
         if let comp = self.composition {
             comp.tempo = Double(sender.value)
@@ -196,7 +206,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         if let comp = self.composition {
             self.tempoSliderView.isHidden = true
             self.tempoSlider.setValue(Float(comp.tempo), animated: false)
-            self.tempoLabel.text = "= " + String(Int(comp.tempo))
+            self.tempoLabel.text = "="
+            self.tempoTextField.text = String(Int(comp.tempo))
         }
     }
 
