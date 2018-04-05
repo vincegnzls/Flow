@@ -21,6 +21,7 @@ class MusicSheet: UIView {
     private var staffIndex:CGFloat = -1
     private var movingStartX: CGFloat = 0
     private var distance: CGFloat = 450
+    private var clefWidth: CGFloat = 58.2
 
     private let noteXOffset: CGFloat = 10
     private let noteYOffset: CGFloat = -93
@@ -252,6 +253,13 @@ class MusicSheet: UIView {
             // for redirecting the cursor after a full measure
             movingStartX = lefRightPadding
             endX = movingStartX + self.distance // initial endX TODO: Remove when implementing adaptive measure
+            
+            // draw clef before drawing the rest of the staff FOR HORIZONTAL VIEW
+            for (index, measure) in measureSplices[0].enumerated() {
+                let startPoint = startY + staffSpace * CGFloat(index)
+                let _ = drawClefLabel(startX: movingStartX, startY: startPoint, clefType: measure.clef)
+            }
+            
             for i in 0..<measureSplices.count {
                 setupGrandStaff(startX: movingStartX, startY: startY, measures: measureSplices[i])
             }
@@ -363,11 +371,11 @@ class MusicSheet: UIView {
         var startYs = [CGFloat]()
 
         let startPointG = startY + staffSpace * staffIndex
-        let gClefWidth = drawClefLabel(startX: startX, startY: startPointG, clefType: gMeasure.clef)
+        //let gClefWidth = drawClefLabel(startX: startX, startY: startPointG, clefType: gMeasure.clef)
 
         staffIndex += 1
         let startPointF = startY + staffSpace * staffIndex
-        let fClefWidth = drawClefLabel(startX: startX, startY: startPointF, clefType: fMeasure.clef)
+        //let fClefWidth = drawClefLabel(startX: startX, startY: startPointF, clefType: fMeasure.clef)
 
         startYs.append(startPointG)
         startYs.append(startPointF)
@@ -437,7 +445,16 @@ class MusicSheet: UIView {
             }
 
             modStartX += adjustKeyTimeSig
-            adjustKeyTimeSig += gClefWidth + fClefWidth
+            
+            if let staffList = composition?.staffList {
+                for staff in staffList {
+                    if let measureIndex = staff.measures.index(of: measures[i]) {
+                        if measureIndex == 0 {
+                            adjustKeyTimeSig += clefWidth*1.5
+                        }
+                    }
+                }
+            }
 
 
             // START OF DRAWING OF MEASURE
@@ -1998,7 +2015,11 @@ class MusicSheet: UIView {
                                                 y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
                                         moveCursorY(location: newSnapPoints[prevSnapIndex])
 
-                                        scrollMusicSheetToY(y: newMeasurePoints.lowerRightPoint.y - 140)
+                                        //scrollMusicSheetToY(y: newMeasurePoints.lowerRightPoint.y - 140)
+                                        //scrollMusicSheetToX(x: newMeasurePoints.upperLeftPoint.x - 140)
+                                        
+                                        scrollMusicSheetToYIfPointNotVisible(y: newMeasurePoints.lowerRightPoint.y - 140, targetPoint: newMeasurePoints.lowerRightPoint)
+                                        scrollMusicSheetToXIfPointNotVisible(x: newMeasurePoints.upperLeftPoint.x - 140, targetPoint: newMeasurePoints.lowerRightPoint)
 
                                     }
 
@@ -2057,7 +2078,11 @@ class MusicSheet: UIView {
                                                 y: firstMeasurePoints.lowerRightPoint.y + cursorXOffsetY))
                                         moveCursorY(location: newPoint)
 
-                                        scrollMusicSheetToY(y: newMeasurePoints.lowerRightPoint.y - 140)
+                                        //scrollMusicSheetToY(y: newMeasurePoints.lowerRightPoint.y - 140)
+                                        //scrollMusicSheetToX(x: newMeasurePoints.upperLeftPoint.x - 140)
+                                        
+                                        scrollMusicSheetToYIfPointNotVisible(y: newMeasurePoints.lowerRightPoint.y - 140, targetPoint: sheetCursor.curYCursorLocation)
+                                        scrollMusicSheetToXIfPointNotVisible(x: newMeasurePoints.upperLeftPoint.x - 140, targetPoint: sheetCursor.curYCursorLocation)
 
                                     }
 
@@ -2079,6 +2104,41 @@ class MusicSheet: UIView {
         if let outerScrollView = self.superview as? UIScrollView {
             outerScrollView.setContentOffset(
                 CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: animated)
+        }
+    }
+    
+    private func scrollMusicSheetToX (x: CGFloat, animated: Bool = true) {
+        if let outerScrollView = self.superview as? UIScrollView {
+            outerScrollView.setContentOffset(
+                CGPoint(x: x, y: outerScrollView.contentOffset.y), animated: animated)
+        }
+    }
+    
+    private func scrollMusicSheetToYIfPointNotVisible (y: CGFloat, targetPoint: CGPoint, animated: Bool = true) {
+        if let outerScrollView = self.superview as? UIScrollView {
+            
+            let r:CGRect = CGRect(x: outerScrollView.contentOffset.x, y: outerScrollView.contentOffset.y,
+                                  width: outerScrollView.frame.width,
+                                  height: outerScrollView.frame.height)
+            
+            if !r.contains(targetPoint) {
+                outerScrollView.setContentOffset(
+                    CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: animated)
+            }
+        }
+    }
+    
+    private func scrollMusicSheetToXIfPointNotVisible (x: CGFloat, targetPoint: CGPoint, animated: Bool = true) {
+        if let outerScrollView = self.superview as? UIScrollView {
+            
+            let r:CGRect = CGRect(x: outerScrollView.contentOffset.x, y: outerScrollView.contentOffset.y,
+                                  width: outerScrollView.frame.width,
+                                  height: outerScrollView.frame.height)
+            
+            if !r.contains(targetPoint) {
+                outerScrollView.setContentOffset(
+                    CGPoint(x: x, y: outerScrollView.contentOffset.y), animated: animated)
+            }
         }
     }
     
@@ -2624,6 +2684,7 @@ class MusicSheet: UIView {
                    let fMeasurePoints = GridSystem.instance.getPointsFromMeasure(measure: parallelPlayingMeasure) {
                 
                     scrollMusicSheetToY(y: gMeasurePoints.lowerRightPointWithLedger.y)
+                    scrollMusicSheetToX(x: gMeasurePoints.upperLeftPoint.x - 140)
                     
                     let r: CGRect = CGRect(x: fMeasurePoints.upperLeftPoint.x, y: fMeasurePoints.upperLeftPoint.y,
                             width: gMeasurePoints.width,
