@@ -765,7 +765,7 @@ Tap '+' to create a new composition.</string>
                                                 <rect key="frame" x="49" y="5" width="43" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <nil key="textColor"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <fontDescription key="fontDescription" name="TimesNewRomanPS-BoldMT" family="Times New Roman" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                                 <connections>
                                                     <action selector="editingChanged:" destination="ldS-Qo-c4z" eventType="editingChanged" id="WZk-ic-jTG"/>
