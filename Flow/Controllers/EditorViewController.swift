@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditorViewController: UIViewController, UIScrollViewDelegate {
+class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var musicSheet: MusicSheet!
     @IBOutlet weak var height: NSLayoutConstraint!
@@ -95,6 +95,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tempoTextField.delegate = self
 
         //let params = Parameters()
         //params.put(key: KeyNames.COMPOSITION, value: self.composition!)
@@ -361,6 +363,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     
     func changesMade() {
         
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        return allowedCharacters.isSuperset(of: characterSet)
     }
 }
 
