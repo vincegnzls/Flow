@@ -266,10 +266,11 @@ Tap '+' to create a new composition.</string>
                                 <rect key="frame" x="0.0" y="144" width="1112" height="690"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bCt-Js-Xda" customClass="MusicSheet" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="1112" height="1800"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1112" height="690"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="1800" id="xo5-Y1-ev2"/>
+                                            <constraint firstAttribute="width" constant="1112" id="FNs-ij-IW5"/>
+                                            <constraint firstAttribute="height" constant="690" id="xo5-Y1-ev2"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -811,7 +812,6 @@ Tap '+' to create a new composition.</string>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="trailing" secondItem="9Me-FI-wrK" secondAttribute="trailing" id="YV8-AU-guD"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="leading" secondItem="9Me-FI-wrK" secondAttribute="leading" id="gkZ-FX-afh"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="top" secondItem="VHe-OH-6BV" secondAttribute="bottom" constant="20" id="nXp-Hu-rYX"/>
-                            <constraint firstItem="bCt-Js-Xda" firstAttribute="width" secondItem="ACD-nf-3gA" secondAttribute="width" id="sgU-I3-59M"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="j19-iv-FrW"/>
                     </view>
@@ -829,6 +829,7 @@ Tap '+' to create a new composition.</string>
                         <outlet property="menuBar" destination="VHe-OH-6BV" id="EC9-aQ-TAh"/>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
                         <outlet property="musicSheetHeight" destination="xo5-Y1-ev2" id="qsl-wN-zx1"/>
+                        <outlet property="musicSheetWidth" destination="FNs-ij-IW5" id="I0R-5D-Npb"/>
                         <outlet property="scrollView" destination="9Me-FI-wrK" id="TfR-zs-wl6"/>
                         <outlet property="tempoBtn" destination="yi3-eV-UmB" id="ZZm-tD-4CE"/>
                         <outlet property="tempoLabel" destination="wPq-zV-MYY" id="yqa-AO-XI0"/>

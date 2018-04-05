@@ -19,6 +19,8 @@ class MusicSheet: UIView {
     private let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
     private var startY:CGFloat = 200
     private var staffIndex:CGFloat = -1
+    private var movingStartX: CGFloat = 0
+    private var distance: CGFloat = 450
 
     private let noteXOffset: CGFloat = 10
     private let noteYOffset: CGFloat = -93
@@ -90,10 +92,8 @@ class MusicSheet: UIView {
 
     var playBackTimer = Timer()
 
-    private var endX: CGFloat {
-        return bounds.width - lefRightPadding
-    }
-
+    private var endX: CGFloat = 0
+    
     private var visibleLedgerLines = [UIBezierPath]()
 
     public var selectedNotations: [MusicNotation] = [] {
@@ -250,8 +250,10 @@ class MusicSheet: UIView {
             }
 
             // for redirecting the cursor after a full measure
+            movingStartX = lefRightPadding
+            endX = movingStartX + self.distance // initial endX TODO: Remove when implementing adaptive measure
             for i in 0..<measureSplices.count {
-                setupGrandStaff(startX: lefRightPadding, startY: startY, measures: measureSplices[i])
+                setupGrandStaff(startX: movingStartX, startY: startY, measures: measureSplices[i])
             }
 
             // for redirecting the cursor after redrawing the whole composition
@@ -343,11 +345,13 @@ class MusicSheet: UIView {
         staffIndex += 1
         let startPoint = startY + staffSpace * staffIndex
 
-        let measureHeight = drawStaff(startX: lefRightPadding, startY: startY, measures:measures)
+        let measureHeight = drawStaff(startX: movingStartX, startY: startY, measures:measures)
 
         if let height = measureHeight {
-            drawStaffConnection(startX: lefRightPadding, startY: startPoint - height, height: height)
+            drawStaffConnection(startX: movingStartX, startY: startPoint - height, height: height)
         }
+        
+        staffIndex = -1
     }
 
     // Draws a staff
@@ -372,7 +376,6 @@ class MusicSheet: UIView {
         let startMeasure:CGFloat = startX + 85
 
         // Track distance for each measure to be printed
-        var distance:CGFloat = (endX-startMeasure)
 
         // Start drawing the measures
         var modStartX:CGFloat = startMeasure
@@ -453,6 +456,9 @@ class MusicSheet: UIView {
         
         measurePoints = drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
                                              staffSpace: startPointG - startPointF, leftInnerPadding: adjustKeyTimeSig, rightInnerPadding: 15)
+        
+        movingStartX = endX
+        endX = endX + distance
         
         for measurePoint in measurePoints {
             GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measurePoint)
