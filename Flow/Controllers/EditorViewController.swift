@@ -156,7 +156,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         if let composition = self.musicSheet.composition {
             if FileHandler.instance.saveFile(composition: composition) {
                 self.view.hideAllToasts()
-                self.view.makeToast("Saved successfully", duration: 1.5, position: .bottom)
+                self.view.makeToast("Saved successfully", duration: 1.5, position: .bottom, image: UIImage(named: "save-icon"))
             }
         }
         
