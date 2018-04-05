@@ -168,9 +168,10 @@ class Converter {
                     previousTimeSignature = TimeSignature(beats: beats, beatType: beatType)
                 }
                 
-                if let tempoString = measureElement["attributes"]["sound"].attributes["tempo"] {
+                if let tempoString = measureElement["sound"].attributes["tempo"] {
                     if let tempo = Double(tempoString) {
                         composition.tempo = tempo
+                        print("Tempo: \(tempo)")
                     }
                 }
                 
