@@ -353,10 +353,10 @@ class MusicSheet: UIView {
         staffIndex += 1
         let startPoint = startY + staffSpace * staffIndex
 
-        let measureHeight = drawStaff(startX: movingStartX, startY: startY, measures:measures)
+        let measureHeight = drawStaff(startX: startX, startY: startY, measures:measures)
 
         if let height = measureHeight {
-            drawStaffConnection(startX: movingStartX, startY: startPoint - height, height: height)
+            drawStaffConnection(startX: startX, startY: startPoint - height, height: height)
         }
         
         staffIndex = -1
@@ -381,7 +381,7 @@ class MusicSheet: UIView {
         startYs.append(startPointF)
 
         // Adjust initial space for clef and time signature
-        let startMeasure:CGFloat = startX + 85
+        let startMeasure:CGFloat = startX
 
         // Track distance for each measure to be printed
 
@@ -396,6 +396,18 @@ class MusicSheet: UIView {
             adjustKeyTimeSig = 0
 
             var keyLabelWidth:CGFloat = 0
+            
+            if let staffList = composition?.staffList {
+                for staff in staffList {
+                    if let measureIndex = staff.measures.index(of: measures[i]) {
+                        if measureIndex == 0 {
+                            adjustKeyTimeSig += clefWidth*1.5
+                        } else {
+                            adjustKeyTimeSig += 15
+                        }
+                    }
+                }
+            }
 
             // START OF DRAWING KEY SIGNATURE
 
@@ -445,17 +457,6 @@ class MusicSheet: UIView {
             }
 
             modStartX += adjustKeyTimeSig
-            
-            if let staffList = composition?.staffList {
-                for staff in staffList {
-                    if let measureIndex = staff.measures.index(of: measures[i]) {
-                        if measureIndex == 0 {
-                            adjustKeyTimeSig += clefWidth*1.5
-                        }
-                    }
-                }
-            }
-
 
             // START OF DRAWING OF MEASURE
             //measureLocation = drawMeasure(measure: measures[i], startX: modStartX, endX: modStartX+distance, startY: startY)
