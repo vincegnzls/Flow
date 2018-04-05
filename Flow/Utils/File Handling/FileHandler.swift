@@ -44,7 +44,7 @@ class FileHandler {
         return composition
     }
     
-    func saveFile(composition: Composition) {
+    func saveFile(composition: Composition) -> Bool {
         let fileURL = documentsDirectory.appendingPathComponent(composition.compositionInfo.id).appendingPathExtension("xml")
         
         let writeString = Converter.compositionToMusicXML(composition)
@@ -64,7 +64,10 @@ class FileHandler {
         } catch let error as NSError {
             print("Failed to write to file \(composition.compositionInfo.name) with id \(composition.compositionInfo.id)")
             print(error)
+            return false
         }
+        
+        return true
     }
     
     func export(_ compositionInfo: CompositionInfo) -> URL? {
