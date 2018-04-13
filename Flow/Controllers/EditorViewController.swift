@@ -15,6 +15,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var menuBar: MenuBar!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var musicSheetHeight: NSLayoutConstraint!
+    @IBOutlet weak var musicSheetWidth: NSLayoutConstraint!
     @IBOutlet weak var tempoBtn: UIView!
     @IBOutlet weak var tempoSliderView: UIView!
     @IBOutlet weak var tempoLabel: UILabel!
@@ -114,7 +115,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                     print("EXTRA MEASURES: \(extraMeasuresCount)")
 
                     for _ in 0..<extraMeasuresCount {
-                        self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
+                        self.musicSheetWidth.constant = self.musicSheetWidth.constant + 650
                     }
                 }
             }
