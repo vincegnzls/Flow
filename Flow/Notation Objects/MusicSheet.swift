@@ -2605,16 +2605,85 @@ class MusicSheet: UIView {
     }
 
     public func copy() {
+        self.superview!.hideAllToasts()
         print("Copy")
-        Clipboard.instance.copy(self.selectedNotations)
+        if !self.selectedNotations.isEmpty {
+            Clipboard.instance.copy(self.selectedNotations)
+            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon"))
+        } else if let hovered = self.hoveredNotation {
+            Clipboard.instance.copy([hovered])
+            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon"))
+        }
     }
 
     public func cut() {
+        self.superview!.hideAllToasts()
         print("Cut")
-        Clipboard.instance.cut(self.selectedNotations)
-        self.selectedNotations.removeAll()
-        self.updateMeasureDraw()
+        if !self.selectedNotations.isEmpty {
+            Clipboard.instance.cut(self.selectedNotations)
+            self.selectedNotations.removeAll()
+            self.updateMeasureDraw()
+            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "cut-icon"))
+        } else if let hovered = self.hoveredNotation {
+            Clipboard.instance.cut([hovered])
+            self.selectedNotations.removeAll()
+            self.updateMeasureDraw()
+            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon"))
+        }
+        
 
+    }
+    
+    public func paste() {
+        selectedNotations.removeAll()
+        
+        print("Paste")
+        var measures = [Measure]()
+        if !self.selectedNotations.isEmpty {
+            for notation in self.selectedNotations {
+                if let measure = notation.measure {
+                    if !measures.contains(measure) {
+                        measures.append(measure)
+                    }
+                }
+            }
+            
+            let startMeasure = measures[0]
+            let firstNotation = self.selectedNotations[0]
+            if let startIndex = startMeasure.notationObjects.index(of: firstNotation) {
+                Clipboard.instance.paste(measures: measures, at: startIndex)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
+            }
+            
+        } else if let selectedMeasure = GridSystem.instance.getCurrentMeasure() {
+            if let staves = self.composition?.staffList {
+                for staff in staves {
+                    if let startIndex = staff.measures.index(of: selectedMeasure) {
+                        measures = Array(staff.measures[startIndex...])
+                    }
+                }
+            }
+            
+            let startMeasure = measures[0]
+            if let hovered = self.hoveredNotation {
+                if let startIndex = startMeasure.notationObjects.index(of: hovered) {
+                    Clipboard.instance.paste(measures: measures, at: startIndex)
+                    
+                    EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
+                }
+            } else {
+                Clipboard.instance.paste(measures: measures, at: startMeasure.notationObjects.count)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
+            }
+        }
+        
+        
+        
+        self.updateMeasureDraw()
+        
+        //Clipboard.instance.paste(measures: <#T##[Measure]#>, noteIndex: &<#T##Int#>)
     }
 
     public func play() {
@@ -2705,58 +2774,6 @@ class MusicSheet: UIView {
 
     }
 
-    public func paste() {
-        selectedNotations.removeAll()
-
-        print("Paste")
-        var measures = [Measure]()
-        if !self.selectedNotations.isEmpty {
-            for notation in self.selectedNotations {
-                if let measure = notation.measure {
-                    if !measures.contains(measure) {
-                        measures.append(measure)
-                    }
-                }
-            }
-
-            let startMeasure = measures[0]
-            let firstNotation = self.selectedNotations[0]
-            if let startIndex = startMeasure.notationObjects.index(of: firstNotation) {
-                Clipboard.instance.paste(measures: measures, at: startIndex)
-
-                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
-            }
-
-        } else if let selectedMeasure = GridSystem.instance.getCurrentMeasure() {
-            if let staves = self.composition?.staffList {
-                for staff in staves {
-                    if let startIndex = staff.measures.index(of: selectedMeasure) {
-                        measures = Array(staff.measures[startIndex...])
-                    }
-                }
-            }
-
-            let startMeasure = measures[0]
-            if let hovered = self.hoveredNotation {
-                if let startIndex = startMeasure.notationObjects.index(of: hovered) {
-                    Clipboard.instance.paste(measures: measures, at: startIndex)
-
-                    EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
-                }
-            } else {
-                Clipboard.instance.paste(measures: measures, at: startMeasure.notationObjects.count)
-
-                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
-            }
-        }
-
-
-
-        self.updateMeasureDraw()
-
-        //Clipboard.instance.paste(measures: <#T##[Measure]#>, noteIndex: &<#T##Int#>)
-    }
-
     public func editTimeSig(params: Parameters) {
         let newMeasure:Measure = params.get(key: KeyNames.NEW_MEASURE) as! Measure
         let oldMeasure:Measure = params.get(key: KeyNames.OLD_MEASURE) as! Measure
@@ -2773,17 +2790,66 @@ class MusicSheet: UIView {
                         if staff.measures[i].timeSignature == oldTimeSig {
                             let curMeasure = staff.measures[i]
 
-                            while newMaxBeatValue < curMeasure.getTotalBeats() {
+                            /*while newMaxBeatValue < curMeasure.getTotalBeats() {
                                 curMeasure.deleteInMeasure(curMeasure.notationObjects[curMeasure.notationObjects.count - 1])
-                            }
+                            }*/
 
                             staff.measures[i].timeSignature = newMeasure.timeSignature
-                            staff.measures[i].fillWithRests()
+                            //staff.measures[i].fillWithRests()
                         }
                     }
                 }
             }
         }
+
+        var oldStaffs = [Staff]()
+
+        var oldStaffsNotations = [[MusicNotation]]()
+
+        if let staffs = composition?.staffList {
+            for staff in staffs {
+                oldStaffs.append(staff.duplicate())
+            }
+        }
+
+        for oldStaff in oldStaffs {
+            oldStaffsNotations.append([MusicNotation]())
+        }
+
+        var oldStaffIndex = 0
+
+        for oldStaff in oldStaffs {
+            for measure in oldStaff.measures {
+                for notation in measure.notationObjects {
+                    oldStaffsNotations[oldStaffIndex].append(notation)
+                }
+            }
+
+            oldStaffIndex += 1
+        }
+
+        if let staffs = composition?.staffList {
+            for staff in staffs {
+                for measure in staff.measures {
+                    measure.deleteAllNotes()
+                }
+            }
+        }
+
+        var index = 0
+
+        if let staffs = composition?.staffList {
+            for (staff, notations) in zip(staffs, oldStaffsNotations) {
+                for measure in staff.measures {
+                    while index < notations.count && measure.addToMeasure(notations[index]) {
+                        index += 1
+                    }
+
+                    measure.fillWithRests()
+                }
+            }
+        }
+
 
         moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
     }

@@ -57,6 +57,7 @@
 		864CE5AC1FD33076001FF059 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5AB1FD33076001FF059 /* Note.swift */; };
 		864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5B01FD330DA001FF059 /* GridCoordinates.swift */; };
 		865B22CA20050477009D0D11 /* HighlightRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865B22C920050477009D0D11 /* HighlightRect.swift */; };
+		8677ADF12074E18B002C28BF /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677ADF02074E18B002C28BF /* Toast.swift */; };
 		8696A8A61FD4E8E800EB81BD /* Composition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A51FD4E8E800EB81BD /* Composition.swift */; };
 		8696A8A91FD4EA5800EB81BD /* FileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8A81FD4EA5800EB81BD /* FileHandler.swift */; };
 		8696A8AC1FD4EB5600EB81BD /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */; };
@@ -166,6 +167,7 @@
 		864CE5AB1FD33076001FF059 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		864CE5B01FD330DA001FF059 /* GridCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCoordinates.swift; sourceTree = "<group>"; };
 		865B22C920050477009D0D11 /* HighlightRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightRect.swift; sourceTree = "<group>"; };
+		8677ADF02074E18B002C28BF /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		8696A8A51FD4E8E800EB81BD /* Composition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Composition.swift; sourceTree = "<group>"; };
 		8696A8A81FD4EA5800EB81BD /* FileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandler.swift; sourceTree = "<group>"; };
 		8696A8AB1FD4EB5600EB81BD /* TimeSignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignature.swift; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 				86B8EFED1FEAC30500DD834E /* Clipboard.swift */,
 				8618F07B1FED406500DF8A10 /* UndoRedoManager.swift */,
 				6126669108703D46E1FBE33D /* DateExtension.swift */,
+				8677ADF02074E18B002C28BF /* Toast.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -623,6 +626,7 @@
 				861F781A1FD6E12A00C51BD2 /* CompositionInfo.swift in Sources */,
 				86A9B2801FDD046A007EB37C /* TestClass.swift in Sources */,
 				864CE5A81FD32FEB001FF059 /* Pitch.swift in Sources */,
+				8677ADF12074E18B002C28BF /* Toast.swift in Sources */,
 				61B1316B1FE1513900ADCDF0 /* ButtonEffect.swift in Sources */,
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
 				8696A8A91FD4EA5800EB81BD /* FileHandler.swift in Sources */,

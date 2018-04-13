@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditorViewController: UIViewController, UIScrollViewDelegate {
+class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var musicSheet: MusicSheet!
     @IBOutlet weak var height: NSLayoutConstraint!
@@ -19,6 +19,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var tempoBtn: UIView!
     @IBOutlet weak var tempoSliderView: UIView!
     @IBOutlet weak var tempoLabel: UILabel!
+    @IBOutlet weak var tempoTextField: UITextField!
     @IBOutlet weak var tempoSlider: UISlider!
     
     var composition: Composition?
@@ -95,6 +96,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tempoTextField.delegate = self
 
         //let params = Parameters()
         //params.put(key: KeyNames.COMPOSITION, value: self.composition!)
@@ -152,13 +155,25 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
         
         if let composition = self.musicSheet.composition {
-            FileHandler.instance.saveFile(composition: composition)
+            if FileHandler.instance.saveFile(composition: composition) {
+                self.view.hideAllToasts()
+                self.view.makeToast("Saved successfully", duration: 1.5, position: .bottom, image: UIImage(named: "save-icon"))
+            }
         }
         
     }
     
+    @IBAction func editingChanged(_ sender: UITextField) {
+        print("CHAAANGE")
+        if let comp = self.composition {
+            if let tempo = Double(sender.text!) {
+                comp.tempo = tempo
+            }
+        }
+    }
+    
     @IBAction func tempoSliderChange(_ sender: UISlider) {
-        self.tempoLabel.text = "= " + String(Int(sender.value))
+        self.tempoTextField.text = String(Int(sender.value))
         
         if let comp = self.composition {
             comp.tempo = Double(sender.value)
@@ -197,7 +212,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
         if let comp = self.composition {
             self.tempoSliderView.isHidden = true
             self.tempoSlider.setValue(Float(comp.tempo), animated: false)
-            self.tempoLabel.text = "= " + String(Int(comp.tempo))
+            self.tempoLabel.text = "="
+            self.tempoTextField.text = String(Int(comp.tempo))
         }
     }
 
@@ -348,6 +364,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate {
     
     func changesMade() {
         
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        return allowedCharacters.isSuperset(of: characterSet)
     }
 }
 

@@ -762,6 +762,16 @@ Tap '+' to create a new composition.</string>
                                                 <rect key="frame" x="-12" y="-41" width="55" height="117"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
+                                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MEu-Lw-eGp">
+                                                <rect key="frame" x="49" y="5" width="43" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" name="TimesNewRomanPS-BoldMT" family="Times New Roman" pointSize="17"/>
+                                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                <connections>
+                                                    <action selector="editingChanged:" destination="ldS-Qo-c4z" eventType="editingChanged" id="WZk-ic-jTG"/>
+                                                </connections>
+                                            </textField>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <accessibility key="accessibilityConfiguration">
@@ -780,11 +790,11 @@ Tap '+' to create a new composition.</string>
                                 </connections>
                             </view>
                             <view alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vvK-lH-hA9" userLabel="Tempo Slider">
-                                <rect key="frame" x="815" y="117" width="174" height="53"/>
+                                <rect key="frame" x="815" y="117" width="200" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="30" maxValue="200" translatesAutoresizingMaskIntoConstraints="NO" id="Q0u-RV-0u3">
-                                        <rect key="frame" x="28" y="12" width="118" height="30"/>
+                                        <rect key="frame" x="20" y="11" width="160" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="tempoSliderChange:" destination="ldS-Qo-c4z" eventType="valueChanged" id="qf9-MJ-PKV"/>
@@ -835,6 +845,7 @@ Tap '+' to create a new composition.</string>
                         <outlet property="tempoLabel" destination="wPq-zV-MYY" id="yqa-AO-XI0"/>
                         <outlet property="tempoSlider" destination="Q0u-RV-0u3" id="RWk-I1-jfO"/>
                         <outlet property="tempoSliderView" destination="vvK-lH-hA9" id="CZ6-M1-wif"/>
+                        <outlet property="tempoTextField" destination="MEu-Lw-eGp" id="jI5-D8-Hg1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2W-99-FM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -891,7 +902,7 @@ Tap '+' to create a new composition.</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Number of Beats:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4gt-QU-C0q">
-                                            <rect key="frame" x="111" y="90" width="202" height="21"/>
+                                            <rect key="frame" x="111" y="90" width="201" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -919,14 +930,14 @@ Tap '+' to create a new composition.</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2" minValue="1" maxValue="32" translatesAutoresizingMaskIntoConstraints="NO" id="0rU-pP-1Nh">
-                                            <rect key="frame" x="57" y="260" width="318" height="30"/>
+                                            <rect key="frame" x="56" y="260" width="319" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <connections>
                                                 <action selector="onChangeBeatDuration:" destination="cUa-Ia-SFW" eventType="valueChanged" id="1gE-v6-CEa"/>
                                             </connections>
                                         </slider>
                                         <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="7Ks-c6-edb">
-                                            <rect key="frame" x="57" y="156" width="318" height="30"/>
+                                            <rect key="frame" x="56" y="156" width="319" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <connections>
                                                 <action selector="onChangeNBeats:" destination="cUa-Ia-SFW" eventType="valueChanged" id="Mq6-yV-s3B"/>
