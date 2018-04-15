@@ -45,4 +45,6 @@ struct EventNames {
 
     static let HIGHLIGHT_MEASURE = "HIGHLIGHT_MEASURE"
     static let HIDE_TEMPO_MENU = "HIDE_TEMPO_MENU"
+    
+    static let SELECT_KEY_SIGNATURE = "SELECT_KEY_SIGNATURE"
 }

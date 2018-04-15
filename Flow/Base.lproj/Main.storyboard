@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L3C-ZS-342">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L3C-ZS-342">
     <device id="ipad10_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="TimesNewRomanBold.ttf">
-            <string>TimesNewRomanPS-BoldMT</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="154-Sg-OxG">
@@ -790,11 +785,11 @@ Tap '+' to create a new composition.</string>
                                 </connections>
                             </view>
                             <view alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vvK-lH-hA9" userLabel="Tempo Slider">
-                                <rect key="frame" x="815" y="117" width="200" height="50"/>
+                                <rect key="frame" x="815" y="117" width="250" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="30" maxValue="200" translatesAutoresizingMaskIntoConstraints="NO" id="Q0u-RV-0u3">
-                                        <rect key="frame" x="20" y="11" width="160" height="30"/>
+                                        <rect key="frame" x="20" y="11" width="210" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="tempoSliderChange:" destination="ldS-Qo-c4z" eventType="valueChanged" id="qf9-MJ-PKV"/>
@@ -871,11 +866,11 @@ Tap '+' to create a new composition.</string>
                                     </connections>
                                 </button>
                                 <view alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wag-AV-1Qd">
-                                    <rect key="frame" x="156" y="242" width="800" height="350"/>
+                                    <rect key="frame" x="51" y="92" width="1010" height="650"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cDd-Cx-x6q">
-                                            <rect key="frame" x="669" y="304" width="46" height="30"/>
+                                            <rect key="frame" x="879" y="604" width="46" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <state key="normal" title="Save">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -885,7 +880,7 @@ Tap '+' to create a new composition.</string>
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IA1-J8-R26">
-                                            <rect key="frame" x="723" y="304" width="52" height="30"/>
+                                            <rect key="frame" x="933" y="604" width="52" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <state key="normal" title="Cancel">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -895,65 +890,182 @@ Tap '+' to create a new composition.</string>
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Set Time Signature" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hb8-6M-Wv1">
-                                            <rect key="frame" x="111" y="55" width="214" height="21"/>
+                                            <rect key="frame" x="100" y="43" width="270" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Number of Beats:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4gt-QU-C0q">
-                                            <rect key="frame" x="111" y="90" width="201" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Number of Beats" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pJy-jc-Q22">
+                                            <rect key="frame" x="45" y="295" width="181" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cMO-fH-QBP" userLabel="N Beats">
-                                            <rect key="frame" x="125" y="119" width="175" height="30"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Beat Duration" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pha-Fv-esI">
+                                            <rect key="frame" x="244" y="295" width="181" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="32"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Beat Duration:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d2p-ta-m1i">
-                                            <rect key="frame" x="144" y="194" width="148" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YxG-qy-psA" userLabel="N Duration">
-                                            <rect key="frame" x="125" y="223" width="175" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="32"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2" minValue="1" maxValue="32" translatesAutoresizingMaskIntoConstraints="NO" id="0rU-pP-1Nh">
-                                            <rect key="frame" x="56" y="260" width="319" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dBP-b9-rSh" userLabel="Time Signature Presets">
+                                            <rect key="frame" x="45" y="99" width="380" height="128"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleAspectFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mxf-Uq-Ms3" userLabel="2-4" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="13" width="89" height="102"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" backgroundImage="2-4"/>
+                                                    <connections>
+                                                        <action selector="twoFourPress:" destination="cUa-Ia-SFW" eventType="touchUpInside" id="3MX-J2-423"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleAspectFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="62I-uq-hZ6" userLabel="3-4" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="194" y="13" width="89" height="102"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" backgroundImage="4-4"/>
+                                                    <connections>
+                                                        <action selector="fourFourPress:" destination="cUa-Ia-SFW" eventType="touchUpInside" id="bZR-Uk-QhU"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleAspectFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w53-1P-GBv" userLabel="4-4" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="97" y="13" width="89" height="102"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" backgroundImage="3-4"/>
+                                                    <connections>
+                                                        <action selector="threeFourPress:" destination="cUa-Ia-SFW" eventType="touchUpInside" id="yfQ-Sx-MQF"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleAspectFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3YN-ZG-dei" userLabel="6-8" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="291" y="13" width="89" height="102"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" backgroundImage="6-8"/>
+                                                    <connections>
+                                                        <action selector="sixEighthPress:" destination="cUa-Ia-SFW" eventType="touchUpInside" id="MRQ-GZ-Aix"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </view>
+                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jek-XO-Ke8">
+                                            <rect key="frame" x="80" y="345" width="110" height="70"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="38"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="numberPad" enablesReturnKeyAutomatically="YES"/>
                                             <connections>
-                                                <action selector="onChangeBeatDuration:" destination="cUa-Ia-SFW" eventType="valueChanged" id="1gE-v6-CEa"/>
+                                                <action selector="onNBeatsEdit:" destination="cUa-Ia-SFW" eventType="editingChanged" id="Pln-Op-1gF"/>
                                             </connections>
-                                        </slider>
-                                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="7Ks-c6-edb">
-                                            <rect key="frame" x="56" y="156" width="319" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        </textField>
+                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zgi-KF-05A">
+                                            <rect key="frame" x="279" y="345" width="110" height="70"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="38"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="numberPad" enablesReturnKeyAutomatically="YES"/>
                                             <connections>
-                                                <action selector="onChangeNBeats:" destination="cUa-Ia-SFW" eventType="valueChanged" id="Mq6-yV-s3B"/>
+                                                <action selector="onBeatDurationEndEdit:" destination="cUa-Ia-SFW" eventType="editingDidEnd" id="sjH-9f-4vw"/>
                                             </connections>
-                                        </slider>
+                                        </textField>
+                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="stY-lC-caC" userLabel="KeySignaturePicker">
+                                            <rect key="frame" x="428" y="87" width="534" height="509"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="b8j-mx-suG">
+                                                    <rect key="frame" x="114" y="33" width="350" height="350"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uEF-MS-jBj" userLabel="C" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="246" y="-5" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-c"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwf-oK-lni" userLabel="G" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="337" y="16" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-g"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xre-s8-rFB" userLabel="A" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="404" y="257" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-e"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQ3-pv-4h8" userLabel="E" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="416" y="168" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-a"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VOX-er-gOf" userLabel="F#" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="249" y="430" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-fsharp"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="79Z-Pd-oh4" userLabel="B" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="337" y="318" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-b"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RnP-yl-aCl" userLabel="Gb" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="246" y="340" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-gflat"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Efr-Pg-vNf" userLabel="Db" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="155" y="318" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-dflat"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Oq-pD-cAO" userLabel="Ab" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="88" y="257" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-aflat"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QQn-J1-RyH" userLabel="Eb" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="71" y="168" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-eflat"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oyJ-8s-29E" userLabel="D" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="402" y="81" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-d"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6hK-PI-qIf" userLabel="Bb" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="90" y="81" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-bflat"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aVe-6v-you" userLabel="F" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="155" y="16" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-f"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zNK-pr-wdA" userLabel="C#" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="97" y="392" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-csharp"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dZ8-0B-r2i" userLabel="Cb" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
+                                                    <rect key="frame" x="395" y="392" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="keysig-cflat"/>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Set Key Signature" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZEs-ca-dQD">
-                                            <rect key="frame" x="467" y="55" width="214" height="21"/>
+                                            <rect key="frame" x="575" y="43" width="270" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xol-jn-CnT" customClass="KeySignaturePicker" customModule="Flow" customModuleProvider="target">
-                                            <rect key="frame" x="520" y="30" width="100" height="290"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                        </pickerView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <userDefinedRuntimeAttributes>
@@ -974,25 +1086,42 @@ Tap '+' to create a new composition.</string>
                         <blurEffect style="light"/>
                     </visualEffectView>
                     <connections>
-                        <outlet property="beatDurationLabel" destination="YxG-qy-psA" id="Pkj-7G-kKS"/>
-                        <outlet property="beatDurationSlider" destination="0rU-pP-1Nh" id="4IV-HB-EgV"/>
-                        <outlet property="keySignaturePicker" destination="Xol-jn-CnT" id="sdd-y3-mBP"/>
-                        <outlet property="nBeatsLabel" destination="cMO-fH-QBP" id="RLI-Nk-x5B"/>
-                        <outlet property="nBeatsSlider" destination="7Ks-c6-edb" id="c1K-6X-9E7"/>
+                        <outlet property="aBtn" destination="eQ3-pv-4h8" id="Jsm-6I-GIS"/>
+                        <outlet property="aFlatBtn" destination="8Oq-pD-cAO" id="wun-lh-hua"/>
+                        <outlet property="bBtn" destination="79Z-Pd-oh4" id="tP1-jS-g0t"/>
+                        <outlet property="bFlatBtn" destination="6hK-PI-qIf" id="izv-rd-Wt7"/>
+                        <outlet property="beatDurationTextField" destination="zgi-KF-05A" id="8YW-1c-9Mj"/>
+                        <outlet property="cBtn" destination="uEF-MS-jBj" id="rW9-62-oES"/>
+                        <outlet property="cFlatBtn" destination="dZ8-0B-r2i" id="6Ir-GW-Ywc"/>
+                        <outlet property="cSharpBtn" destination="zNK-pr-wdA" id="51H-6u-HNl"/>
+                        <outlet property="dBtn" destination="oyJ-8s-29E" id="sjt-qM-ttw"/>
+                        <outlet property="dFlatBtn" destination="Efr-Pg-vNf" id="vnI-Wd-uam"/>
+                        <outlet property="eBtn" destination="Xre-s8-rFB" id="CTa-l2-kAS"/>
+                        <outlet property="eFlatBtn" destination="QQn-J1-RyH" id="8Uv-yc-meI"/>
+                        <outlet property="fBtn" destination="aVe-6v-you" id="3JL-f0-Poz"/>
+                        <outlet property="fSharpBtn" destination="VOX-er-gOf" id="XxB-oi-i6s"/>
+                        <outlet property="gBtn" destination="gwf-oK-lni" id="Go7-ba-STh"/>
+                        <outlet property="gFlatBtn" destination="RnP-yl-aCl" id="zid-fd-jdn"/>
+                        <outlet property="nBeatsTextField" destination="jek-XO-Ke8" id="wLQ-5h-C5U"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kZZ-rP-7o3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4192.9721815519761" y="128.3203125"/>
+            <point key="canvasLocation" x="4192.4460431654679" y="128.05755395683454"/>
         </scene>
     </scenes>
     <resources>
         <image name="16th-note-icon" width="116" height="115"/>
         <image name="16th-rest-icon" width="116" height="115"/>
+        <image name="2-4" width="52" height="60"/>
+        <image name="3-4" width="52" height="60"/>
         <image name="32nd-note-icon" width="116" height="115"/>
         <image name="32nd-rest-icon" width="116" height="115"/>
+        <image name="4-4" width="52" height="60"/>
+        <image name="6-8" width="52" height="60"/>
         <image name="64th-note-icon" width="116" height="115"/>
         <image name="64th-rest-icon" width="116" height="115"/>
+        <image name="circle" width="512" height="512"/>
         <image name="controls-arrow-down" width="320" height="320"/>
         <image name="controls-arrow-left" width="320" height="320"/>
         <image name="controls-arrow-right" width="310" height="320"/>
@@ -1005,6 +1134,21 @@ Tap '+' to create a new composition.</string>
         <image name="flat-icon" width="43" height="43"/>
         <image name="half-note-icon" width="115" height="115"/>
         <image name="half-rest-icon" width="116" height="115"/>
+        <image name="keysig-a" width="60" height="60"/>
+        <image name="keysig-aflat" width="60" height="60"/>
+        <image name="keysig-b" width="60" height="60"/>
+        <image name="keysig-bflat" width="60" height="60"/>
+        <image name="keysig-c" width="60" height="60"/>
+        <image name="keysig-cflat" width="60" height="60"/>
+        <image name="keysig-csharp" width="60" height="60"/>
+        <image name="keysig-d" width="60" height="60"/>
+        <image name="keysig-dflat" width="60" height="60"/>
+        <image name="keysig-e" width="60" height="60"/>
+        <image name="keysig-eflat" width="60" height="60"/>
+        <image name="keysig-f" width="60" height="60"/>
+        <image name="keysig-fsharp" width="60" height="60"/>
+        <image name="keysig-g" width="60" height="60"/>
+        <image name="keysig-gflat" width="60" height="60"/>
         <image name="natural-icon" width="43" height="43"/>
         <image name="paste-icon" width="50" height="50"/>
         <image name="play-icon" width="100" height="100"/>
