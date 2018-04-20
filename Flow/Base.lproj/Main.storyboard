@@ -260,9 +260,8 @@ Tap '+' to create a new composition.</string>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VHe-OH-6BV" userLabel="Menu" customClass="MenuBar" customModule="Flow" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="1112" height="60"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="atk-1G-Xla">
-                                        <rect key="frame" x="28" y="14" width="250" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="atk-1G-Xla">
+                                        <rect key="frame" x="30" y="12" width="184" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="Untitled Composition">
                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -271,40 +270,120 @@ Tap '+' to create a new composition.</string>
                                             <action selector="touchCompositionTitle:" destination="VHe-OH-6BV" eventType="touchUpInside" id="kGJ-6r-s9C"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgc-3s-wZs" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="331" y="20" width="20" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="copy-icon"/>
-                                        <connections>
-                                            <action selector="touchCopy:" destination="VHe-OH-6BV" eventType="touchUpInside" id="vc0-EB-ehF"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Eq-5K-fxN" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="372" y="20" width="20" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="cut-icon"/>
-                                        <connections>
-                                            <action selector="touchCut:" destination="VHe-OH-6BV" eventType="touchUpInside" id="1UQ-as-xtz"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JB1-ip-x0z" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="409" y="20" width="20" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="paste-icon"/>
-                                        <connections>
-                                            <action selector="touchPaste:" destination="VHe-OH-6BV" eventType="touchUpInside" id="xhH-mK-YyF"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S5P-cD-EmE">
-                                        <rect key="frame" x="479" y="20" width="20" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="undo-icon"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bed-zR-lKQ">
-                                        <rect key="frame" x="513" y="20" width="20" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="redo-icon"/>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="iEu-Uq-rfU" userLabel="Cut Copy Paste Stack">
+                                        <rect key="frame" x="264" y="8" width="130" height="45.5"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="GYH-Nt-qcu" userLabel="Copy Stack">
+                                                <rect key="frame" x="0.0" y="0.0" width="30" height="45.5"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgc-3s-wZs" userLabel="Copy Button" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="nGO-yI-D4h"/>
+                                                            <constraint firstAttribute="width" constant="30" id="xSL-Wp-eYf"/>
+                                                        </constraints>
+                                                        <state key="normal" image="copy-icon"/>
+                                                        <connections>
+                                                            <action selector="touchCopy:" destination="VHe-OH-6BV" eventType="touchUpInside" id="vc0-EB-ehF"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vzt-o4-aLU">
+                                                        <rect key="frame" x="1.5" y="32" width="27.5" height="13.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="cL8-jk-3TQ" userLabel="Cut Stack">
+                                                <rect key="frame" x="50" y="0.0" width="30" height="45.5"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Eq-5K-fxN" userLabel="Cut Button" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="30" id="cWI-PI-xhc"/>
+                                                            <constraint firstAttribute="height" constant="30" id="n3A-Pa-ftJ"/>
+                                                        </constraints>
+                                                        <state key="normal" image="cut-icon"/>
+                                                        <connections>
+                                                            <action selector="touchCut:" destination="VHe-OH-6BV" eventType="touchUpInside" id="1UQ-as-xtz"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cut" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XyV-Sq-TOA">
+                                                        <rect key="frame" x="6" y="32" width="18.5" height="13.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="5LH-7b-1ts" userLabel="Paste Stack">
+                                                <rect key="frame" x="100" y="0.0" width="30" height="45.5"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JB1-ip-x0z" userLabel="Paste Button" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="30" id="KOu-cn-IPv"/>
+                                                            <constraint firstAttribute="height" constant="30" id="gZI-1U-62H"/>
+                                                        </constraints>
+                                                        <state key="normal" image="paste-icon"/>
+                                                        <connections>
+                                                            <action selector="touchPaste:" destination="VHe-OH-6BV" eventType="touchUpInside" id="xhH-mK-YyF"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Paste" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RZd-9Q-K0u">
+                                                        <rect key="frame" x="0.5" y="32" width="29.5" height="13.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="TAn-Ub-OaB" userLabel="Undo Redo Stack">
+                                        <rect key="frame" x="444" y="8" width="80" height="45.5"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="ncM-d7-A7N" userLabel="Undo Stack">
+                                                <rect key="frame" x="0.0" y="0.0" width="30" height="45.5"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S5P-cD-EmE" userLabel="Undo Button">
+                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="aEu-ps-oeF"/>
+                                                            <constraint firstAttribute="width" constant="30" id="vqr-Rw-p8Q"/>
+                                                        </constraints>
+                                                        <state key="normal" image="undo-icon"/>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Undo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jyV-9k-ATr">
+                                                        <rect key="frame" x="1" y="32" width="28.5" height="13.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="8no-1g-fPX" userLabel="Redo Stack">
+                                                <rect key="frame" x="50" y="0.0" width="30" height="45.5"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bed-zR-lKQ" userLabel="Redo Button">
+                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="30" id="PPK-gj-o0r"/>
+                                                            <constraint firstAttribute="height" constant="30" id="lpH-8Q-cSW"/>
+                                                        </constraints>
+                                                        <state key="normal" image="redo-icon"/>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Redo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WXm-1l-xVA">
+                                                        <rect key="frame" x="1.5" y="32" width="27" height="13.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-B0-Oho">
                                         <rect key="frame" x="978" y="15" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -356,6 +435,12 @@ Tap '+' to create a new composition.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="0BX-zu-w6C"/>
+                                    <constraint firstItem="atk-1G-Xla" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" id="CBA-Oh-98E"/>
+                                    <constraint firstItem="iEu-Uq-rfU" firstAttribute="leading" secondItem="atk-1G-Xla" secondAttribute="trailing" constant="50" id="TtF-5f-OoV"/>
+                                    <constraint firstItem="TAn-Ub-OaB" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" id="VAi-p1-QqL"/>
+                                    <constraint firstItem="atk-1G-Xla" firstAttribute="leading" secondItem="VHe-OH-6BV" secondAttribute="leading" constant="30" id="j6i-GK-Is4"/>
+                                    <constraint firstItem="TAn-Ub-OaB" firstAttribute="leading" secondItem="iEu-Uq-rfU" secondAttribute="trailing" constant="50" id="jR3-DN-cGK"/>
+                                    <constraint firstItem="iEu-Uq-rfU" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" id="slP-uX-hxM"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="compositionTitleButton" destination="atk-1G-Xla" id="HjF-pT-jZ9"/>
