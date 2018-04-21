@@ -53,6 +53,7 @@
 		861F781A1FD6E12A00C51BD2 /* CompositionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */; };
 		8632C97C2000877B00D69CB4 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8632C97B2000877B00D69CB4 /* Converter.swift */; };
 		863374811FD32849003D7936 /* MusicNotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863374801FD32849003D7936 /* MusicNotation.swift */; };
+		863BB0F1208AEB9600819CCE /* MaxLengthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863BB0F0208AEB9600819CCE /* MaxLengthTextField.swift */; };
 		864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A11FD32FC3001FF059 /* RestNoteType.swift */; };
 		864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A31FD32FD6001FF059 /* Rest.swift */; };
 		864CE5A81FD32FEB001FF059 /* Pitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864CE5A71FD32FEB001FF059 /* Pitch.swift */; };
@@ -166,6 +167,7 @@
 		861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionInfo.swift; sourceTree = "<group>"; };
 		8632C97B2000877B00D69CB4 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		863374801FD32849003D7936 /* MusicNotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotation.swift; sourceTree = "<group>"; };
+		863BB0F0208AEB9600819CCE /* MaxLengthTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MaxLengthTextField.swift; path = "Flow/View Objects/MaxLengthTextField.swift"; sourceTree = "<group>"; };
 		864CE5A11FD32FC3001FF059 /* RestNoteType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestNoteType.swift; sourceTree = "<group>"; };
 		864CE5A31FD32FD6001FF059 /* Rest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rest.swift; sourceTree = "<group>"; };
 		864CE5A71FD32FEB001FF059 /* Pitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pitch.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 		61370E0A1F82A1CB002B6A09 = {
 			isa = PBXGroup;
 			children = (
+				863BB0F0208AEB9600819CCE /* MaxLengthTextField.swift */,
 				61516C892052EA2F00020F6E /* AudioKit.framework */,
 				61516C882052EA2D00020F6E /* AudioKitUI.framework */,
 				61370E151F82A1CB002B6A09 /* Flow */,
@@ -614,6 +617,7 @@
 				86DBDA8020368C6E00C834EF /* Chord.swift in Sources */,
 				861B3DDA1FDC20E2003FE0A5 /* KeyNames.swift in Sources */,
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
+				863BB0F1208AEB9600819CCE /* MaxLengthTextField.swift in Sources */,
 				861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */,
 				86A0287C1FD97C3500305C0C /* NotationControlsView.swift in Sources */,
 				7ADDE1311FEA29FD0065523E /* GridSystem.swift in Sources */,
