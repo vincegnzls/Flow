@@ -21,6 +21,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var tempoTextField: UITextField!
     @IBOutlet weak var tempoSlider: UISlider!
     @IBOutlet weak var titleTextField: MaxLengthTextField!
+    @IBOutlet weak var bottomMenu: UIView!
     
     var composition: Composition?
     
@@ -397,5 +398,30 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.tempoTextField.endEditing(true)
         return false
     }
+    
+    @IBAction func onTouchHideButton(_ sender: UIButton) {
+//        self.bottomMenu.isHidden = true
+        let originalTransform = self.bottomMenu.transform
+        let translatedTransform = originalTransform.translatedBy(x: 0, y: 60)
+        
+        UIView.transition(with: self.bottomMenu, duration: 0.3, animations: {
+            self.bottomMenu.transform = translatedTransform
+//            self.bottomMenu.isHidden = true
+        })
+    }
+    
+    @IBAction func onTouchShowButton(_ sender: UIButton) {
+//        self.bottomMenu.isHidden = false;
+        
+        let originalTransform = self.bottomMenu.transform
+        let translatedTransform = originalTransform.translatedBy(x: 0, y: -60)
+        
+        UIView.transition(with: self.bottomMenu, duration: 0.3, animations: {
+            self.bottomMenu.transform = translatedTransform
+//            self.bottomMenu.isHidden = false
+        })
+    }
+    
+    
 }
 
