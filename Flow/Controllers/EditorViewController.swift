@@ -10,6 +10,10 @@ import UIKit
 
 class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
+    private struct Constants {
+        static let keyIsBottomMenuHidden = "IsBottomMenuHidden"
+    }
+    
     @IBOutlet weak var musicSheet: MusicSheet!
     @IBOutlet weak var height: NSLayoutConstraint!
     @IBOutlet weak var menuBar: MenuBar!
@@ -66,6 +70,18 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapTempo))
         self.tempoStackView.addGestureRecognizer(tapGesture)
+        
+        self.setupBottomMenu()
+    }
+    
+    private func setupBottomMenu() {
+        let defaults = UserDefaults.standard
+        
+        let isBottomMenuHidden = defaults.bool(forKey: Constants.keyIsBottomMenuHidden)
+        
+        if isBottomMenuHidden {
+            self.bottomMenu.transform = self.bottomMenu.transform.translatedBy(x: 0, y: 60)
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -408,6 +424,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             self.bottomMenu.transform = translatedTransform
 //            self.bottomMenu.isHidden = true
         })
+        
+        let defaults = UserDefaults.standard
+        defaults.set(true, forKey: Constants.keyIsBottomMenuHidden)
     }
     
     @IBAction func onTouchShowButton(_ sender: UIButton) {
@@ -420,6 +439,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             self.bottomMenu.transform = translatedTransform
 //            self.bottomMenu.isHidden = false
         })
+        
+        let defaults = UserDefaults.standard
+        defaults.set(false, forKey: Constants.keyIsBottomMenuHidden)
     }
     
     

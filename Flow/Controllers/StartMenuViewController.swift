@@ -74,7 +74,6 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         let defaults = UserDefaults.standard
 
         self.isCollectionViewShowing = defaults.bool(forKey: Constants.keyIsCollectionViewShowing)
-        print(self.isCollectionViewShowing)
 
         self.collectionView.isHidden = !self.isCollectionViewShowing
         self.tableView.isHidden = self.isCollectionViewShowing
