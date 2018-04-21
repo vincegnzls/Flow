@@ -16,13 +16,56 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var musicSheetHeight: NSLayoutConstraint!
     @IBOutlet weak var musicSheetWidth: NSLayoutConstraint!
-    @IBOutlet weak var tempoBtn: UIView!
+    @IBOutlet weak var tempoStackView: UIStackView!
     @IBOutlet weak var tempoSliderView: UIView!
-    @IBOutlet weak var tempoLabel: UILabel!
     @IBOutlet weak var tempoTextField: UITextField!
     @IBOutlet weak var tempoSlider: UISlider!
+    @IBOutlet weak var titleTextField: MaxLengthTextField!
     
     var composition: Composition?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.tempoTextField.delegate = self
+        
+        //let params = Parameters()
+        //params.put(key: KeyNames.COMPOSITION, value: self.composition!)
+        
+        //EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
+        
+        if self.musicSheet != nil {
+            // set composition in music sheet
+            self.musicSheet.composition = self.composition
+            
+            if let comp = self.composition {
+                if comp.staffList[0].measures.count > 3 {
+                    let extraMeasuresCount = comp.staffList[0].measures.count - 3
+                    
+                    print("EXTRA MEASURES: \(extraMeasuresCount)")
+                    
+                    for _ in 0..<extraMeasuresCount {
+                        self.musicSheetWidth.constant = self.musicSheetWidth.constant + 650
+                    }
+                }
+            }
+        }
+        
+        if let titleTextField = self.titleTextField, let compositionTitle = self.composition?.compositionInfo.name {
+            titleTextField.text = compositionTitle
+        }
+        
+        /*if let menuBar = self.menuBar, let composition = self.composition {
+         menuBar.compositionInfo = composition.compositionInfo
+         }*/
+        
+        // Do any additional setup after loading the view, typically from a nib.
+        
+        initTempo()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapTempo))
+        self.tempoStackView.addGestureRecognizer(tapGesture)
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch: UITouch? = touches.first
@@ -92,44 +135,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.addObserver(event: EventNames.CHANGES_MADE,
                                               observer: Observer(id: "EditorViewController.changesMade", function: self.changesMade))
         
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.tempoTextField.delegate = self
-
-        //let params = Parameters()
-        //params.put(key: KeyNames.COMPOSITION, value: self.composition!)
-
-        //EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
-
-        if self.musicSheet != nil {
-            // set composition in music sheet
-            self.musicSheet.composition = self.composition
-
-            if let comp = self.composition {
-                if comp.staffList[0].measures.count > 3 {
-                    let extraMeasuresCount = comp.staffList[0].measures.count - 3
-
-                    print("EXTRA MEASURES: \(extraMeasuresCount)")
-
-                    for _ in 0..<extraMeasuresCount {
-                        self.musicSheetWidth.constant = self.musicSheetWidth.constant + 650
-                    }
-                }
-            }
-        }
-        
-        if let menuBar = self.menuBar, let composition = self.composition {
-            menuBar.compositionInfo = composition.compositionInfo
-        }
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        initTempo()
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapTempo))
-        self.tempoBtn.addGestureRecognizer(tapGesture)
     }
     
     override func viewWillLayoutSubviews() {
@@ -212,7 +217,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         if let comp = self.composition {
             self.tempoSliderView.isHidden = true
             self.tempoSlider.setValue(Float(comp.tempo), animated: false)
-            self.tempoLabel.text = "="
             self.tempoTextField.text = String(Int(comp.tempo))
         }
     }
@@ -371,6 +375,27 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         let allowedCharacters = CharacterSet.decimalDigits
         let characterSet = CharacterSet(charactersIn: string)
         return allowedCharacters.isSuperset(of: characterSet)
+    }
+    
+    
+    @IBAction func onTitleChanged(_ sender: MaxLengthTextField) {
+        let title: String
+        if let textFieldText = sender.text, !textFieldText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            title = textFieldText
+        } else {
+            title = "Untitled Composition"
+        }
+        
+        sender.text = title
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NEW_TITLE, value: title)
+        EventBroadcaster.instance.postEvent(event: EventNames.TITLE_CHANGED, params: params)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.tempoTextField.endEditing(true)
+        return false
     }
 }
 

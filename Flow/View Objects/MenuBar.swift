@@ -10,18 +10,18 @@ import UIKit
 
 class MenuBar: UIView {
     
-    @IBOutlet weak var compositionTitleButton: UIButton!
+//    @IBOutlet weak var compositionTitleButton: UIButton!
     @IBOutlet weak var playBtn: UIButton!
     @IBOutlet weak var naturalizeBtn: UIButton!
     @IBOutlet weak var flatBtn: UIButton!
     @IBOutlet weak var sharpBtn: UIButton!
     @IBOutlet weak var dSharpBtn: UIButton!
 
-    var compositionInfo: CompositionInfo? {
+    /*var compositionInfo: CompositionInfo? {
         didSet {
             self.compositionTitleButton.setTitle(compositionInfo?.name, for: .normal)
         }
-    }
+    }*/
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -50,7 +50,7 @@ class MenuBar: UIView {
         EventBroadcaster.instance.addObserver(event: EventNames.ENABLE_ACCIDENTALS, observer: Observer(id: "MenuBar.enableAccidentals", function: self.enableAccidentals))
     }
 
-    @IBAction func touchCompositionTitle(_ sender: UIButton) {
+    /*@IBAction func touchCompositionTitle(_ sender: UIButton) {
         // Create the alert controller
         let alertController = UIAlertController(title: "Change title", message: "Enter a new title for your composition", preferredStyle: .alert)
 
@@ -80,7 +80,7 @@ class MenuBar: UIView {
 
         // Present the dialog box
         self.window?.rootViewController?.present(alertController, animated: true, completion: nil)
-    }
+    }*/
 
     @IBAction func touchCopy(_ sender: UIButton) {
         EventBroadcaster.instance.postEvent(event: EventNames.COPY_KEY_PRESSED)
