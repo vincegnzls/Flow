@@ -374,19 +374,8 @@ Tap '+' to create a new composition.</string>
                                             </stackView>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-B0-Oho">
-                                        <rect key="frame" x="982" y="15" width="30" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="1PK-FQ-ZyG"/>
-                                            <constraint firstAttribute="width" constant="30" id="iTI-i6-dWf"/>
-                                        </constraints>
-                                        <state key="normal" title="Time Signature" image="time-key-icon"/>
-                                        <connections>
-                                            <segue destination="cUa-Ia-SFW" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="fAg-Li-uzT"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycl-gp-KaZ" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="541" y="15" width="30" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycl-gp-KaZ" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="536" y="10" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="AIK-EF-Ro7"/>
                                             <constraint firstAttribute="height" constant="30" id="d99-W3-dyI"/>
@@ -432,6 +421,17 @@ Tap '+' to create a new composition.</string>
                                             </stackView>
                                         </subviews>
                                     </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dCD-B0-Oho">
+                                        <rect key="frame" x="979" y="10" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="1PK-FQ-ZyG"/>
+                                            <constraint firstAttribute="width" constant="30" id="iTI-i6-dWf"/>
+                                        </constraints>
+                                        <state key="normal" title="Time Signature" image="time-key-icon"/>
+                                        <connections>
+                                            <segue destination="cUa-Ia-SFW" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="fAg-Li-uzT"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -455,9 +455,13 @@ Tap '+' to create a new composition.</string>
                                     <outlet property="sharpBtn" destination="ofh-iv-b6S" id="u0B-2T-jm2"/>
                                 </connections>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4zk-xT-4Cr">
-                                <rect key="frame" x="537" y="804" width="38" height="30"/>
-                                <state key="normal" title="Show"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4zk-xT-4Cr">
+                                <rect key="frame" x="516.5" y="808" width="80" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="2CR-dJ-trW"/>
+                                    <constraint firstAttribute="width" constant="80" id="CPa-rJ-63W"/>
+                                </constraints>
+                                <state key="normal" title="Show" image="show-menu-arrow"/>
                                 <connections>
                                     <action selector="onTouchShowButton:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="RlN-U1-a4O"/>
                                 </connections>
@@ -498,21 +502,56 @@ Tap '+' to create a new composition.</string>
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ccp-hq-7ZC">
-                                        <rect key="frame" x="540" y="0.0" width="32" height="30"/>
-                                        <state key="normal" title="Hide"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ccp-hq-7ZC">
+                                        <rect key="frame" x="516" y="-8" width="80" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="9UB-z8-haj"/>
+                                            <constraint firstAttribute="height" constant="34" id="wWm-wx-9pq"/>
+                                        </constraints>
+                                        <state key="normal" title="Hide" image="hide-menu-arrow"/>
                                         <connections>
                                             <action selector="onTouchHideButton:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="JNQ-tR-Od0"/>
                                         </connections>
                                     </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ZLD-aG-meq" userLabel="Dot Stack">
+                                        <rect key="frame" x="822" y="5" width="190" height="50"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rQN-ic-H0l">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="1Cu-O8-j93"/>
+                                                    <constraint firstAttribute="width" constant="50" id="8Zm-l2-Rhi"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="one-dot-icon"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzu-Uc-umr">
+                                                <rect key="frame" x="70" y="0.0" width="50" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="P6l-Ty-C7r"/>
+                                                    <constraint firstAttribute="width" constant="50" id="ur3-yL-vn0"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="two-dot-icon"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-U5-9Q2">
+                                                <rect key="frame" x="140" y="0.0" width="50" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="BdB-TV-q42"/>
+                                                    <constraint firstAttribute="width" constant="50" id="gum-Jt-1f1"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="three-dot-icon"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="ZLD-aG-meq" secondAttribute="trailing" constant="100" id="2QK-Y9-VtY"/>
                                     <constraint firstItem="C9e-be-vdB" firstAttribute="leading" secondItem="9Uy-OO-nyR" secondAttribute="leading" constant="100" id="4Mb-DB-0oh"/>
                                     <constraint firstAttribute="height" constant="60" id="5rs-W5-jyX"/>
                                     <constraint firstItem="Ccp-hq-7ZC" firstAttribute="centerX" secondItem="9Uy-OO-nyR" secondAttribute="centerX" id="EWW-qC-sXp"/>
                                     <constraint firstItem="C9e-be-vdB" firstAttribute="centerY" secondItem="9Uy-OO-nyR" secondAttribute="centerY" id="Fiz-UI-019"/>
-                                    <constraint firstItem="Ccp-hq-7ZC" firstAttribute="top" secondItem="9Uy-OO-nyR" secondAttribute="top" id="pUX-a7-opn"/>
+                                    <constraint firstItem="ZLD-aG-meq" firstAttribute="centerY" secondItem="9Uy-OO-nyR" secondAttribute="centerY" id="OmV-au-bbA"/>
+                                    <constraint firstItem="Ccp-hq-7ZC" firstAttribute="top" secondItem="9Uy-OO-nyR" secondAttribute="top" constant="-8" id="c2r-34-ooS"/>
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-FI-wrK">
@@ -933,12 +972,12 @@ Tap '+' to create a new composition.</string>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="7NV-X7-x9s"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="96U-OV-wpB"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="Jdk-b5-cZV"/>
-                            <constraint firstItem="j19-iv-FrW" firstAttribute="bottom" secondItem="4zk-xT-4Cr" secondAttribute="bottom" id="MB0-Vl-5iI"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="top" secondItem="j19-iv-FrW" secondAttribute="top" id="Mk4-6g-fF2"/>
                             <constraint firstItem="4zk-xT-4Cr" firstAttribute="centerX" secondItem="ACD-nf-3gA" secondAttribute="centerX" id="MsI-id-h3M"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="top" secondItem="9Me-FI-wrK" secondAttribute="bottom" constant="5" id="NOA-83-POD"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="aWf-I0-eDT"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="top" secondItem="VHe-OH-6BV" secondAttribute="bottom" constant="5" id="nXp-Hu-rYX"/>
+                            <constraint firstAttribute="bottom" secondItem="4zk-xT-4Cr" secondAttribute="bottom" constant="-8" id="o17-se-kPh"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="s53-Nk-Va2"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="uPJ-bS-SXc"/>
                         </constraints>
@@ -1273,6 +1312,7 @@ Tap '+' to create a new composition.</string>
         <image name="flat-icon" width="43" height="43"/>
         <image name="half-note-icon" width="115" height="115"/>
         <image name="half-rest-icon" width="116" height="115"/>
+        <image name="hide-menu-arrow" width="228" height="115"/>
         <image name="keysig-a" width="60" height="60"/>
         <image name="keysig-aflat" width="60" height="60"/>
         <image name="keysig-b" width="60" height="60"/>
@@ -1289,6 +1329,7 @@ Tap '+' to create a new composition.</string>
         <image name="keysig-g" width="60" height="60"/>
         <image name="keysig-gflat" width="60" height="60"/>
         <image name="natural-icon" width="43" height="43"/>
+        <image name="one-dot-icon" width="115" height="115"/>
         <image name="paste-icon" width="50" height="50"/>
         <image name="play-icon" width="100" height="100"/>
         <image name="quarter-note-icon" width="115" height="115"/>
@@ -1296,7 +1337,10 @@ Tap '+' to create a new composition.</string>
         <image name="redo-icon" width="50" height="50"/>
         <image name="save-icon" width="100" height="100"/>
         <image name="sharp-icon" width="44" height="43"/>
+        <image name="show-menu-arrow" width="228" height="115"/>
+        <image name="three-dot-icon" width="116" height="115"/>
         <image name="time-key-icon" width="100" height="100"/>
+        <image name="two-dot-icon" width="115" height="115"/>
         <image name="undo-icon" width="50" height="50"/>
         <image name="whole-note-icon" width="116" height="115"/>
         <image name="whole-rest-icon" width="115" height="115"/>
