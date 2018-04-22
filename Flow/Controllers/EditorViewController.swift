@@ -26,10 +26,21 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var titleTextField: MaxLengthTextField!
     @IBOutlet weak var bottomMenu: UIView!
     
+    var backButton : UIBarButtonItem!
+    
     var composition: Composition?
+    var initialTitle: String = "Untitled Composition"
+    var initialXML: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Revise back button
+        
+        // Disable the swipe to make sure you get your chance to save
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        
+        
         
         self.tempoTextField.delegate = self
         
@@ -37,6 +48,11 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         //params.put(key: KeyNames.COMPOSITION, value: self.composition!)
         
         //EventBroadcaster.instance.postEvent(event: EventNames.VIEW_FINISH_LOADING, params: params)
+        
+        if let composition = self.composition {
+            self.initialTitle = composition.compositionInfo.name
+            self.initialXML = Converter.compositionToMusicXML(composition)
+        }
         
         if self.musicSheet != nil {
             // set composition in music sheet
@@ -83,7 +99,48 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         }
     }
     
+    @IBAction func onBackPressed(_ sender: UIBarButtonItem) {
+        // Check if there are unsaved changes
+        if let composition = self.musicSheet.composition, self.initialTitle != composition.compositionInfo.name ||
+            self.initialXML != Converter.compositionToMusicXML(composition){
+            // Here we just remove the back button, you could also disabled it or better yet show an activityIndicator
+            self.navigationItem.leftBarButtonItem?.isEnabled = false
+            
+            // Show alert for confirmation
+            let alertController = UIAlertController(title: "Uh-oh! You've made some changes.", message: "Do you want to save the changes made to the composition?", preferredStyle: .alert)
+            
+            let saveAction = UIAlertAction(title: "Save", style: .default) { (_) in
+                // Save
+                self.save()
+                
+                self.navigationController?.popViewController(animated: true)
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+                
+            }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+                self.navigationItem.leftBarButtonItem?.isEnabled = true
+            }
+            
+            let quitAction = UIAlertAction(title: "Don't Save", style: .destructive) { (_) in
+                self.navigationController?.popViewController(animated: true)
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+            }
+            
+            // Add the actions to the alert
+            alertController.addAction(saveAction)
+            alertController.addAction(cancelAction)
+            alertController.addAction(quitAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: true)
+            self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
         let touch: UITouch? = touches.first
         //location is relative to the current view
         // do something with the touched point
@@ -174,14 +231,19 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     }
     
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
-        
+        self.save()
+    }
+    
+    private func save() {
         if let composition = self.musicSheet.composition {
             if FileHandler.instance.saveFile(composition: composition) {
                 self.view.hideAllToasts()
                 self.view.makeToast("Saved successfully", duration: 1.5, position: .bottom, image: UIImage(named: "save-icon"))
+                
+                self.initialTitle = composition.compositionInfo.name
+                self.initialXML = Converter.compositionToMusicXML(composition)
             }
         }
-        
     }
     
     @IBAction func editingChanged(_ sender: UITextField) {
@@ -218,6 +280,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     }
     
     func hideTempo() {
+        // Close text fields
+        self.titleTextField?.endEditing(true)
+        self.tempoTextField?.endEditing(true)
+        
         if !self.tempoSliderView.isHidden {
             UIView.animate(withDuration: 0.1, animations: {
                 self.tempoSliderView.alpha = 0

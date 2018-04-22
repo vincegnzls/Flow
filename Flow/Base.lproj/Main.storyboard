@@ -986,6 +986,11 @@ Tap '+' to create a new composition.</string>
                     </view>
                     <navigationItem key="navigationItem" id="Hhe-eV-Nri">
                         <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="iVc-bo-ECP">
+                            <connections>
+                                <action selector="onBackPressed:" destination="ldS-Qo-c4z" id="fjW-gf-wrD"/>
+                            </connections>
+                        </barButtonItem>
                         <textField key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Untitled Composition" placeholder="Composition Title" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="7ny-qk-IhS" userLabel="Title Text Field" customClass="MaxLengthTextField" customModule="Flow" customModuleProvider="target">
                             <rect key="frame" x="256.5" y="7" width="599" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
