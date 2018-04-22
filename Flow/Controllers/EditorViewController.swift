@@ -15,7 +15,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     }
     
     @IBOutlet weak var musicSheet: MusicSheet!
-    @IBOutlet weak var height: NSLayoutConstraint!
     @IBOutlet weak var menuBar: MenuBar!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var musicSheetHeight: NSLayoutConstraint!
