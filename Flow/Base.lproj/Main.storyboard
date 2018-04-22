@@ -562,6 +562,7 @@ Tap '+' to create a new composition.</string>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="1112" id="FNs-ij-IW5"/>
+                                            <constraint firstAttribute="height" constant="640" id="KPP-b0-DlP"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -1012,6 +1013,7 @@ Tap '+' to create a new composition.</string>
                         <outlet property="bottomMenu" destination="9Uy-OO-nyR" id="qAP-7j-PpZ"/>
                         <outlet property="menuBar" destination="VHe-OH-6BV" id="EC9-aQ-TAh"/>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
+                        <outlet property="musicSheetHeight" destination="KPP-b0-DlP" id="wYN-6H-ZMN"/>
                         <outlet property="musicSheetWidth" destination="FNs-ij-IW5" id="I0R-5D-Npb"/>
                         <outlet property="scrollView" destination="9Me-FI-wrK" id="TfR-zs-wl6"/>
                         <outlet property="tempoSlider" destination="Q0u-RV-0u3" id="RWk-I1-jfO"/>
