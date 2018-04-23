@@ -77,6 +77,12 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
 
         self.collectionView.isHidden = !self.isCollectionViewShowing
         self.tableView.isHidden = self.isCollectionViewShowing
+        
+        if self.isCollectionViewShowing {
+            self.changeViewBtn.setImage(UIImage(named: "list-view-icon"), for: .normal)
+        } else {
+            self.changeViewBtn.setImage(UIImage(named: "block-view-icon"), for: .normal)
+        }
     }
 
     private func setupMenuShadow() {
@@ -345,6 +351,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
                     duration: 0.5,
                     options: [.transitionFlipFromLeft, .showHideTransitionViews],
                     completion:nil)
+            self.changeViewBtn.setImage(UIImage(named: "list-view-icon"), for: .normal)
         } else {
             // Show List
             UIView.transition(from: self.collectionView,
@@ -352,6 +359,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             duration: 0.5,
             options: [.transitionFlipFromRight, .showHideTransitionViews],
             completion: nil)
+            self.changeViewBtn.setImage(UIImage(named: "block-view-icon"), for: .normal)
         }
 
         self.isCollectionViewShowing = !self.isCollectionViewShowing
