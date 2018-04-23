@@ -230,7 +230,13 @@ Tap '+' to create a new composition.</string>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2DB-Ug-KK3"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Your Compositions" id="0l2-Ep-9cc"/>
+                    <navigationItem key="navigationItem" title="Your Compositions" id="0l2-Ep-9cc">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="JoT-Q3-th7">
+                            <connections>
+                                <segue destination="ldS-Qo-c4z" kind="show" identifier="CreateComposition" id="I8U-CZ-y2k"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="changeViewBtn" destination="ACm-2h-O3l" id="xbf-mZ-O08"/>
                         <outlet property="collectionView" destination="FMb-5Y-qyJ" id="UqJ-qy-wZQ"/>
@@ -1358,6 +1364,6 @@ Tap '+' to create a new composition.</string>
         <image name="whole-rest-icon" width="115" height="115"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="2Bx-FE-wU0"/>
+        <segue reference="I8U-CZ-y2k"/>
     </inferredMetricsTieBreakers>
 </document>
