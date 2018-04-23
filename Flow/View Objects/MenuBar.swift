@@ -89,6 +89,10 @@ class MenuBar: UIView {
     @IBAction func touchCut(_ sender: UIButton) {
         EventBroadcaster.instance.postEvent(event: EventNames.CUT_KEY_PRESSED)
     }
+    
+    @IBAction func touchPaste(_ sender: UIButton) {
+        EventBroadcaster.instance.postEvent(event: EventNames.PASTE_KEY_PRESSED)
+    }
 
     @IBAction func touchPlay(_ sender: UIButton) {
         EventBroadcaster.instance.postEvent(event: EventNames.PLAY_KEY_PRESSED)
@@ -126,10 +130,6 @@ class MenuBar: UIView {
         self.dSharpBtn.isUserInteractionEnabled = true
     }
     
-    @IBAction func touchPaste(_ sender: UIButton) {
-        EventBroadcaster.instance.postEvent(event: EventNames.PASTE_KEY_PRESSED)
-    }
-    
     @IBAction func touchNaturalize(_ sender: UIButton) {
         print("naturalize")
         EventBroadcaster.instance.postEvent(event: EventNames.NATURALIZE_KEY_PRESSED)
@@ -149,4 +149,12 @@ class MenuBar: UIView {
         print("dsharp")
         EventBroadcaster.instance.postEvent(event: EventNames.DSHARP_KEY_PRESSED)
     }
+    @IBAction func touchUndo(_ sender: UIButton) {
+        UndoRedoManager.instance.undo()
+    }
+    
+    @IBAction func touchRedo(_ sender: UIButton) {
+        UndoRedoManager.instance.redo()
+    }
+    
 }

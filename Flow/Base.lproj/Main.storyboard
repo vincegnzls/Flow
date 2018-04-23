@@ -354,6 +354,10 @@ Tap '+' to create a new composition.</string>
                                                             <constraint firstAttribute="width" constant="30" id="vqr-Rw-p8Q"/>
                                                         </constraints>
                                                         <state key="normal" image="undo-icon"/>
+                                                        <connections>
+                                                            <action selector="touchUndo:" destination="87U-aK-pku" eventType="touchUpInside" id="XtI-mu-8Xo"/>
+                                                            <action selector="touchUndo:" destination="VHe-OH-6BV" eventType="touchUpInside" id="evr-lO-OAJ"/>
+                                                        </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Undo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jyV-9k-ATr">
                                                         <rect key="frame" x="1" y="32" width="28.5" height="13.5"/>
@@ -373,6 +377,10 @@ Tap '+' to create a new composition.</string>
                                                             <constraint firstAttribute="height" constant="30" id="lpH-8Q-cSW"/>
                                                         </constraints>
                                                         <state key="normal" image="redo-icon"/>
+                                                        <connections>
+                                                            <action selector="touchRedo:" destination="VHe-OH-6BV" eventType="touchUpInside" id="3pV-ro-Ge1"/>
+                                                            <action selector="touchRedo:" destination="87U-aK-pku" eventType="touchUpInside" id="mpY-Eu-Yaw"/>
+                                                        </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Redo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WXm-1l-xVA">
                                                         <rect key="frame" x="1.5" y="32" width="27" height="13.5"/>
