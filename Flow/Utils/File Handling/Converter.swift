@@ -224,10 +224,10 @@ class Converter {
                             if let accidentalString = notationElement["accidental"].value {
                                 let accidental = Accidental.convert(accidentalString)
                                 let note = Note(pitch: pitch, type: type, accidental: accidental)
-                                measure.addToMeasure(note)
+                                measure.add(note)
                             } else {
                                 let note = Note(pitch: pitch, type: type)
-                                measure.addToMeasure(note)
+                                measure.add(note)
                             }
 
                         } else {
@@ -237,7 +237,7 @@ class Converter {
                                 measureIndex += 1
                             }*/
                             
-                            measure.addToMeasure(rest)
+                            measure.add(rest)
                         }
                     }
                 }

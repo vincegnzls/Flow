@@ -2841,7 +2841,7 @@ class MusicSheet: UIView {
         if let staffs = composition?.staffList {
             for (staff, notations) in zip(staffs, oldStaffsNotations) {
                 for measure in staff.measures {
-                    while index < notations.count && measure.addToMeasure(notations[index]) {
+                    while index < notations.count && measure.add(notations[index]) {
                         index += 1
                     }
 

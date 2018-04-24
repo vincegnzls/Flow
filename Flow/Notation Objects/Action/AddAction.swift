@@ -45,13 +45,13 @@ class AddAction: Action {
             
             let measure = measures[measureIndex]
             
-            measure.addToMeasure(notation)
+            measure.add(notation)
         }
     }
     
     func undo() {
         for notation in self.notations {
-            notation.measure?.deleteInMeasure(notation)
+            notation.measure?.remove(notation)
         }
     }
     

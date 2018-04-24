@@ -103,7 +103,7 @@ class Measure: Hashable {
         return lhs !== rhs
     }
 
-    public func addToMeasure(_ notation: MusicNotation) -> Bool {
+    public func add(_ notation: MusicNotation) -> Bool {
         if(isAddNoteValid(musicNotation: notation.type)) {
             print("ADD NOTE VALID")
 
@@ -154,7 +154,7 @@ class Measure: Hashable {
         }
     }
     
-    public func addToMeasure(_ notation: MusicNotation, at index: Int) -> Bool {
+    public func add(_ notation: MusicNotation, at index: Int) -> Bool {
         if(isAddNoteValid(musicNotation: notation.type)) {
             print("ADD NOTE VALID")
             
@@ -219,7 +219,7 @@ class Measure: Hashable {
         }
     }
 
-    public func deleteInMeasure(_ musicNotation: MusicNotation) {
+    public func remove(_ musicNotation: MusicNotation) {
 
         if let index = notationObjects.index(of: musicNotation) {
             musicNotation.measure = nil
@@ -229,7 +229,7 @@ class Measure: Hashable {
 
     }
 
-    public func editInMeasure(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
+    public func replace(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
         print("EDIT")
         if let index = notationObjects.index(of: oldNote) {
             oldNote.measure = nil
@@ -269,6 +269,12 @@ class Measure: Hashable {
             }
             //self.fillWithRests()
         }
+    }
+    
+    func insert(_ notation: MusicNotation, at index: Int) {
+        self.notationObjects.insert(notation, at: index)
+        
+        notation.measure = self
     }
 
     public func getInvalidNotes() -> [RestNoteType] {
@@ -368,7 +374,7 @@ class Measure: Hashable {
         while getTotalBeats() < timeSignature.getMaxBeatValue() && !stop {
             for rest in RestNoteType.types {
                 let curRest = Rest(type: rest)
-                if !self.addToMeasure(curRest) {
+                if !self.add(curRest) {
                     invalidCount += 1
                 }
             }

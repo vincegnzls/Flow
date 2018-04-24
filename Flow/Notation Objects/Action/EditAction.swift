@@ -46,10 +46,10 @@ class EditAction: Action {
             if let measure = old.measure {
                 
                 if newIndex < self.newNotations.count {
-                    measure.editInMeasure(old, self.newNotations[newIndex])
+                    measure.replace(old, self.newNotations[newIndex])
                     newIndex += 1
                 } else {
-                    measure.deleteInMeasure(old)
+                    measure.remove(old)
                 }
                 
                 if !self.measures.contains(measure) {
@@ -94,7 +94,7 @@ class EditAction: Action {
             
             let measure = measures[measureIndex]
             
-            measure.addToMeasure(notation)
+            measure.add(notation)
         }
 
         //self.measures[0].addToMeasure(newNotations[0])
