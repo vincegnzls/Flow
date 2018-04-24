@@ -149,6 +149,7 @@ class MenuBar: UIView {
         print("dsharp")
         EventBroadcaster.instance.postEvent(event: EventNames.DSHARP_KEY_PRESSED)
     }
+    
     @IBAction func touchUndo(_ sender: UIButton) {
         UndoRedoManager.instance.undo()
     }
