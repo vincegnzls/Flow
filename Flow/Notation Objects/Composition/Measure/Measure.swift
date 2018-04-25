@@ -254,12 +254,6 @@ class Measure: Hashable {
             //self.fillWithRests()
         }
     }
-    
-    func insert(_ notation: MusicNotation, at index: Int) {
-        self.notationObjects.insert(notation, at: index)
-        
-        notation.measure = self
-    }
 
     public func getInvalidNotes() -> [RestNoteType] {
         

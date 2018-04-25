@@ -38,7 +38,7 @@ class DeleteAction: Action {
         for (i, measure) in self.measures.enumerated() {
             let notation = self.notations[i]
             let index = self.indices[i]
-            measure.insert(notation, at: index)
+            measure.add(notation, at: index)
         }
     }
     

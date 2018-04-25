@@ -167,7 +167,7 @@
 		861F78191FD6E12A00C51BD2 /* CompositionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionInfo.swift; sourceTree = "<group>"; };
 		8632C97B2000877B00D69CB4 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		863374801FD32849003D7936 /* MusicNotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotation.swift; sourceTree = "<group>"; };
-		863BB0F0208AEB9600819CCE /* MaxLengthTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MaxLengthTextField.swift; path = "Flow/View Objects/MaxLengthTextField.swift"; sourceTree = "<group>"; };
+		863BB0F0208AEB9600819CCE /* MaxLengthTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxLengthTextField.swift; sourceTree = "<group>"; };
 		864CE5A11FD32FC3001FF059 /* RestNoteType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestNoteType.swift; sourceTree = "<group>"; };
 		864CE5A31FD32FD6001FF059 /* Rest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rest.swift; sourceTree = "<group>"; };
 		864CE5A71FD32FEB001FF059 /* Pitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pitch.swift; sourceTree = "<group>"; };
@@ -264,7 +264,6 @@
 		61370E0A1F82A1CB002B6A09 = {
 			isa = PBXGroup;
 			children = (
-				863BB0F0208AEB9600819CCE /* MaxLengthTextField.swift */,
 				61516C892052EA2F00020F6E /* AudioKit.framework */,
 				61516C882052EA2D00020F6E /* AudioKitUI.framework */,
 				61370E151F82A1CB002B6A09 /* Flow */,
@@ -448,6 +447,7 @@
 		869F3C5D1FD8FBA400CC236F /* View Objects */ = {
 			isa = PBXGroup;
 			children = (
+				863BB0F0208AEB9600819CCE /* MaxLengthTextField.swift */,
 				861F36802018C90E0047A1DA /* CompositionCollectionViewCell.swift */,
 				610ECE351FE787EA009CC0F2 /* KeySignaturePicker.swift */,
 				61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */,
