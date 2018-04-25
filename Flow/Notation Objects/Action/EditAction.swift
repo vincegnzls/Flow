@@ -21,26 +21,11 @@ class EditAction: Action {
     }
     
     func execute() {
-
-        /*for (notation, measure) in zip(oldNotations, measures) {
-            measure.deleteInMeasure(notation)
-        }*/
-        
-        // Delete notes in measures
-        /*for notation in self.oldNotations {
-            if let measure = notation.measure {
-                if let index = measure.notationObjects.index(of: notation) {
-                    self.notationIndices.append(index)
-                    print("found index at: \(index)")
-                }
-                if !self.measures.contains(measure) {
-                    self.measures.append(measure)
-                }
-                print("deleting notation")
-                measure.deleteInMeasure(notation)
-            }
-        }*/
-
+        self.edit()
+        UndoRedoManager.instance.addActionToUndoStack(self)
+    }
+    
+    private func edit() {
         var newIndex = 0
         for old in self.oldNotations {
             if let measure = old.measure {
@@ -57,27 +42,8 @@ class EditAction: Action {
                 }
             }
         }
-
-        var measureIndex = 0
         
-        /*for (notation, index) in zip(self.newNotations, self.notationIndices) {
-            if !measures[measureIndex].isAddNoteValid(musicNotation: notation.type) {
-                measureIndex += 1
-            }
-
-            if measureIndex >= measures.count {
-                break
-            }
-
-            let measure = measures[measureIndex]
-            
-            if index > -1 {
-                measure.addToMeasure(notation, at: index)
-            } else {
-                measure.addToMeasure(notation)
-            }
-            
-        }*/
+        var measureIndex = 0
         
         for i in newIndex..<self.newNotations.count {
             let notation = self.newNotations[i]
@@ -96,32 +62,45 @@ class EditAction: Action {
             
             measure.add(notation)
         }
-
-        //self.measures[0].addToMeasure(newNotations[0])
-
-        /*for notation in newNotations {
-            if !measures[measureIndex].isAddNoteValid(musicNotation: item.type) {
-                measureIndex += 1
-                noteIndex = 0
-            }
-
-            if measureIndex >= measures.count {
-                break
-            }
-
-
-            let measure = measures[measureIndex]
-            measure
-
-        }*/
     }
     
     func undo() {
+        var newIndex = 0
+        for new in self.newNotations {
+            if let measure = new.measure {
+                
+                if newIndex < self.oldNotations.count {
+                    measure.replace(new, self.oldNotations[newIndex])
+                    newIndex += 1
+                } else {
+                    measure.remove(new)
+                }
+            }
+        }
         
+        var measureIndex = 0
+        
+        for i in newIndex..<self.oldNotations.count {
+            let notation = self.oldNotations[i]
+            
+            if measureIndex < measures.count {
+                if !measures[measureIndex].isAddNoteValid(musicNotation: notation.type) {
+                    measureIndex += 1
+                }
+            }
+            
+            if measureIndex >= measures.count {
+                break
+            }
+            
+            let measure = measures[measureIndex]
+            
+            measure.add(notation)
+        }
     }
     
     func redo() {
-        
+        self.edit()
     }
     
 }
