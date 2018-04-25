@@ -62,8 +62,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                 if comp.staffList[0].measures.count > 3 {
                     let extraMeasuresCount = comp.staffList[0].measures.count - 3
                     
-                    print("EXTRA MEASURES: \(extraMeasuresCount)")
-                    
                     for _ in 0..<extraMeasuresCount {
                         self.musicSheetWidth.constant = self.musicSheetWidth.constant + 650
                     }
@@ -203,11 +201,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.removeObservers(event: EventNames.DELETE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
                                               observer: Observer(id: "EditorViewController.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
-        
-        EventBroadcaster.instance.removeObservers(event: EventNames.CHANGES_MADE)
-        EventBroadcaster.instance.addObserver(event: EventNames.CHANGES_MADE,
-                                              observer: Observer(id: "EditorViewController.changesMade", function: self.changesMade))
-        
     }
     
     override func viewWillLayoutSubviews() {
@@ -247,7 +240,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     }
     
     @IBAction func editingChanged(_ sender: UITextField) {
-        print("CHAAANGE")
         if let comp = self.composition {
             if let tempo = Double(sender.text!) {
                 comp.tempo = tempo
@@ -338,7 +330,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
                 if musicSheet.selectedNotations.count > 0 {
                     //edit selected notes
-                    print("at selectedNotations.count > 0")
                     editNotations(old: self.musicSheet.selectedNotations, new: [note])
                     
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
@@ -439,17 +430,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     func addGrandStaff() {
         if let currentComp = self.musicSheet.composition {
             if currentComp.isLastMeasureFull() {
-                print("PREV HEIGHT \(self.musicSheetHeight.constant)")
                 self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
-                print("UPDATED HEIGHT \(self.musicSheetHeight.constant)")
-                print("LAST MEASURE FULL")
                 currentComp.addGrandStaff()
             }
         }
-    }
-    
-    func changesMade() {
-        
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
