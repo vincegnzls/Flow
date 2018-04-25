@@ -311,22 +311,27 @@ class Measure: Hashable {
         return false
     }
 
-    func fillWithRests() {
+    func fillWithRests(isAction: Bool = false) {
+        var restsToAdd = [Rest]()
+        var addedBeats:Float = 0
+        let currentBeats = self.getTotalBeats()
 
-        var invalidCount = 0
-
-        var stop = false
-
-        while getTotalBeats() < timeSignature.getMaxBeatValue() && !stop {
-            for rest in RestNoteType.types {
-                let curRest = Rest(type: rest)
-                if !self.add(curRest) {
-                    invalidCount += 1
+        while currentBeats + addedBeats < timeSignature.getMaxBeatValue(){
+            for type in RestNoteType.types {
+                if self.isAddNoteValid(musicNotation: type) {
+                    restsToAdd.append(Rest(type: type))
+                    addedBeats += type.getBeatValue()
+                    break;
                 }
             }
-
-            if invalidCount > RestNoteType.types.count {
-                stop = true
+        }
+        
+        if isAction && restsToAdd.isNotEmpty {
+            let addAction = AddAction(measures: [self], notations: restsToAdd)
+            addAction.execute()
+        } else {
+            for rest in restsToAdd {
+                self.add(rest)
             }
         }
     }
