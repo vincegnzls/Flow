@@ -8,6 +8,10 @@
 
 import UIKit
 
+enum TranspositionDirection {
+    case up, down
+}
+
 class MusicSheet: UIView {
 
     private let HIGHLIGHTED_NOTES_TAG = 2500
@@ -122,6 +126,9 @@ class MusicSheet: UIView {
     }
 
     public var selectedClef: Clef?
+    
+    var transpositions = 0
+    private var initialPitches = [Pitch]()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -1561,12 +1568,7 @@ class MusicSheet: UIView {
         if direction == ArrowKey.up {
 
             if !self.selectedNotations.isEmpty {
-                for notation in self.selectedNotations {
-                    if let note = notation as? Note {
-                        note.transposeUp()
-                    }
-                }
-                self.updateMeasureDraw()
+                self.transpose(direction: .up)
                 return;
             }
 
@@ -1579,12 +1581,7 @@ class MusicSheet: UIView {
         } else if direction == ArrowKey.down {
 
             if !self.selectedNotations.isEmpty {
-                for notation in self.selectedNotations {
-                    if let note = notation as? Note {
-                        note.transposeDown()
-                    }
-                }
-                self.updateMeasureDraw()
+                self.transpose(direction: .down)
                 return;
             }
 
@@ -1639,7 +1636,26 @@ class MusicSheet: UIView {
         print(xLocString)
         print(yLocString)*/
     }
-
+    
+    private func transpose(direction: TranspositionDirection) {
+        for notation in self.selectedNotations {
+            if let note = notation as? Note {
+                if self.transpositions == 0 {
+                    self.initialPitches.append(note.pitch)
+                }
+                
+                if direction == .up {
+                    note.transposeUp()
+                } else {
+                    note.transposeDown()
+                }
+                
+            }
+        }
+        self.transpositions += 1
+        self.updateMeasureDraw()
+    }
+    
     public func moveCursorY(location: CGPoint) {
         sheetCursor.moveCursorY(location: location)
 
@@ -1704,14 +1720,16 @@ class MusicSheet: UIView {
         let touch = touches.first!
         let location = touch.location(in: self)
 
-        if selectedNotations.count > 0 {
+        if self.selectedNotations.count > 0 {
             // Remove highlight
             while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
                 highlightView.removeFromSuperview()
             }
+            
+            self.processTranspositions()
 
             // Remove selected notes
-            for note in selectedNotations {
+            for note in self.selectedNotations {
                 note.isSelected = false
             }
             self.selectedNotations.removeAll()
@@ -1721,6 +1739,45 @@ class MusicSheet: UIView {
 
         remapCurrentMeasure(location: location)
         moveCursorsToNearestSnapPoint(location: location)
+    }
+    
+    private func processTranspositions() {
+        // Process transpositions
+        if self.transpositions != 0 {
+            var newNotations = [MusicNotation]()
+            for notation in self.selectedNotations {
+                newNotations.append(notation.duplicate())
+                
+                if let note = notation as? Note {
+                    note.pitch = self.initialPitches.removeFirst()
+                }
+            }
+            
+            /*if self.transpositions > 0 {
+                for _ in 0..<self.transpositions {
+                    for notation in self.selectedNotations {
+                        if let note = notation as? Note {
+                            note.transposeDown()
+                        }
+                    }
+                }
+            } else if self.transpositions < 0 {
+                for _ in 0..<abs(self.transpositions) {
+                    for notation in self.selectedNotations {
+                        if let note = notation as? Note {
+                            note.transposeUp()
+                        }
+                    }
+                }
+            }*/
+            
+            let editAction = EditAction(old: self.selectedNotations, new: newNotations)
+            editAction.execute()
+            self.updateMeasureDraw()
+            
+            self.transpositions = 0
+            self.initialPitches.removeAll()
+        }
     }
 
     private func moveCursorsToNearestSnapPoint (location:CGPoint) {

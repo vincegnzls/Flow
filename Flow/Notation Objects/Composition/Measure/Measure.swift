@@ -19,10 +19,7 @@ class Measure: Hashable {
     var clef: Clef
     var notationObjects: [MusicNotation] {
         didSet{
-            print("TOTAL BEATS: \(getTotalBeats())")
-            print("MAX BEATS: \(timeSignature.getMaxBeatValue())")
             curBeatValue = getTotalBeats()
-            print("INVALID NOTES: \(getInvalidNotes())")
             updateInvalidNotes(invalidNotes: getInvalidNotes()) // update valid notes in notation controls
             updateGroups()
             //updateKeySignature()
@@ -105,17 +102,12 @@ class Measure: Hashable {
 
     public func add(_ notation: MusicNotation) -> Bool {
         if(isAddNoteValid(musicNotation: notation.type)) {
-            print("ADD NOTE VALID")
-
             //CHECKING OF NOTE PITCH OUT OF BOUNDS
             if let note = notation as? Note {
                 notationObjects.append(note)
                 note.measure = self
 
                 fixNoteOutOfBounds(note: note)
-
-                print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
-
             } else {
                 notationObjects.append(notation)
                 notation.measure = self
@@ -129,7 +121,6 @@ class Measure: Hashable {
             return  true
             //self.fillWithRests()
         } else {
-            print("INVALID ADD NOTE")
             return false
         }
     }
@@ -162,31 +153,17 @@ class Measure: Hashable {
     
     public func add(_ notation: MusicNotation, at index: Int) -> Bool {
         if(isAddNoteValid(musicNotation: notation.type)) {
-            print("ADD NOTE VALID")
-            
             notation.measure = self
-            print("inserting note at index \(index)")
-            print("before inserting: ")
-            for notation in notationObjects {
-                print(notation.type.toString())
-            }
 
             //CHECKING OF NOTE PITCH OUT OF BOUNDS
             if let note = notation as? Note {
                 self.notationObjects.insert(notation, at: index)
                 note.measure = self
 
-                print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
                 fixNoteOutOfBounds(note: note)
             } else {
                 self.notationObjects.insert(notation, at: index)
                 notation.measure = self
-            }
-
-            //self.fillWithRests()
-            print("after inserting:")
-            for notation in notationObjects {
-                print(notation.type.toString())
             }
 
             if self.isFullWithNotes {
@@ -198,8 +175,6 @@ class Measure: Hashable {
             return  true
         } else {
             return false
-            print("INVALID ADD NOTE")
-            
         }
     }
 
@@ -214,7 +189,6 @@ class Measure: Hashable {
     }
 
     public func replace(_ oldNote: MusicNotation, _ newNote: MusicNotation) {
-        print("EDIT")
         if let index = notationObjects.index(of: oldNote) {
             oldNote.measure = nil
 
@@ -222,8 +196,7 @@ class Measure: Hashable {
             if let note = newNote as? Note {
                 notationObjects[index] = note
                 note.measure = self
-
-                print("COPIED ITEM CLEF: \(note.measure?.clef.rawValue)")
+                
                 if let noteMeasure = note.measure {
                     if noteMeasure.clef == .G {
                         if note.pitch.octave * 8 + note.pitch.step.rawValue > 51 {
@@ -256,9 +229,6 @@ class Measure: Hashable {
     }
 
     public func getInvalidNotes() -> [RestNoteType] {
-        
-//        print("CUR BEAT VALUE: " + String(curBeatValue))
-//        print("MAX BEAT VALUE: " + String(timeSignature.getMaxBeatValue()))
         
         var invalidNotes = [RestNoteType]()
 
@@ -328,8 +298,6 @@ class Measure: Hashable {
             totalBeats = totalBeats + note.type.getBeatValue()
         }
 
-        print("NOTES: \(notationObjects)")
-
         return totalBeats
     }
 
@@ -343,28 +311,32 @@ class Measure: Hashable {
         return false
     }
 
-    func fillWithRests() {
+    func fillWithRests(isAction: Bool = false) {
+        var restsToAdd = [Rest]()
+        var addedBeats:Float = 0
+        let currentBeats = self.getTotalBeats()
 
-        var invalidCount = 0
-
-        var stop = false
-
-        while getTotalBeats() < timeSignature.getMaxBeatValue() && !stop {
-            for rest in RestNoteType.types {
-                let curRest = Rest(type: rest)
-                if !self.add(curRest) {
-                    invalidCount += 1
+        while currentBeats + addedBeats < timeSignature.getMaxBeatValue(){
+            for type in RestNoteType.types {
+                if self.isAddNoteValid(musicNotation: type) {
+                    restsToAdd.append(Rest(type: type))
+                    addedBeats += type.getBeatValue()
+                    break;
                 }
             }
-
-            if invalidCount > RestNoteType.types.count {
-                stop = true
+        }
+        
+        if isAction && restsToAdd.isNotEmpty {
+            let addAction = AddAction(measures: [self], notations: restsToAdd)
+            addAction.execute()
+        } else {
+            for rest in restsToAdd {
+                self.add(rest)
             }
         }
     }
 
     func updateGroups() {
-        print("CALL UPDATE GROUP: \(notationObjects)")
         self.groups.removeAll()
 
         var curGroup = [MusicNotation]()
