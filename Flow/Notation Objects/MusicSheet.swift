@@ -2892,7 +2892,7 @@ class MusicSheet: UIView {
         if let staffs = composition?.staffList {
             for staff in staffs {
                 for measure in staff.measures {
-                    measure.deleteAllNotes()
+                    measure.removeAllNotations()
                 }
             }
         }
@@ -2938,9 +2938,37 @@ class MusicSheet: UIView {
     }
     
     func editSignature(params: Parameters) {
-        let editSignatureAction = params.get(key: KeyNames.EDIT_SIGNATURE_ACTION) as! EditSignatureAction
+        let startMeasure = params.get(key: KeyNames.START_MEASURE) as! Measure
+        let oldKeySignature = params.get(key: KeyNames.OLD_KEY_SIGNATURE) as! KeySignature
+        let newKeySignature = params.get(key: KeyNames.NEW_KEY_SIGNATURE) as! KeySignature
+        let oldTimeSignature = params.get(key: KeyNames.OLD_TIME_SIGNATURE) as! TimeSignature
+        let newTimeSignature = params.get(key: KeyNames.NEW_TIME_SIGNATURE) as! TimeSignature
         
-        let startMeasure = editSignatureAction.measures[0]
+        var stavesToEdit = [Staff]()
+    
+        var startIndex = 0
+        
+        if let staves = self.composition?.staffList {
+            for staff in staves {
+                if let start = staff.measures.index(of: startMeasure) {
+                    startIndex = start
+                }
+            }
+            
+            for staff in staves {
+                let measures = Array(staff.measures[startIndex...])
+                stavesToEdit.append(Staff(measures: measures))
+            }
+        }
+        
+        let editSignatureAction = EditSignatureAction(staves: stavesToEdit,
+                                                      oldKeySignature: oldKeySignature,
+                                                      newKeySignature: newKeySignature,
+                                                      oldTimeSignature: oldTimeSignature,
+                                                      newTimeSignature: newTimeSignature)
+        
+        editSignatureAction.execute()
+        moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
     }
 
     public func searchMeasureIndex(measure: Measure) -> Int? {

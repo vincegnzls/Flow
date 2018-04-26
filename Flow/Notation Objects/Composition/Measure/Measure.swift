@@ -394,7 +394,7 @@ class Measure: Hashable {
         return true
     }
 
-    func deleteAllNotes() {
+    func removeAllNotations() {
         self.notationObjects.removeAll()
     }
 

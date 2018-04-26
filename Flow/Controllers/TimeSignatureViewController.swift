@@ -185,7 +185,7 @@ class TimeSignatureViewController: UIViewController {
                 let alert = UIAlertController(title: "Warning!", message: "Changing the time signature may cut off some of your notes. Do you want to proceed?", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Proceed", style: .destructive) { _ in
                     self.dismiss(animated: true) {
-                        self.changeSignature(measures: [measure],
+                        self.changeSignature(start: measure,
                                              oldKeySignature: oldKeySignature,
                                              newKeySignature: newKeySignature,
                                              oldTimeSignature: oldTimeSignature,
@@ -200,7 +200,7 @@ class TimeSignatureViewController: UIViewController {
             } else if !sameTimeSignature(t1: oldTimeSignature, t2: newTimeSignature) ||
                 oldKeySignature != newKeySignature {
                 
-                self.changeSignature(measures: [measure],
+                self.changeSignature(start: measure,
                                      oldKeySignature: oldKeySignature,
                                      newKeySignature: newKeySignature,
                                      oldTimeSignature: oldTimeSignature,
@@ -213,17 +213,16 @@ class TimeSignatureViewController: UIViewController {
         }
     }
     
-    private func changeSignature(measures: [Measure], oldKeySignature: KeySignature, newKeySignature: KeySignature,
+    private func changeSignature(start: Measure, oldKeySignature: KeySignature, newKeySignature: KeySignature,
                                  oldTimeSignature: TimeSignature, newTimeSignature: TimeSignature) {
-        let editSignatureAction = EditSignatureAction(measures: measures,
-                                                     oldKeySignature: oldKeySignature,
-                                                     newKeySignature: newKeySignature,
-                                                     oldTimeSignature: oldTimeSignature,
-                                                     newTimeSignature: newTimeSignature)
-        
+
         let params:Parameters = Parameters()
         
-        params.put(key: KeyNames.EDIT_SIGNATURE_ACTION, value: editSignatureAction)
+        params.put(key: KeyNames.START_MEASURE, value: start)
+        params.put(key: KeyNames.OLD_KEY_SIGNATURE, value: oldKeySignature)
+        params.put(key: KeyNames.NEW_KEY_SIGNATURE, value: newKeySignature)
+        params.put(key: KeyNames.OLD_TIME_SIGNATURE, value: oldTimeSignature)
+        params.put(key: KeyNames.NEW_TIME_SIGNATURE, value: newTimeSignature)
         
         EventBroadcaster.instance.postEvent(event: EventNames.EDIT_SIGNATURE, params: params)
     }
