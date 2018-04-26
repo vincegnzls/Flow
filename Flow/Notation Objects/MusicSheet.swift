@@ -198,6 +198,10 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_KEY_SIG)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editKeySig", function: self.editKeySig))
 
+        EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_SIGNATURE)
+        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_SIGNATURE, observer: Observer(id: "MusicSheet.editSignature", function: self.editSignature))
+
+        
         EventBroadcaster.instance.removeObservers(event: EventNames.TITLE_CHANGED)
         EventBroadcaster.instance.addObserver(event: EventNames.TITLE_CHANGED, observer: Observer(id: "MusicSheet.titleChanged", function: self.titleChanged))
 
@@ -2888,7 +2892,7 @@ class MusicSheet: UIView {
         if let staffs = composition?.staffList {
             for staff in staffs {
                 for measure in staff.measures {
-                    measure.deleteAllNotes()
+                    measure.removeAllNotations()
                 }
             }
         }
@@ -2931,6 +2935,41 @@ class MusicSheet: UIView {
                 }
             }
         }
+    }
+    
+    func editSignature(params: Parameters) {
+        let startMeasure = params.get(key: KeyNames.START_MEASURE) as! Measure
+        let oldKeySignature = params.get(key: KeyNames.OLD_KEY_SIGNATURE) as! KeySignature
+        let newKeySignature = params.get(key: KeyNames.NEW_KEY_SIGNATURE) as! KeySignature
+        let oldTimeSignature = params.get(key: KeyNames.OLD_TIME_SIGNATURE) as! TimeSignature
+        let newTimeSignature = params.get(key: KeyNames.NEW_TIME_SIGNATURE) as! TimeSignature
+        
+        var stavesToEdit = [Staff]()
+    
+        var startIndex = 0
+        
+        if let staves = self.composition?.staffList {
+            for staff in staves {
+                if let start = staff.measures.index(of: startMeasure) {
+                    startIndex = start
+                }
+            }
+            
+            for staff in staves {
+                let measures = Array(staff.measures[startIndex...])
+                stavesToEdit.append(Staff(measures: measures))
+            }
+        }
+        
+        let editSignatureAction = EditSignatureAction(staves: stavesToEdit,
+                                                      oldKeySignature: oldKeySignature,
+                                                      newKeySignature: newKeySignature,
+                                                      oldTimeSignature: oldTimeSignature,
+                                                      newTimeSignature: newTimeSignature)
+        
+        editSignatureAction.execute()
+        self.updateMeasureDraw()
+        moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
     }
 
     public func searchMeasureIndex(measure: Measure) -> Int? {

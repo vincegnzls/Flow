@@ -22,7 +22,7 @@ class Staff {
 
     func removeAllNotes() {
         for measure in self.measures {
-            measure.deleteAllNotes()
+            measure.removeAllNotations()
         }
     }
 

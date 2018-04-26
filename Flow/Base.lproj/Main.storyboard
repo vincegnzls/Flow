@@ -1176,7 +1176,7 @@ Tap '+' to create a new composition.</string>
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="stY-lC-caC" userLabel="KeySignaturePicker">
-                                            <rect key="frame" x="430" y="113" width="534" height="629"/>
+                                            <rect key="frame" x="430" y="113" width="534" height="530"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="b8j-mx-suG">
