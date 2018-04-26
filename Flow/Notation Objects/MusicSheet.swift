@@ -33,6 +33,8 @@ class MusicSheet: UIView {
     private let noteHeightAlter: CGFloat = -3
 
     private let restYOffset: CGFloat = -0.5
+    private let wholeRestYOffset: CGFloat = 8
+    private let halfRestYOffset: CGFloat = -5
     private let restWidthAlter: CGFloat = 1.7
     private let restHeightAlter: CGFloat = 1.7
     
@@ -511,7 +513,7 @@ class MusicSheet: UIView {
             if clef == .G {
                 startYForKeySig = startYForKeySig - (lineSpace*5.85)
             } else if clef == .F {
-                startYForKeySig = startYForKeySig - (lineSpace*5.30)
+                startYForKeySig = startYForKeySig - (lineSpace*4.75)
             }
 
             let numberOfAccidentals = abs(keySignature.rawValue)
@@ -538,7 +540,7 @@ class MusicSheet: UIView {
 
                 } else if keySignature.rawValue < 0 { // flats
 
-                    let snapPointSequence = [5, 2, 6, 3, 7, 4, 8]
+                    let snapPointSequence = [4, 1, 5, 2, 6, 3, 7]
 
                     let flat = UIImage(named:"flat")
                     let currentSnapPoint = snapPointsForKeySig[snapPointSequence[i]]
@@ -1416,7 +1418,13 @@ class MusicSheet: UIView {
             
             if let screenCoordinates = rest.screenCoordinates, let image = rest.image {
             
-                notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                if rest.type == .whole {
+                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset + wholeRestYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                } else if rest.type == .half {
+                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset + halfRestYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                } else {
+                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                }
                 
             }
         }
@@ -1975,7 +1983,13 @@ class MusicSheet: UIView {
                 image = rest.image
 
                 if let image = image {
-                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                    if rest.type == .whole {
+                        notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset + wholeRestYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                    } else if rest.type == .half {
+                        notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset + halfRestYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                    } else {
+                        notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                    }
                 }
                 
             }
