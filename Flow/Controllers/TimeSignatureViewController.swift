@@ -192,7 +192,7 @@ class TimeSignatureViewController: UIViewController {
                                              newTimeSignature: newTimeSignature)
                     }
                 })
-                alert.addAction(UIAlertAction(title: "Cancel", style: .default) { _ in
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
                     
                 })
                 

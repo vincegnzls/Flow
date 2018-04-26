@@ -194,11 +194,11 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
         EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
 
-        EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
+        /*EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_TIME_SIG, observer: Observer(id: "MusicSheet.editTimeSig", function: self.editTimeSig))
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_KEY_SIG)
-        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editKeySig", function: self.editKeySig))
+        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editKeySig", function: self.editKeySig))*/
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_SIGNATURE)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_SIGNATURE, observer: Observer(id: "MusicSheet.editSignature", function: self.editSignature))
@@ -2849,7 +2849,7 @@ class MusicSheet: UIView {
 
     }
 
-    public func editTimeSig(params: Parameters) {
+    /*public func editTimeSig(params: Parameters) {
         let newMeasure:Measure = params.get(key: KeyNames.NEW_MEASURE) as! Measure
         let oldMeasure:Measure = params.get(key: KeyNames.OLD_MEASURE) as! Measure
         let newMaxBeatValue: Float = newMeasure.timeSignature.getMaxBeatValue()
@@ -2949,7 +2949,7 @@ class MusicSheet: UIView {
                 }
             }
         }
-    }
+    }*/
     
     func editSignature(params: Parameters) {
         let startMeasure = params.get(key: KeyNames.START_MEASURE) as! Measure
@@ -2983,7 +2983,7 @@ class MusicSheet: UIView {
         
         editSignatureAction.execute()
         self.updateMeasureDraw()
-        moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
+        self.moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
     }
 
     public func searchMeasureIndex(measure: Measure) -> Int? {
