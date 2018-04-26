@@ -513,7 +513,7 @@ class MusicSheet: UIView {
             if clef == .G {
                 startYForKeySig = startYForKeySig - (lineSpace*5.85)
             } else if clef == .F {
-                startYForKeySig = startYForKeySig - (lineSpace*5.30)
+                startYForKeySig = startYForKeySig - (lineSpace*4.75)
             }
 
             let numberOfAccidentals = abs(keySignature.rawValue)
@@ -540,7 +540,7 @@ class MusicSheet: UIView {
 
                 } else if keySignature.rawValue < 0 { // flats
 
-                    let snapPointSequence = [5, 2, 6, 3, 7, 4, 8]
+                    let snapPointSequence = [4, 1, 5, 2, 6, 3, 7]
 
                     let flat = UIImage(named:"flat")
                     let currentSnapPoint = snapPointsForKeySig[snapPointSequence[i]]
