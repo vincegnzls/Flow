@@ -2684,10 +2684,10 @@ class MusicSheet: UIView {
         print("Copy")
         if !self.selectedNotations.isEmpty {
             Clipboard.instance.copy(self.selectedNotations)
-            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon"))
+            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon-white"))
         } else if let hovered = self.hoveredNotation {
             Clipboard.instance.copy([hovered])
-            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon"))
+            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon-white"))
         }
     }
 
@@ -2698,12 +2698,12 @@ class MusicSheet: UIView {
             Clipboard.instance.cut(self.selectedNotations)
             self.selectedNotations.removeAll()
             self.updateMeasureDraw()
-            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "cut-icon"))
+            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "cut-icon-white"))
         } else if let hovered = self.hoveredNotation {
             Clipboard.instance.cut([hovered])
             self.selectedNotations.removeAll()
             self.updateMeasureDraw()
-            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon"))
+            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "cut-icon-white"))
         }
         
 
