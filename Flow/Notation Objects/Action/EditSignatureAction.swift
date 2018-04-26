@@ -51,13 +51,12 @@ class EditSignatureAction: Action {
     }
     
     private func editTimeSignature() {
-        let newMaxBeatValue: Float = self.newTimeSignature.getMaxBeatValue()
         var newNotations = [[MusicNotation]]()
         
         for staff in self.staves {
             // Create list of all the notations for each staff
             var notations = [MusicNotation]()
-            newNotations.append(notations)
+            
             
             var measureIndex = 0
             for measure in staff.measures {
@@ -83,10 +82,15 @@ class EditSignatureAction: Action {
                 // so we can add them back later while following the new time signature
                 measure.removeAllNotations()
             }
+            
+            newNotations.append(notations)
         }
-    
+        
         var index = 0
         for (staff, notations) in zip(self.staves, newNotations) {
+            for notation in notations {
+                print("Notation: \(notation.type)")
+            }
             for measure in staff.measures {
                 while index < notations.count && measure.add(notations[index]) {
                     index += 1
@@ -95,8 +99,6 @@ class EditSignatureAction: Action {
                 measure.fillWithRests()
             }
         }
-        
-//        moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
     }
     
     public func editKeySignature() {

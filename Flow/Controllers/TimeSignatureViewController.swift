@@ -207,6 +207,8 @@ class TimeSignatureViewController: UIViewController {
                                      newTimeSignature: newTimeSignature)
                 
                 self.dismiss(animated: true, completion: nil)
+            } else {
+                self.dismiss(animated: true, completion: nil)
             }
             
             
@@ -223,7 +225,7 @@ class TimeSignatureViewController: UIViewController {
         params.put(key: KeyNames.NEW_KEY_SIGNATURE, value: newKeySignature)
         params.put(key: KeyNames.OLD_TIME_SIGNATURE, value: oldTimeSignature)
         params.put(key: KeyNames.NEW_TIME_SIGNATURE, value: newTimeSignature)
-        
+
         EventBroadcaster.instance.postEvent(event: EventNames.EDIT_SIGNATURE, params: params)
     }
 

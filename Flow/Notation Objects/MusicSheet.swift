@@ -199,7 +199,7 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editKeySig", function: self.editKeySig))
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_SIGNATURE)
-        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editSignature", function: self.editSignature))
+        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_SIGNATURE, observer: Observer(id: "MusicSheet.editSignature", function: self.editSignature))
 
         
         EventBroadcaster.instance.removeObservers(event: EventNames.TITLE_CHANGED)
@@ -2968,6 +2968,7 @@ class MusicSheet: UIView {
                                                       newTimeSignature: newTimeSignature)
         
         editSignatureAction.execute()
+        self.updateMeasureDraw()
         moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
     }
 

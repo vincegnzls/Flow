@@ -321,7 +321,6 @@ class Measure: Hashable {
                 if self.isAddNoteValid(musicNotation: type) {
                     restsToAdd.append(Rest(type: type))
                     addedBeats += type.getBeatValue()
-                    break;
                 }
             }
         }
