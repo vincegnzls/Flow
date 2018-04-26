@@ -194,11 +194,11 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
         EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "MusicSheet.play", function: self.play))
 
-        EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
+        /*EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_TIME_SIG)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_TIME_SIG, observer: Observer(id: "MusicSheet.editTimeSig", function: self.editTimeSig))
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_KEY_SIG)
-        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editKeySig", function: self.editKeySig))
+        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editKeySig", function: self.editKeySig))*/
 
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_SIGNATURE)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_SIGNATURE, observer: Observer(id: "MusicSheet.editSignature", function: self.editSignature))
@@ -2684,10 +2684,10 @@ class MusicSheet: UIView {
         print("Copy")
         if !self.selectedNotations.isEmpty {
             Clipboard.instance.copy(self.selectedNotations)
-            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon"))
+            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon-white"))
         } else if let hovered = self.hoveredNotation {
             Clipboard.instance.copy([hovered])
-            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon"))
+            self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon-white"))
         }
     }
 
@@ -2698,12 +2698,12 @@ class MusicSheet: UIView {
             Clipboard.instance.cut(self.selectedNotations)
             self.selectedNotations.removeAll()
             self.updateMeasureDraw()
-            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "cut-icon"))
+            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "cut-icon-white"))
         } else if let hovered = self.hoveredNotation {
             Clipboard.instance.cut([hovered])
             self.selectedNotations.removeAll()
             self.updateMeasureDraw()
-            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon"))
+            self.superview!.makeToast("Cut notations", duration: 1.5, position: .bottom, image: UIImage(named: "cut-icon-white"))
         }
         
 
@@ -2849,7 +2849,7 @@ class MusicSheet: UIView {
 
     }
 
-    public func editTimeSig(params: Parameters) {
+    /*public func editTimeSig(params: Parameters) {
         let newMeasure:Measure = params.get(key: KeyNames.NEW_MEASURE) as! Measure
         let oldMeasure:Measure = params.get(key: KeyNames.OLD_MEASURE) as! Measure
         let newMaxBeatValue: Float = newMeasure.timeSignature.getMaxBeatValue()
@@ -2949,7 +2949,7 @@ class MusicSheet: UIView {
                 }
             }
         }
-    }
+    }*/
     
     func editSignature(params: Parameters) {
         let startMeasure = params.get(key: KeyNames.START_MEASURE) as! Measure
@@ -2983,7 +2983,7 @@ class MusicSheet: UIView {
         
         editSignatureAction.execute()
         self.updateMeasureDraw()
-        moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
+        self.moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
     }
 
     public func searchMeasureIndex(measure: Measure) -> Int? {
