@@ -18,8 +18,8 @@ class EditSignatureAction: Action {
     
     init(measures: [Measure],
          oldKeySignature: KeySignature,
-         oldTimeSignature: TimeSignature,
          newKeySignature: KeySignature? = nil,
+         oldTimeSignature: TimeSignature,
          newTimeSignature: TimeSignature? = nil) {
         self.measures = measures
         self.oldKeySignature = oldKeySignature

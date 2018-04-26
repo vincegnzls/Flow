@@ -112,7 +112,7 @@ class TimeSignatureViewController: UIViewController {
     // When a user taps save
     @IBAction func onSavePress(_ sender: Any) {
         if let measure = GridSystem.instance.getCurrentMeasure() {
-            let newMeasure = Measure(loading: false)
+            /*let newMeasure = Measure(loading: false)
 
             newMeasure.notationObjects = measure.notationObjects
             newMeasure.keySignature = measure.keySignature
@@ -158,10 +158,74 @@ class TimeSignatureViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
             } else {
                 dismiss(animated: true, completion: nil)
+            }*/
+            
+            // Key Signature
+            let oldKeySignature = measure.keySignature
+            let newKeySignature = self.selectedKeySignature
+            
+            // Time Signature
+            var newTimeSignature = TimeSignature()
+            
+            if let newNBeats = self.nBeatsTextField.text {
+                if let newNBeatsInt = Int(newNBeats) {
+                    newTimeSignature.beats = newNBeatsInt
+                }
             }
-
-
+            
+            if let newBeatType = self.beatDurationTextField.text {
+                if let newBeatTypeInt = Int(newBeatType) {
+                    newTimeSignature.beatType = newBeatTypeInt
+                }
+            }
+            
+            let oldTimeSignature = measure.timeSignature
+            
+            if newTimeSignature.beats < oldTimeSignature.beats {
+                let alert = UIAlertController(title: "Warning!", message: "Changing the time signature may cut off some of your notes. Do you want to proceed?", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Proceed", style: .destructive) { _ in
+                    self.dismiss(animated: true) {
+                        self.changeSignature(measures: [measure],
+                                             oldKeySignature: oldKeySignature,
+                                             newKeySignature: newKeySignature,
+                                             oldTimeSignature: oldTimeSignature,
+                                             newTimeSignature: newTimeSignature)
+                    }
+                })
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default) { _ in
+                    
+                })
+                
+                self.present(alert, animated: true, completion: nil)
+            } else if !sameTimeSignature(t1: oldTimeSignature, t2: newTimeSignature) ||
+                oldKeySignature != newKeySignature {
+                
+                self.changeSignature(measures: [measure],
+                                     oldKeySignature: oldKeySignature,
+                                     newKeySignature: newKeySignature,
+                                     oldTimeSignature: oldTimeSignature,
+                                     newTimeSignature: newTimeSignature)
+                
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+            
         }
+    }
+    
+    private func changeSignature(measures: [Measure], oldKeySignature: KeySignature, newKeySignature: KeySignature,
+                                 oldTimeSignature: TimeSignature, newTimeSignature: TimeSignature) {
+        let editSignatureAction = EditSignatureAction(measures: measures,
+                                                     oldKeySignature: oldKeySignature,
+                                                     newKeySignature: newKeySignature,
+                                                     oldTimeSignature: oldTimeSignature,
+                                                     newTimeSignature: newTimeSignature)
+        
+        let params:Parameters = Parameters()
+        
+        params.put(key: KeyNames.EDIT_SIGNATURE_ACTION, value: editSignatureAction)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.EDIT_SIGNATURE, params: params)
     }
 
     public func sameTimeSignature(t1: TimeSignature, t2: TimeSignature) -> Bool {

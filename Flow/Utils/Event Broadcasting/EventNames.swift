@@ -28,6 +28,7 @@ struct EventNames {
 
     static let EDIT_TIME_SIG = "EDIT_TIME_SIG"
     static let EDIT_KEY_SIG = "EDIT_KEY_SIG"
+    static let EDIT_SIGNATURE = "EDIT_SIGNATURE"
 
     static let TITLE_CHANGED = "TITLE_CHANGED"
 

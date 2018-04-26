@@ -198,6 +198,10 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_KEY_SIG)
         EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editKeySig", function: self.editKeySig))
 
+        EventBroadcaster.instance.removeObservers(event: EventNames.EDIT_SIGNATURE)
+        EventBroadcaster.instance.addObserver(event: EventNames.EDIT_KEY_SIG, observer: Observer(id: "MusicSheet.editSignature", function: self.editSignature))
+
+        
         EventBroadcaster.instance.removeObservers(event: EventNames.TITLE_CHANGED)
         EventBroadcaster.instance.addObserver(event: EventNames.TITLE_CHANGED, observer: Observer(id: "MusicSheet.titleChanged", function: self.titleChanged))
 
@@ -2931,6 +2935,12 @@ class MusicSheet: UIView {
                 }
             }
         }
+    }
+    
+    func editSignature(params: Parameters) {
+        let editSignatureAction = params.get(key: KeyNames.EDIT_SIGNATURE_ACTION) as! EditSignatureAction
+        
+        let startMeasure = editSignatureAction.measures[0]
     }
 
     public func searchMeasureIndex(measure: Measure) -> Int? {

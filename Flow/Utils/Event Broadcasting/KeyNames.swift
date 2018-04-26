@@ -19,4 +19,5 @@ struct KeyNames {
     static let NEW_TITLE = "NEW_TITLE"
     static let HIGHLIGHT_MEASURE = "HIGHLIGHT_MEASURE"
     static let SELECTED_KEY_SIG = "SELECTED_KEY_SIG"
+    static let EDIT_SIGNATURE_ACTION = "EDIT_SIGNATURE_ACTION"
 }
