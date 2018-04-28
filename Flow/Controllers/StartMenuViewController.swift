@@ -26,6 +26,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
     
     // MARK: Properties
     private var isCollectionViewShowing = false
+    private var editingIndex: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,15 +35,6 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         
         self.setupMenuShadow()
         self.setupLists()
-
-        /*for i in 1..<5 {
-            self.compositions.append(CompositionInfo(name: "Composition \(i)"))
-            //self.compositions.append(CompositionInfo(name:"Composition 2"))
-        }
-        self.compositions.append(CompositionInfo(name: "The quick brown fox jumps over the lazy dog. " +
-                "The quick brown fox jumps over the lazy dog. " +
-                "The quick brown fox jumps over the lazy dog."))*/
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -170,7 +162,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
              }
 
         let composition = FileHandler.instance.compositions[indexPath.row]
-        cell.nameLabel.text = composition.name
+        cell.nameTextField.text = composition.name
         cell.lastEditedLabel.text = composition.lastEditedString
 
         return cell
@@ -200,7 +192,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             self.showAlertPopup(cell: cell, index: indexPath)
         }
     }
-
+    
     // MARK: TableViewSource protocol
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -217,7 +209,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
                 }
 
         let composition = FileHandler.instance.compositions[indexPath.row]
-        cell.nameLabel.text = composition.name
+        cell.nameTextField.text = composition.name
         cell.lastEditedLabel.text = composition.lastEditedString
 
         return cell
@@ -261,6 +253,18 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             print("Export tapped")
             let compositionInfo = FileHandler.instance.compositions[index.row]
             self.shareComposition(compositionInfo: compositionInfo, cell: cell)
+        })
+        
+        alert.addAction(UIAlertAction(title: "Rename", style: .default) { _ in
+            if let tableCell = cell as? CompositionTableViewCell {
+                tableCell.nameTextField.isUserInteractionEnabled = true
+                tableCell.nameTextField.becomeFirstResponder()
+                self.editingIndex = index.row
+            } else if let collectionCell = cell as? CompositionCollectionViewCell {
+                collectionCell.nameTextField.isUserInteractionEnabled = true
+                collectionCell.nameTextField.becomeFirstResponder()
+                self.editingIndex = index.row
+            }
         })
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
@@ -367,5 +371,31 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         // Set preference to new view
         let defaults = UserDefaults.standard
         defaults.set(self.isCollectionViewShowing, forKey: Constants.keyIsCollectionViewShowing)
+    }
+    
+    private func onTitleChanged(_ sender: MaxLengthTextField) {
+        sender.isUserInteractionEnabled = false
+        let title: String
+        if let textFieldText = sender.text, !textFieldText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            title = textFieldText
+        } else {
+            title = "Untitled Composition"
+        }
+        
+        sender.text = title
+        if let index = self.editingIndex {
+            FileHandler.instance.compositions[index].name = title
+            FileHandler.instance.compositions[index].lastEdited = Date()
+            FileHandler.instance.saveCompositionList()
+        }
+    }
+    
+    @IBAction func onTableViewCellTitleChanged(_ sender: MaxLengthTextField) {
+        self.onTitleChanged(sender)
+    }
+    
+    
+    @IBAction func onCollectionViewCellTitleChanged(_ sender: MaxLengthTextField) {
+        self.onTitleChanged(sender)
     }
 }

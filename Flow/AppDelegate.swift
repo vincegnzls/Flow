@@ -25,6 +25,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ToastManager.shared.style = style
         ToastManager.shared.isQueueEnabled = false
         
+        // Enable IQKeyboardManager
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enableAutoToolbar = false
+        
         return true
     }
 
