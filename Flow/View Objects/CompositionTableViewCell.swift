@@ -9,8 +9,8 @@ class CompositionTableViewCell: UITableViewCell {
 
     static let cellIdentifier = "CompositionTableViewCell"
     
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var lastEditedLabel: UILabel!
+    @IBOutlet weak var nameTextField: MaxLengthTextField!
     
     override func awakeFromNib() {
         super.awakeFromNib()

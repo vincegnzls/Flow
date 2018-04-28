@@ -12,9 +12,10 @@ class CompositionCollectionViewCell: UICollectionViewCell {
 
     static let cellIdentifier = "CompositionCollectionViewCell"
 
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var lastEditedLabel: UILabel!
-
+    @IBOutlet weak var nameTextField: MaxLengthTextField!
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()

@@ -50,7 +50,7 @@
                                             <segue destination="ldS-Qo-c4z" kind="show" identifier="CreateComposition" id="cr9-tM-n2r"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACm-2h-O3l">
+                                    <button hidden="YES" opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACm-2h-O3l">
                                         <rect key="frame" x="1022" y="10" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="GK5-9V-3aQ"/>
@@ -92,12 +92,20 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="300" height="200"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Composition Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B6I-9M-6Qh">
-                                                            <rect key="frame" x="18" y="28" width="358" height="121"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                                        <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Composition Title" placeholder="Untitled Composition" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QvQ-Q5-fd9" userLabel="Collection Name Text Field" customClass="MaxLengthTextField" customModule="Flow" customModuleProvider="target">
+                                                            <rect key="frame" x="18" y="18" width="264" height="32"/>
                                                             <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                                            <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                                                    <integer key="value" value="60"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="onCollectionViewCellTitleChanged:" destination="dfI-mq-vOZ" eventType="editingDidEnd" id="RFt-eb-QAf"/>
+                                                            </connections>
+                                                        </textField>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Edited: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Vf-Hj-b3c">
                                                             <rect key="frame" x="18" y="139.5" width="264" height="16"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -117,17 +125,18 @@
                                                 <constraints>
                                                     <constraint firstItem="URL-me-ESm" firstAttribute="top" secondItem="1Vf-Hj-b3c" secondAttribute="bottom" constant="5" id="7qm-kr-YHx"/>
                                                     <constraint firstAttribute="bottom" secondItem="URL-me-ESm" secondAttribute="bottom" constant="20" id="ECo-I4-mtb"/>
-                                                    <constraint firstItem="B6I-9M-6Qh" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="Ev6-y9-jTh"/>
                                                     <constraint firstAttribute="trailingMargin" secondItem="1Vf-Hj-b3c" secondAttribute="trailing" constant="10" id="KR6-6E-wvz"/>
-                                                    <constraint firstAttribute="trailingMargin" secondItem="B6I-9M-6Qh" secondAttribute="trailing" constant="10" id="YbM-hB-mq5"/>
-                                                    <constraint firstItem="B6I-9M-6Qh" firstAttribute="top" secondItem="X6u-9N-ovJ" secondAttribute="topMargin" constant="20" id="gB9-Hu-Uzu"/>
+                                                    <constraint firstItem="QvQ-Q5-fd9" firstAttribute="top" secondItem="X6u-9N-ovJ" secondAttribute="topMargin" constant="10" id="KW6-VS-W4R"/>
+                                                    <constraint firstAttribute="trailingMargin" secondItem="QvQ-Q5-fd9" secondAttribute="trailing" constant="10" id="eym-X4-UXX"/>
+                                                    <constraint firstItem="QvQ-Q5-fd9" firstAttribute="centerX" secondItem="X6u-9N-ovJ" secondAttribute="centerX" id="h8q-Sv-s79"/>
                                                     <constraint firstAttribute="trailingMargin" secondItem="URL-me-ESm" secondAttribute="trailing" constant="10" id="hNu-j4-9To"/>
                                                     <constraint firstItem="URL-me-ESm" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="in2-yU-kjs"/>
                                                     <constraint firstItem="1Vf-Hj-b3c" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="tcB-5H-qbH"/>
+                                                    <constraint firstItem="QvQ-Q5-fd9" firstAttribute="leading" secondItem="X6u-9N-ovJ" secondAttribute="leadingMargin" constant="10" id="weB-RK-ocU"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="lastEditedLabel" destination="URL-me-ESm" id="3fA-Cw-Cyc"/>
-                                                    <outlet property="nameLabel" destination="B6I-9M-6Qh" id="M71-T8-Pub"/>
+                                                    <outlet property="nameTextField" destination="QvQ-Q5-fd9" id="TCr-iV-q5E"/>
                                                     <segue destination="ldS-Qo-c4z" kind="show" identifier="EditCompositionFromCollection" id="2Bx-FE-wU0"/>
                                                 </connections>
                                             </collectionViewCell>
@@ -168,25 +177,32 @@
                                                                 <constraint firstAttribute="width" constant="200" id="5Z1-8f-0Zj"/>
                                                             </constraints>
                                                         </stackView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Composition Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zqy-75-84O">
-                                                            <rect key="frame" x="25" y="21" width="626" height="33"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                                        <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Composition Title" placeholder="Untitled Composition" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="WsO-KS-OuO" userLabel="Table Name Text Field" customClass="MaxLengthTextField" customModule="Flow" customModuleProvider="target">
+                                                            <rect key="frame" x="25" y="21.5" width="626" height="32"/>
                                                             <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                                            <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                                                    <integer key="value" value="60"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="onTableViewCellTitleChanged:" destination="dfI-mq-vOZ" eventType="editingDidEnd" id="1ip-Sh-nig"/>
+                                                            </connections>
+                                                        </textField>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="Sda-9z-Q7m" firstAttribute="leading" secondItem="Zqy-75-84O" secondAttribute="trailing" constant="30" id="53x-Wa-05N"/>
                                                         <constraint firstAttribute="trailingMargin" secondItem="Sda-9z-Q7m" secondAttribute="trailing" constant="200" id="ATM-7k-Kpb"/>
-                                                        <constraint firstItem="Zqy-75-84O" firstAttribute="top" secondItem="lTF-8f-wrI" secondAttribute="topMargin" constant="10" id="Bce-AE-CH3"/>
                                                         <constraint firstItem="Sda-9z-Q7m" firstAttribute="centerY" secondItem="lTF-8f-wrI" secondAttribute="centerY" id="GpO-lh-3W5"/>
-                                                        <constraint firstItem="Zqy-75-84O" firstAttribute="leading" secondItem="lTF-8f-wrI" secondAttribute="leadingMargin" constant="10" id="Kcy-wk-EJw"/>
-                                                        <constraint firstAttribute="bottomMargin" secondItem="Zqy-75-84O" secondAttribute="bottom" constant="10" id="fxb-KC-KND"/>
+                                                        <constraint firstItem="WsO-KS-OuO" firstAttribute="leading" secondItem="lTF-8f-wrI" secondAttribute="leadingMargin" constant="10" id="M8W-dl-ukw"/>
+                                                        <constraint firstItem="WsO-KS-OuO" firstAttribute="centerY" secondItem="lTF-8f-wrI" secondAttribute="centerY" id="jtn-oL-cut"/>
+                                                        <constraint firstItem="Sda-9z-Q7m" firstAttribute="leading" secondItem="WsO-KS-OuO" secondAttribute="trailing" constant="30" id="u2O-qK-R5i"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <connections>
                                                     <outlet property="lastEditedLabel" destination="TM7-Ae-ZBD" id="Xh6-VR-LCH"/>
-                                                    <outlet property="nameLabel" destination="Zqy-75-84O" id="oDc-47-25a"/>
+                                                    <outlet property="nameTextField" destination="WsO-KS-OuO" id="J4T-zM-CjE"/>
                                                     <segue destination="ldS-Qo-c4z" kind="show" identifier="EditCompositionFromTable" id="9qL-sA-OPV"/>
                                                 </connections>
                                             </tableViewCell>
