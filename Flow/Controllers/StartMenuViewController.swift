@@ -33,7 +33,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
 
         self.setupView()
         
-        self.setupMenuShadow()
+        self.setupBottomMenu()
         self.setupLists()
     }
 
@@ -77,13 +77,15 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         }
     }
 
-    private func setupMenuShadow() {
+    private func setupBottomMenu() {
         if self.menu != nil {
-            self.menu.layer.shadowColor = UIColor.black.cgColor
+            /*self.menu.layer.shadowColor = UIColor.black.cgColor
             self.menu.layer.shadowOpacity = 0.1
             self.menu.layer.shadowOffset = CGSize.zero
             self.menu.layer.shadowRadius = 5
-            self.menu.layer.shadowPath = UIBezierPath(rect: self.menu.bounds).cgPath
+            self.menu.layer.shadowPath = UIBezierPath(rect: self.menu.bounds).cgPath*/
+            self.menu.layer.borderWidth = 1
+            self.menu.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
         }
     }
     

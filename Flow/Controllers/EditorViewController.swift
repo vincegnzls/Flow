@@ -88,6 +88,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     }
     
     private func setupBottomMenu() {
+        self.bottomMenu.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
+        
         let defaults = UserDefaults.standard
         
         let isBottomMenuHidden = defaults.bool(forKey: Constants.keyIsBottomMenuHidden)

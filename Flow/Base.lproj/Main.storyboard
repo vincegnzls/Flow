@@ -39,8 +39,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Dd-JO-83n">
                                 <rect key="frame" x="0.0" y="774" width="1112" height="60"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TYM-3a-dQk">
-                                        <rect key="frame" x="8" y="15" width="30" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TYM-3a-dQk">
+                                        <rect key="frame" x="10" y="-6" width="72" height="72"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="TYM-3a-dQk" secondAttribute="height" multiplier="1:1" id="nhE-8g-Ef9"/>
                                         </constraints>
@@ -62,12 +62,12 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="137-SO-iL1"/>
                                     <constraint firstItem="ACm-2h-O3l" firstAttribute="centerY" secondItem="4Dd-JO-83n" secondAttribute="centerY" id="7sd-WA-hxf"/>
-                                    <constraint firstItem="TYM-3a-dQk" firstAttribute="leading" secondItem="4Dd-JO-83n" secondAttribute="leading" constant="30" id="Kgw-7N-mZs"/>
                                     <constraint firstAttribute="trailing" secondItem="ACm-2h-O3l" secondAttribute="trailing" constant="50" id="RGC-dA-zcy"/>
+                                    <constraint firstItem="TYM-3a-dQk" firstAttribute="leading" secondItem="4Dd-JO-83n" secondAttribute="leading" constant="10" id="a22-Jl-1MJ"/>
                                     <constraint firstItem="TYM-3a-dQk" firstAttribute="centerY" secondItem="4Dd-JO-83n" secondAttribute="centerY" id="rKZ-j1-apX"/>
                                 </constraints>
                             </view>
@@ -306,7 +306,7 @@ Tap '+' to create a new composition.</string>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vzt-o4-aLU">
                                                         <rect key="frame" x="1.5" y="32" width="27.5" height="13.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -328,7 +328,7 @@ Tap '+' to create a new composition.</string>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cut" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XyV-Sq-TOA">
                                                         <rect key="frame" x="6" y="32" width="18.5" height="13.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -350,7 +350,7 @@ Tap '+' to create a new composition.</string>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Paste" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RZd-9Q-K0u">
                                                         <rect key="frame" x="0.5" y="32" width="29.5" height="13.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -378,7 +378,7 @@ Tap '+' to create a new composition.</string>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Undo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jyV-9k-ATr">
                                                         <rect key="frame" x="1" y="32" width="28.5" height="13.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -401,7 +401,7 @@ Tap '+' to create a new composition.</string>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Redo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WXm-1l-xVA">
                                                         <rect key="frame" x="1.5" y="32" width="27" height="13.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -467,7 +467,7 @@ Tap '+' to create a new composition.</string>
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="0BX-zu-w6C"/>
                                     <constraint firstItem="dCD-B0-Oho" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" id="3YR-mc-Xa9"/>
@@ -587,6 +587,11 @@ Tap '+' to create a new composition.</string>
                                     <constraint firstItem="ZLD-aG-meq" firstAttribute="centerY" secondItem="9Uy-OO-nyR" secondAttribute="centerY" id="OmV-au-bbA"/>
                                     <constraint firstItem="Ccp-hq-7ZC" firstAttribute="top" secondItem="9Uy-OO-nyR" secondAttribute="top" constant="-8" id="c2r-34-ooS"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="self.layer.borderWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-FI-wrK">
                                 <rect key="frame" x="0.0" y="129" width="1112" height="640"/>
