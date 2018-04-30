@@ -162,25 +162,25 @@ class MenuBar: UIView {
     
     @IBAction func touchNaturalize(_ sender: UIButton) {
         print("naturalize")
-        //self.removeAccidentalHighlight()
+        self.removeAccidentalHighlight()
         EventBroadcaster.instance.postEvent(event: EventNames.NATURALIZE_KEY_PRESSED)
     }
     
     @IBAction func touchFlat(_ sender: UIButton) {
         print("flat")
-        //self.removeAccidentalHighlight()
+        self.removeAccidentalHighlight()
         EventBroadcaster.instance.postEvent(event: EventNames.FLAT_KEY_PRESSED)
     }
     
     @IBAction func touchSharp(_ sender: UIButton) {
         print("sharp")
-        //self.removeAccidentalHighlight()
+        self.removeAccidentalHighlight()
         EventBroadcaster.instance.postEvent(event: EventNames.SHARP_KEY_PRESSED)
     }
 
     @IBAction func touchDSharp(_ sender: UIButton) {
         print("dsharp")
-        //self.removeAccidentalHighlight()
+        self.removeAccidentalHighlight()
         EventBroadcaster.instance.postEvent(event: EventNames.DSHARP_KEY_PRESSED)
     }
     

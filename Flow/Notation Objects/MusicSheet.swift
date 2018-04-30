@@ -69,6 +69,8 @@ class MusicSheet: UIView {
     public var composition: Composition?
     public var hoveredNotation: MusicNotation? {
         didSet {
+            checkHighlightAccidentalButton()
+
             while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
                 highlightView.removeFromSuperview()
             }
@@ -78,9 +80,6 @@ class MusicSheet: UIView {
                     measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
                 }
 
-                EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
-                checkHighlightAccidentalButton()
-
                 /*if notation is Note {
                     EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
                 } else {
@@ -89,7 +88,7 @@ class MusicSheet: UIView {
 
                 self.highlightNotation(notation, true)
             } else {
-                EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
+                //EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
                 //disable accidentals
                 //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             }
@@ -109,6 +108,7 @@ class MusicSheet: UIView {
 
     public var selectedNotations: [MusicNotation] = [] {
         didSet {
+            checkHighlightAccidentalButton()
             print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
             if selectedNotations.count == 0 {
 
@@ -125,7 +125,6 @@ class MusicSheet: UIView {
                 //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             } else {
                 selectedNotes()
-                checkHighlightAccidentalButton()
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
         }
@@ -165,6 +164,10 @@ class MusicSheet: UIView {
         let params = Parameters()
 
         if !self.selectedNotations.isEmpty {
+            if self.hoveredNotation != nil {
+                EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
+            }
+
             for notation in self.selectedNotations {
                 if let note = notation as? Note {
                     if note.accidental == .natural {
@@ -194,6 +197,9 @@ class MusicSheet: UIView {
             } else {
                 EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
             }
+        } else {
+            print("EMPTYYY")
+            EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
         }
 
         if self.selectedNotations.isEmpty {
@@ -213,6 +219,8 @@ class MusicSheet: UIView {
                 } else {
                     EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
                 }
+            } else {
+                EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
             }
         }
     }
