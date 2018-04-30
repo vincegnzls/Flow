@@ -25,4 +25,6 @@ struct KeyNames {
     static let NEW_KEY_SIGNATURE = "NEW_KEY_SIGNATURE"
     static let OLD_TIME_SIGNATURE = "OLD_TIME_SIGNATURE"
     static let NEW_TIME_SIGNATURE = "NEW_TIME_SIGNATURE"
+
+    static let ACCIDENTAL = "ACCIDENTAL"
 }

@@ -48,6 +48,36 @@ class MenuBar: UIView {
 
         EventBroadcaster.instance.removeObserver(event: EventNames.ENABLE_ACCIDENTALS, observer: Observer(id: "MenuBar.enableAccidentals", function: self.enableAccidentals))
         EventBroadcaster.instance.addObserver(event: EventNames.ENABLE_ACCIDENTALS, observer: Observer(id: "MenuBar.enableAccidentals", function: self.enableAccidentals))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.HIGHLIGHT_ACCIDENTAL_BTN, observer: Observer(id: "MenuBar.highlightAccidentalBtn", function: self.highlightAccidentalBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_ACCIDENTAL_BTN, observer: Observer(id: "MenuBar.highlightAccidentalBtn", function: self.highlightAccidentalBtn))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT, observer: Observer(id: "MenuBar.removeAccidentalHighlight", function: self.removeAccidentalHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT, observer: Observer(id: "MenuBar.removeAccidentalHighlight", function: self.removeAccidentalHighlight))
+    }
+
+    func highlightAccidentalBtn(params: Parameters) {
+        if let accidental: Accidental = params.get(key: KeyNames.ACCIDENTAL) as! Accidental {
+
+            print("ACCIDENTAL: \(accidental.toString())")
+
+            if accidental == .natural {
+                self.naturalizeBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            } else if accidental == .sharp {
+                self.sharpBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            } else if accidental == .flat {
+                self.flatBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            } else if accidental == .doubleSharp {
+                self.dSharpBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            }
+        }
+    }
+
+    func removeAccidentalHighlight() {
+        self.naturalizeBtn.backgroundColor = nil
+        self.sharpBtn.backgroundColor = nil
+        self.flatBtn.backgroundColor = nil
+        self.dSharpBtn.backgroundColor = nil
     }
 
     /*@IBAction func touchCompositionTitle(_ sender: UIButton) {
@@ -132,21 +162,25 @@ class MenuBar: UIView {
     
     @IBAction func touchNaturalize(_ sender: UIButton) {
         print("naturalize")
+        //self.removeAccidentalHighlight()
         EventBroadcaster.instance.postEvent(event: EventNames.NATURALIZE_KEY_PRESSED)
     }
     
     @IBAction func touchFlat(_ sender: UIButton) {
         print("flat")
+        //self.removeAccidentalHighlight()
         EventBroadcaster.instance.postEvent(event: EventNames.FLAT_KEY_PRESSED)
     }
     
     @IBAction func touchSharp(_ sender: UIButton) {
         print("sharp")
+        //self.removeAccidentalHighlight()
         EventBroadcaster.instance.postEvent(event: EventNames.SHARP_KEY_PRESSED)
     }
 
     @IBAction func touchDSharp(_ sender: UIButton) {
         print("dsharp")
+        //self.removeAccidentalHighlight()
         EventBroadcaster.instance.postEvent(event: EventNames.DSHARP_KEY_PRESSED)
     }
     
