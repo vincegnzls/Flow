@@ -432,7 +432,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     func addGrandStaff() {
         if let currentComp = self.musicSheet.composition {
             if currentComp.isLastMeasureFull() {
-                self.musicSheetHeight.constant = self.musicSheetHeight.constant + 520
+                self.musicSheetWidth.constant = self.musicSheetWidth.constant + 520
                 currentComp.addGrandStaff()
             }
         }
