@@ -61,6 +61,11 @@ class KeyboardView: AKKeyboardView, AKKeyboardDelegate {
         //SoundManager.instance.pl
         print("Note Number: \(note)")
         pianoSound.play(noteNumber: note + 3)
+
+        let params = Parameters()
+        params.put(key: KeyNames.KEYBOARD_NOTE, value: MIDINoteParser.instance.parse(noteNumber: note + 3))
+
+        EventBroadcaster.instance.postEvent(event: EventNames.KEYBOARD_NOTE_PRESSED, params: params)
     }
     
     func noteOff(note: MIDINoteNumber) {

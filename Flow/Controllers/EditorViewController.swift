@@ -211,6 +211,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.addObserver(event: EventNames.HIDE_TRANSPOSE_KEYS, observer: Observer(id: "EditorViewController.hideTransposeKeys", function: self.hideTransposeKeys))
         EventBroadcaster.instance.removeObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
         EventBroadcaster.instance.addObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
+        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
+        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
     }
     
     override func viewWillLayoutSubviews() {
@@ -256,6 +258,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     }
 
     public func toggleKeyboard() {
+        self.transposeKeyView.isHidden = true
         self.keyboardView.isHidden = !self.keyboardView.isHidden
     }
     

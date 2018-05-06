@@ -9,6 +9,11 @@
 struct Pitch : Hashable {
     var step: Step
     var octave: Int
+
+    init(){
+        self.step = .C
+        self.octave = 0
+    }
     
     init(step: Step, octave: Int) {
         self.step = step

@@ -31,6 +31,7 @@
 		6173941920821AE8001A6331 /* NBeatsTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6173941820821AE8001A6331 /* NBeatsTextFieldDelegate.swift */; };
 		6173941B20823E2C001A6331 /* BeatDurationTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6173941A20823E2C001A6331 /* BeatDurationTextFieldDelegate.swift */; };
 		618F02D5209ECD7F0018C213 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F02D4209ECD7F0018C213 /* KeyboardView.swift */; };
+		618F02D7209EE3EC0018C213 /* MIDINoteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F02D6209EE3EC0018C213 /* MIDINoteParser.swift */; };
 		61B1316B1FE1513900ADCDF0 /* ButtonEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */; };
 		61EBB0321FE695B60015F7C2 /* KeySignatureDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
@@ -164,6 +165,7 @@
 		6173941820821AE8001A6331 /* NBeatsTextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBeatsTextFieldDelegate.swift; sourceTree = "<group>"; };
 		6173941A20823E2C001A6331 /* BeatDurationTextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeatDurationTextFieldDelegate.swift; sourceTree = "<group>"; };
 		618F02D4209ECD7F0018C213 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
+		618F02D6209EE3EC0018C213 /* MIDINoteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDINoteParser.swift; sourceTree = "<group>"; };
 		61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEffect.swift; sourceTree = "<group>"; };
 		61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureDesignable.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -510,6 +512,7 @@
 			children = (
 				8696A8A81FD4EA5800EB81BD /* FileHandler.swift */,
 				8632C97B2000877B00D69CB4 /* Converter.swift */,
+				618F02D6209EE3EC0018C213 /* MIDINoteParser.swift */,
 			);
 			path = "File Handling";
 			sourceTree = "<group>";
@@ -793,6 +796,7 @@
 				8618F07A1FED3DB400DF8A10 /* DeleteAction.swift in Sources */,
 				8618F0741FED3D0400DF8A10 /* Action.swift in Sources */,
 				864CE5AC1FD33076001FF059 /* Note.swift in Sources */,
+				618F02D7209EE3EC0018C213 /* MIDINoteParser.swift in Sources */,
 				8696A8C01FD5898200EB81BD /* Parser.swift in Sources */,
 				861B3DDE1FDC43C5003FE0A5 /* Observer.swift in Sources */,
 				866CC9122094775E001ADD5B /* IQUIScrollView+Additions.swift in Sources */,

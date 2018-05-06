@@ -29,4 +29,6 @@ struct KeyNames {
     static let ACCIDENTAL = "ACCIDENTAL"
 
     static let TRANSPOSE_KEYS_COORD = "TRANSPOSE_KEYS_COORD"
+
+    static let KEYBOARD_NOTE = "KEYBOARD_NOTE"
 }
