@@ -111,7 +111,7 @@ class MusicSheet: UIView {
             checkHighlightAccidentalButton()
             print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
             if selectedNotations.count == 0 {
-
+                EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TRANSPOSE_KEYS)
                 if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                     if let newMeasure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
                         let params:Parameters = Parameters()
@@ -125,6 +125,16 @@ class MusicSheet: UIView {
                 //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             } else {
                 selectedNotes()
+
+                let params = Parameters()
+
+                print("NANI")
+
+                if let coord = selectedNotations.last?.screenCoordinates {
+                    print("NANI2")
+                    params.put(key: KeyNames.TRANSPOSE_KEYS_COORD, value: coord)
+                    EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSPOSE_KEYS, params: params)
+                }
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
         }
@@ -298,6 +308,12 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.HIGHLIGHT_MEASURE)
         EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_MEASURE, observer: Observer(id: "MusicSheet.highlightParallelMeasures", function: self.highlightParallelMeasures))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.TRANSPOSE_UP, observer: Observer(id: "MusicSheet.transposeUp", function: self.transposeUp))
+        EventBroadcaster.instance.addObserver(event: EventNames.TRANSPOSE_UP, observer: Observer(id: "MusicSheet.transposeUp", function: self.transposeUp))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.TRANSPOSE_DOWN, observer: Observer(id: "MusicSheet.transposeDown", function: self.transposeDown))
+        EventBroadcaster.instance.addObserver(event: EventNames.TRANSPOSE_DOWN, observer: Observer(id: "MusicSheet.transposeDown", function: self.transposeDown))
 
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -1646,16 +1662,41 @@ class MusicSheet: UIView {
         }
     }
 
+    func transposeUp() {
+        if !self.selectedNotations.isEmpty {
+            self.transpose(direction: .up)
+
+            /*let params = Parameters()
+
+            if let coord = selectedNotations.last?.screenCoordinates {
+                //print("NANI2")
+                params.put(key: KeyNames.TRANSPOSE_KEYS_COORD, value: coord)
+                EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSPOSE_KEYS, params: params)
+            }*/
+            //return;
+        }
+    }
+
+    func transposeDown() {
+        if !self.selectedNotations.isEmpty {
+            self.transpose(direction: .down)
+
+            /*let params = Parameters()
+
+            if let coord = selectedNotations.last?.screenCoordinates {
+                //print("NANI2")
+                params.put(key: KeyNames.TRANSPOSE_KEYS_COORD, value: coord)
+                EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSPOSE_KEYS, params: params)
+            }*/
+            //return;
+        }
+    }
+
     func onArrowKeyPressed(params: Parameters) {
         let direction:ArrowKey = params.get(key: KeyNames.ARROW_KEY_DIRECTION) as! ArrowKey
         var nextPoint:CGPoint = sheetCursor.curYCursorLocation
 
         if direction == ArrowKey.up {
-
-            if !self.selectedNotations.isEmpty {
-                self.transpose(direction: .up)
-                return;
-            }
 
             if let point = GridSystem.instance.getUpYSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
                 nextPoint = point
@@ -1665,10 +1706,10 @@ class MusicSheet: UIView {
 
         } else if direction == ArrowKey.down {
 
-            if !self.selectedNotations.isEmpty {
+            /*if !self.selectedNotations.isEmpty {
                 self.transpose(direction: .down)
                 return;
-            }
+            }*/
 
             if let point = GridSystem.instance.getDownYSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
                 nextPoint = point

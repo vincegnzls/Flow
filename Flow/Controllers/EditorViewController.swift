@@ -25,6 +25,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var tempoSlider: UISlider!
     @IBOutlet weak var titleTextField: MaxLengthTextField!
     @IBOutlet weak var bottomMenu: UIView!
+    @IBOutlet weak var transposeKeyView: UIView!
+
     
     var backButton : UIBarButtonItem!
     
@@ -39,7 +41,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         // Disable the swipe to make sure you get your chance to save
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        
+        self.transposeKeyView.isHidden = true
         
         
         self.tempoTextField.delegate = self
@@ -203,6 +205,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.removeObservers(event: EventNames.DELETE_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.DELETE_KEY_PRESSED,
                                               observer: Observer(id: "EditorViewController.onDeleteKeyPressed", function: self.onDeleteKeyPressed))
+        EventBroadcaster.instance.removeObserver(event: EventNames.SHOW_TRANSPOSE_KEYS, observer: Observer(id: "EditorViewController.showTransposeKeys", function: self.showTransposeKeys))
+        EventBroadcaster.instance.addObserver(event: EventNames.SHOW_TRANSPOSE_KEYS, observer: Observer(id: "EditorViewController.showTransposeKeys", function: self.showTransposeKeys))
+        EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_TRANSPOSE_KEYS, observer: Observer(id: "EditorViewController.hideTransposeKeys", function: self.hideTransposeKeys))
+        EventBroadcaster.instance.addObserver(event: EventNames.HIDE_TRANSPOSE_KEYS, observer: Observer(id: "EditorViewController.hideTransposeKeys", function: self.hideTransposeKeys))
     }
     
     override func viewWillLayoutSubviews() {
@@ -227,6 +233,24 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
         self.save()
+    }
+
+    public func showTransposeKeys(params: Parameters) {
+        let coord: CGPoint = params.get(key: KeyNames.TRANSPOSE_KEYS_COORD) as! CGPoint
+
+        print("SHOWWW")
+
+        if let tView = self.transposeKeyView {
+            tView.isHidden = false
+            tView.frame = CGRect(x: coord.x + 55, y: coord.y + tView.frame.height / 2, width: tView.frame.width, height: tView.frame.height)
+        }
+        //self.transposeKeyView.
+    }
+
+    public func hideTransposeKeys() {
+        if let tView = self.transposeKeyView {
+            tView.isHidden = true
+        }
     }
     
     private func save() {
@@ -495,6 +519,12 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         defaults.set(false, forKey: Constants.keyIsBottomMenuHidden)
     }
     
+    @IBAction func transposeUp(_ sender: UIButton) {
+        EventBroadcaster.instance.postEvent(event: EventNames.TRANSPOSE_UP)
+    }
     
+    @IBAction func transposeDown(_ sender: UIButton) {
+        EventBroadcaster.instance.postEvent(event: EventNames.TRANSPOSE_DOWN)
+    }
 }
 
