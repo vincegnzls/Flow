@@ -237,6 +237,8 @@ class MusicSheet: UIView {
 
     private func setup() {
 
+        //self.addSubview(KeyboardView.instance.keyboard)
+
         while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
             highlightView.removeFromSuperview()
         }

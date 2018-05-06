@@ -503,6 +503,14 @@ Tap '+' to create a new composition.</string>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Uy-OO-nyR" userLabel="Bottom Menu">
                                 <rect key="frame" x="0.0" y="774" width="1112" height="60"/>
                                 <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIn-ix-cFN">
+                                        <rect key="frame" x="485" y="15" width="143" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Show/Hide Keyboard"/>
+                                        <connections>
+                                            <action selector="toggleKeyboard:" destination="VHe-OH-6BV" eventType="touchUpInside" id="rnd-Lz-15e"/>
+                                        </connections>
+                                    </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="C9e-be-vdB" userLabel="Accidentals Stack">
                                         <rect key="frame" x="100" y="8" width="234" height="43"/>
                                         <subviews>
@@ -1025,6 +1033,11 @@ Tap '+' to create a new composition.</string>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ae9-dp-GQa" userLabel="Keyboard" customClass="KeyboardView" customModule="Flow" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="630" width="1112" height="140"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <accessibility key="accessibilityConfiguration">
@@ -1078,6 +1091,7 @@ Tap '+' to create a new composition.</string>
                     <size key="freeformSize" width="1112" height="834"/>
                     <connections>
                         <outlet property="bottomMenu" destination="9Uy-OO-nyR" id="qAP-7j-PpZ"/>
+                        <outlet property="keyboardView" destination="Ae9-dp-GQa" id="UWE-BK-yB1"/>
                         <outlet property="menuBar" destination="VHe-OH-6BV" id="EC9-aQ-TAh"/>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
                         <outlet property="musicSheetHeight" destination="KPP-b0-DlP" id="wYN-6H-ZMN"/>
@@ -1308,7 +1322,7 @@ Tap '+' to create a new composition.</string>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Set Key Signature" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZEs-ca-dQD">
-                                            <rect key="frame" x="577" y="69" width="270" height="21"/>
+                                            <rect key="frame" x="576" y="69" width="270" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

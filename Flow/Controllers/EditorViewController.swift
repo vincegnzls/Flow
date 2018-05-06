@@ -26,7 +26,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var titleTextField: MaxLengthTextField!
     @IBOutlet weak var bottomMenu: UIView!
     @IBOutlet weak var transposeKeyView: UIView!
-
+    @IBOutlet weak var keyboardView: KeyboardView!
     
     var backButton : UIBarButtonItem!
     
@@ -209,6 +209,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.addObserver(event: EventNames.SHOW_TRANSPOSE_KEYS, observer: Observer(id: "EditorViewController.showTransposeKeys", function: self.showTransposeKeys))
         EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_TRANSPOSE_KEYS, observer: Observer(id: "EditorViewController.hideTransposeKeys", function: self.hideTransposeKeys))
         EventBroadcaster.instance.addObserver(event: EventNames.HIDE_TRANSPOSE_KEYS, observer: Observer(id: "EditorViewController.hideTransposeKeys", function: self.hideTransposeKeys))
+        EventBroadcaster.instance.removeObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
+        EventBroadcaster.instance.addObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
     }
     
     override func viewWillLayoutSubviews() {
@@ -251,6 +253,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         if let tView = self.transposeKeyView {
             tView.isHidden = true
         }
+    }
+
+    public func toggleKeyboard() {
+        self.keyboardView.isHidden = !self.keyboardView.isHidden
     }
     
     private func save() {

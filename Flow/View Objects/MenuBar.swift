@@ -192,4 +192,8 @@ class MenuBar: UIView {
         UndoRedoManager.instance.redo()
     }
     
+    @IBAction func toggleKeyboard(_ sender: UIButton) {
+        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_KEYBOARD)
+        print("TOGGLE PRESSED")
+    }
 }
