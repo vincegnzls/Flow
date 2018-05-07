@@ -1261,7 +1261,14 @@ class MusicSheet: UIView {
                 if let measure = note.measure {
                     if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
                         if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints) {
-                            if note is Note {
+                            
+                            if let chord = note as? Chord {
+                                for note in chord.notes {
+                                    note.screenCoordinates =
+                                        CGPoint(x: currentStartX,
+                                                y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
+                                }
+                            } else if note is Note {
                                 note.screenCoordinates =
                                         CGPoint(x: currentStartX,
                                                 y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints))
@@ -1291,8 +1298,15 @@ class MusicSheet: UIView {
                             GridSystem.instance.removeRelativeXSnapPoints(measurePoints: measurePoints,
                                     relativeX: currentStartX - noteSpace + adjustToXCenter * initialNoteSpace + 35)
 
-                            // assign snap point to added note
-                            if note is Note {
+                            // assign snap point to added note or rest
+                            if let chord = note as? Chord {
+                                for note in chord.notes {
+                                    GridSystem.instance.assignSnapPointToNotation(
+                                        snapPoint: CGPoint(x: currentStartX + adjustToXCenter * initialNoteSpace,
+                                                           y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
+                                        notation: note)
+                                }
+                            } else if note is Note {
                                 GridSystem.instance.assignSnapPointToNotation(
                                         snapPoint: CGPoint(x: currentStartX + adjustToXCenter * initialNoteSpace,
                                                 y: GridSystem.instance.getYFromPitch(notation: note, clef: measure.clef, snapPoints: snapPoints)),
@@ -1495,13 +1509,28 @@ class MusicSheet: UIView {
 
     public func addMusicNotation(notation: MusicNotation) {
 
-        var notationImageView: UIImageView?
+        var notationImageViews = [UIImageView]()
 
-        if let note = notation as? Note {
+        if let chord = notation as? Chord {
+            
+            for note in chord.notes {
+                
+                if let screenCoordinates = note.screenCoordinates, let image = note.image {
+                    notationImageViews.append(
+                        UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
+                    
+                    drawAccidentalByNote(note: note)
+                }
+                
+            }
+            
+        } else if let note = notation as? Note {
             
             if let screenCoordinates = note.screenCoordinates, let image = note.image {
                 
-                notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
+                notationImageViews.append(
+                    UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
+                
                 drawAccidentalByNote(note: note)
             }
             
@@ -1510,19 +1539,22 @@ class MusicSheet: UIView {
             if let screenCoordinates = rest.screenCoordinates, let image = rest.image {
             
                 if rest.type == .whole {
-                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset + wholeRestYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                    notationImageViews.append(
+                        UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset + wholeRestYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter)))
                 } else if rest.type == .half {
-                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset + halfRestYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                    notationImageViews.append(
+                        UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset + halfRestYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter)))
                 } else {
-                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
+                    notationImageViews.append(
+                        UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter)))
                 }
                 
             }
         }
 
-        if let notationImageView = notationImageView {
+        for notationImageView in notationImageViews {
             notationImageView.image = notation.image
-
+            
             self.addSubview(notationImageView)
         }
         

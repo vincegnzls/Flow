@@ -386,26 +386,44 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                         SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
-                } else if GridSystem.instance.pointXHasANote(x: musicSheet.sheetCursor.curYCursorLocation.x) { // if cursor has a note above or below it
+                } else if GridSystem.instance.pointXHasANote(x: musicSheet.sheetCursor.curYCursorLocation.x) {
+                    // if cursor has a note above or below it, then CREATE CHORD
                     
                     if let note = note as? Note {
                     
-                        var newChord: Chord = Chord(type: note.type, note: note)
+                        let newChord: Chord = Chord(type: note.type, note: note)
                     
-                        let notation = GridSystem.instance.getNoteFromX(x: musicSheet.sheetCursor.curYCursorLocation.x)
+                        if let notation = GridSystem.instance.getNoteFromX(x: musicSheet.sheetCursor.curYCursorLocation.x) {
                         
-                        if let chord = notation as? Chord {
-                            for note in chord.notes {
-                                newChord.notes.append(note)
+                            if let note = notation as? Note {
+                                
+                                // if cursor follows an existing CHORD, pour those existing elements to new chord
+                                if let chord = note.chord {
+                                    for note in chord.notes {
+                                        newChord.notes.append(note)
+                                    }
+                                    
+                                    for note in newChord.notes {
+                                        print(note.pitch)
+                                    }
+                                // if cursor follows an existing NOTE, put that existing element to new chord
+                                } else {
+                                    newChord.notes.append(note)
+                                }
                             }
-                        } else if let note = notation as? Note {
-                            newChord.notes.append(note)
-                        }
-                        
-                        print ("CREATED CHORD")
-                        
-                        for note in newChord.notes {
-                            print (note.pitch)
+                            
+                            if let note = notation as? Note {
+                                if let oldChord = note.chord {
+                                    self.editNotations(old: [oldChord], new: [newChord])
+                                } else {
+                                    self.editNotations(old: [notation], new: [newChord])
+                                }
+                            }
+                            
+                            for note in newChord.notes {
+                                note.chord = newChord
+                            }
+                            
                         }
                         
                     }

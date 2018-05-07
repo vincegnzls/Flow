@@ -18,6 +18,8 @@ class Chord: MusicNotation {
          notes: [Note] = []) {
         self.notes = notes
         super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
+        
+        setImage()
     }
     
     init(screenCoordinates: CGPoint? = nil,
@@ -27,10 +29,12 @@ class Chord: MusicNotation {
         self.notes = []
         notes.append(note)
         super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
+        
+        setImage()
     }
  
     override func setImage() {
-        //self.image = type.getRestImage()
+        self.image = type.getNoteImage(isUpwards: true)
     }
     
     override func duplicate() -> Chord {

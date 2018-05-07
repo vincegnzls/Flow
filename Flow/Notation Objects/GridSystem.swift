@@ -562,6 +562,31 @@ class GridSystem {
         
         return nil
     }
+    
+    public func getNotesFromX (x: CGFloat) -> [MusicNotation] {
+        
+        var notations = [MusicNotation]()
+        
+        if let measurePoints = selectedMeasureCoord {
+            if let snapPoints = getSnapPointsFromPoints(measurePoints: measurePoints) {
+                
+                for snapPoint in snapPoints {
+                    
+                    if snapPoint.x == x {
+                        
+                        if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: snapPoint) {
+                            notations.append(notation)
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+        }
+        
+        return notations
+    }
 
     public static func getMaximum64s (timeSig: TimeSignature) -> Int {
         return (64/timeSig.beatType) * timeSig.beats
