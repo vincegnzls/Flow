@@ -36,6 +36,7 @@ class KeyboardView: AKKeyboardView, AKKeyboardDelegate {
         self.polyphonicMode = true
         self.octaveCount = 7
         self.firstOctave = 0
+        self.isHidden = true
 
         //self.frame = CGRect(x: 0, y: 0, width: 400, height: 100)
         pianoSound.volume = 5.0
