@@ -515,6 +515,30 @@ class GridSystem {
         return -1
 
     }
+    
+    public func pointXHasANote(x: CGFloat) -> Bool {
+        var containsANote = false
+        
+        if let measurePoints = selectedMeasureCoord {
+            if let snapPoints = getSnapPointsFromPoints(measurePoints: measurePoints) {
+            
+                for snapPoint in snapPoints {
+                    
+                    if snapPoint.x == x {
+                        
+                        if let _ = GridSystem.instance.getNotationFromSnapPoint(snapPoint: snapPoint) {
+                            containsANote = true
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+        }
+        
+        return containsANote
+    }
 
     public static func getMaximum64s (timeSig: TimeSignature) -> Int {
         return (64/timeSig.beatType) * timeSig.beats

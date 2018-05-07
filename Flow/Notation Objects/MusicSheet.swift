@@ -60,7 +60,7 @@ class MusicSheet: UIView {
     private var curLayers = [CALayer]()
 
     private let highlightRect = HighlightRect()
-    private let sheetCursor = SheetCursor()
+    public let sheetCursor = SheetCursor()
     private let cursorXOffsetY:CGFloat = -95 // distance of starting y from measure
     
     private let playbackHighlightRect = CAShapeLayer()

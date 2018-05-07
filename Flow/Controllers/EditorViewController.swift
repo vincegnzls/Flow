@@ -37,6 +37,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        toggleKeyboard()
+        
         // Revise back button
         
         // Disable the swipe to make sure you get your chance to save
@@ -384,7 +386,12 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                         SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                } else if GridSystem.instance.pointXHasANote(x: musicSheet.sheetCursor.curYCursorLocation.x) { // if cursor has a note above or below it
+                    
+                    print ("CHORD CHORD CHORD")
+                    
                 } else {
+                    
                     // instantiate add action
                     let addAction = AddAction(measure: measure, notation: note)
                     
@@ -401,6 +408,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
                 EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                
             }
 
         }
