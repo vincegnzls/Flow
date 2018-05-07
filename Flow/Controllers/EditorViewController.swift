@@ -426,6 +426,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                             
                         }
                         
+                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
+                        
                     }
                     
                 } else {
