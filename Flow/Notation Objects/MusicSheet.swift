@@ -1331,12 +1331,6 @@ class MusicSheet: UIView {
 
                             }
                         }
-
-                        if let noteCoordinates = note.screenCoordinates {
-
-                            drawLedgerLinesIfApplicable(measurePoints: measurePoints, upToLocation: noteCoordinates)
-
-                        }
                     }
 
                 }
@@ -1520,6 +1514,12 @@ class MusicSheet: UIView {
                         UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
                     
                     drawAccidentalByNote(note: note)
+                    
+                    if let measure = chord.measure {
+                        if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
+                            drawLedgerLinesIfApplicable(measurePoints: measurePoints, upToLocation: screenCoordinates)
+                        }
+                    }
                 }
                 
             }
@@ -1532,6 +1532,13 @@ class MusicSheet: UIView {
                     UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
                 
                 drawAccidentalByNote(note: note)
+                
+                if let measure = note.measure {
+                    if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
+                        drawLedgerLinesIfApplicable(measurePoints: measurePoints, upToLocation: screenCoordinates)
+                    }
+                }
+                
             }
             
         } else if let rest = notation as? Rest {
