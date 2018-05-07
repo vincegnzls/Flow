@@ -388,7 +388,27 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 } else if GridSystem.instance.pointXHasANote(x: musicSheet.sheetCursor.curYCursorLocation.x) { // if cursor has a note above or below it
                     
-                    print ("CHORD CHORD CHORD")
+                    if let note = note as? Note {
+                    
+                        var newChord: Chord = Chord(type: note.type, note: note)
+                    
+                        let notation = GridSystem.instance.getNoteFromX(x: musicSheet.sheetCursor.curYCursorLocation.x)
+                        
+                        if let chord = notation as? Chord {
+                            for note in chord.notes {
+                                newChord.notes.append(note)
+                            }
+                        } else if let note = notation as? Note {
+                            newChord.notes.append(note)
+                        }
+                        
+                        print ("CREATED CHORD")
+                        
+                        for note in newChord.notes {
+                            print (note.pitch)
+                        }
+                        
+                    }
                     
                 } else {
                     
