@@ -2097,7 +2097,18 @@ class MusicSheet: UIView {
 
         if let allNotations = composition?.all {
             for notation in allNotations {
-                if let coor = notation.screenCoordinates {
+                if let chord = notation as? Chord {
+                    for note in chord.notes {
+                        if let coor = note.screenCoordinates {
+                            let rect = self.highlightRect.rect
+                            if rect.contains(coor) {
+                                notation.isSelected = true
+                                self.selectedNotations.append(note)
+                                self.highlightNotation(note, false)
+                            }
+                        }
+                    }
+                } else if let coor = notation.screenCoordinates {
                     let rect = self.highlightRect.rect
                     if rect.contains(coor) {
                         notation.isSelected = true
