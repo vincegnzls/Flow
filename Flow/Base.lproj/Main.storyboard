@@ -505,7 +505,7 @@ Tap '+' to create a new composition.</string>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIn-ix-cFN">
                                         <rect key="frame" x="485" y="15" width="143" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" title="Show/Hide Keyboard"/>
                                         <connections>
                                             <action selector="toggleKeyboard:" destination="VHe-OH-6BV" eventType="touchUpInside" id="rnd-Lz-15e"/>
@@ -1035,7 +1035,7 @@ Tap '+' to create a new composition.</string>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ae9-dp-GQa" userLabel="Keyboard" customClass="KeyboardView" customModule="Flow" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="630" width="1112" height="140"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
