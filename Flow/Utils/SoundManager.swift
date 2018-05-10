@@ -854,14 +854,6 @@ class SoundManager {
          timer.invalidate()
          }*/
     }
-
-    func invertVertically(notations: [MusicNotation]) -> [MusicNotation] {
-        return notations.reversed()
-    }
-
-    func invertHorizontally(notations: [MusicNotation]) -> [MusicNotation] {
-        return notations
-    }
 }
 
 

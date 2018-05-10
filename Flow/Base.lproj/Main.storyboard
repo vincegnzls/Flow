@@ -630,7 +630,7 @@ Tap '+' to create a new composition.</string>
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S6z-Dj-MLs" userLabel="TranposeKeys">
-                                <rect key="frame" x="531" y="364" width="50" height="105"/>
+                                <rect key="frame" x="531" y="364" width="151" height="105"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SFC-dm-Sgp" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
@@ -649,6 +649,29 @@ Tap '+' to create a new composition.</string>
                                             <action selector="transposeDown:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="VGd-tp-JS5"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jgu-f4-OfY" userLabel="RetrogradeInversion">
+                                        <rect key="frame" x="65" y="0.0" width="80" height="105"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DpG-Ff-gPa">
+                                                <rect key="frame" x="1" y="19" width="77" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Retrograde"/>
+                                                <connections>
+                                                    <action selector="retrograde:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="t7E-ri-VCH"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oVX-49-dcL">
+                                                <rect key="frame" x="15" y="52" width="50" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Inverse"/>
+                                                <connections>
+                                                    <action selector="inverse:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="GCU-BQ-l0r"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -1096,6 +1119,7 @@ Tap '+' to create a new composition.</string>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
                         <outlet property="musicSheetHeight" destination="KPP-b0-DlP" id="wYN-6H-ZMN"/>
                         <outlet property="musicSheetWidth" destination="FNs-ij-IW5" id="I0R-5D-Npb"/>
+                        <outlet property="riView" destination="Jgu-f4-OfY" id="uHh-Hk-8c0"/>
                         <outlet property="scrollView" destination="9Me-FI-wrK" id="TfR-zs-wl6"/>
                         <outlet property="tempoSlider" destination="Q0u-RV-0u3" id="RWk-I1-jfO"/>
                         <outlet property="tempoSliderView" destination="vvK-lH-hA9" id="CZ6-M1-wif"/>
