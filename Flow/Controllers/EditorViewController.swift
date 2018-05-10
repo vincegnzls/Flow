@@ -44,6 +44,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         // Disable the swipe to make sure you get your chance to save
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         self.transposeKeyView.isHidden = true
+        self.keyboardView.isHidden = true
         
         
         self.tempoTextField.delegate = self

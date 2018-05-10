@@ -1033,7 +1033,7 @@ Tap '+' to create a new composition.</string>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ae9-dp-GQa" userLabel="Keyboard" customClass="KeyboardView" customModule="Flow" customModuleProvider="target">
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ae9-dp-GQa" userLabel="Keyboard" customClass="KeyboardView" customModule="Flow" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="630" width="1112" height="140"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -2519,15 +2519,45 @@ class MusicSheet: UIView {
         if upCount > downCount {
             let highestNote = getLowestOrHighestNote(highest: true, notations: notations)
             let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 4
-            let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
-            let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
+            //let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
+
+            var startX: CGFloat = 0.0
+
+            if let notation = notations[0] as? Chord {
+                startX = notation.notes[0].screenCoordinates!.x + noteXOffset + 23.9
+            } else {
+                startX = notations[0].screenCoordinates!.x + noteXOffset + 23.9
+            }
+
+            var endX: CGFloat = 0.0
+
+            if let notation = notations[notations.count - 1] as? Chord {
+                endX = notation.notes[0].screenCoordinates!.x + noteXOffset + 23.9 + 2
+            } else {
+                endX = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
+            }
+
+            //let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
 
             var curSameNotes = [MusicNotation]()
 
             for notation in notations {
-                let curHeight = notation.screenCoordinates!.y - highestY
+                var notation = notation
 
-                assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: true)
+                if let chord = notation as? Chord {
+                    notation = getLowestOrHighestNoteChord(highest: true, notations: chord.notes)
+
+                    for note in chord.notes {
+                        let curHeight = note.screenCoordinates!.y - highestY
+
+                        assembleNoteForBeaming(notation: note, stemHeight: curHeight, isUpwards: true)
+                    }
+                } else {
+                    let curHeight = notation.screenCoordinates!.y - highestY
+
+                    assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: true)
+                }
+
 
                 if !curSameNotes.isEmpty {
                     if curSameNotes[curSameNotes.count - 1].type == notation.type {
@@ -2658,16 +2688,45 @@ class MusicSheet: UIView {
         } else {
             let lowestNote = getLowestOrHighestNote(highest: false, notations: notations)
             let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 5
-            let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 0.5
-            let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
+            var startX: CGFloat = 0.0
+
+            if let notation = notations[0] as? Chord {
+                startX = notation.notes[0].screenCoordinates!.x + noteXOffset + 0.5
+            } else {
+                startX = notations[0].screenCoordinates!.x + noteXOffset + 0.5
+            }
+
+            var endX: CGFloat = 0.0
+
+            if let notation = notations[notations.count - 1] as? Chord {
+                endX = notation.notes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2
+            } else {
+                endX = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
+            }
+
+            //let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
 
             var curSameNotes = [MusicNotation]()
 
             for notation in notations {
-                let curHeight = lowestY - notation.screenCoordinates!.y
+                var notation = notation
+                
+                if notation is Chord {
+                    if let chord = notation as? Chord {
+                        notation = getLowestOrHighestNoteChord(highest: false, notations: chord.notes)
 
-                assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: false)
+                        for note in chord.notes {
+                            let curHeight = lowestY - note.screenCoordinates!.y
 
+                            assembleNoteForBeaming(notation: note, stemHeight: curHeight, isUpwards: false)
+                        }
+                    }
+                } else {
+                    let curHeight = lowestY - notation.screenCoordinates!.y
+
+                    assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: false)
+                }
+    
                 if !curSameNotes.isEmpty {
                     if curSameNotes[curSameNotes.count - 1].type == notation.type {
                         curSameNotes.append(notation)
@@ -2825,7 +2884,48 @@ class MusicSheet: UIView {
         }
     }
 
-    public func getLowestOrHighestNote(highest: Bool, notations: [MusicNotation]) -> MusicNotation{
+    public func getLowestOrHighestNote(highest: Bool, notations: [MusicNotation]) -> MusicNotation {
+        var note: MusicNotation
+
+        if let notation = notations[0] as? Chord {
+            note = getLowestOrHighestNoteChord(highest: highest, notations: notation.notes)
+        } else {
+            note = notations[0]
+        }
+
+        for notation in notations {
+            if !highest {
+
+                if let notation = notation as? Chord {
+                    var lowestNotation = getLowestOrHighestNoteChord(highest: highest, notations: notation.notes)
+
+                    if lowestNotation.screenCoordinates!.y > note.screenCoordinates!.y {
+                        note = notation
+                    }
+                } else {
+                    if notation.screenCoordinates!.y > note.screenCoordinates!.y {
+                        note = notation
+                    }
+                }
+            } else {
+                if let notation = notation as? Chord {
+                    var lowestNotation = getLowestOrHighestNoteChord(highest: highest, notations: notation.notes)
+
+                    if lowestNotation.screenCoordinates!.y < note.screenCoordinates!.y {
+                        note = notation
+                    }
+                } else {
+                    if notation.screenCoordinates!.y < note.screenCoordinates!.y {
+                        note = notation
+                    }
+                }
+            }
+        }
+
+        return note
+    }
+
+    public func getLowestOrHighestNoteChord(highest: Bool, notations: [MusicNotation]) -> MusicNotation {
         var note: MusicNotation
 
         note = notations[0]
