@@ -3649,7 +3649,7 @@ class MusicSheet: UIView {
 
     func allNotes(notations: [MusicNotation]) -> Bool {
         for notation in notations {
-            if notation is Rest || notations is Chord {
+            if notation is Rest || notation is Chord {
                 return false
             }
         }
