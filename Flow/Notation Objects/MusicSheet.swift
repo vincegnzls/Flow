@@ -2900,7 +2900,7 @@ class MusicSheet: UIView {
                     var lowestNotation = getLowestOrHighestNoteChord(highest: highest, notations: notation.notes)
 
                     if lowestNotation.screenCoordinates!.y > note.screenCoordinates!.y {
-                        note = notation
+                        note = lowestNotation
                     }
                 } else {
                     if notation.screenCoordinates!.y > note.screenCoordinates!.y {
@@ -2909,10 +2909,10 @@ class MusicSheet: UIView {
                 }
             } else {
                 if let notation = notation as? Chord {
-                    var lowestNotation = getLowestOrHighestNoteChord(highest: highest, notations: notation.notes)
+                    var highestNotation = getLowestOrHighestNoteChord(highest: highest, notations: notation.notes)
 
-                    if lowestNotation.screenCoordinates!.y < note.screenCoordinates!.y {
-                        note = notation
+                    if highestNotation.screenCoordinates!.y < note.screenCoordinates!.y {
+                        note = highestNotation
                     }
                 } else {
                     if notation.screenCoordinates!.y < note.screenCoordinates!.y {
