@@ -265,6 +265,22 @@ class Measure: Hashable {
         params.put(key: KeyNames.INVALID_NOTES, value: invalidNotes)
         EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_NOTES, params: params)
     }
+    
+    public func updateInvalidNotes(validNotes: [RestNoteType]) {
+        
+        let params = Parameters()
+        
+        var invalidNotes = [RestNoteType]()
+        
+        for type in RestNoteType.types {
+            if !validNotes.contains(type) {
+                invalidNotes.append(type)
+            }
+        }
+        
+        params.put(key: KeyNames.INVALID_NOTES, value: invalidNotes)
+        EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_NOTES, params: params)
+    }
 
     public func isAddNoteValid (musicNotation: RestNoteType) -> Bool {
 
