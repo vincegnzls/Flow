@@ -183,11 +183,19 @@ class MusicSheet: UIView {
         return true
     }
 
-    func repositionTransformView() {
-        if let coord = selectedNotations.last?.screenCoordinates {
-            self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-            self.transformView.isHidden = false
-            self.addSubview(self.transformView)
+    func repositionTransformView(first: Bool) {
+        if first {
+            if let coord = selectedNotations.first?.screenCoordinates {
+                self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                self.transformView.isHidden = false
+                self.addSubview(self.transformView)
+            }
+        } else {
+            if let coord = selectedNotations.last?.screenCoordinates {
+                self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                self.transformView.isHidden = false
+                self.addSubview(self.transformView)
+            }
         }
     }
 
@@ -3582,9 +3590,16 @@ class MusicSheet: UIView {
 
         editAction.execute()
 
+        selectedNotations.removeAll()
+
+        selectedNotations = retrograde
+
         self.updateMeasureDraw()
 
-        selectedNotations.removeAll()
+        repositionTransformView(first: true)
+        
+        self.transformView.isHidden = false
+        self.addSubview(self.transformView)
     }
 
     func inverse(notations: [MusicNotation]) {
@@ -3625,10 +3640,21 @@ class MusicSheet: UIView {
         let editAction = EditAction(old: oldNotes, new: invertedNotes)
         
         editAction.execute()
-        
-        self.updateMeasureDraw()
 
         self.selectedNotations.removeAll()
+
+        if let fNote = notations.first as? Note {
+            invertedNotes.insert(fNote, at: 0)
+        }
+
+        self.selectedNotations = invertedNotes
+
+        self.updateMeasureDraw()
+
+        repositionTransformView(first: false)
+        
+        self.transformView.isHidden = false
+        self.addSubview(self.transformView)
     }
 
     func invertNote(note: Note, steps: Int) -> Note {
