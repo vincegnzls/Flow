@@ -27,6 +27,7 @@
 		61516C8B2052EA3000020F6E /* AudioKitUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 61516C882052EA2D00020F6E /* AudioKitUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		61516C8C2052EA3000020F6E /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61516C892052EA2F00020F6E /* AudioKit.framework */; };
 		61516C8D2052EA3000020F6E /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 61516C892052EA2F00020F6E /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		616796B220A5990600009C17 /* TransformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616796B120A5990600009C17 /* TransformView.swift */; };
 		617394132080BE0D001A6331 /* KeySignatureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617394122080BE0D001A6331 /* KeySignatureButton.swift */; };
 		6173941920821AE8001A6331 /* NBeatsTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6173941820821AE8001A6331 /* NBeatsTextFieldDelegate.swift */; };
 		6173941B20823E2C001A6331 /* BeatDurationTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6173941A20823E2C001A6331 /* BeatDurationTextFieldDelegate.swift */; };
@@ -161,6 +162,7 @@
 		613EE8D41F98EB5F004FD009 /* Staff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Staff.swift; sourceTree = "<group>"; };
 		61516C882052EA2D00020F6E /* AudioKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKitUI.framework; sourceTree = "<group>"; };
 		61516C892052EA2F00020F6E /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
+		616796B120A5990600009C17 /* TransformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformView.swift; sourceTree = "<group>"; };
 		617394122080BE0D001A6331 /* KeySignatureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureButton.swift; sourceTree = "<group>"; };
 		6173941820821AE8001A6331 /* NBeatsTextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBeatsTextFieldDelegate.swift; sourceTree = "<group>"; };
 		6173941A20823E2C001A6331 /* BeatDurationTextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeatDurationTextFieldDelegate.swift; sourceTree = "<group>"; };
@@ -568,6 +570,7 @@
 				61266A38BF3434D745ED8A2D /* CompositionTableViewCell.swift */,
 				617394122080BE0D001A6331 /* KeySignatureButton.swift */,
 				618F02D4209ECD7F0018C213 /* KeyboardView.swift */,
+				616796B120A5990600009C17 /* TransformView.swift */,
 			);
 			path = "View Objects";
 			sourceTree = "<group>";
@@ -755,6 +758,7 @@
 				86B8EFEC1FEAA5E600DD834E /* Step.swift in Sources */,
 				8632C97C2000877B00D69CB4 /* Converter.swift in Sources */,
 				866CC90A2094774F001ADD5B /* IQKeyboardManagerConstants.swift in Sources */,
+				616796B220A5990600009C17 /* TransformView.swift in Sources */,
 				8696A8BC1FD5898200EB81BD /* Element.swift in Sources */,
 				8618F07C1FED406500DF8A10 /* UndoRedoManager.swift in Sources */,
 				866CC9002094773B001ADD5B /* IQUIView+IQKeyboardToolbar.swift in Sources */,

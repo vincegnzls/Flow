@@ -12,6 +12,7 @@ enum TranspositionDirection {
     case up, down
 }
 
+@IBDesignable
 class MusicSheet: UIView {
 
     private let HIGHLIGHTED_NOTES_TAG = 2500
@@ -66,6 +67,9 @@ class MusicSheet: UIView {
     private let playbackHighlightRect = CAShapeLayer()
     private var playbackScrollLock = false
     
+    @IBOutlet var transformView: UIView!
+    @IBOutlet var riView: UIView!
+    
     public var composition: Composition?
     public var hoveredNotation: MusicNotation? {
         didSet {
@@ -111,7 +115,9 @@ class MusicSheet: UIView {
             checkHighlightAccidentalButton()
             print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
             if selectedNotations.count == 0 {
-                EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TRANSPOSE_KEYS)
+
+                self.transformView.isHidden = true
+
                 if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                     if let newMeasure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
                         let params:Parameters = Parameters()
@@ -131,25 +137,21 @@ class MusicSheet: UIView {
                 print("NANI")
 
                 if let coord = selectedNotations.last?.screenCoordinates {
-                    print("NANI2")
-                    params.put(key: KeyNames.TRANSPOSE_KEYS_COORD, value: coord)
-                    EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSPOSE_KEYS, params: params)
+                    self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                    self.transformView.isHidden = false
+                    self.addSubview(self.transformView)
                 }
 
                 if selectedNotations.count > 1 {
                     let params = Parameters()
 
                     if allNotes(notations: selectedNotations) {
-                        params.put(key: KeyNames.RI_TOGGLE, value: false)
-                        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_RI_VIEW, params: params)
+                        self.riView.isHidden = false
                     } else {
-                        params.put(key: KeyNames.RI_TOGGLE, value: true)
-                        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_RI_VIEW, params: params)
+                        self.riView.isHidden = true
                     }
                 } else {
-                    let params = Parameters()
-                    params.put(key: KeyNames.RI_TOGGLE, value: true)
-                    EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_RI_VIEW, params: params)
+                    self.riView.isHidden = true
                 }
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
@@ -179,6 +181,14 @@ class MusicSheet: UIView {
         }
 
         return true
+    }
+
+    func repositionTransformView() {
+        if let coord = selectedNotations.last?.screenCoordinates {
+            self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+            self.transformView.isHidden = false
+            self.addSubview(self.transformView)
+        }
     }
 
     func checkHighlightAccidentalButton() {
@@ -254,7 +264,7 @@ class MusicSheet: UIView {
     private func setup() {
 
         //self.addSubview(KeyboardView.instance.keyboard)
-
+        
         while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
             highlightView.removeFromSuperview()
         }
@@ -326,18 +336,6 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.HIGHLIGHT_MEASURE)
         EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_MEASURE, observer: Observer(id: "MusicSheet.highlightParallelMeasures", function: self.highlightParallelMeasures))
-
-        EventBroadcaster.instance.removeObserver(event: EventNames.TRANSPOSE_UP, observer: Observer(id: "MusicSheet.transposeUp", function: self.transposeUp))
-        EventBroadcaster.instance.addObserver(event: EventNames.TRANSPOSE_UP, observer: Observer(id: "MusicSheet.transposeUp", function: self.transposeUp))
-
-        EventBroadcaster.instance.removeObserver(event: EventNames.TRANSPOSE_DOWN, observer: Observer(id: "MusicSheet.transposeDown", function: self.transposeDown))
-        EventBroadcaster.instance.addObserver(event: EventNames.TRANSPOSE_DOWN, observer: Observer(id: "MusicSheet.transposeDown", function: self.transposeDown))
-
-        EventBroadcaster.instance.removeObserver(event: EventNames.INVERSE, observer: Observer(id: "MusicSheet.inverseSelected", function: self.inverseSelected))
-        EventBroadcaster.instance.addObserver(event: EventNames.INVERSE, observer: Observer(id: "MusicSheet.inverseSelected", function: self.inverseSelected))
-
-        EventBroadcaster.instance.removeObserver(event: EventNames.RETROGRADE, observer: Observer(id: "MusicSheet.retrogradeSelected", function: self.retrogradeSelected))
-        EventBroadcaster.instance.addObserver(event: EventNames.RETROGRADE, observer: Observer(id: "MusicSheet.retrogradeSelected", function: self.retrogradeSelected))
 
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -1728,6 +1726,8 @@ class MusicSheet: UIView {
     func transposeUp() {
         if !self.selectedNotations.isEmpty {
             self.transpose(direction: .up)
+            self.transformView.isHidden = false
+            self.addSubview(self.transformView)
 
             /*let params = Parameters()
 
@@ -1743,6 +1743,8 @@ class MusicSheet: UIView {
     func transposeDown() {
         if !self.selectedNotations.isEmpty {
             self.transpose(direction: .down)
+            self.transformView.isHidden = false
+            self.addSubview(self.transformView)
 
             /*let params = Parameters()
 
@@ -3286,6 +3288,12 @@ class MusicSheet: UIView {
         return nil
     }
 
+    public func highlightSelected() {
+        for notation in self.selectedNotations {
+            highlightNotation(notation, false)
+        }
+    }
+
     public func titleChanged(params: Parameters) {
         print("here")
         if let composition = self.composition {
@@ -3331,6 +3339,8 @@ class MusicSheet: UIView {
                 }
             }
 
+            self.transformView.isHidden = false
+            self.addSubview(self.transformView)
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
@@ -3389,6 +3399,8 @@ class MusicSheet: UIView {
                 }
             }
 
+            self.transformView.isHidden = false
+            self.addSubview(self.transformView)
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
@@ -3477,6 +3489,8 @@ class MusicSheet: UIView {
                 }
             }
 
+            self.transformView.isHidden = false
+            self.addSubview(self.transformView)
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
@@ -3535,6 +3549,8 @@ class MusicSheet: UIView {
                 }
             }
 
+            self.transformView.isHidden = false
+            self.addSubview(self.transformView)
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
@@ -3569,18 +3585,6 @@ class MusicSheet: UIView {
         self.updateMeasureDraw()
 
         selectedNotations.removeAll()
-    }
-
-    public func inverseSelected() {
-        if selectedNotations.count > 1 {
-            inverse(notations: selectedNotations)
-        }
-    }
-
-    public func retrogradeSelected() {
-        if selectedNotations.count > 1 {
-            retrograde(notations: selectedNotations)
-        }
     }
 
     func inverse(notations: [MusicNotation]) {
@@ -3663,4 +3667,24 @@ class MusicSheet: UIView {
         return ((note2.pitch.octave * 7) + note2.pitch.step.rawValue) - ((note1.pitch.octave * 7) + note1.pitch.step.rawValue)
     }
 
+    @IBAction func transposeUp(_ sender: UIButton) {
+        self.transposeUp()
+    }
+    
+    @IBAction func transposeDown(_ sender: UIButton) {
+        self.transposeDown()
+    }
+    
+    @IBAction func retrograde(_ sender: UIButton) {
+        if selectedNotations.count > 1 {
+            self.retrograde(notations: self.selectedNotations)
+        }
+    }
+    
+    @IBAction func inverse(_ sender: UIButton) {
+        if selectedNotations.count > 1 {
+            self.inverse(notations: self.selectedNotations)
+        }
+    }
+    
 }
