@@ -420,7 +420,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                                     }
                                 // if cursor follows an existing NOTE, put that existing element to new chord
                                 } else {
-                                    newChord.notes.append(note.duplicate())
+                                    let duplicatedNote = note.duplicate()
+                                    duplicatedNote.measure = nil
+                                    
+                                    newChord.notes.append(duplicatedNote)
                                 }
                             }
                             
