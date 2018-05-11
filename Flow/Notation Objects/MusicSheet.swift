@@ -135,6 +135,22 @@ class MusicSheet: UIView {
                     params.put(key: KeyNames.TRANSPOSE_KEYS_COORD, value: coord)
                     EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSPOSE_KEYS, params: params)
                 }
+
+                if selectedNotations.count > 1 {
+                    let params = Parameters()
+
+                    if allNotes(notations: selectedNotations) {
+                        params.put(key: KeyNames.RI_TOGGLE, value: false)
+                        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_RI_VIEW, params: params)
+                    } else {
+                        params.put(key: KeyNames.RI_TOGGLE, value: true)
+                        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_RI_VIEW, params: params)
+                    }
+                } else {
+                    let params = Parameters()
+                    params.put(key: KeyNames.RI_TOGGLE, value: true)
+                    EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_RI_VIEW, params: params)
+                }
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
         }
@@ -316,6 +332,12 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObserver(event: EventNames.TRANSPOSE_DOWN, observer: Observer(id: "MusicSheet.transposeDown", function: self.transposeDown))
         EventBroadcaster.instance.addObserver(event: EventNames.TRANSPOSE_DOWN, observer: Observer(id: "MusicSheet.transposeDown", function: self.transposeDown))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.INVERSE, observer: Observer(id: "MusicSheet.inverseSelected", function: self.inverseSelected))
+        EventBroadcaster.instance.addObserver(event: EventNames.INVERSE, observer: Observer(id: "MusicSheet.inverseSelected", function: self.inverseSelected))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.RETROGRADE, observer: Observer(id: "MusicSheet.retrogradeSelected", function: self.retrogradeSelected))
+        EventBroadcaster.instance.addObserver(event: EventNames.RETROGRADE, observer: Observer(id: "MusicSheet.retrogradeSelected", function: self.retrogradeSelected))
 
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -2519,15 +2541,45 @@ class MusicSheet: UIView {
         if upCount > downCount {
             let highestNote = getLowestOrHighestNote(highest: true, notations: notations)
             let highestY: CGFloat = highestNote.screenCoordinates!.y - stemHeight - 4
-            let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
-            let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
+            //let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 23.9
+
+            var startX: CGFloat = 0.0
+
+            if let notation = notations[0] as? Chord {
+                startX = notation.notes[0].screenCoordinates!.x + noteXOffset + 23.9
+            } else {
+                startX = notations[0].screenCoordinates!.x + noteXOffset + 23.9
+            }
+
+            var endX: CGFloat = 0.0
+
+            if let notation = notations[notations.count - 1] as? Chord {
+                endX = notation.notes[0].screenCoordinates!.x + noteXOffset + 23.9 + 2
+            } else {
+                endX = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
+            }
+
+            //let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 23.9 + 2
 
             var curSameNotes = [MusicNotation]()
 
             for notation in notations {
-                let curHeight = notation.screenCoordinates!.y - highestY
+                var notation = notation
 
-                assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: true)
+                if let chord = notation as? Chord {
+                    notation = getLowestOrHighestNoteChord(highest: true, notations: chord.notes)
+
+                    for note in chord.notes {
+                        let curHeight = note.screenCoordinates!.y - highestY
+
+                        assembleNoteForBeaming(notation: note, stemHeight: curHeight, isUpwards: true)
+                    }
+                } else {
+                    let curHeight = notation.screenCoordinates!.y - highestY
+
+                    assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: true)
+                }
+
 
                 if !curSameNotes.isEmpty {
                     if curSameNotes[curSameNotes.count - 1].type == notation.type {
@@ -2658,16 +2710,45 @@ class MusicSheet: UIView {
         } else {
             let lowestNote = getLowestOrHighestNote(highest: false, notations: notations)
             let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 5
-            let startX: CGFloat = notations[0].screenCoordinates!.x + noteXOffset + 0.5
-            let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
+            var startX: CGFloat = 0.0
+
+            if let notation = notations[0] as? Chord {
+                startX = notation.notes[0].screenCoordinates!.x + noteXOffset + 0.5
+            } else {
+                startX = notations[0].screenCoordinates!.x + noteXOffset + 0.5
+            }
+
+            var endX: CGFloat = 0.0
+
+            if let notation = notations[notations.count - 1] as? Chord {
+                endX = notation.notes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2
+            } else {
+                endX = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
+            }
+
+            //let endX: CGFloat = notations[notations.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2
 
             var curSameNotes = [MusicNotation]()
 
             for notation in notations {
-                let curHeight = lowestY - notation.screenCoordinates!.y
+                var notation = notation
+                
+                if notation is Chord {
+                    if let chord = notation as? Chord {
+                        notation = getLowestOrHighestNoteChord(highest: false, notations: chord.notes)
 
-                assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: false)
+                        for note in chord.notes {
+                            let curHeight = lowestY - note.screenCoordinates!.y
 
+                            assembleNoteForBeaming(notation: note, stemHeight: curHeight, isUpwards: false)
+                        }
+                    }
+                } else {
+                    let curHeight = lowestY - notation.screenCoordinates!.y
+
+                    assembleNoteForBeaming(notation: notation, stemHeight: curHeight, isUpwards: false)
+                }
+    
                 if !curSameNotes.isEmpty {
                     if curSameNotes[curSameNotes.count - 1].type == notation.type {
                         curSameNotes.append(notation)
@@ -2825,7 +2906,48 @@ class MusicSheet: UIView {
         }
     }
 
-    public func getLowestOrHighestNote(highest: Bool, notations: [MusicNotation]) -> MusicNotation{
+    public func getLowestOrHighestNote(highest: Bool, notations: [MusicNotation]) -> MusicNotation {
+        var note: MusicNotation
+
+        if let notation = notations[0] as? Chord {
+            note = getLowestOrHighestNoteChord(highest: highest, notations: notation.notes)
+        } else {
+            note = notations[0]
+        }
+
+        for notation in notations {
+            if !highest {
+
+                if let notation = notation as? Chord {
+                    var lowestNotation = getLowestOrHighestNoteChord(highest: highest, notations: notation.notes)
+
+                    if lowestNotation.screenCoordinates!.y > note.screenCoordinates!.y {
+                        note = lowestNotation
+                    }
+                } else {
+                    if notation.screenCoordinates!.y > note.screenCoordinates!.y {
+                        note = notation
+                    }
+                }
+            } else {
+                if let notation = notation as? Chord {
+                    var highestNotation = getLowestOrHighestNoteChord(highest: highest, notations: notation.notes)
+
+                    if highestNotation.screenCoordinates!.y < note.screenCoordinates!.y {
+                        note = highestNotation
+                    }
+                } else {
+                    if notation.screenCoordinates!.y < note.screenCoordinates!.y {
+                        note = notation
+                    }
+                }
+            }
+        }
+
+        return note
+    }
+
+    public func getLowestOrHighestNoteChord(highest: Bool, notations: [MusicNotation]) -> MusicNotation {
         var note: MusicNotation
 
         note = notations[0]
@@ -3431,6 +3553,114 @@ class MusicSheet: UIView {
             }
         }
 
+    }
+
+    func retrograde(notations: [MusicNotation]) {
+        var retrograde = [MusicNotation]()
+
+        for arrayIndex in stride(from: notations.count - 1, through: 0, by: -1) {
+            retrograde.append(notations[arrayIndex].duplicate())
+        }
+
+        let editAction = EditAction(old: notations, new: retrograde)
+
+        editAction.execute()
+
+        self.updateMeasureDraw()
+
+        selectedNotations.removeAll()
+    }
+
+    public func inverseSelected() {
+        if selectedNotations.count > 1 {
+            inverse(notations: selectedNotations)
+        }
+    }
+
+    public func retrogradeSelected() {
+        if selectedNotations.count > 1 {
+            retrograde(notations: selectedNotations)
+        }
+    }
+
+    func inverse(notations: [MusicNotation]) {
+        var invertedDeltas = [Int]()
+        var invertedNotes = [Note]()
+
+        for x in 0...notations.count - 2 {
+            print("XXX: \(x)")
+            if notations[0] is Note && notations[x + 1] is Note {
+                
+                let delta = getNoteDifference(note1: notations[0] as! Note, note2: notations[x + 1] as! Note)
+                
+                print("DELTA: \(delta)")
+
+                let invertDelta = delta * -1
+
+                invertedDeltas.append(invertDelta)
+            }
+        }
+
+        print("INVERTED DELTAS: \(invertedDeltas)")
+        
+        for y in 1...notations.count - 1 {
+            if notations[y] is Note {
+                let invertedNote = invertNote(note: notations[y].duplicate() as! Note, steps: invertedDeltas[y - 1])
+                
+                invertedNotes.append(invertedNote)
+
+                print("inverted note pitch: \(invertedNote.pitch.step.rawValue)")
+                print("inverted note octave: \(invertedNote.pitch.octave)")
+            }
+        }
+        
+        let oldNotes = Array(notations[1..<notations.count])
+        
+        print("OLD NOTES COUNT: \(oldNotes.count)")
+        
+        let editAction = EditAction(old: oldNotes, new: invertedNotes)
+        
+        editAction.execute()
+        
+        self.updateMeasureDraw()
+
+        self.selectedNotations.removeAll()
+    }
+
+    func invertNote(note: Note, steps: Int) -> Note {
+
+        var invertedNote = note
+        
+        print("INVERTNOTE STEPS: \(abs(steps))")
+        print("STEPS: \(steps))")
+
+        if abs(steps) > 0 {
+            for _ in 1...abs(steps) * 2 {
+                if steps > 0 {
+                    invertedNote.transposeUp()
+                } else if steps < 0 {
+                    invertedNote.transposeDown()
+                }
+            }
+        }
+
+        return invertedNote
+    }
+
+    func allNotes(notations: [MusicNotation]) -> Bool {
+        for notation in notations {
+            if notation is Rest || notation is Chord {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    func getNoteDifference(note1: Note, note2: Note) -> Int {
+        print("note1 pitch : \(note1.pitch.step.rawValue) note2 pitch: \(note2.pitch.step.rawValue)")
+        print("note1 octave: \(note1.pitch.octave) note2 octave: \(note2.pitch.octave)")
+        return ((note2.pitch.octave * 7) + note2.pitch.step.rawValue) - ((note1.pitch.octave * 7) + note1.pitch.step.rawValue)
     }
 
 }

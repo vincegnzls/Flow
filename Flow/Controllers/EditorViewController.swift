@@ -27,6 +27,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var bottomMenu: UIView!
     @IBOutlet weak var transposeKeyView: UIView!
     @IBOutlet weak var keyboardView: KeyboardView!
+    @IBOutlet weak var riView: UIView!
     
     var backButton : UIBarButtonItem!
     
@@ -44,6 +45,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         // Disable the swipe to make sure you get your chance to save
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         self.transposeKeyView.isHidden = true
+        self.keyboardView.isHidden = true
         
         
         self.tempoTextField.delegate = self
@@ -213,8 +215,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.addObserver(event: EventNames.HIDE_TRANSPOSE_KEYS, observer: Observer(id: "EditorViewController.hideTransposeKeys", function: self.hideTransposeKeys))
         EventBroadcaster.instance.removeObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
         EventBroadcaster.instance.addObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
-        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
-        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
+        EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "EditorViewController.hideViews", function: self.hideViews))
+        EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "EditorViewController.hideViews", function: self.hideViews))
+        EventBroadcaster.instance.removeObserver(event: EventNames.TOGGLE_RI_VIEW, observer: Observer(id: "EditorViewController.toggleRIView", function: self.toggleRIView))
+        EventBroadcaster.instance.addObserver(event: EventNames.TOGGLE_RI_VIEW, observer: Observer(id: "EditorViewController.toggleRIView", function: self.toggleRIView))
     }
     
     override func viewWillLayoutSubviews() {
@@ -241,6 +245,14 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.save()
     }
 
+    func toggleRIView(params: Parameters) {
+        let isHidden = params.get(key: KeyNames.RI_TOGGLE, defaultValue: false)
+
+        print("IS HIDDEN: \(isHidden)")
+
+        self.riView.isHidden = isHidden
+    }
+
     public func showTransposeKeys(params: Parameters) {
         let coord: CGPoint = params.get(key: KeyNames.TRANSPOSE_KEYS_COORD) as! CGPoint
 
@@ -259,8 +271,12 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         }
     }
 
-    public func toggleKeyboard() {
+    public func hideViews() {
         self.transposeKeyView.isHidden = true
+        self.keyboardView.isHidden = true
+    }
+
+    public func toggleKeyboard() {
         self.keyboardView.isHidden = !self.keyboardView.isHidden
     }
     
@@ -582,6 +598,14 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     @IBAction func transposeDown(_ sender: UIButton) {
         EventBroadcaster.instance.postEvent(event: EventNames.TRANSPOSE_DOWN)
+    }
+    
+    @IBAction func inverse(_ sender: UIButton) {
+        EventBroadcaster.instance.postEvent(event: EventNames.INVERSE)
+    }
+
+    @IBAction func retrograde(_ sender: UIButton) {
+        EventBroadcaster.instance.postEvent(event: EventNames.RETROGRADE)
     }
 }
 
