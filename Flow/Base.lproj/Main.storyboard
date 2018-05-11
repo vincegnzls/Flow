@@ -1263,85 +1263,85 @@ Tap '+' to create a new composition.</string>
                                             </connections>
                                         </textField>
                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="stY-lC-caC" userLabel="KeySignaturePicker">
-                                            <rect key="frame" x="430" y="113" width="534" height="530"/>
+                                            <rect key="frame" x="507" y="110" width="475" height="530"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="b8j-mx-suG">
-                                                    <rect key="frame" x="114" y="33" width="350" height="350"/>
+                                                    <rect key="frame" x="68" y="38" width="350" height="350"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uEF-MS-jBj" userLabel="C" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="246" y="-5" width="80" height="80"/>
+                                                    <rect key="frame" x="200" y="0.0" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-c"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwf-oK-lni" userLabel="G" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="337" y="16" width="80" height="80"/>
+                                                    <rect key="frame" x="291" y="21" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-g"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xre-s8-rFB" userLabel="A" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="404" y="257" width="80" height="80"/>
+                                                    <rect key="frame" x="358" y="262" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-e"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQ3-pv-4h8" userLabel="E" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="416" y="168" width="80" height="80"/>
+                                                    <rect key="frame" x="370" y="173" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-a"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VOX-er-gOf" userLabel="F#" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="249" y="430" width="80" height="80"/>
+                                                    <rect key="frame" x="203" y="435" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-fsharp"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="79Z-Pd-oh4" userLabel="B" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="337" y="318" width="80" height="80"/>
+                                                    <rect key="frame" x="291" y="323" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-b"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RnP-yl-aCl" userLabel="Gb" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="246" y="340" width="80" height="80"/>
+                                                    <rect key="frame" x="200" y="345" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-gflat"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Efr-Pg-vNf" userLabel="Db" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="155" y="318" width="80" height="80"/>
+                                                    <rect key="frame" x="109" y="323" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-dflat"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Oq-pD-cAO" userLabel="Ab" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="88" y="257" width="80" height="80"/>
+                                                    <rect key="frame" x="42" y="262" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-aflat"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QQn-J1-RyH" userLabel="Eb" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="71" y="168" width="80" height="80"/>
+                                                    <rect key="frame" x="25" y="173" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-eflat"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oyJ-8s-29E" userLabel="D" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="402" y="81" width="80" height="80"/>
+                                                    <rect key="frame" x="356" y="86" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-d"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6hK-PI-qIf" userLabel="Bb" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="90" y="81" width="80" height="80"/>
+                                                    <rect key="frame" x="44" y="86" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-bflat"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aVe-6v-you" userLabel="F" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="155" y="16" width="80" height="80"/>
+                                                    <rect key="frame" x="109" y="21" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-f"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zNK-pr-wdA" userLabel="C#" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="97" y="392" width="80" height="80"/>
+                                                    <rect key="frame" x="51" y="397" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-csharp"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dZ8-0B-r2i" userLabel="Cb" customClass="KeySignatureButton" customModule="Flow" customModuleProvider="target">
-                                                    <rect key="frame" x="395" y="392" width="80" height="80"/>
+                                                    <rect key="frame" x="349" y="397" width="80" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <state key="normal" image="keysig-cflat"/>
                                                 </button>
@@ -1350,7 +1350,7 @@ Tap '+' to create a new composition.</string>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Set Key Signature" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZEs-ca-dQD">
-                                            <rect key="frame" x="575" y="69" width="270" height="21"/>
+                                            <rect key="frame" x="609" y="69" width="270" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
