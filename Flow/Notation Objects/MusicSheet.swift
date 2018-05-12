@@ -1748,7 +1748,13 @@ class MusicSheet: UIView {
         if let dotImage = UIImage(named: "dot"), let screenCoordinates = notation.screenCoordinates {
             for _ in 0..<notation.dots {
                 if notation is Rest {
-                    dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 10, y: screenCoordinates.y + 10, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    if notation.type == .whole {
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 5, y: screenCoordinates.y + wholeRestYOffset, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    } else if notation.type == .half {
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 5, y: screenCoordinates.y + halfRestYOffset, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    } else {
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 10, y: screenCoordinates.y + 10, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    }
                 } else if notation is Note {
                     dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y, width: dotImage.size.width/3, height: dotImage.size.height/3))
                 }
@@ -2948,6 +2954,12 @@ class MusicSheet: UIView {
         self.addSubview(notationImageView)
         if let note = notation as? Note {
             drawAccidentalByNote(note: note)
+            
+            if let measure = note.measure, let screenCoordinates = note.screenCoordinates {
+                if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
+                    drawLedgerLinesIfApplicable(measurePoints: measurePoints, upToLocation: screenCoordinates)
+                }
+            }
         }
 
         if isUpwards {
