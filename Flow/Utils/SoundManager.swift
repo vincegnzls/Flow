@@ -615,20 +615,20 @@ class SoundManager {
 
         var x = 0
 
-        switch notation.type.toString() {
-            case "64th":
+        switch notation.type {
+            case .sixtyFourth:
                 x = 1
-            case "32nd":
+            case .thirtySecond:
                 x = 2
-            case "16th":
+            case .sixteenth:
                 x = 4
-            case "eigth":
+            case .eighth:
                 x = 8
-            case "quarter":
+            case .quarter:
                 x = 16
-            case "half":
+            case .half:
                 x = 32
-            case "whole":
+            case .whole:
                 x = 64
             default:
                 x = 8
@@ -685,20 +685,20 @@ class SoundManager {
                 for notation in measure.notationObjects {
                     var x = 0
 
-                    switch notation.type.toString() {
-                    case "64th":
+                    switch notation.type {
+                    case .sixtyFourth:
                         x = 1
-                    case "32nd":
+                    case .thirtySecond:
                         x = 2
-                    case "16th":
+                    case .sixteenth:
                         x = 4
-                    case "eigth":
+                    case .eighth:
                         x = 8
-                    case "quarter":
+                    case .quarter:
                         x = 16
-                    case "half":
+                    case .half:
                         x = 32
-                    case "whole":
+                    case .whole:
                         x = 64
                     default:
                         x = 8

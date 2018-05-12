@@ -27,6 +27,8 @@ struct KeyNames {
     static let NEW_TIME_SIGNATURE = "NEW_TIME_SIGNATURE"
 
     static let ACCIDENTAL = "ACCIDENTAL"
+    
+    static let NUM_OF_DOTS = "NUM_OF_DOTS"
 
     static let KEYBOARD_NOTE = "KEYBOARD_NOTE"
 }

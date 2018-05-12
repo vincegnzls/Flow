@@ -29,6 +29,8 @@ class MusicNotation: Equatable {
         }
     }
     
+    var dots = 0
+    
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType,
          measure: Measure? = nil) {

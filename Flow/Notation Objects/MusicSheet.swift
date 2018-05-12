@@ -338,6 +338,10 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.DSHARP_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.DSHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.dsharp", function: self.dsharp))
+        
+        // Add listeners for dots
+        EventBroadcaster.instance.removeObservers(event: EventNames.DOT_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.DOT_KEY_PRESSED, observer: Observer(id: "MusicSheet.dotNotation", function: self.dotNotation))
 
         EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
         EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
@@ -1542,6 +1546,7 @@ class MusicSheet: UIView {
                         UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
                     
                     drawAccidentalByNote(note: note)
+                    drawDotsByNotation(notation: note)
                     
                     if let measure = chord.measure {
                         if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
@@ -1560,6 +1565,7 @@ class MusicSheet: UIView {
                     UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
                 
                 drawAccidentalByNote(note: note)
+                drawDotsByNotation(notation: note)
                 
                 if let measure = note.measure {
                     if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
@@ -1585,6 +1591,9 @@ class MusicSheet: UIView {
                 }
                 
             }
+            
+            drawDotsByNotation(notation: rest)
+            
         }
 
         for notationImageView in notationImageViews {
@@ -1729,6 +1738,30 @@ class MusicSheet: UIView {
 
             }
         }
+    }
+    
+    func drawDotsByNotation(notation: MusicNotation) {
+        
+        var dotImageView:UIImageView?
+        var curSpacing: CGFloat = 45
+        
+        if let dotImage = UIImage(named: "dot"), let screenCoordinates = notation.screenCoordinates {
+            for _ in 0..<notation.dots {
+                if notation is Rest {
+                    dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 10, y: screenCoordinates.y + 10, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                } else if notation is Note {
+                    dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                }
+                dotImageView?.image = dotImage
+                
+                if let dotImageView = dotImageView {
+                    self.addSubview(dotImageView)
+                }
+                
+                curSpacing += 12
+            }
+        }
+        
     }
 
     func transposeUp() {
@@ -3587,6 +3620,22 @@ class MusicSheet: UIView {
             }
         }
 
+    }
+    
+    func dotNotation(params: Parameters) {
+        let numDots = params.get(key: KeyNames.NUM_OF_DOTS, defaultValue: 0)
+        
+        if numDots > 0 {
+            
+            if !selectedNotations.isEmpty {
+                for notation in selectedNotations {
+                    notation.dots = numDots
+                }
+            } else if let hovered = self.hoveredNotation {
+                hovered.dots = numDots
+            }
+            
+        }
     }
 
     func retrograde(notations: [MusicNotation]) {
