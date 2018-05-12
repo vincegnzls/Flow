@@ -1863,7 +1863,17 @@ class MusicSheet: UIView {
         if let measurePoints = GridSystem.instance.selectedMeasureCoord {
             sheetCursor.showLedgerLinesGuide(measurePoints: measurePoints, upToLocation: location, lineSpace: lineSpace)
         }
-
+        
+        if let noteFromX = GridSystem.instance.getNoteFromX(x: location.x) {
+            if let measure = GridSystem.instance.getCurrentMeasure() {
+                measure.updateInvalidNotes(validNotes: [noteFromX.type])
+            }
+        } else {
+            if let measure = GridSystem.instance.getCurrentMeasure() {
+                measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes())
+            }
+        }
+        
         if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: location) {
             hoveredNotation = notation
         } else {
