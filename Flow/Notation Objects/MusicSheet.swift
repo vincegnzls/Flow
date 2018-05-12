@@ -187,16 +187,17 @@ class MusicSheet: UIView {
         if first {
             if let coord = selectedNotations.first?.screenCoordinates {
                 self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                self.transformView.isHidden = false
-                self.addSubview(self.transformView)
             }
         } else {
             if let coord = selectedNotations.last?.screenCoordinates {
                 self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                self.transformView.isHidden = false
-                self.addSubview(self.transformView)
             }
         }
+
+        self.transformView.isHidden = false
+        self.addSubview(self.transformView)
+        self.transformView.superview?.bringSubview(toFront: self.transformView)
+        self.transformView.layer.zPosition = CGFloat.greatestFiniteMagnitude
     }
 
     func checkHighlightAccidentalButton() {
@@ -3607,9 +3608,6 @@ class MusicSheet: UIView {
         self.updateMeasureDraw()
 
         repositionTransformView(first: true)
-        
-        self.transformView.isHidden = false
-        self.addSubview(self.transformView)
     }
 
     func inverse(notations: [MusicNotation]) {
@@ -3662,9 +3660,6 @@ class MusicSheet: UIView {
         self.updateMeasureDraw()
 
         repositionTransformView(first: false)
-        
-        self.transformView.isHidden = false
-        self.addSubview(self.transformView)
     }
 
     func invertNote(note: Note, steps: Int) -> Note {
