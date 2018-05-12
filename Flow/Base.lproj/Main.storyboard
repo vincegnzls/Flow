@@ -632,7 +632,7 @@ Tap '+' to create a new composition.</string>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oVX-49-dcL" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="57" width="100" height="40"/>
+                                                                <rect key="frame" x="0.0" y="57" width="100" height="37"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <state key="normal" title="Inverse" image="controls-invert"/>
                                                                 <connections>
@@ -640,7 +640,7 @@ Tap '+' to create a new composition.</string>
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DpG-Ff-gPa" userLabel="Retrograde" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="8" width="100" height="40"/>
+                                                                <rect key="frame" x="0.0" y="8" width="100" height="37"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <state key="normal" image="controls-retrograde"/>
                                                                 <connections>
