@@ -357,16 +357,27 @@ class Measure: Hashable {
         var curGroup = [MusicNotation]()
 
         for note in notationObjects {
-            if !groupFull(group: curGroup, isEighth: note.type == .eighth) {
+            if !groupFull(group: curGroup, isEighth: note.type == .eighth) && (note is Note || note is Chord) {
                 curGroup.append(note)
             } else {
-                self.groups.append(curGroup)
+                if !curGroup.isEmpty {
+                    self.groups.append(curGroup)
+                }
                 curGroup.removeAll()
                 curGroup.append(note)
+
+                if note is Rest {
+                    if !curGroup.isEmpty {
+                        self.groups.append(curGroup)
+                    }
+                    curGroup.removeAll()
+                }
             }
         }
 
-        self.groups.append(curGroup)
+        if !curGroup.isEmpty {
+            self.groups.append(curGroup)
+        }
 
         /*var x = 0
 
