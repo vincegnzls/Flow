@@ -608,31 +608,86 @@ class SoundManager {
 
         return MIDINum + 3
     }
+    
+    private func getDurationOfNote (notation: MusicNotation) -> Int {
+        var x = 0
+        
+        switch notation.type {
+        case .sixtyFourth:
+            x = 8
+            if notation.dots == 1 {
+                x += 4
+            } else if notation.dots == 2 {
+                x += 6
+            } else if notation.dots == 3 {
+                x += 7
+            }
+        case .thirtySecond:
+            x = 16
+            if notation.dots == 1 {
+                x += 8
+            } else if notation.dots == 2 {
+                x += 12
+            } else if notation.dots == 3 {
+                x += 14
+            }
+        case .sixteenth:
+            x = 32
+            if notation.dots == 1 {
+                x += 16
+            } else if notation.dots == 2 {
+                x += 24
+            } else if notation.dots == 3 {
+                x += 28
+            }
+        case .eighth:
+            x = 64
+            if notation.dots == 1 {
+                x += 32
+            } else if notation.dots == 2 {
+                x += 48
+            } else if notation.dots == 3 {
+                x += 56
+            }
+        case .quarter:
+            x = 128
+            if notation.dots == 1 {
+                x += 64
+            } else if notation.dots == 2 {
+                x += 96
+            } else if notation.dots == 3 {
+                x += 112
+            }
+        case .half:
+            x = 256
+            if notation.dots == 1 {
+                x += 128
+            } else if notation.dots == 2 {
+                x += 192
+            } else if notation.dots == 3 {
+                x += 224
+            }
+        case .whole:
+            x = 512
+            if notation.dots == 1 {
+                x += 32
+            } else if notation.dots == 2 {
+                x += 48
+            } else if notation.dots == 3 {
+                x += 56
+            }
+        default:
+            x = 8
+        }
+        
+        return x
+    }
 
     func addNotation(notation: MusicNotation, keySignature: KeySignature) -> [[Int?]] {
 
         var notePlayer = [[Int?]]()
 
-        var x = 0
-
-        switch notation.type {
-            case .sixtyFourth:
-                x = 1
-            case .thirtySecond:
-                x = 2
-            case .sixteenth:
-                x = 4
-            case .eighth:
-                x = 8
-            case .quarter:
-                x = 16
-            case .half:
-                x = 32
-            case .whole:
-                x = 64
-            default:
-                x = 8
-        }
+        let x = self.getDurationOfNote(notation: notation)
 
         for beat in 0..<x {
             if let note = notation as? Note {
@@ -683,26 +738,7 @@ class SoundManager {
         if let firstStaff = comp.staffList.first {
             for measure in firstStaff.measures {
                 for notation in measure.notationObjects {
-                    var x = 0
-
-                    switch notation.type {
-                    case .sixtyFourth:
-                        x = 1
-                    case .thirtySecond:
-                        x = 2
-                    case .sixteenth:
-                        x = 4
-                    case .eighth:
-                        x = 8
-                    case .quarter:
-                        x = 16
-                    case .half:
-                        x = 32
-                    case .whole:
-                        x = 64
-                    default:
-                        x = 8
-                    }
+                    let x = self.getDurationOfNote(notation: notation)
 
                     for beat in 0..<x {
                         measures.append(measure)
@@ -756,11 +792,11 @@ class SoundManager {
         self.curBeat = 0
 
         if #available(iOS 10.0, *) {
-            self.timer = Timer.scheduledTimer(withTimeInterval: 60 / tempo * 0.0625, repeats: true) {_ in
+            self.timer = Timer.scheduledTimer(withTimeInterval: 60 / tempo * 0.0078125, repeats: true) {_ in
                 self.updateTime()
             }
         } else {
-            self.timer = Timer.scheduledTimer(timeInterval: 60 / tempo * 0.0625,
+            self.timer = Timer.scheduledTimer(timeInterval: 60 / tempo * 0.0078125,
                                  target: self,
                                  selector: #selector(self.updateTime),
                                  userInfo: nil,
