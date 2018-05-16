@@ -2269,8 +2269,10 @@ class MusicSheet: UIView {
             var totalBeats:Float = 0
 
             for note in selectedNotations {
-                totalBeats = totalBeats + note.type.getBeatValue()
-                print(note.type.getBeatValue())
+                if note.measure == measure {
+                    totalBeats = totalBeats + note.type.getBeatValue()
+                    print(note.type.getBeatValue())
+                }
             }
 
             let netBeatValue = measure.curBeatValue - totalBeats
