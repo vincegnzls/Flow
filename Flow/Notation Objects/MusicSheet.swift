@@ -3653,6 +3653,7 @@ class MusicSheet: UIView {
             
             if !selectedNotations.isEmpty {
                 var dottedNotations = [MusicNotation]()
+                
                 for notation in selectedNotations {
                     
                     if let measure = notation.measure {
@@ -3668,8 +3669,10 @@ class MusicSheet: UIView {
                     }
                 }
                 
-                let editAction = EditAction(old: selectedNotations, new: dottedNotations)
-                editAction.execute()
+                if !dottedNotations.isEmpty {
+                    let editAction = EditAction(old: selectedNotations, new: dottedNotations)
+                    editAction.execute()
+                }
                 
             } else if let hovered = self.hoveredNotation {
                 
