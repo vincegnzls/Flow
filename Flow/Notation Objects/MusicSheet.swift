@@ -3648,28 +3648,36 @@ class MusicSheet: UIView {
     
     func dotNotation(params: Parameters) {
         let numDots = params.get(key: KeyNames.NUM_OF_DOTS, defaultValue: 0)
+        var addedValue: Float = 0
         
         if numDots > 0 {
             
             if !selectedNotations.isEmpty {
                 var dottedNotations = [MusicNotation]()
+                
                 for notation in selectedNotations {
                     
                     if let measure = notation.measure {
                         
                         let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue()
                         
-                        if measure.isAddNoteValid(value: value) {
+                        if measure.isAddNoteValid(addedValue: addedValue, value: value) {
                             let dottedNote = notation.duplicate()
                             dottedNote.dots = numDots
                             
+                            addedValue += value
+                            
                             dottedNotations.append(dottedNote)
+                        } else {
+                            dottedNotations.append(notation)
                         }
                     }
                 }
                 
-                let editAction = EditAction(old: selectedNotations, new: dottedNotations)
-                editAction.execute()
+                if !dottedNotations.isEmpty {
+                    let editAction = EditAction(old: selectedNotations, new: dottedNotations)
+                    editAction.execute()
+                }
                 
             } else if let hovered = self.hoveredNotation {
                 
