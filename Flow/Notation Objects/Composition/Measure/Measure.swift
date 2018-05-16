@@ -31,7 +31,7 @@ class Measure: Hashable {
     var groups: [[MusicNotation]]
 
     var isFull: Bool {
-        return self.curBeatValue == self.timeSignature.getMaxBeatValue()
+        return self.getTotalBeats() == self.timeSignature.getMaxBeatValue()
     }
 
     var isFullWithNotes: Bool {

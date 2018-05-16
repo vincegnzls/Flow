@@ -3648,6 +3648,7 @@ class MusicSheet: UIView {
                 hovered.dots = numDots
             }
             
+            self.updateMeasureDraw()
         }
     }
 
