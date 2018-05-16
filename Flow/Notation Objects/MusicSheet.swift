@@ -3648,6 +3648,7 @@ class MusicSheet: UIView {
     
     func dotNotation(params: Parameters) {
         let numDots = params.get(key: KeyNames.NUM_OF_DOTS, defaultValue: 0)
+        var addedValue: Float = 0
         
         if numDots > 0 {
             
@@ -3660,11 +3661,15 @@ class MusicSheet: UIView {
                         
                         let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue()
                         
-                        if measure.isAddNoteValid(value: value) {
+                        if measure.isAddNoteValid(addedValue: addedValue, value: value) {
                             let dottedNote = notation.duplicate()
                             dottedNote.dots = numDots
                             
+                            addedValue += value
+                            
                             dottedNotations.append(dottedNote)
+                        } else {
+                            dottedNotations.append(notation)
                         }
                     }
                 }
