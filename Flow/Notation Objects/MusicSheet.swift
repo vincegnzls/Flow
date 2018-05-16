@@ -3129,11 +3129,11 @@ class MusicSheet: UIView {
                 SoundManager.instance.musicPlayback(composition)
 
                 if #available(iOS 10.0, *) {
-                    playBackTimer = Timer.scheduledTimer(withTimeInterval: 60 / SoundManager.instance.tempo * 0.0625, repeats: true) { _ in
+                    playBackTimer = Timer.scheduledTimer(withTimeInterval: 60 / SoundManager.instance.tempo * 0.0078125, repeats: true) { _ in
                         self.updateTime()
                     }
                 } else {
-                    playBackTimer = Timer.scheduledTimer(timeInterval: 60 / SoundManager.instance.tempo * 0.0625,
+                    playBackTimer = Timer.scheduledTimer(timeInterval: 60 / SoundManager.instance.tempo * 0.0078125,
                                          target: self,
                                          selector: #selector(self.updateTime),
                                          userInfo: nil,
