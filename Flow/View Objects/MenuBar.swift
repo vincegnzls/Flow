@@ -16,6 +16,10 @@ class MenuBar: UIView {
     @IBOutlet weak var flatBtn: UIButton!
     @IBOutlet weak var sharpBtn: UIButton!
     @IBOutlet weak var dSharpBtn: UIButton!
+    
+    @IBOutlet weak var oneDotBtn: UIButton!
+    @IBOutlet weak var twoDotsBtn: UIButton!
+    @IBOutlet weak var threeDotsBtn: UIButton!
 
     /*var compositionInfo: CompositionInfo? {
         didSet {
@@ -190,6 +194,33 @@ class MenuBar: UIView {
     
     @IBAction func touchRedo(_ sender: UIButton) {
         UndoRedoManager.instance.redo()
+    }
+    
+    @IBAction func touchOneDot(_ sender: UIButton) {
+        print("ONE DOT")
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NUM_OF_DOTS, value: 1)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
+    }
+    
+    @IBAction func touchTwoDots(_ sender: UIButton) {
+        print("Two DOT")
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NUM_OF_DOTS, value: 2)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
+    }
+    
+    @IBAction func touchThreeDots(_ sender: UIButton) {
+        print("Three DOT")
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NUM_OF_DOTS, value: 3)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
     }
     
     @IBAction func toggleKeyboard(_ sender: UIButton) {

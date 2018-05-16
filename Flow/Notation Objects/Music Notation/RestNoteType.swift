@@ -129,16 +129,28 @@ enum RestNoteType {
         }
     }
     
-    func getBeatValue() -> Float {
+    func getBeatValue(dots: Int = 0) -> Float {
+        var currentVal: Float
+        
         switch self {
-        case .sixtyFourth: return 0.015625
-        case .thirtySecond: return 0.03125
-        case .sixteenth: return 0.0625
-        case .eighth: return 0.125
-        case .quarter: return 0.25
-        case .half: return 0.5
-        case .whole: return 1.0
+        case .sixtyFourth: currentVal = 0.015625
+        case .thirtySecond: currentVal = 0.03125
+        case .sixteenth: currentVal = 0.0625
+        case .eighth: currentVal = 0.125
+        case .quarter: currentVal = 0.25
+        case .half: currentVal = 0.5
+        case .whole: currentVal = 1.0
         }
+        
+        var halvedVal = currentVal / 2
+        
+        for _ in 0..<dots {
+            currentVal += halvedVal
+            halvedVal = halvedVal / 2
+        }
+        
+        return currentVal
+        
     }
     
 }

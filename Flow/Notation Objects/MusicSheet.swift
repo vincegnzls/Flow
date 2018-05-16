@@ -339,6 +339,10 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.DSHARP_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.DSHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.dsharp", function: self.dsharp))
+        
+        // Add listeners for dots
+        EventBroadcaster.instance.removeObservers(event: EventNames.DOT_KEY_PRESSED)
+        EventBroadcaster.instance.addObserver(event: EventNames.DOT_KEY_PRESSED, observer: Observer(id: "MusicSheet.dotNotation", function: self.dotNotation))
 
         EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
         EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
@@ -1543,6 +1547,7 @@ class MusicSheet: UIView {
                         UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
                     
                     drawAccidentalByNote(note: note)
+                    drawDotsByNotation(notation: note)
                     
                     if let measure = chord.measure {
                         if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
@@ -1561,6 +1566,7 @@ class MusicSheet: UIView {
                     UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
                 
                 drawAccidentalByNote(note: note)
+                drawDotsByNotation(notation: note)
                 
                 if let measure = note.measure {
                     if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
@@ -1586,6 +1592,9 @@ class MusicSheet: UIView {
                 }
                 
             }
+            
+            drawDotsByNotation(notation: rest)
+            
         }
 
         for notationImageView in notationImageViews {
@@ -1730,6 +1739,42 @@ class MusicSheet: UIView {
 
             }
         }
+    }
+    
+    func drawDotsByNotation(notation: MusicNotation, highlighted: Bool = false) {
+        
+        var dotImageView:UIImageView?
+        var curSpacing: CGFloat = 45
+        
+        if let dotImage = UIImage(named: "dot"), let screenCoordinates = notation.screenCoordinates {
+            for _ in 0..<notation.dots {
+                if notation is Rest {
+                    if notation.type == .whole {
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 5, y: screenCoordinates.y + wholeRestYOffset, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    } else if notation.type == .half {
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 5, y: screenCoordinates.y + halfRestYOffset, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    } else {
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 10, y: screenCoordinates.y + 10, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    }
+                } else if notation is Note {
+                    dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                }
+                dotImageView?.image = dotImage
+                
+                if highlighted {
+                    dotImageView?.image = dotImageView?.image?.withRenderingMode(.alwaysTemplate)
+                    dotImageView?.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                    dotImageView?.tag = HIGHLIGHTED_NOTES_TAG
+                }
+                
+                if let dotImageView = dotImageView {
+                    self.addSubview(dotImageView)
+                }
+                
+                curSpacing += 12
+            }
+        }
+        
     }
 
     func transposeUp() {
@@ -2181,6 +2226,7 @@ class MusicSheet: UIView {
                 if let image = image {
                     notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
                     drawAccidentalByNote(note: note, highlighted: true)
+                    drawDotsByNotation(notation: note, highlighted: true)
                 }
                 
             }
@@ -2199,6 +2245,8 @@ class MusicSheet: UIView {
                     } else {
                         notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
                     }
+                    
+                    drawDotsByNotation(notation: rest, highlighted: true)
                 }
                 
             }
@@ -2918,6 +2966,12 @@ class MusicSheet: UIView {
         self.addSubview(notationImageView)
         if let note = notation as? Note {
             drawAccidentalByNote(note: note)
+            
+            if let measure = note.measure, let screenCoordinates = note.screenCoordinates {
+                if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
+                    drawLedgerLinesIfApplicable(measurePoints: measurePoints, upToLocation: screenCoordinates)
+                }
+            }
         }
 
         if isUpwards {
@@ -3084,11 +3138,11 @@ class MusicSheet: UIView {
                 SoundManager.instance.musicPlayback(composition)
 
                 if #available(iOS 10.0, *) {
-                    playBackTimer = Timer.scheduledTimer(withTimeInterval: 60 / SoundManager.instance.tempo * 0.0625, repeats: true) { _ in
+                    playBackTimer = Timer.scheduledTimer(withTimeInterval: 60 / SoundManager.instance.tempo * 0.0078125, repeats: true) { _ in
                         self.updateTime()
                     }
                 } else {
-                    playBackTimer = Timer.scheduledTimer(timeInterval: 60 / SoundManager.instance.tempo * 0.0625,
+                    playBackTimer = Timer.scheduledTimer(timeInterval: 60 / SoundManager.instance.tempo * 0.0078125,
                                          target: self,
                                          selector: #selector(self.updateTime),
                                          userInfo: nil,
@@ -3590,6 +3644,53 @@ class MusicSheet: UIView {
             }
         }
 
+    }
+    
+    func dotNotation(params: Parameters) {
+        let numDots = params.get(key: KeyNames.NUM_OF_DOTS, defaultValue: 0)
+        
+        if numDots > 0 {
+            
+            if !selectedNotations.isEmpty {
+                var dottedNotations = [MusicNotation]()
+                for notation in selectedNotations {
+                    
+                    if let measure = notation.measure {
+                        
+                        let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue()
+                        
+                        if measure.isAddNoteValid(value: value) {
+                            let dottedNote = notation.duplicate()
+                            dottedNote.dots = numDots
+                            
+                            dottedNotations.append(dottedNote)
+                        }
+                    }
+                }
+                
+                let editAction = EditAction(old: selectedNotations, new: dottedNotations)
+                editAction.execute()
+                
+            } else if let hovered = self.hoveredNotation {
+                
+                if let measure = hovered.measure {
+                    
+                    let value = hovered.type.getBeatValue(dots: numDots) - hovered.type.getBeatValue()
+                    
+                    if measure.isAddNoteValid(value: value) {
+                        
+                        let dottedNote = hovered.duplicate()
+                        dottedNote.dots = numDots
+                        
+                        let editAction = EditAction(old: [hovered], new: [dottedNote])
+                        editAction.execute()
+                        
+                    }
+                }
+            }
+            
+            self.updateMeasureDraw()
+        }
     }
 
     func retrograde(notations: [MusicNotation]) {

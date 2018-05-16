@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L3C-ZS-342">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L3C-ZS-342">
     <device id="ipad10_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="TimesNewRomanBold.ttf">
+            <string>TimesNewRomanPS-BoldMT</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="154-Sg-OxG">
@@ -485,8 +490,11 @@ Tap '+' to create a new composition.</string>
                                     <outlet property="dSharpBtn" destination="NBh-oB-XfU" id="Ucn-7H-fiF"/>
                                     <outlet property="flatBtn" destination="HO1-ae-mut" id="m9Q-1U-792"/>
                                     <outlet property="naturalizeBtn" destination="uE4-6g-BJV" id="ruX-st-90t"/>
+                                    <outlet property="oneDotBtn" destination="rQN-ic-H0l" id="rx7-AI-uf2"/>
                                     <outlet property="playBtn" destination="Ycl-gp-KaZ" id="PfC-LS-EAk"/>
                                     <outlet property="sharpBtn" destination="ofh-iv-b6S" id="u0B-2T-jm2"/>
+                                    <outlet property="threeDotsBtn" destination="MiL-U5-9Q2" id="Y4f-pc-hB3"/>
+                                    <outlet property="twoDotsBtn" destination="nzu-Uc-umr" id="u7z-re-ofG"/>
                                 </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4zk-xT-4Cr">
@@ -558,29 +566,38 @@ Tap '+' to create a new composition.</string>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ZLD-aG-meq" userLabel="Dot Stack">
                                         <rect key="frame" x="822" y="5" width="190" height="50"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rQN-ic-H0l">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rQN-ic-H0l" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="1Cu-O8-j93"/>
                                                     <constraint firstAttribute="width" constant="50" id="8Zm-l2-Rhi"/>
                                                 </constraints>
                                                 <state key="normal" title="Button" image="one-dot-icon"/>
+                                                <connections>
+                                                    <action selector="touchOneDot:" destination="VHe-OH-6BV" eventType="touchUpInside" id="vDt-SM-IIQ"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzu-Uc-umr">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzu-Uc-umr" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="70" y="0.0" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="P6l-Ty-C7r"/>
                                                     <constraint firstAttribute="width" constant="50" id="ur3-yL-vn0"/>
                                                 </constraints>
                                                 <state key="normal" title="Button" image="two-dot-icon"/>
+                                                <connections>
+                                                    <action selector="touchTwoDots:" destination="VHe-OH-6BV" eventType="touchUpInside" id="V3u-Jm-iuK"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-U5-9Q2">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-U5-9Q2" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="140" y="0.0" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="BdB-TV-q42"/>
                                                     <constraint firstAttribute="width" constant="50" id="gum-Jt-1f1"/>
                                                 </constraints>
                                                 <state key="normal" title="Button" image="three-dot-icon"/>
+                                                <connections>
+                                                    <action selector="touchThreeDots:" destination="VHe-OH-6BV" eventType="touchUpInside" id="Qh0-Ec-LaU"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>

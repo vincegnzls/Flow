@@ -29,13 +29,17 @@ class MusicNotation: Equatable {
         }
     }
     
+    var dots = 0
+    
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType,
-         measure: Measure? = nil) {
+         measure: Measure? = nil,
+         dots: Int = 0) {
         self.screenCoordinates = screenCoordinates
         self.type = type
         self.isSelected = false
         self.measure = measure
+        self.dots = dots
         self.setImage()
 
     }
@@ -51,7 +55,7 @@ class MusicNotation: Equatable {
 
 
     func duplicate() -> MusicNotation {
-        return MusicNotation(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure)
+        return MusicNotation(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure, dots: self.dots)
     }
     
     static func == (lhs: MusicNotation, rhs: MusicNotation) -> Bool {
