@@ -3652,6 +3652,7 @@ class MusicSheet: UIView {
         if numDots > 0 {
             
             if !selectedNotations.isEmpty {
+                var dottedNotations = [MusicNotation]()
                 for notation in selectedNotations {
                     
                     if let measure = notation.measure {
@@ -3659,11 +3660,17 @@ class MusicSheet: UIView {
                         let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue()
                         
                         if measure.isAddNoteValid(value: value) {
+                            let dottedNote = notation.duplicate()
+                            dottedNote.dots = numDots
                             
-                            notation.dots = numDots
+                            dottedNotations.append(dottedNote)
                         }
                     }
                 }
+                
+                let editAction = EditAction(old: selectedNotations, new: dottedNotations)
+                editAction.execute()
+                
             } else if let hovered = self.hoveredNotation {
                 
                 if let measure = hovered.measure {
@@ -3672,7 +3679,12 @@ class MusicSheet: UIView {
                     
                     if measure.isAddNoteValid(value: value) {
                         
-                        hovered.dots = numDots
+                        let dottedNote = hovered.duplicate()
+                        dottedNote.dots = numDots
+                        
+                        let editAction = EditAction(old: [hovered], new: [dottedNote])
+                        editAction.execute()
+                        
                     }
                 }
             }
