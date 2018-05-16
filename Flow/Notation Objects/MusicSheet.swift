@@ -1741,7 +1741,7 @@ class MusicSheet: UIView {
         }
     }
     
-    func drawDotsByNotation(notation: MusicNotation) {
+    func drawDotsByNotation(notation: MusicNotation, highlighted: Bool = false) {
         
         var dotImageView:UIImageView?
         var curSpacing: CGFloat = 45
@@ -1760,6 +1760,12 @@ class MusicSheet: UIView {
                     dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y, width: dotImage.size.width/3, height: dotImage.size.height/3))
                 }
                 dotImageView?.image = dotImage
+                
+                if highlighted {
+                    dotImageView?.image = dotImageView?.image?.withRenderingMode(.alwaysTemplate)
+                    dotImageView?.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                    dotImageView?.tag = HIGHLIGHTED_NOTES_TAG
+                }
                 
                 if let dotImageView = dotImageView {
                     self.addSubview(dotImageView)
@@ -2220,6 +2226,7 @@ class MusicSheet: UIView {
                 if let image = image {
                     notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
                     drawAccidentalByNote(note: note, highlighted: true)
+                    drawDotsByNotation(notation: note, highlighted: true)
                 }
                 
             }
@@ -2238,6 +2245,8 @@ class MusicSheet: UIView {
                     } else {
                         notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
                     }
+                    
+                    drawDotsByNotation(notation: rest, highlighted: true)
                 }
                 
             }
