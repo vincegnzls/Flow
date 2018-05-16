@@ -3644,10 +3644,28 @@ class MusicSheet: UIView {
             
             if !selectedNotations.isEmpty {
                 for notation in selectedNotations {
-                    notation.dots = numDots
+                    
+                    if let measure = notation.measure {
+                        
+                        let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue()
+                        
+                        if measure.isAddNoteValid(value: value) {
+                            
+                            notation.dots = numDots
+                        }
+                    }
                 }
             } else if let hovered = self.hoveredNotation {
-                hovered.dots = numDots
+                
+                if let measure = hovered.measure {
+                    
+                    let value = hovered.type.getBeatValue(dots: numDots) - hovered.type.getBeatValue()
+                    
+                    if measure.isAddNoteValid(value: value) {
+                        
+                        hovered.dots = numDots
+                    }
+                }
             }
             
             self.updateMeasureDraw()

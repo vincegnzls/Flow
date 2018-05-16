@@ -283,9 +283,15 @@ class Measure: Hashable {
     }
 
     public func isAddNoteValid (musicNotation: RestNoteType) -> Bool {
-
         return self.curBeatValue + musicNotation.getBeatValue() <= self.timeSignature.getMaxBeatValue()
-
+    }
+    
+    public func isAddNoteValid (value: Float) -> Bool {
+        return self.getTotalBeats() + value <= self.timeSignature.getMaxBeatValue()
+    }
+    
+    public func isAddNoteValid (addedValue: Float, value: Float) -> Bool {
+        return self.curBeatValue + addedValue + value <= self.timeSignature.getMaxBeatValue()
     }
     
     public func isEditNoteValid (oldNotations: [RestNoteType], newNotations: [RestNoteType]) -> Bool {
@@ -331,12 +337,15 @@ class Measure: Hashable {
         var restsToAdd = [Rest]()
         var addedBeats:Float = 0
         let currentBeats = self.getTotalBeats()
+        
+        self.curBeatValue = self.getTotalBeats()
 
         while currentBeats + addedBeats < timeSignature.getMaxBeatValue(){
             for type in RestNoteType.types {
-                if self.isAddNoteValid(musicNotation: type) {
+                if self.isAddNoteValid(addedValue: addedBeats, value: type.getBeatValue()) {
                     restsToAdd.append(Rest(type: type))
                     addedBeats += type.getBeatValue()
+                    break
                 }
             }
         }
