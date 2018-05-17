@@ -228,12 +228,12 @@ class Measure: Hashable {
         }
     }
 
-    public func getInvalidNotes() -> [RestNoteType] {
+    public func getInvalidNotes(numDots: Int = 0) -> [RestNoteType] {
         
         var invalidNotes = [RestNoteType]()
 
         for note in RestNoteType.types {
-            if note.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
+            if note.getBeatValue(dots: numDots) + curBeatValue > timeSignature.getMaxBeatValue() {
                 invalidNotes.append(note)
             }
         }

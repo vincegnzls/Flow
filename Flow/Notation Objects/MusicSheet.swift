@@ -17,6 +17,16 @@ class MusicSheet: UIView {
 
     private let HIGHLIGHTED_NOTES_TAG = 2500
     private let TIME_SIGNATURES_TAG = 2501
+    
+    private var dotModes = [false, false, false] {
+        didSet {
+            let dotMode = self.getCurrentDotMode()
+            
+            if let currentMeasure = GridSystem.instance.getCurrentMeasure() {
+                currentMeasure.updateInvalidNotes(invalidNotes: currentMeasure.getInvalidNotes(numDots: dotMode))
+            }
+        }
+    }
 
     private let sheetYOffset:CGFloat = 20
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
@@ -74,6 +84,8 @@ class MusicSheet: UIView {
     public var hoveredNotation: MusicNotation? {
         didSet {
             checkHighlightAccidentalButton()
+            
+            let parameters = Parameters()
 
             while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
                 highlightView.removeFromSuperview()
@@ -92,10 +104,16 @@ class MusicSheet: UIView {
 
                 self.highlightNotation(notation, true)
             } else {
+                
+                parameters.put(key: KeyNames.CURRENT_DOT_MODES, value: dotModes)
+                
                 //EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
                 //disable accidentals
                 //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             }
+            
+            parameters.put(key: KeyNames.SELECTED_NOTATIONS, value: [hoveredNotation])
+            EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_DOTS, params: parameters)
         }
     }
 
@@ -114,11 +132,16 @@ class MusicSheet: UIView {
         didSet {
             checkHighlightAccidentalButton()
             print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
+            
+            let parameters = Parameters() // parameters for dotted notes
+            
             if selectedNotations.count == 0 {
+                
+                parameters.put(key: KeyNames.CURRENT_DOT_MODES, value: dotModes)
 
                 self.transformView.isHidden = true
 
-                if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+                /*if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                     if let newMeasure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
                         let params:Parameters = Parameters()
                         params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
@@ -126,7 +149,7 @@ class MusicSheet: UIView {
                         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
                         //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
                     }
-                }
+                }*/
 
                 //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             } else {
@@ -155,6 +178,10 @@ class MusicSheet: UIView {
                 }
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
+            
+            parameters.put(key: KeyNames.SELECTED_NOTATIONS, value: selectedNotations)
+            EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_DOTS, params: parameters)
+            
         }
     }
 
@@ -1904,8 +1931,6 @@ class MusicSheet: UIView {
     public func moveCursorY(location: CGPoint) {
         sheetCursor.moveCursorY(location: location)
 
-        print(location)
-
         if let measurePoints = GridSystem.instance.selectedMeasureCoord {
             sheetCursor.showLedgerLinesGuide(measurePoints: measurePoints, upToLocation: location, lineSpace: lineSpace)
         }
@@ -1916,7 +1941,7 @@ class MusicSheet: UIView {
             }
         } else {
             if let measure = GridSystem.instance.getCurrentMeasure() {
-                measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes())
+                measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(numDots: self.getCurrentDotMode()))
             }
         }
         
@@ -3650,53 +3675,119 @@ class MusicSheet: UIView {
         let numDots = params.get(key: KeyNames.NUM_OF_DOTS, defaultValue: 0)
         var addedValue: Float = 0
         
+        var allDotsAreEqualToNumDots = true
+        
         if numDots > 0 {
             
             if !selectedNotations.isEmpty {
-                var dottedNotations = [MusicNotation]()
                 
                 for notation in selectedNotations {
-                    
-                    if let measure = notation.measure {
-                        
-                        let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue()
-                        
-                        if measure.isAddNoteValid(addedValue: addedValue, value: value) {
-                            let dottedNote = notation.duplicate()
-                            dottedNote.dots = numDots
-                            
-                            addedValue += value
-                            
-                            dottedNotations.append(dottedNote)
-                        } else {
-                            dottedNotations.append(notation)
-                        }
+                    if notation.dots != numDots {
+                        allDotsAreEqualToNumDots = false
                     }
                 }
                 
-                if !dottedNotations.isEmpty {
-                    let editAction = EditAction(old: selectedNotations, new: dottedNotations)
-                    editAction.execute()
+                if allDotsAreEqualToNumDots {
+                    
+                    var removedDottedNotes = [MusicNotation]()
+                    
+                    for notation in selectedNotations {
+                        
+                        let dottedNote = notation.duplicate()
+                        dottedNote.dots = 0
+                        
+                        removedDottedNotes.append(dottedNote)
+                        
+                    }
+                    
+                    if !removedDottedNotes.isEmpty {
+                        let editAction = EditAction(old: selectedNotations, new: removedDottedNotes)
+                        editAction.execute()
+                    }
+                    
+                } else {
+                    var dottedNotations = [MusicNotation]()
+                    
+                    for notation in selectedNotations {
+                        
+                        if let measure = notation.measure {
+                            
+                            let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue(dots: notation.dots)
+                            
+                            if measure.isAddNoteValid(addedValue: addedValue, value: value) {
+                                
+                                let dottedNote = notation.duplicate()
+                                dottedNote.dots = numDots
+                                
+                                addedValue += value
+                                
+                                dottedNotations.append(dottedNote)
+                            } else {
+                                dottedNotations.append(notation)
+                            }
+                        }
+                    }
+                    
+                    if !dottedNotations.isEmpty {
+                        let editAction = EditAction(old: selectedNotations, new: dottedNotations)
+                        editAction.execute()
+                    }
                 }
                 
             } else if let hovered = self.hoveredNotation {
                 
-                if let measure = hovered.measure {
+                if hovered.dots == numDots {
                     
-                    let value = hovered.type.getBeatValue(dots: numDots) - hovered.type.getBeatValue()
+                    let removedDottedNote = hovered.duplicate()
+                    removedDottedNote.dots = 0
                     
-                    if measure.isAddNoteValid(value: value) {
+                    let editAction = EditAction(old: [hovered], new: [removedDottedNote])
+                    editAction.execute()
+                    
+                } else {
+                
+                    if let measure = hovered.measure {
                         
-                        let dottedNote = hovered.duplicate()
-                        dottedNote.dots = numDots
+                        let value = hovered.type.getBeatValue(dots: numDots) - hovered.type.getBeatValue(dots:hovered.dots)
                         
-                        let editAction = EditAction(old: [hovered], new: [dottedNote])
-                        editAction.execute()
-                        
+                        if measure.isAddNoteValid(value: value) {
+                            
+                            let dottedNote = hovered.duplicate()
+                            dottedNote.dots = numDots
+                            
+                            let editAction = EditAction(old: [hovered], new: [dottedNote])
+                            editAction.execute()
+                            
+                        }
                     }
+                    
+                }
+            } else {
+                switch numDots {
+                case 1:
+                    if dotModes[0] {
+                        dotModes[0] = false
+                    } else {
+                        dotModes = [true, false, false]
+                    }
+                case 2:
+                    if dotModes[1] {
+                        dotModes[1] = false
+                    } else {
+                        dotModes = [false, true, false]
+                    }
+                case 3:
+                    if dotModes[2] {
+                        dotModes[2] = false
+                    } else {
+                        dotModes = [false, false, true]
+                    }
+                default:
+                    dotModes = [false, false, false]
                 }
             }
             
+            selectedNotations.removeAll()
             self.updateMeasureDraw()
         }
     }
@@ -3807,6 +3898,16 @@ class MusicSheet: UIView {
         print("note1 pitch : \(note1.pitch.step.rawValue) note2 pitch: \(note2.pitch.step.rawValue)")
         print("note1 octave: \(note1.pitch.octave) note2 octave: \(note2.pitch.octave)")
         return ((note2.pitch.octave * 7) + note2.pitch.step.rawValue) - ((note1.pitch.octave * 7) + note1.pitch.step.rawValue)
+    }
+    
+    public func getCurrentDotMode() -> Int {
+        for (index, dotMode) in dotModes.enumerated() {
+            if dotMode {
+                return index+1
+            }
+        }
+        
+        return 0
     }
 
     @IBAction func transposeUp(_ sender: UIButton) {

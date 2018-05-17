@@ -38,6 +38,7 @@ struct EventNames {
     static let DSHARP_KEY_PRESSED = "DSHARP_KEY_PRESSED"
     
     static let DOT_KEY_PRESSED = "DOT_KEY_PRESSED"
+    static let UPDATE_INVALID_DOTS = "UPDATE_INVALID_DOTS"
 
     static let ADD_GRAND_STAFF = "ADD_GRAND_STAFF"
 

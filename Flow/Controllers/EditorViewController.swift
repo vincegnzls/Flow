@@ -411,6 +411,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                 } else {
                     
                     // instantiate add action
+                    
+                    let dotMode = musicSheet.getCurrentDotMode()
+                    
+                    if dotMode > 0 {
+                        note.dots = dotMode
+                    }
+                    
                     let addAction = AddAction(measure: measure, notation: note)
                     
                     if let note = note as? Note {
