@@ -365,47 +365,48 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                         SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
 //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
-                } else if GridSystem.instance.pointXHasANote(x: musicSheet.sheetCursor.curYCursorLocation.x) {
+                } else if let notation = GridSystem.instance.getNoteFromX(x: musicSheet.sheetCursor.curYCursorLocation.x) {
                     // if cursor has a note above or below it, then CREATE CHORD
                     
-                    if let note = note as? Note {
+                    if notation.type != note.type {
+                         self.editNotations(old: [notation], new: [note])
+                        
+                        if let note = note as? Note {
+                            SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
+                        }
+                    } else if let note = note as? Note {
                     
                         note.measure = measure
                         let newChord: Chord = Chord(type: note.type, note: note)
                     
-                        if let notation = GridSystem.instance.getNoteFromX(x: musicSheet.sheetCursor.curYCursorLocation.x) {
-                        
-                            if let existingNote = notation as? Note {
+                        if let existingNote = notation as? Note {
+                            
+                            // if cursor follows an existing CHORD, pour those existing elements to new chord
+                            if let chord = existingNote.chord {
+                                for note in chord.notes {
+                                    newChord.notes.append(note)
+                                }
+                            // if cursor follows an existing NOTE, put that existing element to new chord
+                            } else {
+                                let duplicatedNote = existingNote.duplicate()
                                 
-                                // if cursor follows an existing CHORD, pour those existing elements to new chord
-                                if let chord = existingNote.chord {
-                                    for note in chord.notes {
-                                        newChord.notes.append(note)
-                                    }
-                                // if cursor follows an existing NOTE, put that existing element to new chord
-                                } else {
-                                    let duplicatedNote = existingNote.duplicate()
-                                    
-                                    newChord.notes.append(duplicatedNote)
-                                }
+                                newChord.notes.append(duplicatedNote)
                             }
-                            
-                            if let note = notation as? Note {
-                                if let oldChord = note.chord {
-                                    self.editNotations(old: [oldChord], new: [newChord])
-                                } else {
-                                    self.editNotations(old: [notation], new: [newChord])
-                                }
+                        }
+                        
+                        if let note = notation as? Note {
+                            if let oldChord = note.chord {
+                                self.editNotations(old: [oldChord], new: [newChord])
+                            } else {
+                                self.editNotations(old: [notation], new: [newChord])
                             }
-                            
-                            for note in newChord.notes {
-                                note.chord = newChord
-                            }
-                            
+                        }
+                        
+                        for note in newChord.notes {
+                            note.chord = newChord
                         }
                         
                         SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
-                        
                     }
                     
                 } else {
