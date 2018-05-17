@@ -3169,8 +3169,13 @@ class MusicSheet: UIView {
 
         if !SoundManager.instance.isPlaying {
             
-            sheetCursor.yVisible = false
-            sheetCursor.xVisible = false
+            sheetCursor.hideCursors()
+            
+            for view in self.subviews {
+                if view.tag == HIGHLIGHTED_NOTES_TAG {
+                    view.isHidden = true
+                }
+            }
             
             if let composition = self.composition {
                 SoundManager.instance.musicPlayback(composition)
@@ -3204,8 +3209,13 @@ class MusicSheet: UIView {
     func enableInteraction() {
         self.isUserInteractionEnabled = true
         
-        self.sheetCursor.yVisible = true
-        self.sheetCursor.xVisible = true
+        for view in self.subviews {
+            if view.tag == HIGHLIGHTED_NOTES_TAG {
+                view.isHidden = false
+            }
+        }
+        
+        sheetCursor.showCursors()
         
         self.playbackHighlightRect.path = nil
     }
