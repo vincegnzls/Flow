@@ -162,6 +162,44 @@ class MusicSheet: UIView {
 
                 print("NANI")
 
+                var allChordsSelected = [Chord]()
+                
+                for notation in selectedNotations {
+                    if let note = notation as? Note {
+                        if let chord = note.chord {
+                            if !allChordsSelected.contains(chord) {
+                                allChordsSelected.append(chord)
+                            }
+                        }
+                    }
+                }
+                
+                for (index, chord) in allChordsSelected.enumerated() {
+                    var mustMeetNum = chord.notes.count
+                    var currentNum = 0
+                    
+                    var possiblyRemovedNotes = [Note]()
+                    
+                    for notation in selectedNotations {
+                        if let note = notation as? Note {
+                            if chord.notes.contains(note) {
+                                currentNum += 1
+                                possiblyRemovedNotes.append(note)
+                            }
+                        }
+                    }
+                    
+                    if mustMeetNum == currentNum {
+                        for note in possiblyRemovedNotes {
+                            if let index = selectedNotations.index(of: note) {
+                                selectedNotations.remove(at: index)
+                            }
+                        }
+                        
+                        selectedNotations.append(chord)
+                    }
+                }
+                
                 if let coord = selectedNotations.last?.screenCoordinates {
                     self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
                     self.transformView.isHidden = false

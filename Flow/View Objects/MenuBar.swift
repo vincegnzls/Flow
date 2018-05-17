@@ -323,7 +323,9 @@ class MenuBar: UIView {
                         
                     }
                     
-                    enableDotButton(numDot: dots, enabled: dotBools[dots]!)
+                    if let dotBool = dotBools[dots] {
+                        enableDotButton(numDot: dots, enabled: dotBool)
+                    }
                     
                 }
                 

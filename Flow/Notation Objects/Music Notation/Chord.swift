@@ -53,7 +53,7 @@ class Chord: MusicNotation {
             self.notes.remove(at: index)
             
             if self.notes.count < 2 && self.notes.count > 0 {
-                self.notes[0].measure = self.measure
+                //self.notes[0].measure = self.measure
                 self.notes[0].chord = nil
                 
                 if let chordIndex = measure?.notationObjects.index(of: self) {

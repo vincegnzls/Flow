@@ -370,21 +370,21 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                     
                     if let note = note as? Note {
                     
+                        note.measure = measure
                         let newChord: Chord = Chord(type: note.type, note: note)
                     
                         if let notation = GridSystem.instance.getNoteFromX(x: musicSheet.sheetCursor.curYCursorLocation.x) {
                         
-                            if let note = notation as? Note {
+                            if let existingNote = notation as? Note {
                                 
                                 // if cursor follows an existing CHORD, pour those existing elements to new chord
-                                if let chord = note.chord {
+                                if let chord = existingNote.chord {
                                     for note in chord.notes {
                                         newChord.notes.append(note)
                                     }
                                 // if cursor follows an existing NOTE, put that existing element to new chord
                                 } else {
-                                    let duplicatedNote = note.duplicate()
-                                    duplicatedNote.measure = nil
+                                    let duplicatedNote = existingNote.duplicate()
                                     
                                     newChord.notes.append(duplicatedNote)
                                 }
@@ -477,6 +477,18 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             
             let delAction = DeleteAction(notations: [notation])
             delAction.execute()
+        } else if let currentPoint = GridSystem.instance.selectedCoord {
+            if let notationRelativeFromX = GridSystem.instance.getNoteFromX(x: currentPoint.x) {
+                if let note = notationRelativeFromX as? Note {
+                    if let chord = note.chord {
+                        let delAction = DeleteAction(notations: [chord])
+                        delAction.execute()
+                    } else {
+                        let delAction = DeleteAction(notations: [note])
+                        delAction.execute()
+                    }
+                }
+            }
         }
         
         musicSheet.selectedNotations.removeAll()
