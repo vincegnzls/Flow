@@ -329,7 +329,24 @@ class MenuBar: UIView {
                 
             } else {
                 removeHighlightDotButton(numDot: -1)
-                enableDotButton(numDot: -1, enabled: false)
+                
+                if let dotModes = parameters.get(key: KeyNames.CURRENT_DOT_MODES) as? [Bool] {
+                    enableDotButton(numDot: -1, enabled: true)
+                    
+                    for (index, dotMode) in dotModes.enumerated() {
+                        let numDot = index+1
+                        
+                        if dotMode {
+                            highlightDotButton(numDot: numDot)
+                        } else {
+                            removeHighlightDotButton(numDot: numDot)
+                        }
+                    }
+                } else {
+                    
+                    enableDotButton(numDot: -1, enabled: false)
+                    
+                }
             }
         }
     }

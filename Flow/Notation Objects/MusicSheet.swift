@@ -17,6 +17,8 @@ class MusicSheet: UIView {
 
     private let HIGHLIGHTED_NOTES_TAG = 2500
     private let TIME_SIGNATURES_TAG = 2501
+    
+    private var dotModes = [false, false, false]
 
     private let sheetYOffset:CGFloat = 20
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
@@ -74,6 +76,8 @@ class MusicSheet: UIView {
     public var hoveredNotation: MusicNotation? {
         didSet {
             checkHighlightAccidentalButton()
+            
+            let parameters = Parameters()
 
             while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
                 highlightView.removeFromSuperview()
@@ -92,12 +96,13 @@ class MusicSheet: UIView {
 
                 self.highlightNotation(notation, true)
             } else {
+                
+                parameters.put(key: KeyNames.CURRENT_DOT_MODES, value: dotModes)
+                
                 //EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
                 //disable accidentals
                 //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             }
-            
-            let parameters = Parameters()
             
             parameters.put(key: KeyNames.SELECTED_NOTATIONS, value: [hoveredNotation])
             EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_DOTS, params: parameters)
@@ -119,7 +124,12 @@ class MusicSheet: UIView {
         didSet {
             checkHighlightAccidentalButton()
             print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
+            
+            let parameters = Parameters() // parameters for dotted notes
+            
             if selectedNotations.count == 0 {
+                
+                parameters.put(key: KeyNames.CURRENT_DOT_MODES, value: dotModes)
 
                 self.transformView.isHidden = true
 
@@ -160,8 +170,6 @@ class MusicSheet: UIView {
                 }
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
-            
-            let parameters = Parameters()
             
             parameters.put(key: KeyNames.SELECTED_NOTATIONS, value: selectedNotations)
             EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_DOTS, params: parameters)
@@ -3748,8 +3756,32 @@ class MusicSheet: UIView {
                     }
                     
                 }
+            } else {
+                switch numDots {
+                case 1:
+                    if dotModes[0] {
+                        dotModes[0] = false
+                    } else {
+                        dotModes = [true, false, false]
+                    }
+                case 2:
+                    if dotModes[1] {
+                        dotModes[1] = false
+                    } else {
+                        dotModes = [false, true, false]
+                    }
+                case 3:
+                    if dotModes[2] {
+                        dotModes[2] = false
+                    } else {
+                        dotModes = [false, false, true]
+                    }
+                default:
+                    dotModes = [false, false, false]
+                }
             }
             
+            selectedNotations.removeAll()
             self.updateMeasureDraw()
         }
     }
@@ -3860,6 +3892,16 @@ class MusicSheet: UIView {
         print("note1 pitch : \(note1.pitch.step.rawValue) note2 pitch: \(note2.pitch.step.rawValue)")
         print("note1 octave: \(note1.pitch.octave) note2 octave: \(note2.pitch.octave)")
         return ((note2.pitch.octave * 7) + note2.pitch.step.rawValue) - ((note1.pitch.octave * 7) + note1.pitch.step.rawValue)
+    }
+    
+    public func getCurrentNoteMode() -> Int {
+        for (index, dotMode) in dotModes.enumerated() {
+            if dotMode {
+                return index+1
+            }
+        }
+        
+        return 0
     }
 
     @IBAction func transposeUp(_ sender: UIButton) {
