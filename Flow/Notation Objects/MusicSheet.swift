@@ -3234,33 +3234,35 @@ class MusicSheet: UIView {
     }
 
     private func highlightParallelMeasures(parameters: Parameters) {
-        let currentPlayingMeasure:Measure = parameters.get(key: KeyNames.HIGHLIGHT_MEASURE) as! Measure
+        if let currentPlayingMeasure:Measure = parameters.get(key: KeyNames.HIGHLIGHT_MEASURE) as? Measure {
 
-        if let composition = self.composition {
-            if let measureIndex = composition.staffList[0].measures.index(of: currentPlayingMeasure) {
+            if let composition = self.composition {
+                if let measureIndex = composition.staffList[0].measures.index(of: currentPlayingMeasure) {
 
-                let parallelPlayingMeasure: Measure = composition.staffList[1].measures[measureIndex]
+                    let parallelPlayingMeasure: Measure = composition.staffList[1].measures[measureIndex]
 
-                if let gMeasurePoints = GridSystem.instance.getPointsFromMeasure(measure: currentPlayingMeasure),
-                   let fMeasurePoints = GridSystem.instance.getPointsFromMeasure(measure: parallelPlayingMeasure) {
-                
-                    scrollMusicSheetToY(y: gMeasurePoints.lowerRightPointWithLedger.y)
-                    scrollMusicSheetToX(x: gMeasurePoints.upperLeftPoint.x - 140)
+                    if let gMeasurePoints = GridSystem.instance.getPointsFromMeasure(measure: currentPlayingMeasure),
+                       let fMeasurePoints = GridSystem.instance.getPointsFromMeasure(measure: parallelPlayingMeasure) {
                     
-                    let r: CGRect = CGRect(x: fMeasurePoints.upperLeftPoint.x, y: fMeasurePoints.upperLeftPoint.y,
-                            width: gMeasurePoints.width,
-                            height: gMeasurePoints.lowerRightPoint.y - fMeasurePoints.lowerRightPoint.y + gMeasurePoints.height)
+                        scrollMusicSheetToY(y: gMeasurePoints.lowerRightPointWithLedger.y)
+                        scrollMusicSheetToX(x: gMeasurePoints.upperLeftPoint.x - 140)
+                        
+                        let r: CGRect = CGRect(x: fMeasurePoints.upperLeftPoint.x, y: fMeasurePoints.upperLeftPoint.y,
+                                width: gMeasurePoints.width,
+                                height: gMeasurePoints.lowerRightPoint.y - fMeasurePoints.lowerRightPoint.y + gMeasurePoints.height)
 
-                    let path = CGPath(rect: r, transform: nil)
-                    playbackHighlightRect.path = path
+                        let path = CGPath(rect: r, transform: nil)
+                        playbackHighlightRect.path = path
 
-                    let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
-                    playbackHighlightRect.fillColor = highlightColor.cgColor
-                    
-                    self.layer.addSublayer(playbackHighlightRect)
+                        let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
+                        playbackHighlightRect.fillColor = highlightColor.cgColor
+                        
+                        self.layer.addSublayer(playbackHighlightRect)
+                    }
+
                 }
-
             }
+            
         }
 
     }

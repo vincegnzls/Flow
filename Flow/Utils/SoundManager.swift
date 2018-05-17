@@ -759,6 +759,7 @@ class SoundManager {
         } catch let error as NSError{
             print(error.debugDescription)
         }
+        currentMeasurePlaying = nil
         EventBroadcaster.instance.postEvent(event: EventNames.STOP_PLAYBACK)
     }
     
