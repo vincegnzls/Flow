@@ -73,8 +73,15 @@ class DeleteAction: Action {
                         } else if measure.notationObjects[index] is Note {
                             
                             if let existingNote = measure.notationObjects[index] as? Note {
+                                
+                                previousChord.notes.removeAll()
+                                
+                                previousChord.notes.append(existingNote.duplicate())
                                 previousChord.notes.append(note)
-                                existingNote.chord = previousChord
+                                
+                                for note in previousChord.notes {
+                                    note.chord = previousChord
+                                }
                                 
                                 measure.replace(existingNote, previousChord)
                             }

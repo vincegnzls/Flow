@@ -29,6 +29,7 @@ class Note: MusicNotation {
          type: RestNoteType,
          measure: Measure? = nil,
          accidental: Accidental? = nil,
+         chord: Chord? = nil,
          dots: Int = 0) {
         self.pitch = pitch
         self.accidental = accidental
@@ -89,6 +90,6 @@ class Note: MusicNotation {
     }
 
     override func duplicate() -> Note {
-        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, dots: self.dots)
+        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots)
     }
 }
