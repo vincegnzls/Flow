@@ -3706,7 +3706,7 @@ class MusicSheet: UIView {
                         
                         if let measure = notation.measure {
                             
-                            let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue()
+                            let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue(dots: notation.dots)
                             
                             if measure.isAddNoteValid(addedValue: addedValue, value: value) {
                                 
@@ -3742,7 +3742,7 @@ class MusicSheet: UIView {
                 
                     if let measure = hovered.measure {
                         
-                        let value = hovered.type.getBeatValue(dots: numDots) - hovered.type.getBeatValue()
+                        let value = hovered.type.getBeatValue(dots: numDots) - hovered.type.getBeatValue(dots:hovered.dots)
                         
                         if measure.isAddNoteValid(value: value) {
                             
