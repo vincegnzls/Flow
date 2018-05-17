@@ -1968,7 +1968,7 @@ class MusicSheet: UIView {
 
             while currentPoint.y >= upToLocation.y-1.5 {
                 let _ = drawLine(start: CGPoint(x: upToLocation.x, y: currentPoint.y),
-                                 end: CGPoint(x: upToLocation.x + 45, y: currentPoint.y), thickness: 4)
+                                 end: CGPoint(x: upToLocation.x + 45, y: currentPoint.y), thickness: 2)
 
                 currentPoint = CGPoint(x:currentPoint.x, y: currentPoint.y - lineSpace)
             }
@@ -1979,7 +1979,7 @@ class MusicSheet: UIView {
 
             while currentPoint.y <= upToLocation.y {
                 let _ = drawLine(start: CGPoint(x: upToLocation.x, y: currentPoint.y),
-                                 end: CGPoint(x: upToLocation.x + 45, y: currentPoint.y), thickness: 4)
+                                 end: CGPoint(x: upToLocation.x + 45, y: currentPoint.y), thickness: 2)
 
                 currentPoint = CGPoint(x:currentPoint.x, y: currentPoint.y + lineSpace)
             }
