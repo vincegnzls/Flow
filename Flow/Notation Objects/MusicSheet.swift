@@ -18,7 +18,15 @@ class MusicSheet: UIView {
     private let HIGHLIGHTED_NOTES_TAG = 2500
     private let TIME_SIGNATURES_TAG = 2501
     
-    private var dotModes = [false, false, false]
+    private var dotModes = [false, false, false] {
+        didSet {
+            let dotMode = self.getCurrentDotMode()
+            
+            if let currentMeasure = GridSystem.instance.getCurrentMeasure() {
+                currentMeasure.updateInvalidNotes(invalidNotes: currentMeasure.getInvalidNotes(numDots: dotMode))
+            }
+        }
+    }
 
     private let sheetYOffset:CGFloat = 20
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
@@ -133,7 +141,7 @@ class MusicSheet: UIView {
 
                 self.transformView.isHidden = true
 
-                if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+                /*if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                     if let newMeasure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
                         let params:Parameters = Parameters()
                         params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
@@ -141,7 +149,7 @@ class MusicSheet: UIView {
                         EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_SWITCHED, params: params)
                         //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
                     }
-                }
+                }*/
 
                 //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             } else {
@@ -1923,8 +1931,6 @@ class MusicSheet: UIView {
     public func moveCursorY(location: CGPoint) {
         sheetCursor.moveCursorY(location: location)
 
-        print(location)
-
         if let measurePoints = GridSystem.instance.selectedMeasureCoord {
             sheetCursor.showLedgerLinesGuide(measurePoints: measurePoints, upToLocation: location, lineSpace: lineSpace)
         }
@@ -1935,7 +1941,7 @@ class MusicSheet: UIView {
             }
         } else {
             if let measure = GridSystem.instance.getCurrentMeasure() {
-                measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes())
+                measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(numDots: self.getCurrentDotMode()))
             }
         }
         
@@ -3894,7 +3900,7 @@ class MusicSheet: UIView {
         return ((note2.pitch.octave * 7) + note2.pitch.step.rawValue) - ((note1.pitch.octave * 7) + note1.pitch.step.rawValue)
     }
     
-    public func getCurrentNoteMode() -> Int {
+    public func getCurrentDotMode() -> Int {
         for (index, dotMode) in dotModes.enumerated() {
             if dotMode {
                 return index+1
