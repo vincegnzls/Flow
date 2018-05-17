@@ -3002,6 +3002,9 @@ class MusicSheet: UIView {
         notationImageView.image = noteHead
 
         self.addSubview(notationImageView)
+        
+        drawDotsByNotation(notation: notation)
+        
         if let note = notation as? Note {
             drawAccidentalByNote(note: note)
             
