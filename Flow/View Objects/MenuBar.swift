@@ -228,6 +228,51 @@ class MenuBar: UIView {
         EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
     }
     
+    private func highlightDotButton(numDot: Int) {
+        switch numDot {
+        case 1:
+            oneDotBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        case 2:
+            twoDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        case 3:
+            threeDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        default:
+            oneDotBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            twoDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            threeDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        }
+    }
+    
+    private func removeHighlightDotButton(numDot: Int) {
+        switch numDot {
+        case 1:
+            oneDotBtn.backgroundColor = nil
+        case 2:
+            twoDotsBtn.backgroundColor = nil
+        case 3:
+            threeDotsBtn.backgroundColor = nil
+        default:
+            oneDotBtn.backgroundColor = nil
+            twoDotsBtn.backgroundColor = nil
+            threeDotsBtn.backgroundColor = nil
+        }
+    }
+    
+    private func enableDotButton(numDot: Int, enabled: Bool) {
+        switch numDot {
+        case 1:
+            oneDotBtn.isEnabled = enabled
+        case 2:
+            twoDotsBtn.isEnabled = enabled
+        case 3:
+            threeDotsBtn.isEnabled = enabled
+        default:
+            oneDotBtn.isEnabled = enabled
+            twoDotsBtn.isEnabled = enabled
+            threeDotsBtn.isEnabled = enabled
+        }
+    }
+    
     private func updateInvalidDots(parameters: Parameters) {
         if let selectedNotations = parameters.get(key: KeyNames.SELECTED_NOTATIONS) as? [MusicNotation] {
             
@@ -239,49 +284,52 @@ class MenuBar: UIView {
         
                 for dots in 1...maxNumOfDots {
                 
+                    var allDotsAreEqualToNumDots = true
+                    
                     for notation in selectedNotations {
+                        if notation.dots != dots {
+                            allDotsAreEqualToNumDots = false
+                        }
+                    }
+                    
+                    if allDotsAreEqualToNumDots {
+                        dotBools[dots] = true
                         
-                        if let measure = notation.measure {
-                            if let existingAddedValue = addedValueToMeasureMap[measure] {
-                                addedValueToMeasureMap[measure] = existingAddedValue + (notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue())
+                        highlightDotButton(numDot: dots)
+                    } else {
+                        removeHighlightDotButton(numDot: dots)
+                    
+                        for notation in selectedNotations {
+                            
+                            if let measure = notation.measure {
+                                if let existingAddedValue = addedValueToMeasureMap[measure] {
+                                    addedValueToMeasureMap[measure] = existingAddedValue + (notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue(dots: notation.dots))
+                                } else {
+                                    addedValueToMeasureMap[measure] = notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue(dots: notation.dots)
+                                    measures.append(measure)
+                                }
+                            }
+                            
+                        }
+                        
+                        for measure in measures {
+                            if measure.isAddNoteValid(value: addedValueToMeasureMap[measure]!) {
+                                dotBools[dots] = true
                             } else {
-                                addedValueToMeasureMap[measure] = notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue()
-                                measures.append(measure)
+                                dotBools[dots] = false
+                                break
                             }
                         }
                         
                     }
                     
-                    for measure in measures {
-                        if measure.isAddNoteValid(value: addedValueToMeasureMap[measure]!) {
-                            print ("TRUE ADD NOTE VALID \(dots)")
-                            dotBools[dots] = true
-                        } else {
-                            print ("FALSE ADD NOTE VALID \(dots)")
-                            dotBools[dots] = false
-                            break
-                        }
-                    }
-                    
-                    switch dots {
-                    case 1:
-                        oneDotBtn.isEnabled = dotBools[1]!
-                    case 2:
-                        twoDotsBtn.isEnabled = dotBools[2]!
-                    case 3:
-                        threeDotsBtn.isEnabled = dotBools[3]!
-                    default:
-                        oneDotBtn.isEnabled = true
-                        twoDotsBtn.isEnabled = true
-                        threeDotsBtn.isEnabled = true
-                    }
+                    enableDotButton(numDot: dots, enabled: dotBools[dots]!)
                     
                 }
                 
             } else {
-                oneDotBtn.isEnabled = false
-                twoDotsBtn.isEnabled = false
-                threeDotsBtn.isEnabled = false
+                removeHighlightDotButton(numDot: -1)
+                enableDotButton(numDot: -1, enabled: false)
             }
         }
     }
