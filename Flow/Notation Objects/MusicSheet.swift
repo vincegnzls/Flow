@@ -96,6 +96,11 @@ class MusicSheet: UIView {
                 //disable accidentals
                 //EventBroadcaster.instance.postEvent(event: EventNames.DISABLE_ACCIDENTALS)
             }
+            
+            let parameters = Parameters()
+            
+            parameters.put(key: KeyNames.SELECTED_NOTATIONS, value: [hoveredNotation])
+            EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_DOTS, params: parameters)
         }
     }
 
@@ -155,6 +160,12 @@ class MusicSheet: UIView {
                 }
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
+            
+            let parameters = Parameters()
+            
+            parameters.put(key: KeyNames.SELECTED_NOTATIONS, value: selectedNotations)
+            EventBroadcaster.instance.postEvent(event: EventNames.UPDATE_INVALID_DOTS, params: parameters)
+            
         }
     }
 

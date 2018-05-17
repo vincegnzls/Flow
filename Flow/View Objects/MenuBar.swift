@@ -20,6 +20,8 @@ class MenuBar: UIView {
     @IBOutlet weak var oneDotBtn: UIButton!
     @IBOutlet weak var twoDotsBtn: UIButton!
     @IBOutlet weak var threeDotsBtn: UIButton!
+    
+    let maxNumOfDots = 3
 
     /*var compositionInfo: CompositionInfo? {
         didSet {
@@ -58,6 +60,9 @@ class MenuBar: UIView {
 
         EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT, observer: Observer(id: "MenuBar.removeAccidentalHighlight", function: self.removeAccidentalHighlight))
         EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT, observer: Observer(id: "MenuBar.removeAccidentalHighlight", function: self.removeAccidentalHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
+        EventBroadcaster.instance.addObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
     }
 
     func highlightAccidentalBtn(params: Parameters) {
@@ -221,6 +226,64 @@ class MenuBar: UIView {
         params.put(key: KeyNames.NUM_OF_DOTS, value: 3)
         
         EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
+    }
+    
+    private func updateInvalidDots(parameters: Parameters) {
+        if let selectedNotations = parameters.get(key: KeyNames.SELECTED_NOTATIONS) as? [MusicNotation] {
+            
+            if selectedNotations.count > 0 {
+            
+            var measures = [Measure]()
+            var addedValueToMeasureMap = [Measure: Float]()
+            var dotBools = [Int: Bool]()
+        
+                for dots in 1...maxNumOfDots {
+                
+                    for notation in selectedNotations {
+                        
+                        if let measure = notation.measure {
+                            if let existingAddedValue = addedValueToMeasureMap[measure] {
+                                addedValueToMeasureMap[measure] = existingAddedValue + (notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue())
+                            } else {
+                                addedValueToMeasureMap[measure] = notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue()
+                                measures.append(measure)
+                            }
+                        }
+                        
+                    }
+                    
+                    for measure in measures {
+                        if measure.isAddNoteValid(value: addedValueToMeasureMap[measure]!) {
+                            print ("TRUE ADD NOTE VALID \(dots)")
+                            dotBools[dots] = true
+                        } else {
+                            print ("FALSE ADD NOTE VALID \(dots)")
+                            dotBools[dots] = false
+                            break
+                        }
+                    }
+                    
+                    switch dots {
+                    case 1:
+                        oneDotBtn.isEnabled = dotBools[1]!
+                    case 2:
+                        twoDotsBtn.isEnabled = dotBools[2]!
+                    case 3:
+                        threeDotsBtn.isEnabled = dotBools[3]!
+                    default:
+                        oneDotBtn.isEnabled = true
+                        twoDotsBtn.isEnabled = true
+                        threeDotsBtn.isEnabled = true
+                    }
+                    
+                }
+                
+            } else {
+                oneDotBtn.isEnabled = false
+                twoDotsBtn.isEnabled = false
+                threeDotsBtn.isEnabled = false
+            }
+        }
     }
     
     @IBAction func toggleKeyboard(_ sender: UIButton) {

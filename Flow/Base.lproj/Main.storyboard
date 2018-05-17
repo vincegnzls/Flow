@@ -568,6 +568,9 @@ Tap '+' to create a new composition.</string>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rQN-ic-H0l" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <bool key="isElement" value="NO"/>
+                                                </accessibility>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="1Cu-O8-j93"/>
                                                     <constraint firstAttribute="width" constant="50" id="8Zm-l2-Rhi"/>
@@ -579,6 +582,9 @@ Tap '+' to create a new composition.</string>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzu-Uc-umr" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="70" y="0.0" width="50" height="50"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <bool key="isElement" value="NO"/>
+                                                </accessibility>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="P6l-Ty-C7r"/>
                                                     <constraint firstAttribute="width" constant="50" id="ur3-yL-vn0"/>
@@ -590,6 +596,9 @@ Tap '+' to create a new composition.</string>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-U5-9Q2" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="140" y="0.0" width="50" height="50"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <bool key="isElement" value="NO"/>
+                                                </accessibility>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="BdB-TV-q42"/>
                                                     <constraint firstAttribute="width" constant="50" id="gum-Jt-1f1"/>
