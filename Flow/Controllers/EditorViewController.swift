@@ -368,7 +368,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                 } else if let notation = GridSystem.instance.getNoteFromX(x: musicSheet.sheetCursor.curYCursorLocation.x) {
                     // if cursor has a note above or below it, then CREATE CHORD
                     
-                    if notation.type != note.type {
+                    if notation.type != note.type || (notation is Rest && note is Note) || (notation is Note && note is Rest) {
                          self.editNotations(old: [notation], new: [note])
                         
                         if let note = note as? Note {

@@ -1987,9 +1987,9 @@ class MusicSheet: UIView {
             hoveredNotation = nil
             
             if let noteFromX = GridSystem.instance.getNoteFromX(x: location.x) {
-                /*if let measure = GridSystem.instance.getCurrentMeasure() {
-                    measure.updateInvalidNotes(validNotes: [noteFromX.type])
-                }*/
+                if let measure = GridSystem.instance.getCurrentMeasure() {
+                    measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: noteFromX))
+                }
                 
                 self.highlightNotation(noteFromX, true)
             } else {
