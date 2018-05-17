@@ -33,6 +33,9 @@ class SheetCursor : CAShapeLayer {
         }
     }
 
+    var isLocked : Bool {
+        return (yVisible == false) && (xVisible == false)
+    }
 
     private var ledgerLineGuides = [CAShapeLayer]()
     
@@ -106,6 +109,21 @@ class SheetCursor : CAShapeLayer {
     public func moveCursorY (location: CGPoint) {
         yCursor.position = location
         curYCursorLocation = location
+    }
+    
+    public func hideCursors() {
+        xVisible = false
+        yVisible = false
+    }
+    
+    public func showCursors() {
+        xVisible = true
+        yVisible = true
+    }
+    
+    public func toggleVisibility () {
+        xVisible = !xVisible
+        yVisible = !yVisible
     }
     
     public func showLedgerLinesGuide (measurePoints: GridSystem.MeasurePoints, upToLocation: CGPoint, lineSpace:CGFloat) {

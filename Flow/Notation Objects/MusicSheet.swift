@@ -137,6 +137,8 @@ class MusicSheet: UIView {
             
             if selectedNotations.count == 0 {
                 
+                sheetCursor.showCursors()
+                
                 parameters.put(key: KeyNames.CURRENT_DOT_MODES, value: dotModes)
 
                 self.transformView.isHidden = true
@@ -155,7 +157,8 @@ class MusicSheet: UIView {
             } else {
                 selectedNotes()
 
-                let params = Parameters()
+                sheetCursor.hideCursors()
+                //let params = Parameters()
 
                 print("NANI")
 
@@ -166,7 +169,7 @@ class MusicSheet: UIView {
                 }
 
                 if selectedNotations.count > 1 {
-                    let params = Parameters()
+                    //let params = Parameters()
 
                     if allNotes(notations: selectedNotations) {
                         self.riView.isHidden = false
@@ -1929,6 +1932,11 @@ class MusicSheet: UIView {
     }
     
     public func moveCursorY(location: CGPoint) {
+        
+        if sheetCursor.isLocked {
+            return
+        }
+        
         sheetCursor.moveCursorY(location: location)
 
         if let measurePoints = GridSystem.instance.selectedMeasureCoord {
@@ -1981,7 +1989,9 @@ class MusicSheet: UIView {
     }
 
     public func moveCursorX(location: CGPoint) {
-        sheetCursor.moveCursorX(location: location)
+        if !sheetCursor.isLocked {
+            sheetCursor.moveCursorX(location: location)
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -2173,10 +2183,13 @@ class MusicSheet: UIView {
                 print("found measure: \(measure)")
                 self.selectedClef = measure.clef
             }*/
+            
+            sheetCursor.hideCursors()
 
         } else if sender.state == UIGestureRecognizerState.ended {
             self.checkPointsInRect()
             self.highlightRect.highlightingEndPoint = nil
+            
         } else {
             let location = sender.location(in: self)
 //            let previousLocation = self.highlightRect.highlightingEndPoint
