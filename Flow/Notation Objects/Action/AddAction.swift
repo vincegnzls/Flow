@@ -53,9 +53,19 @@ class AddAction: Action {
         for notation in self.notations {
             notation.measure?.remove(notation)
         }
+        
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.UNDO)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
     
     func redo() {
         self.add()
+        
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.REDO)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
 }

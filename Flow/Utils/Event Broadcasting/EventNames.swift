@@ -12,6 +12,8 @@ struct EventNames {
     static let ADD_NEW_NOTE = "ADD_NEW_NOTE"
     static let MEASURE_SWITCHED = "MEASURE_SWITCHED"
     static let STAFF_SWITCHED = "STAFF_SWITCHED"
+    
+    static let ACTION_PERFORMED = "ACTION_PERFORMED"
 
     static let NOTATION_KEY_PRESSED = "NOTATION_KEY_PRESSED"
     static let ARROW_KEY_PRESSED = "ARROW_KEY_PRESSED"

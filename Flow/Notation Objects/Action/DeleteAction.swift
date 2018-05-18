@@ -50,6 +50,11 @@ class DeleteAction: Action {
         }
         
         UndoRedoManager.instance.addActionToUndoStack(self)
+        
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.EXECUTE)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
     
     func undo() {
@@ -101,6 +106,11 @@ class DeleteAction: Action {
                 measure.add(notation, at: index)
             }
         }
+        
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.UNDO)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
     
     func redo() {
@@ -117,6 +127,11 @@ class DeleteAction: Action {
                 }
             }
         }
+        
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.REDO)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
     
 }

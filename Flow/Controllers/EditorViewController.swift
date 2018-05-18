@@ -315,6 +315,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
         let restNoteType: RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
         let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
+        var actionPerformed: Action?
 
         let note: MusicNotation
 
@@ -413,27 +414,12 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                     
                     // instantiate add action
                     
-                    let dotMode = musicSheet.getCurrentDotMode()
-                    
-                    if dotMode > 0 {
-                        note.dots = dotMode
-                    }
-                    
-                    let addAction = AddAction(measure: measure, notation: note)
-                    
-                    if let note = note as? Note {
-                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
-                    }
-                    
-                    GridSystem.instance.recentNotation = note
-
-                    addAction.execute()
+                    addNotation(measure: measure, notation: note)
 
                     addGrandStaff()
                     
-//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 }
-                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                
                 
             }
 
@@ -451,6 +437,31 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         }
         
         return measures
+    }
+    
+    func addNotation(measure: Measure, notation: MusicNotation) {
+        let dotMode = musicSheet.getCurrentDotMode()
+        
+        if dotMode > 0 {
+            notation.dots = dotMode
+        }
+        
+        let addAction = AddAction(measure: measure, notation: notation)
+        
+        if let note = notation as? Note {
+            SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
+        }
+        
+        GridSystem.instance.recentNotation = notation
+        
+        addAction.execute()
+        
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: addAction)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.EXECUTE)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
     }
     
     func editNotations(old: [MusicNotation], new: [MusicNotation]) {

@@ -18,6 +18,8 @@ class MusicSheet: UIView {
     private let HIGHLIGHTED_NOTES_TAG = 2500
     private let TIME_SIGNATURES_TAG = 2501
     
+    private var executeLock = false
+    
     private var dotModes = [false, false, false] {
         didSet {
             let dotMode = self.getCurrentDotMode()
@@ -417,6 +419,9 @@ class MusicSheet: UIView {
 
         EventBroadcaster.instance.removeObservers(event: EventNames.HIGHLIGHT_MEASURE)
         EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_MEASURE, observer: Observer(id: "MusicSheet.highlightParallelMeasures", function: self.highlightParallelMeasures))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.ACTION_PERFORMED)
+        EventBroadcaster.instance.addObserver(event: EventNames.ACTION_PERFORMED, observer: Observer(id: "MusicSheet.redirectCursorOnAction", function: self.redirectCursorOnAction))
 
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -468,73 +473,15 @@ class MusicSheet: UIView {
             for i in 0..<measureSplices.count {
                 setupGrandStaff(startX: movingStartX, startY: startY, measures: measureSplices[i])
             }
-
-            // for redirecting the cursor after redrawing the whole composition
-            if let recentNotation = GridSystem.instance.recentNotation {
-
-                if let measure = GridSystem.instance.getCurrentMeasure() {
-
-                    if measure.notationObjects.contains(recentNotation) {
-                        var coordForCurrentPoint:CGPoint?
-
-                        if let coord = recentNotation.screenCoordinates {
-
-                            if recentNotation is Note {
-                                coordForCurrentPoint = coord
-                            } else if recentNotation is Rest {
-                                coordForCurrentPoint = sheetCursor.curYCursorLocation
-                            }
-
-                        }
-
-                        if let noteScreenCoord = coordForCurrentPoint {
-
-                            if let snapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: noteScreenCoord) {
-
-                                // get right again to go to the next
-                                if let nextSnapPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: snapPoint) {
-
-                                    measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes())
-                                    
-                                    GridSystem.instance.selectedCoord = nextSnapPoint
-                                    moveCursorY(location: nextSnapPoint)
-                                    moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
-
-                                }
-                                
-                            }
-
-                        }
-                    } else {
-                        moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
-                    }
-                }
-            } else {
-                if let currentPoint = GridSystem.instance.selectedCoord {
-
-                    if let nextSnapPoint = GridSystem.instance.getLeftXSnapPoint(currentPoint: currentPoint) {
-
-                        if nextSnapPoint == currentPoint {
-
-                            moveCursorsToNearestSnapPoint(location: currentPoint)
-
-                        } else {
-
-                            GridSystem.instance.selectedCoord = nextSnapPoint
-                            moveCursorY(location: nextSnapPoint)
-                            moveCursorX(location: CGPoint(x: nextSnapPoint.x, y: sheetCursor.curXCursorLocation.y))
-
-                        }
-
-                    }
-                }
-            }
-
+            
             for notation in self.selectedNotations {
                 self.highlightNotation(notation, false)
             }
 
         }
+        
+        executeLock = false
+        print("FINISHED DRAWING")
     }
 
     //Setup a grand staff
@@ -1969,12 +1916,222 @@ class MusicSheet: UIView {
         self.updateMeasureDraw()
     }
     
+    private func redirectCursorOnAction(params: Parameters) {
+        
+        DispatchQueue.global(qos: .background).async {
+            while(self.executeLock) {
+                // prevent from moving before lock
+            }
+            
+            DispatchQueue.main.async {
+                if let action = params.get(key: KeyNames.ACTION_DONE) as? Action {
+                    
+                    let type = params.get(key: KeyNames.ACTION_TYPE, defaultValue: "")
+                    if type.isEmpty {
+                        return
+                    }
+                    
+                    var nextPoint: CGPoint?
+                    
+                    if let addAction = action as? AddAction {
+                        
+                        switch type {
+                        case ActionFunctions.EXECUTE :
+                            var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
+                            if let note = addAction.notations[addAction.notations.count-1] as? Note {
+                                currentPoint = note.screenCoordinates!
+                            } else if let chord = addAction.notations[addAction.notations.count-1] as? Chord {
+                                currentPoint = chord.notes[0].screenCoordinates!
+                            }
+                            
+                            if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: currentPoint) {
+                                if let rightPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: point) {
+                                    if addAction.notations[addAction.notations.count-1] is Rest {
+                                        if let righterPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: rightPoint) {
+                                            nextPoint = righterPoint
+                                        }
+                                    } else {
+                                        nextPoint = rightPoint
+                                    }
+                                }
+                            } else {
+                                return
+                            }
+                        case ActionFunctions.REDO :
+                            var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
+                            if let note = addAction.notations[addAction.notations.count-1] as? Note {
+                                currentPoint = note.screenCoordinates!
+                            } else if let chord = addAction.notations[addAction.notations.count-1] as? Chord {
+                                currentPoint = chord.notes[0].screenCoordinates!
+                            }
+                            
+                            if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: currentPoint) {
+                                if let rightPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: point) {
+                                    if addAction.notations[addAction.notations.count-1] is Rest {
+                                        if let righterPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: rightPoint) {
+                                            nextPoint = righterPoint
+                                        }
+                                    } else {
+                                        nextPoint = rightPoint
+                                    }
+                                }
+                            } else {
+                                return
+                            }
+                        case ActionFunctions.UNDO :
+                            var currentPoint: CGPoint = addAction.notations[addAction.notations.count-1].screenCoordinates!
+                            
+                            if let chord = addAction.notations[addAction.notations.count-1] as? Chord {
+                                currentPoint = chord.notes[0].screenCoordinates!
+                            }
+                            
+                            if let leftPoint = GridSystem.instance.getLeftXSnapPoint(currentPoint: currentPoint) {
+                                nextPoint = leftPoint
+                            } else {
+                                return
+                            }
+                        default:
+                            return
+                        }
+                        
+                        
+                    } else if let editAction = action as? EditAction {
+                        
+                        switch type {
+                        case ActionFunctions.EXECUTE :
+                            
+                            if editAction.newNotations[editAction.newNotations.count - 1] is Chord {
+                                self.moveCursorsToNearestSnapPoint(location: self.sheetCursor.curYCursorLocation)
+                            } else {
+                                var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
+                                if let note = editAction.newNotations[editAction.newNotations.count - 1] as? Note {
+                                    currentPoint = note.screenCoordinates!
+                                }
+                                
+                                if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: currentPoint) {
+                                    if let rightPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: point) {
+                                        if editAction.newNotations[editAction.newNotations.count - 1] is Rest {
+                                            if let righterPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: rightPoint) {
+                                                nextPoint = righterPoint
+                                            }
+                                        } else {
+                                            nextPoint = rightPoint
+                                        }
+                                    }
+                                } else {
+                                    return
+                                }
+                            }
+                            
+                        case ActionFunctions.REDO :
+                            
+                            if editAction.newNotations[editAction.newNotations.count - 1] is Chord {
+                                self.moveCursorsToNearestSnapPoint(location: self.sheetCursor.curYCursorLocation)
+                            } else {
+                                var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
+                                if let note = editAction.newNotations[editAction.newNotations.count - 1] as? Note {
+                                    currentPoint = note.screenCoordinates!
+                                }
+                                
+                                if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: currentPoint) {
+                                    if let rightPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: point) {
+                                        if editAction.newNotations[editAction.newNotations.count - 1] is Rest {
+                                            if let righterPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: rightPoint) {
+                                                nextPoint = righterPoint
+                                            }
+                                        } else {
+                                            nextPoint = rightPoint
+                                        }
+                                    }
+                                } else {
+                                    return
+                                }
+                            }
+                            
+                        case ActionFunctions.UNDO :
+                            
+                            if editAction.oldNotations[editAction.oldNotations.count - 1] is Chord {
+                                self.moveCursorsToNearestSnapPoint(location: self.sheetCursor.curYCursorLocation)
+                            } else {
+                                self.remapCurrentMeasure(location: editAction.oldNotations[editAction.oldNotations.count - 1].screenCoordinates!)
+                                self.moveCursorsToNearestSnapPoint(location: editAction.oldNotations[editAction.oldNotations.count - 1].screenCoordinates!)
+                            }
+                            
+                        default:
+                            return
+                        }
+                        
+                    } else if let deleteAction = action as? DeleteAction {
+                        
+                        switch type {
+                        case ActionFunctions.EXECUTE :
+                            
+                            if let chord = deleteAction.notations[0] as? Chord {
+                                self.remapCurrentMeasure(location: chord.notes[0].screenCoordinates!)
+                                self.moveCursorsToNearestSnapPoint(location: chord.notes[0].screenCoordinates!)
+                            } else {
+                                self.remapCurrentMeasure(location: deleteAction.notations[0].screenCoordinates!)
+                                self.moveCursorsToNearestSnapPoint(location: deleteAction.notations[0].screenCoordinates!)
+                            }
+                            
+                        case ActionFunctions.REDO :
+                            
+                            if let chord = deleteAction.notations[0] as? Chord {
+                                self.remapCurrentMeasure(location: chord.notes[0].screenCoordinates!)
+                                self.moveCursorsToNearestSnapPoint(location: chord.notes[0].screenCoordinates!)
+                            } else {
+                                self.remapCurrentMeasure(location: deleteAction.notations[0].screenCoordinates!)
+                                self.moveCursorsToNearestSnapPoint(location: deleteAction.notations[0].screenCoordinates!)
+                            }
+                            
+                        case ActionFunctions.UNDO :
+                            
+                            var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
+                            if let note = deleteAction.notations[deleteAction.notations.count-1] as? Note {
+                                currentPoint = note.screenCoordinates!
+                            } else if let chord = deleteAction.notations[deleteAction.notations.count-1] as? Chord {
+                                currentPoint = chord.notes[0].screenCoordinates!
+                            }
+                            
+                            if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: currentPoint) {
+                                if let rightPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: point) {
+                                    if deleteAction.notations[deleteAction.notations.count-1] is Rest {
+                                        if let righterPoint = GridSystem.instance.getRightXSnapPoint(currentPoint: rightPoint) {
+                                            nextPoint = righterPoint
+                                        }
+                                    } else {
+                                        nextPoint = rightPoint
+                                    }
+                                }
+                            } else {
+                                return
+                            }
+                            
+                        default:
+                            return
+                        }
+                        
+                    }
+                    
+                    if let nextPoint = nextPoint {
+                        self.remapCurrentMeasure(location: nextPoint)
+                        self.sheetCursor.curXCursorLocation.x = nextPoint.x
+                        
+                        self.moveCursorX(location: self.sheetCursor.curXCursorLocation)
+                        self.moveCursorY(location: nextPoint)
+                    }
+                }
+            }
+        }
+    }
+    
     public func moveCursorY(location: CGPoint) {
         
         if sheetCursor.isLocked {
             return
         }
         
+        GridSystem.instance.selectedCoord = location
         sheetCursor.moveCursorY(location: location)
 
         if let measurePoints = GridSystem.instance.selectedMeasureCoord {
@@ -1983,22 +2140,32 @@ class MusicSheet: UIView {
             scrollMusicSheetToYIfPointNotVisible(y: measurePoints.lowerRightPoint.y - 140, targetPoint: sheetCursor.curYCursorLocation)
             scrollMusicSheetToXIfPointNotVisible(x: measurePoints.upperLeftPoint.x - 140, targetPoint: sheetCursor.curYCursorLocation)
         }
- 
-        if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: location) {
-            hoveredNotation = notation
-        } else {
-            hoveredNotation = nil
+        
+        DispatchQueue.global(qos: .background).async {
+            while(self.executeLock) {
+                // prevent from moving before lock
+            }
             
-            if let noteFromX = GridSystem.instance.getNoteFromX(x: location.x) {
-                if let measure = GridSystem.instance.getCurrentMeasure() {
-                    measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: noteFromX))
+            DispatchQueue.main.async {
+                
+                if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: location) {
+                    self.hoveredNotation = notation
+                } else {
+                    self.hoveredNotation = nil
+                    
+                    if let noteFromX = GridSystem.instance.getNoteFromX(x: location.x) {
+                        if let measure = GridSystem.instance.getCurrentMeasure() {
+                            measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: noteFromX))
+                        }
+                        
+                        self.highlightNotation(noteFromX, true)
+                    } else {
+                        if let measure = GridSystem.instance.getCurrentMeasure() {
+                            measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(numDots: self.getCurrentDotMode()))
+                        }
+                    }
                 }
                 
-                self.highlightNotation(noteFromX, true)
-            } else {
-                if let measure = GridSystem.instance.getCurrentMeasure() {
-                    measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(numDots: self.getCurrentDotMode()))
-                }
             }
         }
         
@@ -2209,6 +2376,7 @@ class MusicSheet: UIView {
         fMeasurePoints.removeAll()
         GridSystem.instance.clearNotationSnapPointMap()
 
+        executeLock = true
         self.setNeedsDisplay()
 
         print("finished updating the view")
@@ -3203,8 +3371,6 @@ class MusicSheet: UIView {
                 EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
             }
         }
-        
-        
         
         self.updateMeasureDraw()
         

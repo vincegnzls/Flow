@@ -20,6 +20,9 @@ struct KeyNames {
     static let HIGHLIGHT_MEASURE = "HIGHLIGHT_MEASURE"
     static let SELECTED_KEY_SIG = "SELECTED_KEY_SIG"
     
+    static let ACTION_DONE = "ACTION_DONE"
+    static let ACTION_TYPE = "ACTION_TYPE"
+    
     static let START_MEASURE = "START_MEASURE"
     static let OLD_KEY_SIGNATURE = "OLD_KEY_SIGNATURE"
     static let NEW_KEY_SIGNATURE = "NEW_KEY_SIGNATURE"
