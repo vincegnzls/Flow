@@ -1560,11 +1560,21 @@ class MusicSheet: UIView {
 
         var notationImageViews = [UIImageView]()
 
+        var head: UIImage?
         if let chord = notation as? Chord {
+            
+            if chord.type == .half {
+                head = UIImage(named:"half-head")
+            } else if chord.type == .whole {
+                head = UIImage(named:"whole-head")
+            } else {
+                head = UIImage(named:"quarter-head")
+            }
             
             for note in chord.notes {
                 
                 if let screenCoordinates = note.screenCoordinates, let image = note.image {
+                    
                     notationImageViews.append(
                         UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
                     
@@ -1620,7 +1630,13 @@ class MusicSheet: UIView {
         }
 
         for notationImageView in notationImageViews {
-            notationImageView.image = notation.image
+            if notation is Chord {
+                if let head = head {
+                    notationImageView.image = head
+                }
+            } else {
+                notationImageView.image = notation.image
+            }
             
             self.addSubview(notationImageView)
         }
