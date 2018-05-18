@@ -315,7 +315,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
         let restNoteType: RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
         let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
-        var actionPerformed: Action?
 
         let note: MusicNotation
 
@@ -370,7 +369,15 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                     // if cursor has a note above or below it, then CREATE CHORD
                     
                     if notation.type != note.type || (notation is Rest && note is Note) || (notation is Note && note is Rest) {
-                         self.editNotations(old: [notation], new: [note])
+                        if let noteFromX = notation as? Note {
+                            if let chord = noteFromX.chord {
+                                self.editNotations(old: [chord], new: [note])
+                            } else {
+                                self.editNotations(old: [notation], new: [note])
+                            }
+                        } else {
+                            self.editNotations(old: [notation], new: [note])
+                        }
                         
                         if let note = note as? Note {
                             SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
