@@ -1578,6 +1578,8 @@ class MusicSheet: UIView {
                     notationImageViews.append(
                         UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
                     
+                    note.image = head
+                    
                     drawAccidentalByNote(note: note)
                     drawDotsByNotation(notation: note)
                     
@@ -1639,6 +1641,61 @@ class MusicSheet: UIView {
             }
             
             self.addSubview(notationImageView)
+        }
+        
+        if notation is Chord && notation.type != .whole{
+            let chord = notation as? Chord
+            drawChordLine(chord: chord!)
+        }
+        
+    }
+    
+    private func drawChordLine (chord: Chord) {
+        
+        var stemHeight: CGFloat = 60
+        
+        var upCount: Int = 0
+        var downCount: Int = 0
+        
+        for note in chord.notes {
+            if note.isUpwards {
+                upCount += 1
+            } else {
+                downCount += 1
+            }
+        }
+        
+        let isUpwards = upCount > downCount
+        
+        let startNotePoint = chord.notes[0].screenCoordinates!
+        let endNotePoint = chord.notes.last!.screenCoordinates!
+        
+        var startPoint = CGPoint(x: startNotePoint.x + noteXOffset + 1.515, y: startNotePoint.y)
+        var endPoint = CGPoint(x: endNotePoint.x + noteXOffset + 1.515, y: endNotePoint.y)
+        
+        if upCount > downCount {
+            startPoint = CGPoint(x: startNotePoint.x + noteXOffset + 25, y: startNotePoint.y)
+            endPoint = CGPoint(x: endNotePoint.x + noteXOffset + 25, y: endNotePoint.y)
+        }
+        
+        let _ = drawLine(start: startPoint, end: endPoint, thickness: 2.3)
+        
+        if chord.type == .quarter || chord.type == .half {
+            if upCount > downCount {
+                let newEndPoint = CGPoint(x: endPoint.x, y: endPoint.y - stemHeight)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+            } else {
+                let newEndPoint = CGPoint(x: startPoint.x, y: startPoint.y + stemHeight)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+            }
+        } else if chord.type == .eighth{
+            
+        } else if chord.type == .sixteenth {
+            
+        } else if chord.type == .thirtySecond {
+            
+        } else if chord.type == .sixtyFourth {
+            
         }
         
     }

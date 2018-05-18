@@ -403,6 +403,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                         }
                         
                         if let note = notation as? Note {
+                            
+                            newChord.sortNotes()
+                            
                             if let oldChord = note.chord {
                                 self.editNotations(old: [oldChord], new: [newChord])
                             } else {

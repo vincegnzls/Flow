@@ -71,9 +71,9 @@ class Chord: MusicNotation {
         
         notes = insertionSort(notes) {$0.pitch < $1.pitch}
         
-        /*for note in notes {
+        for note in notes {
             print ("NOTE : \(note.pitch)")
-        }*/
+        }
         
     }
     

@@ -17,13 +17,13 @@ enum Step: Int {
     
     func toValue() -> Int {
         switch self {
-        case .C: return 2
-        case .D: return 3
-        case .E: return 4
-        case .F: return 5
-        case .G: return 6
-        case .A: return 0
-        case .B: return 1
+        case .C: return 0
+        case .D: return 1
+        case .E: return 2
+        case .F: return 3
+        case .G: return 4
+        case .A: return 5
+        case .B: return 6
         }
     }
     
