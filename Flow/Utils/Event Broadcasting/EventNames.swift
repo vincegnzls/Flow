@@ -12,6 +12,8 @@ struct EventNames {
     static let ADD_NEW_NOTE = "ADD_NEW_NOTE"
     static let MEASURE_SWITCHED = "MEASURE_SWITCHED"
     static let STAFF_SWITCHED = "STAFF_SWITCHED"
+    
+    static let ACTION_PERFORMED = "ACTION_PERFORMED"
 
     static let NOTATION_KEY_PRESSED = "NOTATION_KEY_PRESSED"
     static let ARROW_KEY_PRESSED = "ARROW_KEY_PRESSED"
@@ -36,6 +38,9 @@ struct EventNames {
     static let FLAT_KEY_PRESSED = "FLAT_KEY_PRESSED"
     static let SHARP_KEY_PRESSED = "SHARP_KEY_PRESSED"
     static let DSHARP_KEY_PRESSED = "DSHARP_KEY_PRESSED"
+    
+    static let DOT_KEY_PRESSED = "DOT_KEY_PRESSED"
+    static let UPDATE_INVALID_DOTS = "UPDATE_INVALID_DOTS"
 
     static let ADD_GRAND_STAFF = "ADD_GRAND_STAFF"
 

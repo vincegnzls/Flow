@@ -36,6 +36,7 @@
 		61B1316B1FE1513900ADCDF0 /* ButtonEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */; };
 		61EBB0321FE695B60015F7C2 /* KeySignatureDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
+		7A1C6D9B20AE86BA00F766DD /* ActionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C6D9A20AE86BA00F766DD /* ActionFunctions.swift */; };
 		7A8D3F27201B845900692B66 /* Support Objects in Resources */ = {isa = PBXBuildFile; fileRef = 7A8D3F26201B845900692B66 /* Support Objects */; };
 		7AA94C29202D488100CE537B /* maestro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7AA94C28202D488100CE537B /* maestro.ttf */; };
 		7ACB883E2046978D0073B154 /* SheetCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACB883D2046978D0073B154 /* SheetCursor.swift */; };
@@ -171,6 +172,7 @@
 		61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEffect.swift; sourceTree = "<group>"; };
 		61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureDesignable.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		7A1C6D9A20AE86BA00F766DD /* ActionFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionFunctions.swift; sourceTree = "<group>"; };
 		7A8D3F26201B845900692B66 /* Support Objects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Support Objects"; sourceTree = "<group>"; };
 		7AA94C28202D488100CE537B /* maestro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = maestro.ttf; sourceTree = "<group>"; };
 		7ACB883D2046978D0073B154 /* SheetCursor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetCursor.swift; sourceTree = "<group>"; };
@@ -377,6 +379,7 @@
 				8618F0771FED3D8C00DF8A10 /* EditAction.swift */,
 				8618F0791FED3DB400DF8A10 /* DeleteAction.swift */,
 				8642B07320909234006036D4 /* EditSignatureAction.swift */,
+				7A1C6D9A20AE86BA00F766DD /* ActionFunctions.swift */,
 			);
 			path = Action;
 			sourceTree = "<group>";
@@ -733,6 +736,7 @@
 				864CE5A21FD32FC3001FF059 /* RestNoteType.swift in Sources */,
 				863BB0F1208AEB9600819CCE /* MaxLengthTextField.swift in Sources */,
 				866CC9132094775E001ADD5B /* IQUIViewController+Additions.swift in Sources */,
+				7A1C6D9B20AE86BA00F766DD /* ActionFunctions.swift in Sources */,
 				866CC8F720947725001ADD5B /* IQKeyboardManager.swift in Sources */,
 				861B3DD61FDC1E24003FE0A5 /* EventNames.swift in Sources */,
 				86A0287C1FD97C3500305C0C /* NotationControlsView.swift in Sources */,
@@ -979,7 +983,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6D826ZAQ87;
+				DEVELOPMENT_TEAM = 4XKYMS9BR8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -988,7 +992,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-lstdc++";
-				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow22;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -1003,7 +1007,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6D826ZAQ87;
+				DEVELOPMENT_TEAM = 4XKYMS9BR8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1012,7 +1016,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-lstdc++";
-				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow22;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musicg.Flow2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

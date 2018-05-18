@@ -81,6 +81,11 @@ class Clipboard {
         } else {
             let addAction = AddAction(measures: measures, notations: newNotations)
             addAction.execute()
+            
+            let params = Parameters()
+            params.put(key: KeyNames.ACTION_DONE, value: addAction)
+            params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.EXECUTE)
+            EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
         }
 
         

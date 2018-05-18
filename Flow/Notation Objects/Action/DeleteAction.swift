@@ -11,7 +11,7 @@ import Foundation
 class DeleteAction: Action {
     
     var measures: [Measure]
-    var notations:[MusicNotation]
+    var notations : [MusicNotation]
     var indices: [Int]
     
     init(notations: [MusicNotation]) {
@@ -21,22 +21,40 @@ class DeleteAction: Action {
     }
 
     func execute() {
+        var notationsToBeRemoved = [MusicNotation]()
+        
         for notation in self.notations {
-            if let measure = notation.measure { // NOTES in CHORDS aren't assigned to a measure, so it surpasses this check
-                self.indices.append(measure.notationObjects.index(of: notation)!)
-                measure.remove(notation)
-                self.measures.append(measure)
-            } else if let note = notation as? Note { // FOR DELETING GROUP OF NOTES FROM CHORDS
-                if let chord = note.chord {
-                    if let measure = chord.measure {
+            if let measure = notation.measure {
+                if let note = notation as? Note { // FOR DELETING GROUP OF NOTES FROM CHORDS
+                    if let chord = note.chord {
                         self.indices.append(measure.notationObjects.index(of: chord)!)
                         chord.removeNote(note: note)
                         self.measures.append(measure)
+                    } else {
+                        self.indices.append(measure.notationObjects.index(of: notation)!)
+                        notationsToBeRemoved.append(notation)
+                        self.measures.append(measure)
                     }
+                } else {
+                    self.indices.append(measure.notationObjects.index(of: notation)!)
+                    notationsToBeRemoved.append(notation)
+                    self.measures.append(measure)
                 }
             }
         }
+        
+        for notation in notationsToBeRemoved {
+            if let measure = notation.measure {
+                measure.remove(notation)
+            }
+        }
+        
         UndoRedoManager.instance.addActionToUndoStack(self)
+        
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.EXECUTE)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
     
     func undo() {
@@ -50,21 +68,33 @@ class DeleteAction: Action {
                 if let previousChord = note.chord {
                     let index = self.indices[i]
                     
-                    if measure.notationObjects[index] is Chord {
-                        
-                        let chord = measure.notationObjects[index] as? Chord
-                        
-                        chord?.notes.append(note)
-                        
-                    } else if measure.notationObjects[index] is Note {
-                        
-                        if let existingNote = measure.notationObjects[index] as? Note {
-                            previousChord.notes.append(note)
-                            existingNote.chord = previousChord
+                    if measure.notationObjects.count > index {
+                        if measure.notationObjects[index] is Chord {
                             
-                            measure.replace(existingNote, previousChord)
+                            let chord = measure.notationObjects[index] as? Chord
+                            
+                            chord?.notes.append(note)
+                            
+                        } else if measure.notationObjects[index] is Note {
+                            
+                            if let existingNote = measure.notationObjects[index] as? Note {
+                                
+                                previousChord.notes.removeAll()
+                                
+                                previousChord.notes.append(existingNote.duplicate())
+                                previousChord.notes.append(note)
+                                
+                                for note in previousChord.notes {
+                                    note.chord = previousChord
+                                }
+                                
+                                measure.replace(existingNote, previousChord)
+                            }
+                            
                         }
-                        
+                    } else {
+                        let index = self.indices[i]
+                        measure.add(previousChord, at: index)
                     }
                     
                 } else {
@@ -76,20 +106,32 @@ class DeleteAction: Action {
                 measure.add(notation, at: index)
             }
         }
+        
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.UNDO)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
     
     func redo() {
         for notation in self.notations {
-            if let measure = notation.measure { // NOTES in CHORDS aren't assigned to a measure, so it surpasses this check
-                measure.remove(notation)
-            } else if let note = notation as? Note { // FOR DELETING GROUP OF NOTES FROM CHORDS
-                if let chord = note.chord {
-                    if let measure = chord.measure {
+            if let measure = notation.measure {
+                if let note = notation as? Note { // FOR DELETING GROUP OF NOTES FROM CHORDS
+                    if let chord = note.chord {
                         chord.removeNote(note: note)
+                    } else {
+                        measure.remove(notation)
                     }
+                } else {
+                    measure.remove(notation)
                 }
             }
         }
+        
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.REDO)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
     
 }

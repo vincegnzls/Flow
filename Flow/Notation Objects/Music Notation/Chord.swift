@@ -39,10 +39,13 @@ class Chord: MusicNotation {
     
     override func duplicate() -> Chord {
         //return super.duplicate()
-        let chord = Chord()
+        let chord = Chord(type: self.type, measure: self.measure)
         
         for note in notes {
-            chord.notes.append(note.duplicate())
+            let duplicatedNote = note.duplicate()
+            duplicatedNote.chord = chord
+            
+            chord.notes.append(duplicatedNote)
         }
         
         return chord
@@ -53,7 +56,7 @@ class Chord: MusicNotation {
             self.notes.remove(at: index)
             
             if self.notes.count < 2 && self.notes.count > 0 {
-                self.notes[0].measure = self.measure
+                //self.notes[0].measure = self.measure
                 self.notes[0].chord = nil
                 
                 if let chordIndex = measure?.notationObjects.index(of: self) {

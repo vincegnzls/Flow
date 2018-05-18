@@ -28,12 +28,15 @@ class Note: MusicNotation {
          pitch: Pitch,
          type: RestNoteType,
          measure: Measure? = nil,
-         accidental: Accidental? = nil) {
+         accidental: Accidental? = nil,
+         chord: Chord? = nil,
+         dots: Int = 0) {
         self.pitch = pitch
         self.accidental = accidental
         self.isUpwards = true
         self.beamed = false
-        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
+        
+        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
     }
     
     // Set the image based on the note type and location in the staff
@@ -87,6 +90,6 @@ class Note: MusicNotation {
     }
 
     override func duplicate() -> Note {
-        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental)
+        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots)
     }
 }

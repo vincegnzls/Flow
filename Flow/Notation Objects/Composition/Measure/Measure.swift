@@ -31,7 +31,7 @@ class Measure: Hashable {
     var groups: [[MusicNotation]]
 
     var isFull: Bool {
-        return self.curBeatValue == self.timeSignature.getMaxBeatValue()
+        return self.getTotalBeats() == self.timeSignature.getMaxBeatValue()
     }
 
     var isFullWithNotes: Bool {
@@ -228,12 +228,12 @@ class Measure: Hashable {
         }
     }
 
-    public func getInvalidNotes() -> [RestNoteType] {
+    public func getInvalidNotes(numDots: Int = 0) -> [RestNoteType] {
         
         var invalidNotes = [RestNoteType]()
 
         for note in RestNoteType.types {
-            if note.getBeatValue() + curBeatValue > timeSignature.getMaxBeatValue() {
+            if note.getBeatValue(dots: numDots) + curBeatValue > timeSignature.getMaxBeatValue() {
                 invalidNotes.append(note)
             }
         }
@@ -245,7 +245,7 @@ class Measure: Hashable {
     public func getInvalidNotes(without filteredNotation: MusicNotation) -> [RestNoteType] {
         var invalidNotes = [RestNoteType]()
         
-        let beatValue = self.curBeatValue - filteredNotation.type.getBeatValue()
+        let beatValue = self.curBeatValue - filteredNotation.type.getBeatValue(dots: filteredNotation.dots)
         
         for note in RestNoteType.types {
 
@@ -283,9 +283,15 @@ class Measure: Hashable {
     }
 
     public func isAddNoteValid (musicNotation: RestNoteType) -> Bool {
-
         return self.curBeatValue + musicNotation.getBeatValue() <= self.timeSignature.getMaxBeatValue()
-
+    }
+    
+    public func isAddNoteValid (value: Float) -> Bool {
+        return self.getTotalBeats() + value <= self.timeSignature.getMaxBeatValue()
+    }
+    
+    public func isAddNoteValid (addedValue: Float, value: Float) -> Bool {
+        return self.curBeatValue + addedValue + value <= self.timeSignature.getMaxBeatValue()
     }
     
     public func isEditNoteValid (oldNotations: [RestNoteType], newNotations: [RestNoteType]) -> Bool {
@@ -311,7 +317,7 @@ class Measure: Hashable {
         var totalBeats: Float = 0
 
         for note in self.notationObjects {
-            totalBeats = totalBeats + note.type.getBeatValue()
+            totalBeats = totalBeats + note.type.getBeatValue(dots: note.dots)
         }
 
         return totalBeats
@@ -331,12 +337,15 @@ class Measure: Hashable {
         var restsToAdd = [Rest]()
         var addedBeats:Float = 0
         let currentBeats = self.getTotalBeats()
+        
+        self.curBeatValue = self.getTotalBeats()
 
         while currentBeats + addedBeats < timeSignature.getMaxBeatValue(){
             for type in RestNoteType.types {
-                if self.isAddNoteValid(musicNotation: type) {
+                if self.isAddNoteValid(addedValue: addedBeats, value: type.getBeatValue()) {
                     restsToAdd.append(Rest(type: type))
                     addedBeats += type.getBeatValue()
+                    break
                 }
             }
         }
@@ -357,16 +366,27 @@ class Measure: Hashable {
         var curGroup = [MusicNotation]()
 
         for note in notationObjects {
-            if !groupFull(group: curGroup, isEighth: note.type == .eighth) {
+            if !groupFull(group: curGroup, isEighth: note.type == .eighth) && (note is Note || note is Chord) {
                 curGroup.append(note)
             } else {
-                self.groups.append(curGroup)
+                if !curGroup.isEmpty {
+                    self.groups.append(curGroup)
+                }
                 curGroup.removeAll()
                 curGroup.append(note)
+
+                if note is Rest {
+                    if !curGroup.isEmpty {
+                        self.groups.append(curGroup)
+                    }
+                    curGroup.removeAll()
+                }
             }
         }
 
-        self.groups.append(curGroup)
+        if !curGroup.isEmpty {
+            self.groups.append(curGroup)
+        }
 
         /*var x = 0
 
@@ -417,7 +437,7 @@ class Measure: Hashable {
         var curBeatValue: Float = 0
 
         for note in group {
-            curBeatValue = note.type.getBeatValue() + curBeatValue
+            curBeatValue = note.type.getBeatValue(dots: note.dots) + curBeatValue
         }
 
         /*if timeSignature.beatType == 4 && timeSignature.beats == 4 {

@@ -21,6 +21,6 @@ class Rest: MusicNotation {
     }
 
     override func duplicate() -> Rest {
-        return Rest(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure)
+        return Rest(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure, dots: self.dots)
     }
 }

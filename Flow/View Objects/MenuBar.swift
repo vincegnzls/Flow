@@ -16,6 +16,12 @@ class MenuBar: UIView {
     @IBOutlet weak var flatBtn: UIButton!
     @IBOutlet weak var sharpBtn: UIButton!
     @IBOutlet weak var dSharpBtn: UIButton!
+    
+    @IBOutlet weak var oneDotBtn: UIButton!
+    @IBOutlet weak var twoDotsBtn: UIButton!
+    @IBOutlet weak var threeDotsBtn: UIButton!
+    
+    let maxNumOfDots = 3
 
     /*var compositionInfo: CompositionInfo? {
         didSet {
@@ -54,6 +60,9 @@ class MenuBar: UIView {
 
         EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT, observer: Observer(id: "MenuBar.removeAccidentalHighlight", function: self.removeAccidentalHighlight))
         EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT, observer: Observer(id: "MenuBar.removeAccidentalHighlight", function: self.removeAccidentalHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
+        EventBroadcaster.instance.addObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
     }
 
     func highlightAccidentalBtn(params: Parameters) {
@@ -190,6 +199,158 @@ class MenuBar: UIView {
     
     @IBAction func touchRedo(_ sender: UIButton) {
         UndoRedoManager.instance.redo()
+    }
+    
+    @IBAction func touchOneDot(_ sender: UIButton) {
+        print("ONE DOT")
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NUM_OF_DOTS, value: 1)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
+    }
+    
+    @IBAction func touchTwoDots(_ sender: UIButton) {
+        print("Two DOT")
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NUM_OF_DOTS, value: 2)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
+    }
+    
+    @IBAction func touchThreeDots(_ sender: UIButton) {
+        print("Three DOT")
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NUM_OF_DOTS, value: 3)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
+    }
+    
+    private func highlightDotButton(numDot: Int) {
+        switch numDot {
+        case 1:
+            oneDotBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        case 2:
+            twoDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        case 3:
+            threeDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        default:
+            oneDotBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            twoDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            threeDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        }
+    }
+    
+    private func removeHighlightDotButton(numDot: Int) {
+        switch numDot {
+        case 1:
+            oneDotBtn.backgroundColor = nil
+        case 2:
+            twoDotsBtn.backgroundColor = nil
+        case 3:
+            threeDotsBtn.backgroundColor = nil
+        default:
+            oneDotBtn.backgroundColor = nil
+            twoDotsBtn.backgroundColor = nil
+            threeDotsBtn.backgroundColor = nil
+        }
+    }
+    
+    private func enableDotButton(numDot: Int, enabled: Bool) {
+        switch numDot {
+        case 1:
+            oneDotBtn.isEnabled = enabled
+        case 2:
+            twoDotsBtn.isEnabled = enabled
+        case 3:
+            threeDotsBtn.isEnabled = enabled
+        default:
+            oneDotBtn.isEnabled = enabled
+            twoDotsBtn.isEnabled = enabled
+            threeDotsBtn.isEnabled = enabled
+        }
+    }
+    
+    private func updateInvalidDots(parameters: Parameters) {
+        if let selectedNotations = parameters.get(key: KeyNames.SELECTED_NOTATIONS) as? [MusicNotation] {
+            
+            if selectedNotations.count > 0 {
+            
+            var measures = [Measure]()
+            var addedValueToMeasureMap = [Measure: Float]()
+            var dotBools = [Int: Bool]()
+        
+                for dots in 1...maxNumOfDots {
+                
+                    var allDotsAreEqualToNumDots = true
+                    
+                    for notation in selectedNotations {
+                        if notation.dots != dots {
+                            allDotsAreEqualToNumDots = false
+                        }
+                    }
+                    
+                    if allDotsAreEqualToNumDots {
+                        dotBools[dots] = true
+                        
+                        highlightDotButton(numDot: dots)
+                    } else {
+                        removeHighlightDotButton(numDot: dots)
+                    
+                        for notation in selectedNotations {
+                            
+                            if let measure = notation.measure {
+                                if let existingAddedValue = addedValueToMeasureMap[measure] {
+                                    addedValueToMeasureMap[measure] = existingAddedValue + (notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue(dots: notation.dots))
+                                } else {
+                                    addedValueToMeasureMap[measure] = notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue(dots: notation.dots)
+                                    measures.append(measure)
+                                }
+                            }
+                            
+                        }
+                        
+                        for measure in measures {
+                            if measure.isAddNoteValid(value: addedValueToMeasureMap[measure]!) {
+                                dotBools[dots] = true
+                            } else {
+                                dotBools[dots] = false
+                                break
+                            }
+                        }
+                        
+                    }
+                    
+                    if let dotBool = dotBools[dots] {
+                        enableDotButton(numDot: dots, enabled: dotBool)
+                    }
+                    
+                }
+                
+            } else {
+                removeHighlightDotButton(numDot: -1)
+                
+                if let dotModes = parameters.get(key: KeyNames.CURRENT_DOT_MODES) as? [Bool] {
+                    enableDotButton(numDot: -1, enabled: true)
+                    
+                    for (index, dotMode) in dotModes.enumerated() {
+                        let numDot = index+1
+                        
+                        if dotMode {
+                            highlightDotButton(numDot: numDot)
+                        } else {
+                            removeHighlightDotButton(numDot: numDot)
+                        }
+                    }
+                } else {
+                    
+                    enableDotButton(numDot: -1, enabled: false)
+                    
+                }
+            }
+        }
     }
     
     @IBAction func toggleKeyboard(_ sender: UIButton) {

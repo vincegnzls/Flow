@@ -33,8 +33,12 @@ class SheetCursor : CAShapeLayer {
         }
     }
 
+    var isLocked : Bool {
+        return (yVisible == false) && (xVisible == false)
+    }
 
     private var ledgerLineGuides = [CAShapeLayer]()
+    private var ledgerVisibility = [false, false, false]
     
     public var curYCursorLocation = CGPoint(x: 0, y: 0)
     public var curXCursorLocation = CGPoint(x: 0, y: 0)
@@ -108,9 +112,36 @@ class SheetCursor : CAShapeLayer {
         curYCursorLocation = location
     }
     
+    public func hideCursors() {
+        xVisible = false
+        yVisible = false
+        
+        for ledgerLine in ledgerLineGuides {
+            ledgerLine.opacity = 0
+        }
+    }
+    
+    public func showCursors() {
+        xVisible = true
+        yVisible = true
+        
+        for (index, ledgerLine) in ledgerLineGuides.enumerated() {
+            if ledgerVisibility[index] {
+                ledgerLine.opacity = 1
+            }
+        }
+    }
+    
+    public func toggleVisibility () {
+        xVisible = !xVisible
+        yVisible = !yVisible
+    }
+    
     public func showLedgerLinesGuide (measurePoints: GridSystem.MeasurePoints, upToLocation: CGPoint, lineSpace:CGFloat) {
         
-        for ledgerGuide in ledgerLineGuides {
+        for (index, ledgerGuide) in ledgerLineGuides.enumerated() {
+            ledgerVisibility[index] = false
+            
             ledgerGuide.opacity = 0
             ledgerGuide.position = CGPoint(x: upToLocation.x - 5, y: (measurePoints.lowerRightPoint.y + measurePoints.upperLeftPoint.y)/2)
         }
@@ -124,6 +155,7 @@ class SheetCursor : CAShapeLayer {
                 
                 if currentGuideIndex < 3 {
                     let currentGuide = ledgerLineGuides[currentGuideIndex]
+                    ledgerVisibility[currentGuideIndex] = true
                     
                     currentGuide.position = CGPoint(x: currentGuide.position.x, y: currentPoint.y)
                     currentGuide.opacity = 1
@@ -141,6 +173,7 @@ class SheetCursor : CAShapeLayer {
             while currentPoint.y <= upToLocation.y {
                 if currentGuideIndex < 3 {
                     let currentGuide = ledgerLineGuides[currentGuideIndex]
+                    ledgerVisibility[currentGuideIndex] = true
                     
                     currentGuide.position = CGPoint(x: currentGuide.position.x, y: currentPoint.y)
                     currentGuide.opacity = 1
