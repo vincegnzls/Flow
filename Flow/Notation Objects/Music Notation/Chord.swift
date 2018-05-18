@@ -66,4 +66,33 @@ class Chord: MusicNotation {
             }
         }
     }
+    
+    public func sortNotes () {
+        
+        notes = insertionSort(notes) {$0.pitch < $1.pitch}
+        
+        for note in notes {
+            print ("NOTE : \(note.pitch)")
+        }
+        
+    }
+    
+    // INSERTION SORT FROM https://github.com/raywenderlich/swift-algorithm-club/tree/master/Insertion%20Sort
+    // by raywenderlich : https://github.com/raywenderlich
+    func insertionSort<T>(_ array: [T], _ isOrderedBefore: (T, T) -> Bool) -> [T] {
+        guard array.count > 1 else { return array }
+        
+        var a = array
+        for x in 1..<a.count {
+            var y = x
+            let temp = a[y]
+            while y > 0 && isOrderedBefore(temp, a[y - 1]) {
+                a[y] = a[y - 1]
+                y -= 1
+            }
+            a[y] = temp
+        }
+        return a
+    }
+    
 }

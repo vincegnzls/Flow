@@ -24,9 +24,25 @@ struct Pitch : Hashable {
         return step.hashValue ^ octave.hashValue
     }
 
+    public static func > (lhs: Pitch, rhs: Pitch) -> Bool {
+        return lhs.toValue() > rhs.toValue()
+    }
+    
+    public static func < (lhs: Pitch, rhs: Pitch) -> Bool {
+        return lhs.toValue() < rhs.toValue()
+    }
+    
     public static func == (lhs: Pitch, rhs: Pitch) -> Bool {
         return lhs.octave == rhs.octave &&
                 lhs.step.toString() == rhs.step.toString()
+    }
+    
+    public static func difference (from: Pitch, to: Pitch) -> Int {
+        return ((from.octave - to.octave) * 7) + (from.step.toValue() - to.step.toValue())
+    }
+    
+    public func toValue() -> Int {
+        return self.octave * 7 + self.step.toValue()
     }
 
     mutating func transposeUp() {
