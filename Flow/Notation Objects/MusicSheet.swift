@@ -19,6 +19,7 @@ class MusicSheet: UIView {
     private let TIME_SIGNATURES_TAG = 2501
     
     private var executeLock = false
+    private var newlyOpened = true
     
     private var dotModes = [false, false, false] {
         didSet {
@@ -460,7 +461,6 @@ class MusicSheet: UIView {
 
             }
 
-            // for redirecting the cursor after a full measure
             movingStartX = lefRightPadding
             endX = movingStartX + self.distance // initial endX TODO: Remove when implementing adaptive measure
             
@@ -478,6 +478,13 @@ class MusicSheet: UIView {
                 self.highlightNotation(notation, false)
             }
 
+        }
+        
+        if newlyOpened {
+            self.remapCurrentMeasure(location: sheetCursor.curYCursorLocation)
+            self.moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
+            
+            newlyOpened = false
         }
         
         executeLock = false
