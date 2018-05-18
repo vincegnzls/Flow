@@ -2012,7 +2012,9 @@ class MusicSheet: UIView {
                             } else {
                                 var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
                                 if let note = editAction.newNotations[editAction.newNotations.count - 1] as? Note {
-                                    currentPoint = note.screenCoordinates!
+                                    if let coordinates = note.screenCoordinates {
+                                        currentPoint = coordinates
+                                    }
                                 }
                                 
                                 if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: currentPoint) {
@@ -2037,7 +2039,9 @@ class MusicSheet: UIView {
                             } else {
                                 var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
                                 if let note = editAction.newNotations[editAction.newNotations.count - 1] as? Note {
-                                    currentPoint = note.screenCoordinates!
+                                    if let coordinates = note.screenCoordinates {
+                                        currentPoint = coordinates
+                                    }
                                 }
                                 
                                 if let point = GridSystem.instance.getRightXSnapPoint(currentPoint: currentPoint) {
