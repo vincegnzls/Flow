@@ -1652,7 +1652,7 @@ class MusicSheet: UIView {
     
     private func drawChordLine (chord: Chord) {
         
-        var stemHeight: CGFloat = 60
+        var stemHeight: CGFloat = 68
         
         var upCount: Int = 0
         var downCount: Int = 0
@@ -1673,29 +1673,107 @@ class MusicSheet: UIView {
         var startPoint = CGPoint(x: startNotePoint.x + noteXOffset + 1.515, y: startNotePoint.y)
         var endPoint = CGPoint(x: endNotePoint.x + noteXOffset + 1.515, y: endNotePoint.y)
         
-        if upCount > downCount {
+        if isUpwards {
             startPoint = CGPoint(x: startNotePoint.x + noteXOffset + 25, y: startNotePoint.y)
             endPoint = CGPoint(x: endNotePoint.x + noteXOffset + 25, y: endNotePoint.y)
         }
         
         let _ = drawLine(start: startPoint, end: endPoint, thickness: 2.3)
         
+        var tailImageView: UIImageView?
+        
         if chord.type == .quarter || chord.type == .half {
-            if upCount > downCount {
+            if isUpwards { // upwards
                 let newEndPoint = CGPoint(x: endPoint.x, y: endPoint.y - stemHeight)
                 let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
-            } else {
+            } else { // downwards
                 let newEndPoint = CGPoint(x: startPoint.x, y: startPoint.y + stemHeight)
                 let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
             }
         } else if chord.type == .eighth{
-            
+            if isUpwards {
+                let newEndPoint = CGPoint(x: endPoint.x, y: endPoint.y - stemHeight)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+                
+                if let eighthTailImage = UIImage(named:"eighth-stem-up") {
+                    tailImageView = UIImageView(frame: CGRect(x: endPoint.x + noteXOffset - 11, y: endPoint.y - stemHeight - 27, width: eighthTailImage.size.width, height: eighthTailImage.size.height))
+                    
+                    tailImageView?.image = eighthTailImage
+                }
+            } else {
+                let newEndPoint = CGPoint(x: startPoint.x, y: startPoint.y + stemHeight + 5)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+                
+                if let eighthTailImage = UIImage(named:"eighth-stem-down") {
+                    tailImageView = UIImageView(frame: CGRect(x: startPoint.x + noteXOffset - 11, y: startPoint.y + 13, width: eighthTailImage.size.width, height: eighthTailImage.size.height))
+                    
+                    tailImageView?.image = eighthTailImage
+                }
+            }
         } else if chord.type == .sixteenth {
-            
+            if isUpwards {
+                let newEndPoint = CGPoint(x: endPoint.x, y: endPoint.y - stemHeight)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+                
+                if let sixteenthTailImage = UIImage(named:"16th-stem-up") {
+                    tailImageView = UIImageView(frame: CGRect(x: endPoint.x + noteXOffset - 11, y: endPoint.y - stemHeight - 27, width: sixteenthTailImage.size.width, height: sixteenthTailImage.size.height))
+                    
+                    tailImageView?.image = sixteenthTailImage
+                }
+            } else {
+                let newEndPoint = CGPoint(x: startPoint.x, y: startPoint.y + stemHeight + 15)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+                
+                if let sixteenthTailImage = UIImage(named:"16th-stem-down") {
+                    tailImageView = UIImageView(frame: CGRect(x: startPoint.x + noteXOffset - 11, y: startPoint.y + 13, width: sixteenthTailImage.size.width, height: sixteenthTailImage.size.height))
+                    
+                    tailImageView?.image = sixteenthTailImage
+                }
+            }
         } else if chord.type == .thirtySecond {
-            
+            if isUpwards {
+                let newEndPoint = CGPoint(x: endPoint.x, y: endPoint.y - stemHeight - 12)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+                
+                if let thirtySecondTailImage = UIImage(named:"32nd-stem-up") {
+                    tailImageView = UIImageView(frame: CGRect(x: endPoint.x + noteXOffset - 11, y: endPoint.y - stemHeight - 27, width: thirtySecondTailImage.size.width, height: thirtySecondTailImage.size.height))
+                    
+                    tailImageView?.image = thirtySecondTailImage
+                }
+            } else {
+                let newEndPoint = CGPoint(x: startPoint.x, y: startPoint.y + stemHeight + 27)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+                
+                if let thirtySecondTailImage = UIImage(named:"32nd-stem-down") {
+                    tailImageView = UIImageView(frame: CGRect(x: startPoint.x + noteXOffset - 11, y: startPoint.y + 13, width: thirtySecondTailImage.size.width, height: thirtySecondTailImage.size.height))
+                    
+                    tailImageView?.image = thirtySecondTailImage
+                }
+            }
         } else if chord.type == .sixtyFourth {
-            
+            if isUpwards {
+                let newEndPoint = CGPoint(x: endPoint.x, y: endPoint.y - stemHeight - 27)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+                
+                if let sixtyFourthTailImage = UIImage(named:"64th-stem-up") {
+                    tailImageView = UIImageView(frame: CGRect(x: endPoint.x + noteXOffset - 11, y: endPoint.y - stemHeight - 27, width: sixtyFourthTailImage.size.width, height: sixtyFourthTailImage.size.height))
+                    
+                    tailImageView?.image = sixtyFourthTailImage
+                }
+            } else {
+                let newEndPoint = CGPoint(x: startPoint.x, y: startPoint.y + stemHeight + 47)
+                let _ = drawLine(start: endPoint, end: newEndPoint, thickness: 2.3)
+                
+                if let sixtyFourthTailImage = UIImage(named:"64th-stem-down") {
+                    tailImageView = UIImageView(frame: CGRect(x: startPoint.x + noteXOffset - 11, y: startPoint.y + 13, width: sixtyFourthTailImage.size.width, height: sixtyFourthTailImage.size.height))
+                    
+                    tailImageView?.image = sixtyFourthTailImage
+                }
+            }
+        }
+        
+        if let tailImageView = tailImageView {
+            self.addSubview(tailImageView)
         }
         
     }
