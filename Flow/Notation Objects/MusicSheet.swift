@@ -1979,6 +1979,9 @@ class MusicSheet: UIView {
 
         if let measurePoints = GridSystem.instance.selectedMeasureCoord {
             sheetCursor.showLedgerLinesGuide(measurePoints: measurePoints, upToLocation: location, lineSpace: lineSpace)
+            
+            scrollMusicSheetToYIfPointNotVisible(y: measurePoints.lowerRightPoint.y - 140, targetPoint: sheetCursor.curYCursorLocation)
+            scrollMusicSheetToXIfPointNotVisible(x: measurePoints.upperLeftPoint.x - 140, targetPoint: sheetCursor.curYCursorLocation)
         }
  
         if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: location) {
@@ -2432,8 +2435,8 @@ class MusicSheet: UIView {
                                         //scrollMusicSheetToY(y: newMeasurePoints.lowerRightPoint.y - 140)
                                         //scrollMusicSheetToX(x: newMeasurePoints.upperLeftPoint.x - 140)
                                         
-                                        scrollMusicSheetToYIfPointNotVisible(y: newMeasurePoints.lowerRightPoint.y - 140, targetPoint: newMeasurePoints.lowerRightPoint)
-                                        scrollMusicSheetToXIfPointNotVisible(x: newMeasurePoints.upperLeftPoint.x - 140, targetPoint: newMeasurePoints.lowerRightPoint)
+                                        //scrollMusicSheetToYIfPointNotVisible(y: newMeasurePoints.lowerRightPoint.y - 140, targetPoint: sheetCursor.curYCursorLocation)
+                                        //scrollMusicSheetToXIfPointNotVisible(x: newMeasurePoints.upperLeftPoint.x - 140, targetPoint: sheetCursor.curYCursorLocation)
 
                                     }
 
@@ -2495,8 +2498,8 @@ class MusicSheet: UIView {
                                         //scrollMusicSheetToY(y: newMeasurePoints.lowerRightPoint.y - 140)
                                         //scrollMusicSheetToX(x: newMeasurePoints.upperLeftPoint.x - 140)
                                         
-                                        scrollMusicSheetToYIfPointNotVisible(y: newMeasurePoints.lowerRightPoint.y - 140, targetPoint: sheetCursor.curYCursorLocation)
-                                        scrollMusicSheetToXIfPointNotVisible(x: newMeasurePoints.upperLeftPoint.x - 140, targetPoint: sheetCursor.curYCursorLocation)
+                                        //scrollMusicSheetToYIfPointNotVisible(y: newMeasurePoints.lowerRightPoint.y - 140, targetPoint: sheetCursor.curYCursorLocation)
+                                        //scrollMusicSheetToXIfPointNotVisible(x: newMeasurePoints.upperLeftPoint.x - 140, targetPoint: sheetCursor.curYCursorLocation)
 
                                     }
 
