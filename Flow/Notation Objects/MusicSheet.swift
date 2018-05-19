@@ -1590,9 +1590,6 @@ class MusicSheet: UIView {
                         flipped = false
                     }
                     
-                    drawAccidentalByNote(note: note)
-                    drawDotsByNotation(notation: note)
-                    
                     if let measure = chord.measure {
                         if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
                             drawLedgerLinesIfApplicable(measurePoints: measurePoints, upToLocation: screenCoordinates)
@@ -1600,6 +1597,11 @@ class MusicSheet: UIView {
                     }
                 }
                 
+            }
+            
+            for note in chord.notes {
+                drawAccidentalByNote(note: note)
+                drawDotsByNotation(notation: note, hasFlipped: hasFlipped)
             }
             
         } else if let note = notation as? Note {
@@ -1923,7 +1925,7 @@ class MusicSheet: UIView {
         }
     }
     
-    func drawDotsByNotation(notation: MusicNotation, highlighted: Bool = false) {
+    func drawDotsByNotation(notation: MusicNotation, highlighted: Bool = false, hasFlipped: Bool = false) { // 'hasFlipped' is for chords having flipped notes within it
         
         var dotImageView:UIImageView?
         var curSpacing: CGFloat = 45
@@ -1939,7 +1941,11 @@ class MusicSheet: UIView {
                         dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 10, y: screenCoordinates.y + 10, width: dotImage.size.width/3, height: dotImage.size.height/3))
                     }
                 } else if notation is Note {
-                    dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    if hasFlipped {
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing + 27, y: screenCoordinates.y, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    } else {
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    }
                 }
                 dotImageView?.image = dotImage
                 
@@ -2672,8 +2678,8 @@ class MusicSheet: UIView {
                             flipped = false
                         }
                         
-                        drawAccidentalByNote(note: note)
-                        drawDotsByNotation(notation: note)
+                        //drawAccidentalByNote(note: note)
+                        //drawDotsByNotation(notation: note)
                         
                         if let measure = chord.measure {
                             if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
