@@ -3863,121 +3863,439 @@ class MusicSheet: UIView {
     }
 
     public func naturalize() {
+        var newNotes = [MusicNotation]()
+        
         if !self.selectedNotations.isEmpty {
-            if !sameAccidentals(notations: self.selectedNotations, accidental: .natural) {
+            
+            var oldNotes = [MusicNotation]()
+            
+            if !sameAccidentals(notations: self.selectedNotations, accidental: .natural) { // for adding accidentals
+                
+                var alreadyEdited = [Int]()
+                
                 for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = .natural
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
+                    if alreadyEdited.contains(index) {
+                        continue
+                    }
+                    
+                    if let note = note as? Note {
+                        
+                        if let chord = note.chord{
+                            
+                            var newNotesInChord = [Note]()
+                            var indicesToBeEdited = [Int]()
+                            
+                            for notation in selectedNotations {
+                                if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
+                                    if chord == otherChord {
+                                        let newNote = otherNote.duplicate()
+                                        newNote.accidental = .natural
+                                        
+                                        newNotesInChord.append(newNote)
+                                        alreadyEdited.append(selectedIndex)
+                                        indicesToBeEdited.append(noteIndex)
+                                    }
+                                }
+                            }
+                            
+                            let newChord = chord.duplicate()
+                            
+                            for (index, newNote) in newNotesInChord.enumerated() {
+                                newChord.notes[indicesToBeEdited[index]] = newNote
+                                newNote.chord = newChord
+                            }
+                            
+                            oldNotes.append(chord)
+                            newNotes.append(newChord)
+                            
+                        } else {
+                            
+                            let newNote = note.duplicate()
+                            newNote.accidental = .natural
+                            
+                            //self.selectedNotations[index] = newNote
+                            
+                            oldNotes.append(note)
+                            newNotes.append(newNote)
+                            
+                        }
+                        
+                    } else if let chord = note as? Chord { // for the whole chord
+                        
+                        var newNotesInChord = [Note]()
+                        var indicesToBeEdited = [Int]()
+                        
+                        for note in chord.notes {
+                            if let noteIndex = chord.notes.index(of: note) {
+                                let newNote = note.duplicate()
+                                newNote.accidental = .natural
+                                
+                                newNotesInChord.append(newNote)
+                                indicesToBeEdited.append(noteIndex)
+                            }
+                        }
+                        
+                        let newChord = chord.duplicate()
+                        
+                        for (index, newNote) in newNotesInChord.enumerated() {
+                            newChord.notes[indicesToBeEdited[index]] = newNote
+                            newNote.chord = newChord
+                        }
+                        
+                        oldNotes.append(chord)
+                        newNotes.append(newChord)
+                        
                     }
                 }
             } else {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = nil
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
+                
+                var alreadyEdited = [Int]()
+                
+                for (index, note) in self.selectedNotations.enumerated() { // for removing accidentals
+                    if alreadyEdited.contains(index) {
+                        continue
+                    }
+                    
+                    if let note = note as? Note {
+                        
+                        if let chord = note.chord {
+                            
+                            var newNotesInChord = [Note]()
+                            var indicesToBeEdited = [Int]()
+                            
+                            for notation in selectedNotations {
+                                if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
+                                    if chord == otherChord {
+                                        let newNote = otherNote.duplicate()
+                                        newNote.accidental = nil
+                                        
+                                        newNotesInChord.append(newNote)
+                                        alreadyEdited.append(selectedIndex)
+                                        indicesToBeEdited.append(noteIndex)
+                                    }
+                                }
+                            }
+                            
+                            let newChord = chord.duplicate()
+                            
+                            for (index, newNote) in newNotesInChord.enumerated() {
+                                newChord.notes[indicesToBeEdited[index]] = newNote
+                                newNote.chord = newChord
+                            }
+                            
+                            oldNotes.append(chord)
+                            newNotes.append(newChord)
+                        } else {
+                            
+                            let newNote = note.duplicate()
+                            newNote.accidental = nil
+                            
+                            oldNotes.append(note)
+                            newNotes.append(newNote)
+                            
+                        }
+                        
+                    } else if let chord = note as? Chord {
+                        
+                        var newNotesInChord = [Note]()
+                        var indicesToBeEdited = [Int]()
+                        
+                        for note in chord.notes {
+                            if let noteIndex = chord.notes.index(of: note) {
+                                let newNote = note.duplicate()
+                                newNote.accidental = nil
+                                
+                                newNotesInChord.append(newNote)
+                                indicesToBeEdited.append(noteIndex)
+                            }
+                        }
+                        
+                        let newChord = chord.duplicate()
+                        
+                        for (index, newNote) in newNotesInChord.enumerated() {
+                            newChord.notes[indicesToBeEdited[index]] = newNote
+                            newNote.chord = newChord
+                        }
+                        
+                        oldNotes.append(chord)
+                        newNotes.append(newChord)
+                        
                     }
                 }
             }
-
+            
+            if newNotes.count > 0 {
+                let editAction = EditAction(old: oldNotes, new: newNotes)
+                
+                editAction.execute()
+                
+                selectedNotations = newNotes
+                self.updateMeasureDraw()
+            }
+            
             self.transformView.isHidden = false
             self.addSubview(self.transformView)
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
+                
                 let newNote = curNote.duplicate()
-
+                
                 if curNote.accidental != .natural {
                     newNote.accidental = .natural
                 } else {
                     newNote.accidental = nil
                 }
-
-                let editAction = EditAction(old: [curNote], new: [newNote])
-
-                editAction.execute()
-
-                self.updateMeasureDraw()
+                
+                if let chord = curNote.chord, let index = chord.notes.index(of: curNote) {
+                    
+                    let newChord = chord.duplicate()
+                    newChord.notes[index] = newNote
+                    newNote.chord = newChord
+                    
+                    newNotes.append(newChord)
+                    
+                    if newNotes.count > 0 {
+                        let editAction = EditAction(old: [chord], new: newNotes)
+                        
+                        editAction.execute()
+                        
+                        self.updateMeasureDraw()
+                    }
+                    
+                } else {
+                    
+                    newNotes.append(newNote)
+                    
+                    if newNotes.count > 0 {
+                        let editAction = EditAction(old: [hovered], new: newNotes)
+                        
+                        editAction.execute()
+                        
+                        self.updateMeasureDraw()
+                    }
+                }
+                
             }
+            
         }
 
     }
 
     public func flat() {
+        var newNotes = [MusicNotation]()
+        
         if !self.selectedNotations.isEmpty {
-            if !sameAccidentals(notations: self.selectedNotations, accidental: .flat) {
+            
+            var oldNotes = [MusicNotation]()
+            
+            if !sameAccidentals(notations: self.selectedNotations, accidental: .flat) { // for adding accidentals
+                
+                var alreadyEdited = [Int]()
+                
                 for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = .flat
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
+                    if alreadyEdited.contains(index) {
+                        continue
+                    }
+                    
+                    if let note = note as? Note {
+                        
+                        if let chord = note.chord{
+                            
+                            var newNotesInChord = [Note]()
+                            var indicesToBeEdited = [Int]()
+                            
+                            for notation in selectedNotations {
+                                if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
+                                    if chord == otherChord {
+                                        let newNote = otherNote.duplicate()
+                                        newNote.accidental = .flat
+                                        
+                                        newNotesInChord.append(newNote)
+                                        alreadyEdited.append(selectedIndex)
+                                        indicesToBeEdited.append(noteIndex)
+                                    }
+                                }
+                            }
+                            
+                            let newChord = chord.duplicate()
+                            
+                            for (index, newNote) in newNotesInChord.enumerated() {
+                                newChord.notes[indicesToBeEdited[index]] = newNote
+                                newNote.chord = newChord
+                            }
+                            
+                            oldNotes.append(chord)
+                            newNotes.append(newChord)
+                            
+                        } else {
+                            
+                            let newNote = note.duplicate()
+                            newNote.accidental = .flat
+                            
+                            //self.selectedNotations[index] = newNote
+                            
+                            oldNotes.append(note)
+                            newNotes.append(newNote)
+                            
+                        }
+                        
+                    } else if let chord = note as? Chord { // for the whole chord
+                        
+                        var newNotesInChord = [Note]()
+                        var indicesToBeEdited = [Int]()
+                        
+                        for note in chord.notes {
+                            if let noteIndex = chord.notes.index(of: note) {
+                                let newNote = note.duplicate()
+                                newNote.accidental = .flat
+                                
+                                newNotesInChord.append(newNote)
+                                indicesToBeEdited.append(noteIndex)
+                            }
+                        }
+                        
+                        let newChord = chord.duplicate()
+                        
+                        for (index, newNote) in newNotesInChord.enumerated() {
+                            newChord.notes[indicesToBeEdited[index]] = newNote
+                            newNote.chord = newChord
+                        }
+                        
+                        oldNotes.append(chord)
+                        newNotes.append(newChord)
+                        
                     }
                 }
             } else {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = nil
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
+                
+                var alreadyEdited = [Int]()
+                
+                for (index, note) in self.selectedNotations.enumerated() { // for removing accidentals
+                    if alreadyEdited.contains(index) {
+                        continue
+                    }
+                    
+                    if let note = note as? Note {
+                        
+                        if let chord = note.chord {
+                            
+                            var newNotesInChord = [Note]()
+                            var indicesToBeEdited = [Int]()
+                            
+                            for notation in selectedNotations {
+                                if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
+                                    if chord == otherChord {
+                                        let newNote = otherNote.duplicate()
+                                        newNote.accidental = nil
+                                        
+                                        newNotesInChord.append(newNote)
+                                        alreadyEdited.append(selectedIndex)
+                                        indicesToBeEdited.append(noteIndex)
+                                    }
+                                }
+                            }
+                            
+                            let newChord = chord.duplicate()
+                            
+                            for (index, newNote) in newNotesInChord.enumerated() {
+                                newChord.notes[indicesToBeEdited[index]] = newNote
+                                newNote.chord = newChord
+                            }
+                            
+                            oldNotes.append(chord)
+                            newNotes.append(newChord)
+                        } else {
+                            
+                            let newNote = note.duplicate()
+                            newNote.accidental = nil
+                            
+                            oldNotes.append(note)
+                            newNotes.append(newNote)
+                            
+                        }
+                        
+                    } else if let chord = note as? Chord {
+                        
+                        var newNotesInChord = [Note]()
+                        var indicesToBeEdited = [Int]()
+                        
+                        for note in chord.notes {
+                            if let noteIndex = chord.notes.index(of: note) {
+                                let newNote = note.duplicate()
+                                newNote.accidental = nil
+                                
+                                newNotesInChord.append(newNote)
+                                indicesToBeEdited.append(noteIndex)
+                            }
+                        }
+                        
+                        let newChord = chord.duplicate()
+                        
+                        for (index, newNote) in newNotesInChord.enumerated() {
+                            newChord.notes[indicesToBeEdited[index]] = newNote
+                            newNote.chord = newChord
+                        }
+                        
+                        oldNotes.append(chord)
+                        newNotes.append(newChord)
+                        
                     }
                 }
             }
-
+            
+            if newNotes.count > 0 {
+                let editAction = EditAction(old: oldNotes, new: newNotes)
+                
+                editAction.execute()
+                
+                selectedNotations = newNotes
+                self.updateMeasureDraw()
+            }
+            
             self.transformView.isHidden = false
             self.addSubview(self.transformView)
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
+                
                 let newNote = curNote.duplicate()
-
+                
                 if curNote.accidental != .flat {
                     newNote.accidental = .flat
                 } else {
                     newNote.accidental = nil
                 }
-
-                let editAction = EditAction(old: [curNote], new: [newNote])
-
-                editAction.execute()
-
-                self.updateMeasureDraw()
+                
+                if let chord = curNote.chord, let index = chord.notes.index(of: curNote) {
+                    
+                    let newChord = chord.duplicate()
+                    newChord.notes[index] = newNote
+                    newNote.chord = newChord
+                    
+                    newNotes.append(newChord)
+                    
+                    if newNotes.count > 0 {
+                        let editAction = EditAction(old: [chord], new: newNotes)
+                        
+                        editAction.execute()
+                        
+                        self.updateMeasureDraw()
+                    }
+                    
+                } else {
+                    
+                    newNotes.append(newNote)
+                    
+                    if newNotes.count > 0 {
+                        let editAction = EditAction(old: [hovered], new: newNotes)
+                        
+                        editAction.execute()
+                        
+                        self.updateMeasureDraw()
+                    }
+                }
+                
             }
+            
         }
 
     }
@@ -4004,6 +4322,12 @@ class MusicSheet: UIView {
                         accidentalCount += 1
                     }
                 }
+            } else if let chord = notation as? Chord {
+                
+                if sameAccidentals(notations: chord.notes, accidental: accidental) {
+                    accidentalCount += 1
+                }
+                
             } else {
                 return false
             }
@@ -4013,123 +4337,441 @@ class MusicSheet: UIView {
     }
 
     public func sharp() {
+        
+        var newNotes = [MusicNotation]()
+        
         if !self.selectedNotations.isEmpty {
-            if !sameAccidentals(notations: self.selectedNotations, accidental: .sharp) {
+            
+            var oldNotes = [MusicNotation]()
+            
+            if !sameAccidentals(notations: self.selectedNotations, accidental: .sharp) { // for adding accidentals
+                
+                var alreadyEdited = [Int]()
+                
                 for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
+                    if alreadyEdited.contains(index) {
+                        continue
+                    }
+                    
+                    if let note = note as? Note {
+                        
+                        if let chord = note.chord{
+                            
+                            var newNotesInChord = [Note]()
+                            var indicesToBeEdited = [Int]()
+                            
+                            for notation in selectedNotations {
+                                if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
+                                    if chord == otherChord {
+                                        let newNote = otherNote.duplicate()
+                                        newNote.accidental = .sharp
+                                        
+                                        newNotesInChord.append(newNote)
+                                        alreadyEdited.append(selectedIndex)
+                                        indicesToBeEdited.append(noteIndex)
+                                    }
+                                }
+                            }
+                            
+                            let newChord = chord.duplicate()
+                            
+                            for (index, newNote) in newNotesInChord.enumerated() {
+                                newChord.notes[indicesToBeEdited[index]] = newNote
+                                newNote.chord = newChord
+                            }
+                            
+                            oldNotes.append(chord)
+                            newNotes.append(newChord)
+                            
+                        } else {
 
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = .sharp
+                            let newNote = note.duplicate()
+                            newNote.accidental = .sharp
 
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
+                            //self.selectedNotations[index] = newNote
+                            
+                            oldNotes.append(note)
+                            newNotes.append(newNote)
+                            
+                        }
+                        
+                    } else if let chord = note as? Chord { // for the whole chord
+                        
+                        var newNotesInChord = [Note]()
+                        var indicesToBeEdited = [Int]()
+                        
+                        for note in chord.notes {
+                            if let noteIndex = chord.notes.index(of: note) {
+                                let newNote = note.duplicate()
+                                newNote.accidental = .sharp
+                                
+                                newNotesInChord.append(newNote)
+                                indicesToBeEdited.append(noteIndex)
+                            }
+                        }
+                        
+                        let newChord = chord.duplicate()
+                        
+                        for (index, newNote) in newNotesInChord.enumerated() {
+                            newChord.notes[indicesToBeEdited[index]] = newNote
+                            newNote.chord = newChord
+                        }
+                        
+                        oldNotes.append(chord)
+                        newNotes.append(newChord)
+                        
                     }
                 }
             } else {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
+                
+                var alreadyEdited = [Int]()
+                
+                for (index, note) in self.selectedNotations.enumerated() { // for removing accidentals
+                    if alreadyEdited.contains(index) {
+                        continue
+                    }
+                    
+                    if let note = note as? Note {
+                        
+                        if let chord = note.chord {
+                            
+                            var newNotesInChord = [Note]()
+                            var indicesToBeEdited = [Int]()
+                            
+                            for notation in selectedNotations {
+                                if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
+                                    if chord == otherChord {
+                                        let newNote = otherNote.duplicate()
+                                        newNote.accidental = nil
+                                        
+                                        newNotesInChord.append(newNote)
+                                        alreadyEdited.append(selectedIndex)
+                                        indicesToBeEdited.append(noteIndex)
+                                    }
+                                }
+                            }
+                            
+                            let newChord = chord.duplicate()
+                            
+                            for (index, newNote) in newNotesInChord.enumerated() {
+                                newChord.notes[indicesToBeEdited[index]] = newNote
+                                newNote.chord = newChord
+                            }
+                            
+                            oldNotes.append(chord)
+                            newNotes.append(newChord)
+                        } else {
 
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = nil
+                            let newNote = note.duplicate()
+                            newNote.accidental = nil
+                            
+                            oldNotes.append(note)
+                            newNotes.append(newNote)
 
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
+                        }
+                        
+                    } else if let chord = note as? Chord {
+                        
+                        var newNotesInChord = [Note]()
+                        var indicesToBeEdited = [Int]()
+                        
+                        for note in chord.notes {
+                            if let noteIndex = chord.notes.index(of: note) {
+                                let newNote = note.duplicate()
+                                newNote.accidental = nil
+                                
+                                newNotesInChord.append(newNote)
+                                indicesToBeEdited.append(noteIndex)
+                            }
+                        }
+                        
+                        let newChord = chord.duplicate()
+                        
+                        for (index, newNote) in newNotesInChord.enumerated() {
+                            newChord.notes[indicesToBeEdited[index]] = newNote
+                            newNote.chord = newChord
+                        }
+                        
+                        oldNotes.append(chord)
+                        newNotes.append(newChord)
+                        
                     }
                 }
             }
 
+            if newNotes.count > 0 {
+                let editAction = EditAction(old: oldNotes, new: newNotes)
+                
+                editAction.execute()
+                
+                selectedNotations = newNotes
+                self.updateMeasureDraw()
+            }
+            
             self.transformView.isHidden = false
             self.addSubview(self.transformView)
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
+                
                 let newNote = curNote.duplicate()
-
+                
                 if curNote.accidental != .sharp {
                     newNote.accidental = .sharp
                 } else {
                     newNote.accidental = nil
                 }
                 
-                let editAction = EditAction(old: [curNote], new: [newNote])
+                if let chord = curNote.chord, let index = chord.notes.index(of: curNote) {
 
-                editAction.execute()
-
-                self.updateMeasureDraw()
+                    let newChord = chord.duplicate()
+                    newChord.notes[index] = newNote
+                    newNote.chord = newChord
+                    
+                    newNotes.append(newChord)
+                    
+                    if newNotes.count > 0 {
+                        let editAction = EditAction(old: [chord], new: newNotes)
+                        
+                        editAction.execute()
+                        
+                        self.updateMeasureDraw()
+                    }
+                    
+                } else {
+                    
+                    newNotes.append(newNote)
+                    
+                    if newNotes.count > 0 {
+                        let editAction = EditAction(old: [hovered], new: newNotes)
+                        
+                        editAction.execute()
+                        
+                        self.updateMeasureDraw()
+                    }
+                }
+                
             }
+            
         }
 
     }
 
     public func dsharp() {
+        var newNotes = [MusicNotation]()
+        
         if !self.selectedNotations.isEmpty {
-            if !sameAccidentals(notations: self.selectedNotations, accidental: .doubleSharp) {
+            
+            var oldNotes = [MusicNotation]()
+            
+            if !sameAccidentals(notations: self.selectedNotations, accidental: .doubleSharp) { // for adding accidentals
+                
+                var alreadyEdited = [Int]()
+                
                 for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = .doubleSharp
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
+                    if alreadyEdited.contains(index) {
+                        continue
+                    }
+                    
+                    if let note = note as? Note {
+                        
+                        if let chord = note.chord{
+                            
+                            var newNotesInChord = [Note]()
+                            var indicesToBeEdited = [Int]()
+                            
+                            for notation in selectedNotations {
+                                if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
+                                    if chord == otherChord {
+                                        let newNote = otherNote.duplicate()
+                                        newNote.accidental = .doubleSharp
+                                        
+                                        newNotesInChord.append(newNote)
+                                        alreadyEdited.append(selectedIndex)
+                                        indicesToBeEdited.append(noteIndex)
+                                    }
+                                }
+                            }
+                            
+                            let newChord = chord.duplicate()
+                            
+                            for (index, newNote) in newNotesInChord.enumerated() {
+                                newChord.notes[indicesToBeEdited[index]] = newNote
+                                newNote.chord = newChord
+                            }
+                            
+                            oldNotes.append(chord)
+                            newNotes.append(newChord)
+                            
+                        } else {
+                            
+                            let newNote = note.duplicate()
+                            newNote.accidental = .doubleSharp
+                            
+                            //self.selectedNotations[index] = newNote
+                            
+                            oldNotes.append(note)
+                            newNotes.append(newNote)
+                            
+                        }
+                        
+                    } else if let chord = note as? Chord { // for the whole chord
+                        
+                        var newNotesInChord = [Note]()
+                        var indicesToBeEdited = [Int]()
+                        
+                        for note in chord.notes {
+                            if let noteIndex = chord.notes.index(of: note) {
+                                let newNote = note.duplicate()
+                                newNote.accidental = .doubleSharp
+                                
+                                newNotesInChord.append(newNote)
+                                indicesToBeEdited.append(noteIndex)
+                            }
+                        }
+                        
+                        let newChord = chord.duplicate()
+                        
+                        for (index, newNote) in newNotesInChord.enumerated() {
+                            newChord.notes[indicesToBeEdited[index]] = newNote
+                            newNote.chord = newChord
+                        }
+                        
+                        oldNotes.append(chord)
+                        newNotes.append(newChord)
+                        
                     }
                 }
             } else {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = nil
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
+                
+                var alreadyEdited = [Int]()
+                
+                for (index, note) in self.selectedNotations.enumerated() { // for removing accidentals
+                    if alreadyEdited.contains(index) {
+                        continue
+                    }
+                    
+                    if let note = note as? Note {
+                        
+                        if let chord = note.chord {
+                            
+                            var newNotesInChord = [Note]()
+                            var indicesToBeEdited = [Int]()
+                            
+                            for notation in selectedNotations {
+                                if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
+                                    if chord == otherChord {
+                                        let newNote = otherNote.duplicate()
+                                        newNote.accidental = nil
+                                        
+                                        newNotesInChord.append(newNote)
+                                        alreadyEdited.append(selectedIndex)
+                                        indicesToBeEdited.append(noteIndex)
+                                    }
+                                }
+                            }
+                            
+                            let newChord = chord.duplicate()
+                            
+                            for (index, newNote) in newNotesInChord.enumerated() {
+                                newChord.notes[indicesToBeEdited[index]] = newNote
+                                newNote.chord = newChord
+                            }
+                            
+                            oldNotes.append(chord)
+                            newNotes.append(newChord)
+                        } else {
+                            
+                            let newNote = note.duplicate()
+                            newNote.accidental = nil
+                            
+                            oldNotes.append(note)
+                            newNotes.append(newNote)
+                            
+                        }
+                        
+                    } else if let chord = note as? Chord {
+                        
+                        var newNotesInChord = [Note]()
+                        var indicesToBeEdited = [Int]()
+                        
+                        for note in chord.notes {
+                            if let noteIndex = chord.notes.index(of: note) {
+                                let newNote = note.duplicate()
+                                newNote.accidental = nil
+                                
+                                newNotesInChord.append(newNote)
+                                indicesToBeEdited.append(noteIndex)
+                            }
+                        }
+                        
+                        let newChord = chord.duplicate()
+                        
+                        for (index, newNote) in newNotesInChord.enumerated() {
+                            newChord.notes[indicesToBeEdited[index]] = newNote
+                            newNote.chord = newChord
+                        }
+                        
+                        oldNotes.append(chord)
+                        newNotes.append(newChord)
+                        
                     }
                 }
             }
-
+            
+            if newNotes.count > 0 {
+                let editAction = EditAction(old: oldNotes, new: newNotes)
+                
+                editAction.execute()
+                
+                selectedNotations = newNotes
+                self.updateMeasureDraw()
+            }
+            
             self.transformView.isHidden = false
             self.addSubview(self.transformView)
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
+                
                 let newNote = curNote.duplicate()
-
+                
                 if curNote.accidental != .doubleSharp {
                     newNote.accidental = .doubleSharp
                 } else {
                     newNote.accidental = nil
                 }
-
-                let editAction = EditAction(old: [curNote], new: [newNote])
-
-                editAction.execute()
-
-                self.updateMeasureDraw()
+                
+                if let chord = curNote.chord, let index = chord.notes.index(of: curNote) {
+                    
+                    let newChord = chord.duplicate()
+                    newChord.notes[index] = newNote
+                    newNote.chord = newChord
+                    
+                    newNotes.append(newChord)
+                    
+                    if newNotes.count > 0 {
+                        let editAction = EditAction(old: [chord], new: newNotes)
+                        
+                        editAction.execute()
+                        
+                        self.updateMeasureDraw()
+                    }
+                    
+                } else {
+                    
+                    newNotes.append(newNote)
+                    
+                    if newNotes.count > 0 {
+                        let editAction = EditAction(old: [hovered], new: newNotes)
+                        
+                        editAction.execute()
+                        
+                        self.updateMeasureDraw()
+                    }
+                }
+                
             }
+            
         }
-
     }
     
     func dotNotation(params: Parameters) {
