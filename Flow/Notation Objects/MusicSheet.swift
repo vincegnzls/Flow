@@ -2329,7 +2329,11 @@ class MusicSheet: UIView {
                             measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: noteFromX))
                         }
                         
-                        self.highlightNotation(noteFromX, true)
+                        if let note = noteFromX as? Note, note.chord == nil {
+                            self.highlightNotation(noteFromX, true)
+                        } else if noteFromX is Rest {
+                            self.highlightNotation(noteFromX, true)
+                        }
                     } else {
                         if let measure = GridSystem.instance.getCurrentMeasure() {
                             measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(numDots: self.getCurrentDotMode()))
