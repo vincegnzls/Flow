@@ -10,14 +10,29 @@ import UIKit
 
 class Chord: MusicNotation {
     
-    var notes: [Note]
+    var notes: [Note] {
+        didSet {
+            for note in notes {
+                note.dots = dots
+            }
+        }
+    }
+    
+    override var dots: Int {
+        didSet {
+            for note in notes {
+                note.dots = dots
+            }
+        }
+    }
     
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType = .quarter,
          measure: Measure? = nil, 
-         notes: [Note] = []) {
+         notes: [Note] = [],
+         dots: Int = 0) {
         self.notes = notes
-        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
+        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
         
         setImage()
     }
@@ -25,10 +40,11 @@ class Chord: MusicNotation {
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType = .quarter,
          measure: Measure? = nil,
-         note: Note) {
+         note: Note,
+         dots: Int = 0) {
         self.notes = []
         notes.append(note)
-        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
+        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
         
         setImage()
     }
@@ -47,7 +63,7 @@ class Chord: MusicNotation {
     
     override func duplicate() -> Chord {
         //return super.duplicate()
-        let chord = Chord(type: self.type, measure: self.measure)
+        let chord = Chord(type: self.type, measure: self.measure, dots: self.dots)
         
         for note in notes {
             let duplicatedNote = note.duplicate()

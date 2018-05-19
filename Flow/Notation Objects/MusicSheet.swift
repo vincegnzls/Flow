@@ -4790,28 +4790,59 @@ class MusicSheet: UIView {
                     }
                 }
                 
-                if allDotsAreEqualToNumDots {
+                if allDotsAreEqualToNumDots { // for removing dots
                     
+                    var oldNotations = [MusicNotation]()
                     var removedDottedNotes = [MusicNotation]()
+                    var alreadyCheckedIndices = [Int]()
                     
-                    for notation in selectedNotations {
+                    for (index, notation) in selectedNotations.enumerated() {
                         
-                        let dottedNote = notation.duplicate()
-                        dottedNote.dots = 0
+                        if alreadyCheckedIndices.contains(index) {
+                            continue
+                        }
                         
-                        removedDottedNotes.append(dottedNote)
+                        if let note = notation as? Note, let chord = note.chord {
+                            
+                            let newChord = chord.duplicate()
+                            
+                            for note in chord.notes{
+                                if let selectedIndex = selectedNotations.index(of: note) {
+                                    alreadyCheckedIndices.append(selectedIndex)
+                                }
+                            }
+                            
+                            newChord.dots = 0
+                            
+                            oldNotations.append(chord)
+                            removedDottedNotes.append(newChord)
+                            
+                        } else {
+                            let dottedNote = notation.duplicate()
+                            dottedNote.dots = 0
+                            
+                            oldNotations.append(notation)
+                            removedDottedNotes.append(dottedNote)
+                        }
                         
                     }
                     
                     if !removedDottedNotes.isEmpty {
-                        let editAction = EditAction(old: selectedNotations, new: removedDottedNotes)
+                        let editAction = EditAction(old: oldNotations, new: removedDottedNotes)
                         editAction.execute()
                     }
                     
-                } else {
+                } else { // adding dots
                     var dottedNotations = [MusicNotation]()
+                    var oldNotations = [MusicNotation]()
                     
-                    for notation in selectedNotations {
+                    var alreadyCheckedIndices = [Int]()
+                    
+                    for (index, notation) in selectedNotations.enumerated() {
+                        
+                        if alreadyCheckedIndices.contains(index) {
+                            continue
+                        }
                         
                         if let measure = notation.measure {
                             
@@ -4819,12 +4850,34 @@ class MusicSheet: UIView {
                             
                             if measure.isAddNoteValid(addedValue: addedValue, value: value) {
                                 
-                                let dottedNote = notation.duplicate()
-                                dottedNote.dots = numDots
+                                if let note = notation as? Note, let chord = note.chord {
+                                    
+                                    let newChord = chord.duplicate()
+                                    
+                                    for note in chord.notes{
+                                        if let selectedIndex = selectedNotations.index(of: note) {
+                                            alreadyCheckedIndices.append(selectedIndex)
+                                        }
+                                    }
+                                    
+                                    newChord.dots = numDots
+                                    
+                                    oldNotations.append(chord)
+                                    dottedNotations.append(newChord)
+                                    
+                                    addedValue += value
+                                    
+                                } else {
                                 
-                                addedValue += value
-                                
-                                dottedNotations.append(dottedNote)
+                                    let dottedNote = notation.duplicate()
+                                    dottedNote.dots = numDots
+                                    
+                                    addedValue += value
+                                    
+                                    oldNotations.append(notation)
+                                    dottedNotations.append(dottedNote)
+                                    
+                                }
                             } else {
                                 dottedNotations.append(notation)
                             }
@@ -4832,20 +4885,30 @@ class MusicSheet: UIView {
                     }
                     
                     if !dottedNotations.isEmpty {
-                        let editAction = EditAction(old: selectedNotations, new: dottedNotations)
+                        let editAction = EditAction(old: oldNotations, new: dottedNotations)
                         editAction.execute()
                     }
                 }
                 
-            } else if let hovered = self.hoveredNotation {
+            } else if let hovered = self.hoveredNotation ?? GridSystem.instance.getNoteFromX(x: sheetCursor.curYCursorLocation.x) {
                 
                 if hovered.dots == numDots {
                     
-                    let removedDottedNote = hovered.duplicate()
-                    removedDottedNote.dots = 0
-                    
-                    let editAction = EditAction(old: [hovered], new: [removedDottedNote])
-                    editAction.execute()
+                    if let note = hovered as? Note, let chord = note.chord {
+                        
+                        let removedDottedChord = chord.duplicate()
+                        removedDottedChord.dots = 0
+                        
+                        let editAction = EditAction(old: [chord], new: [removedDottedChord])
+                        editAction.execute()
+                    } else {
+                        
+                        let removedDottedNote = hovered.duplicate()
+                        removedDottedNote.dots = 0
+                        
+                        let editAction = EditAction(old: [hovered], new: [removedDottedNote])
+                        editAction.execute()
+                    }
                     
                 } else {
                 
@@ -4855,11 +4918,19 @@ class MusicSheet: UIView {
                         
                         if measure.isAddNoteValid(value: value) {
                             
-                            let dottedNote = hovered.duplicate()
-                            dottedNote.dots = numDots
-                            
-                            let editAction = EditAction(old: [hovered], new: [dottedNote])
-                            editAction.execute()
+                            if let note = hovered as? Note, let chord = note.chord {
+                                let dottedChord = chord.duplicate()
+                                dottedChord.dots = numDots
+                                
+                                let editAction = EditAction(old: [chord], new: [dottedChord])
+                                editAction.execute()
+                            } else {
+                                let dottedNote = hovered.duplicate()
+                                dottedNote.dots = numDots
+                                
+                                let editAction = EditAction(old: [hovered], new: [dottedNote])
+                                editAction.execute()
+                            }
                             
                         }
                     }
