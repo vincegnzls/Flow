@@ -1560,25 +1560,35 @@ class MusicSheet: UIView {
 
         var notationImageViews = [UIImageView]()
 
-        var head: UIImage?
+        var hasFlipped = false
+        
         if let chord = notation as? Chord {
             
-            if chord.type == .half {
-                head = UIImage(named:"half-head")
-            } else if chord.type == .whole {
-                head = UIImage(named:"whole-head")
-            } else {
-                head = UIImage(named:"quarter-head")
-            }
+            var flipped = false
             
-            for note in chord.notes {
+            for (index, note) in chord.notes.enumerated() {
                 
                 if let screenCoordinates = note.screenCoordinates, let image = note.image {
                     
-                    notationImageViews.append(
-                        UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
-                    
-                    note.image = head
+                    if index > 0 {
+                        if Pitch.difference(from: note.pitch, to: chord.notes[index-1].pitch) == 1 && !flipped {
+                            notationImageViews.append(
+                                UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset + 24, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
+                            
+                            flipped = true
+                            hasFlipped = true
+                        } else {
+                            notationImageViews.append(
+                                UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
+                            
+                            flipped = false
+                        }
+                    } else {
+                        notationImageViews.append(
+                            UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter)))
+                        
+                        flipped = false
+                    }
                     
                     drawAccidentalByNote(note: note)
                     drawDotsByNotation(notation: note)
@@ -1632,32 +1642,24 @@ class MusicSheet: UIView {
         }
 
         for notationImageView in notationImageViews {
-            if notation is Chord {
-                if let head = head {
-                    notationImageView.image = head
-                }
-            } else {
-                notationImageView.image = notation.image
-            }
+            notationImageView.image = notation.image
             
             self.addSubview(notationImageView)
         }
         
         if notation is Chord && notation.type != .whole{
             let chord = notation as? Chord
-            drawChordLine(chord: chord!)
+            drawChordLine(chord: chord!, hasFlipped: hasFlipped)
         }
         
     }
     
-    private func drawChordLine (chord: Chord) {
-        
-        var stemHeight: CGFloat = 68
+    private func noteGroupIsUpwards (notes: [Note]) -> Bool {
         
         var upCount: Int = 0
         var downCount: Int = 0
         
-        for note in chord.notes {
+        for note in notes {
             if note.isUpwards {
                 upCount += 1
             } else {
@@ -1665,7 +1667,14 @@ class MusicSheet: UIView {
             }
         }
         
-        let isUpwards = upCount > downCount
+        return upCount > downCount
+    }
+    
+    private func drawChordLine (chord: Chord, hasFlipped: Bool = false) {
+        
+        let stemHeight: CGFloat = 68
+        
+        let isUpwards = noteGroupIsUpwards(notes: chord.notes)
         
         let startNotePoint = chord.notes[0].screenCoordinates!
         let endNotePoint = chord.notes.last!.screenCoordinates!
@@ -1673,7 +1682,7 @@ class MusicSheet: UIView {
         var startPoint = CGPoint(x: startNotePoint.x + noteXOffset + 1.515, y: startNotePoint.y)
         var endPoint = CGPoint(x: endNotePoint.x + noteXOffset + 1.515, y: endNotePoint.y)
         
-        if isUpwards {
+        if isUpwards || hasFlipped {
             startPoint = CGPoint(x: startNotePoint.x + noteXOffset + 25, y: startNotePoint.y)
             endPoint = CGPoint(x: endNotePoint.x + noteXOffset + 25, y: endNotePoint.y)
         }
@@ -2627,18 +2636,66 @@ class MusicSheet: UIView {
         
         if let note = notation as? Note {
             
-            if let screenCoordinates = note.screenCoordinates {
-
-                image = note.image
-
-                if note.type.getBeatValue() <= RestNoteType.eighth.getBeatValue() && note.beamed {
-                    image = UIImage(named: "quarter-head")
+            if let chord = note.chord {
+                
+                var flipped = false
+                
+                image = chord.image
+                
+                for (index, note) in chord.notes.enumerated() {
+                    
+                    if let screenCoordinates = note.screenCoordinates, let image = note.image {
+                        
+                        if index > 0 {
+                            if Pitch.difference(from: note.pitch, to: chord.notes[index-1].pitch) == 1 && !flipped {
+                                if notation == note {
+                                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset + 24, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
+                                }
+                                
+                                flipped = true
+                            } else {
+                                if notation == note {
+                                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
+                                }
+                                
+                                flipped = false
+                            }
+                        } else {
+                            if notation == note {
+                                notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
+                            }
+                            
+                            flipped = false
+                        }
+                        
+                        drawAccidentalByNote(note: note)
+                        drawDotsByNotation(notation: note)
+                        
+                        if let measure = chord.measure {
+                            if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
+                                drawLedgerLinesIfApplicable(measurePoints: measurePoints, upToLocation: screenCoordinates)
+                            }
+                        }
+                    }
+                    
                 }
+                
+            } else {
+            
+                if let screenCoordinates = note.screenCoordinates {
 
-                if let image = image {
-                    notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
-                    drawAccidentalByNote(note: note, highlighted: true)
-                    drawDotsByNotation(notation: note, highlighted: true)
+                    image = note.image
+
+                    if note.type.getBeatValue() <= RestNoteType.eighth.getBeatValue() && note.beamed {
+                        image = UIImage(named: "quarter-head")
+                    }
+
+                    if let image = image {
+                        notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
+                        drawAccidentalByNote(note: note, highlighted: true)
+                        drawDotsByNotation(notation: note, highlighted: true)
+                    }
+                    
                 }
                 
             }

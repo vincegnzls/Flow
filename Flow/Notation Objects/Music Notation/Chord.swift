@@ -34,7 +34,15 @@ class Chord: MusicNotation {
     }
  
     override func setImage() {
-        self.image = type.getNoteImage(isUpwards: true)
+        
+        if self.type == .half {
+            self.image = UIImage(named:"half-head")
+        } else if self.type == .whole {
+            self.image = UIImage(named:"whole-head")
+        } else {
+            self.image = UIImage(named:"quarter-head")
+        }
+        
     }
     
     override func duplicate() -> Chord {
@@ -55,9 +63,11 @@ class Chord: MusicNotation {
         if let index = self.notes.index(of: note) {
             self.notes.remove(at: index)
             
-            if self.notes.count < 2 && self.notes.count > 0 {
+            if self.notes.count < 2 && self.notes.count > 0 { // only one left
                 //self.notes[0].measure = self.measure
                 self.notes[0].chord = nil
+                
+                self.notes[0].setImage()
                 
                 if let chordIndex = measure?.notationObjects.index(of: self) {
                     measure?.notationObjects.remove(at: chordIndex)
