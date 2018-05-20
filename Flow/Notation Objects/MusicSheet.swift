@@ -1601,8 +1601,9 @@ class MusicSheet: UIView {
             
             for note in chord.notes {
                 drawAccidentalByNote(note: note)
-                drawDotsByNotation(notation: note, hasFlipped: hasFlipped)
             }
+            
+            drawDotsByNotation(notation: chord, hasFlipped: hasFlipped)
             
         } else if let note = notation as? Note {
             
@@ -1932,49 +1933,123 @@ class MusicSheet: UIView {
         
         var pointToFollow: CGPoint?
         
-        if let note = notation as? Note, let measure = note.measure, let screenCoordinates = notation.screenCoordinates, let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure), let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints) {
-            if GridSystem.instance.isPitchInLine(pitch: note.pitch) {
-                var upperPitch = Pitch(step: note.pitch.step, octave: note.pitch.octave)
-                upperPitch.transposeUp()
-                pointToFollow = CGPoint(x: screenCoordinates.x, y: GridSystem.instance.getYFromPitch(pitch: upperPitch, clef: measure.clef, snapPoints: snapPoints))
-            } else {
+        if let chord = notation as? Chord {
+            var occupiedPoints = [CGPoint]()
+            
+            for note in chord.notes {
+                
+                curSpacing = 45
+                
+                if let measure = note.measure, let screenCoordinates = note.screenCoordinates, let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure), let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints) {
+                    
+                    var pitchToModify = Pitch(step: note.pitch.step, octave: note.pitch.octave)
+                    pointToFollow = CGPoint(x: screenCoordinates.x, y: GridSystem.instance.getYFromPitch(pitch: pitchToModify, clef: measure.clef, snapPoints: snapPoints))
+                    
+                    if GridSystem.instance.isPitchInLine(pitch: note.pitch) {
+                        
+                        pitchToModify.transposeUp()
+                        pointToFollow = CGPoint(x: screenCoordinates.x, y: GridSystem.instance.getYFromPitch(pitch: pitchToModify, clef: measure.clef, snapPoints: snapPoints))
+                        
+                        if occupiedPoints.contains(pointToFollow!) {
+                            pitchToModify.transposeDown()
+                            pitchToModify.transposeDown()
+                            pointToFollow = CGPoint(x: screenCoordinates.x, y: GridSystem.instance.getYFromPitch(pitch: pitchToModify, clef: measure.clef, snapPoints: snapPoints))
+                            
+                            if occupiedPoints.contains(pointToFollow!) {
+                                continue
+                            }
+                            
+                            occupiedPoints.append(pointToFollow!)
+                        } else {
+                            occupiedPoints.append(pointToFollow!)
+                        }
+                    } else if occupiedPoints.contains(pointToFollow!){
+                        pitchToModify.transposeDown()
+                        pitchToModify.transposeDown()
+                        pointToFollow = CGPoint(x: screenCoordinates.x, y: GridSystem.instance.getYFromPitch(pitch: pitchToModify, clef: measure.clef, snapPoints: snapPoints))
+                        
+                        if occupiedPoints.contains(pointToFollow!) {
+                            continue
+                        }
+                        
+                        occupiedPoints.append(pointToFollow!)
+                    } else {
+                        pointToFollow = screenCoordinates
+                    }
+                } else if let screenCoordinates = note.screenCoordinates {
+                    pointToFollow = screenCoordinates
+                }
+                
+                if let dotImage = UIImage(named: "dot"), let screenCoordinates = pointToFollow {
+                    for _ in 0..<notation.dots {
+                        if hasFlipped {
+                            dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing + 27, y: screenCoordinates.y - 3, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                        } else {
+                            dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y - 3, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                        }
+                        dotImageView?.image = dotImage
+                        
+                        if highlighted {
+                            dotImageView?.image = dotImageView?.image?.withRenderingMode(.alwaysTemplate)
+                            dotImageView?.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                            dotImageView?.tag = HIGHLIGHTED_NOTES_TAG
+                        }
+                        
+                        if let dotImageView = dotImageView {
+                            self.addSubview(dotImageView)
+                        }
+                        
+                        curSpacing += 12
+                    }
+                }
+            }
+        } else {
+        
+            if let note = notation as? Note, let measure = note.measure, let screenCoordinates = notation.screenCoordinates, let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure), let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints) {
+                if GridSystem.instance.isPitchInLine(pitch: note.pitch) {
+                    var upperPitch = Pitch(step: note.pitch.step, octave: note.pitch.octave)
+                    upperPitch.transposeUp()
+                    pointToFollow = CGPoint(x: screenCoordinates.x, y: GridSystem.instance.getYFromPitch(pitch: upperPitch, clef: measure.clef, snapPoints: snapPoints))
+                } else {
+                    pointToFollow = screenCoordinates
+                }
+            } else if let screenCoordinates = notation.screenCoordinates {
                 pointToFollow = screenCoordinates
             }
-        } else if let screenCoordinates = notation.screenCoordinates {
-            pointToFollow = screenCoordinates
-        }
-        
-        if let dotImage = UIImage(named: "dot"), let screenCoordinates = pointToFollow {
-            for _ in 0..<notation.dots {
-                if notation is Rest {
-                    if notation.type == .whole {
-                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 5, y: screenCoordinates.y + wholeRestYOffset, width: dotImage.size.width/3, height: dotImage.size.height/3))
-                    } else if notation.type == .half {
-                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 5, y: screenCoordinates.y + halfRestYOffset, width: dotImage.size.width/3, height: dotImage.size.height/3))
-                    } else {
-                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 10, y: screenCoordinates.y + 10, width: dotImage.size.width/3, height: dotImage.size.height/3))
+            
+            if let dotImage = UIImage(named: "dot"), let screenCoordinates = pointToFollow {
+                for _ in 0..<notation.dots {
+                    if notation is Rest {
+                        if notation.type == .whole {
+                            dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 5, y: screenCoordinates.y + wholeRestYOffset, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                        } else if notation.type == .half {
+                            dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 5, y: screenCoordinates.y + halfRestYOffset, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                        } else {
+                            dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing - 10, y: screenCoordinates.y + 10, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                        }
+                    } else if notation is Note {
+                        if hasFlipped {
+                            dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing + 27, y: screenCoordinates.y - 3, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                        } else {
+                            dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y - 3, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                        }
                     }
-                } else if notation is Note {
-                    if hasFlipped {
-                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing + 27, y: screenCoordinates.y - 3, width: dotImage.size.width/3, height: dotImage.size.height/3))
-                    } else {
-                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y - 3, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                    dotImageView?.image = dotImage
+                    
+                    if highlighted {
+                        dotImageView?.image = dotImageView?.image?.withRenderingMode(.alwaysTemplate)
+                        dotImageView?.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                        dotImageView?.tag = HIGHLIGHTED_NOTES_TAG
                     }
+                    
+                    if let dotImageView = dotImageView {
+                        self.addSubview(dotImageView)
+                    }
+                    
+                    curSpacing += 12
                 }
-                dotImageView?.image = dotImage
-                
-                if highlighted {
-                    dotImageView?.image = dotImageView?.image?.withRenderingMode(.alwaysTemplate)
-                    dotImageView?.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-                    dotImageView?.tag = HIGHLIGHTED_NOTES_TAG
-                }
-                
-                if let dotImageView = dotImageView {
-                    self.addSubview(dotImageView)
-                }
-                
-                curSpacing += 12
             }
+            
         }
         
     }
