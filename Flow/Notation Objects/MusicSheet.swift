@@ -1930,7 +1930,21 @@ class MusicSheet: UIView {
         var dotImageView:UIImageView?
         var curSpacing: CGFloat = 45
         
-        if let dotImage = UIImage(named: "dot"), let screenCoordinates = notation.screenCoordinates {
+        var pointToFollow: CGPoint?
+        
+        if let note = notation as? Note, let measure = note.measure, let screenCoordinates = notation.screenCoordinates, let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure), let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints) {
+            if GridSystem.instance.isPitchInLine(pitch: note.pitch) {
+                var upperPitch = Pitch(step: note.pitch.step, octave: note.pitch.octave)
+                upperPitch.transposeUp()
+                pointToFollow = CGPoint(x: screenCoordinates.x, y: GridSystem.instance.getYFromPitch(pitch: upperPitch, clef: measure.clef, snapPoints: snapPoints))
+            } else {
+                pointToFollow = screenCoordinates
+            }
+        } else if let screenCoordinates = notation.screenCoordinates {
+            pointToFollow = screenCoordinates
+        }
+        
+        if let dotImage = UIImage(named: "dot"), let screenCoordinates = pointToFollow {
             for _ in 0..<notation.dots {
                 if notation is Rest {
                     if notation.type == .whole {
@@ -1942,9 +1956,9 @@ class MusicSheet: UIView {
                     }
                 } else if notation is Note {
                     if hasFlipped {
-                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing + 27, y: screenCoordinates.y, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing + 27, y: screenCoordinates.y - 3, width: dotImage.size.width/3, height: dotImage.size.height/3))
                     } else {
-                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y, width: dotImage.size.width/3, height: dotImage.size.height/3))
+                        dotImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + curSpacing, y: screenCoordinates.y - 3, width: dotImage.size.width/3, height: dotImage.size.height/3))
                     }
                 }
                 dotImageView?.image = dotImage
