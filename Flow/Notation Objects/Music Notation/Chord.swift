@@ -103,6 +103,88 @@ class Chord: MusicNotation {
         
     }
     
+    public static func isSeventh(notes: [Note]) -> Bool {
+        if notes.count > 3 {
+            
+            var minDiff = -1
+            var maxDiff = 0
+            
+            for note in notes.reversed() {
+                for innerNote in notes.reversed() {
+                    
+                    if note == innerNote {
+                        continue
+                    }
+                    
+                    var diff = Pitch.difference(from: note.pitch, to: innerNote.pitch)
+                    
+                    if diff < 0 {
+                        diff = diff * -1
+                    }
+                    
+                    if diff < minDiff || minDiff < 0 {
+                        minDiff = diff
+                    }
+                    
+                    if diff > maxDiff {
+                        maxDiff = diff
+                    }
+                    
+                }
+            }
+            
+            if minDiff == 2 && maxDiff > 5 {
+                return true
+            } else {
+                return false
+            }
+            
+        } else {
+            return false
+        }
+    }
+    
+    public func isSeventh() -> Bool {
+        if self.notes.count > 3 {
+            
+            var minDiff = -1
+            var maxDiff = 0
+            
+            for note in self.notes.reversed() {
+                for innerNote in self.notes.reversed() {
+                    
+                    if note == innerNote {
+                        continue
+                    }
+                    
+                    var diff = Pitch.difference(from: note.pitch, to: innerNote.pitch)
+                    
+                    if diff < 0 {
+                        diff = diff * -1
+                    }
+                    
+                    if diff < minDiff || minDiff < 0 {
+                        minDiff = diff
+                    }
+                    
+                    if diff > maxDiff {
+                        maxDiff = diff
+                    }
+                    
+                }
+            }
+            
+            if minDiff == 2 && maxDiff > 5 {
+                return true
+            } else {
+                return false
+            }
+            
+        } else {
+            return false
+        }
+    }
+    
     // INSERTION SORT FROM https://github.com/raywenderlich/swift-algorithm-club/tree/master/Insertion%20Sort
     // by raywenderlich : https://github.com/raywenderlich
     func insertionSort<T>(_ array: [T], _ isOrderedBefore: (T, T) -> Bool) -> [T] {

@@ -1599,10 +1599,11 @@ class MusicSheet: UIView {
                 
             }
             
-            for note in chord.notes {
+            /*for note in chord.notes {
                 drawAccidentalByNote(note: note)
-            }
+            }*/
             
+            drawAccidentalByChord(chord: chord)
             drawDotsByNotation(notation: chord, hasFlipped: hasFlipped)
             
         } else if let note = notation as? Note {
@@ -1923,6 +1924,180 @@ class MusicSheet: UIView {
                 }
 
             }
+        }
+    }
+    
+    private func drawAccidentalByChord (chord: Chord) {
+        
+        func drawAccidentalsZigzag (notes: [Note]) {
+            var currentXModify: CGFloat = 0
+            var accidentalImageViews = [UIImageView]()
+            
+            // also check if there is a difference between two notes that is > 5, this would restart the layout back nearest to the chord
+            for (index, note) in notes.enumerated() {
+                
+                if index != 0 {
+                    if notes.count > 2 && index-1 >= notes.count / 2 {
+                        currentXModify -= 20
+                    } else if notes.count > 2 {
+                        currentXModify += 40
+                    } else {
+                        currentXModify += 20
+                    }
+                    
+                }
+                
+                if let screenCoordinates = note.screenCoordinates, let accidental = note.accidental {
+                    
+                    var accidentalImageView:UIImageView?
+                    
+                    if accidental == .sharp, let image = UIImage(named: "sharp") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - currentXModify, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .flat, let image = UIImage(named: "flat") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - currentXModify, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .natural, let image = UIImage(named: "natural") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - currentXModify, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .doubleSharp, let accImage = UIImage(named: "double-sharp"), let noteHead = UIImage(named: "quarter-head") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - 8 - currentXModify, y: screenCoordinates.y + doubleSharpAccidentalYOffset, width: noteHead.size.height/9.5, height: noteHead.size.height/9.5))
+                        
+                        accidentalImageView!.image = accImage
+                    }
+                    
+                    if let accidentalImageView = accidentalImageView {
+                        accidentalImageViews.append(accidentalImageView)
+                    }
+                    
+                }
+                
+            }
+            
+            for accidentalImageView in accidentalImageViews {
+                self.addSubview(accidentalImageView)
+            }
+        }
+        
+        func drawAccidentalsStaggered (notes: [Note]) {
+            var currentStaggerMax: Int = 3
+            var currentXModify: CGFloat = 0
+            var accidentalImageViews = [UIImageView]()
+            
+            // also check if there is a difference between two notes that is > 5, this would restart the layout back nearest to the chord
+            var staggerCount = 0
+            for (index, note) in notes.enumerated() {
+                if index != 0 {
+                    currentXModify += 20
+                    
+                    if currentStaggerMax == staggerCount {
+                        currentXModify = 0
+                        currentStaggerMax += 1
+                        staggerCount = 0
+                    }
+                }
+                
+                if let screenCoordinates = note.screenCoordinates, let accidental = note.accidental {
+                    
+                    var accidentalImageView:UIImageView?
+                    
+                    if accidental == .sharp, let image = UIImage(named: "sharp") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - currentXModify, y: screenCoordinates.y + sharpAccidentalYOffset, width: 56/3, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .flat, let image = UIImage(named: "flat") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - currentXModify, y: screenCoordinates.y + flatAccidentalYOffset, width: 56/3, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .natural, let image = UIImage(named: "natural") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - currentXModify, y: screenCoordinates.y + naturalAccidentalYOffset, width: 56/4, height: 150/3))
+                        
+                        accidentalImageView!.image = image
+                    } else if accidental == .doubleSharp, let accImage = UIImage(named: "double-sharp"), let noteHead = UIImage(named: "quarter-head") {
+                        accidentalImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + accidentalXOffset - 8 - currentXModify, y: screenCoordinates.y + doubleSharpAccidentalYOffset, width: noteHead.size.height/9.5, height: noteHead.size.height/9.5))
+                        
+                        accidentalImageView!.image = accImage
+                    }
+                    
+                    if let accidentalImageView = accidentalImageView {
+                        accidentalImageViews.append(accidentalImageView)
+                    }
+                    
+                }
+                
+                staggerCount += 1
+                
+            }
+            
+            for accidentalImageView in accidentalImageViews {
+                self.addSubview(accidentalImageView)
+            }
+        }
+        
+        var largestDiffInPitch = 0
+        var diffsInPitch = [Int]()
+        var notesWithAccidental = [Note]()
+        
+        var topStackNote: Note?
+        
+        for note in chord.notes.reversed() {
+            if let _ = note.accidental {
+                topStackNote = note
+                break
+            }
+        }
+        
+        for (index, note) in chord.notes.reversed().enumerated() {
+            if note == topStackNote {
+                notesWithAccidental.append(note)
+                diffsInPitch.append(0)
+                continue
+            }
+            
+            if let _ = note.accidental, let topStackNote = topStackNote {
+                notesWithAccidental.append(note)
+                
+                let currentDiff = Pitch.difference(from: topStackNote.pitch, to: note.pitch)
+                diffsInPitch.append(currentDiff)
+                
+                if currentDiff > largestDiffInPitch {
+                    largestDiffInPitch = currentDiff
+                }
+                
+            }
+        }
+        
+        /*if largestDiffInPitch > 1 { // zigzag
+            
+            drawAccidentalsZigzag(notes: notesWithAccidental)
+            
+        } else {
+            
+            if chord.notes.count < 4 { //  zigzag
+                
+                for note in notesWithAccidental {
+                    
+                }
+                
+            } else { // stagger
+                
+                var currentStaggerMax = 2
+                
+                for note in notesWithAccidental {
+                    
+                }
+                
+            }
+            
+        }*/
+        
+        if Chord.isSeventh(notes: notesWithAccidental) {
+            drawAccidentalsStaggered(notes: notesWithAccidental)
+        } else {
+            drawAccidentalsZigzag(notes: notesWithAccidental)
         }
     }
     
