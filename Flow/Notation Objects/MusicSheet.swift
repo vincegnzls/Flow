@@ -31,6 +31,8 @@ class MusicSheet: UIView {
         }
     }
 
+    private var ottavaMode: OttavaType? = nil
+
     private let sheetYOffset:CGFloat = 20
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
     private let staffSpace:CGFloat = 260 // Spaces between staff
@@ -4104,6 +4106,9 @@ class MusicSheet: UIView {
 
             selectedNotations.removeAll()
             selectedNotations = newNotations
+
+            self.updateMeasureDraw()
+            repositionTransformView(first: false)
         } else if let notation = self.hoveredNotation {
             if let note = notation as? Note {
                 let newNote = note.duplicate()
@@ -4135,11 +4140,16 @@ class MusicSheet: UIView {
                     editAction.execute()
                 }
             }
+
+            self.updateMeasureDraw()
+            repositionTransformView(first: false)
+        } else {
+            if self.ottavaMode == ottavaType {
+                self.ottavaMode = nil
+            } else {
+                self.ottavaMode = ottavaType
+            }
         }
-
-        self.updateMeasureDraw()
-
-        repositionTransformView(first: false)
     }
 
     public func sharp() {
@@ -4499,6 +4509,14 @@ class MusicSheet: UIView {
         }
         
         return 0
+    }
+
+    public func getCurrentOttavaMode() -> OttavaType? {
+        if let ottavaMode = self.ottavaMode {
+            return self.ottavaMode
+        }
+
+        return nil
     }
 
     @IBAction func transposeUp(_ sender: UIButton) {
