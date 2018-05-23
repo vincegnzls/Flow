@@ -11,6 +11,14 @@ import UIKit
 class Chord: MusicNotation {
     
     var notes: [Note]
+
+    var ottava: OttavaType? {
+        didSet {
+            for note in self.notes {
+                note.ottava = ottava
+            }
+        }
+    }
     
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType = .quarter,

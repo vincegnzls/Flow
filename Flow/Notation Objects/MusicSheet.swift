@@ -254,6 +254,239 @@ class MusicSheet: UIView {
         return true
     }
 
+    func drawDottedLine(start p0: CGPoint, end p1: CGPoint, thickness: CGFloat) {
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.strokeColor = UIColor.black.cgColor
+        shapeLayer.lineWidth = thickness
+        shapeLayer.lineDashPattern = [7, 3] // 7 is the length of dash, 3 is length of the gap.
+
+        let path = CGMutablePath()
+        path.addLines(between: [p0, p1])
+        shapeLayer.path = path
+        shapeLayer.zPosition = .greatestFiniteMagnitude
+        self.layer.addSublayer(shapeLayer)
+        self.curLayers.append(shapeLayer)
+    }
+
+    func checkOttavaPerMeasure(notations: [MusicNotation]) {
+        var curGroup = [Note]()
+
+        for notation in notations {
+            if let note = notation as? Note {
+                if let ottava = note.ottava {
+                    if !curGroup.isEmpty {
+                        if curGroup[0].ottava == ottava {
+                            curGroup.append(note)
+                        } else {
+                            if curGroup.count == 1 {
+                                if let coord = curGroup[0].screenCoordinates {
+                                    if let ottava = curGroup[0].ottava {
+                                        if let measure = curGroup[0].measure {
+                                            drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                                            print("draw 1")
+                                        }
+                                    }
+                                }
+                            } else if curGroup.count > 1 {
+                                if let first = curGroup.first {
+                                    if let last = curGroup.last {
+                                        if let firstCoord = first.screenCoordinates {
+                                            if let lastCoord = last.screenCoordinates {
+                                                if let firstOttava = first.ottava {
+                                                    if let measure = first.measure {
+                                                        drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                                        print("draw 2")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            curGroup.removeAll()
+                            curGroup.append(note)
+                        }
+                    } else {
+                        curGroup.append(note)
+                    }
+                } else {
+                    if curGroup.count == 1 {
+                        if let coord = curGroup[0].screenCoordinates {
+                            if let ottava = curGroup[0].ottava {
+                                if let measure = curGroup[0].measure {
+                                    drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                                    curGroup.removeAll()
+                                    print("draw 3")
+                                }
+                            }
+                        }
+                    } else if curGroup.count > 1 {
+                        if let first = curGroup.first {
+                            if let last = curGroup.last {
+                                if let firstCoord = first.screenCoordinates {
+                                    if let lastCoord = last.screenCoordinates {
+                                        if let firstOttava = first.ottava {
+                                            if let measure = first.measure {
+                                                drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                                curGroup.removeAll()
+                                                print("draw 4")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //curGroup.removeAll()
+            } else {
+                if let chord = notation as? Chord {
+                    if let ottava = chord.ottava {
+                        if !curGroup.isEmpty {
+                            if curGroup[0].ottava == ottava {
+                                curGroup.append(chord.notes[0])
+                            } else {
+                                if curGroup.count == 1 {
+                                    if let coord = curGroup[0].screenCoordinates {
+                                        if let ottava = curGroup[0].ottava {
+                                            if let measure = curGroup[0].measure {
+                                                drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                                                print("draw 5")
+                                            }
+                                        }
+                                    }
+                                } else if curGroup.count > 1 {
+                                    if let first = curGroup.first {
+                                        if let last = curGroup.last {
+                                            if let firstCoord = first.screenCoordinates {
+                                                if let lastCoord = last.screenCoordinates {
+                                                    if let firstOttava = first.ottava {
+                                                        if let measure = first.measure {
+                                                            drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                                            print("draw 6")
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                curGroup.removeAll()
+                                curGroup.append(chord.notes[0])
+                            }
+                        } else {
+                            curGroup.append(chord.notes[0])
+                        }
+                    } else {
+                        if curGroup.count == 1 {
+                            if let coord = curGroup[0].screenCoordinates {
+                                if let ottava = curGroup[0].ottava {
+                                    if let measure = curGroup[0].measure {
+                                        drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                                        curGroup.removeAll()
+                                        print("draw 7")
+                                    }
+                                }
+                            }
+                        } else if curGroup.count > 1 {
+                            if let first = curGroup.first {
+                                if let last = curGroup.last {
+                                    if let firstCoord = first.screenCoordinates {
+                                        if let lastCoord = last.screenCoordinates {
+                                            if let firstOttava = first.ottava {
+                                                if let measure = first.measure {
+                                                    drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                                    curGroup.removeAll()
+                                                    print("draw 8")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        //curGroup.removeAll()
+                    }
+                }
+            }
+        }
+
+        if curGroup.count == 1 {
+            if let coord = curGroup[0].screenCoordinates {
+                if let ottava = curGroup[0].ottava {
+                    if let measure = curGroup[0].measure {
+                        drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                        curGroup.removeAll()
+                        print("draw 9")
+                    }
+                }
+            }
+        } else if curGroup.count > 1 {
+            if let first = curGroup.first {
+                if let last = curGroup.last {
+                    if let firstCoord = first.screenCoordinates {
+                        if let lastCoord = last.screenCoordinates {
+                            if let firstOttava = first.ottava {
+                                if let measure = first.measure {
+                                    drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                    curGroup.removeAll()
+                                    print("draw 10")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        print("DRAW CALL")
+
+        //curGroup.removeAll()
+    }
+
+    func getHigherY(start: CGFloat, end: CGFloat) -> CGFloat {
+        if start < end {
+           if start - 40 > 65 {
+               return 65
+           } else {
+               return start - 40
+           }
+        } else {
+            if end - 40 > 65 {
+                return 65
+            } else {
+                return end - 40
+            }
+        }
+    }
+
+    func drawOttava(start: CGPoint, end: CGPoint, type: OttavaType, clef: Clef) {
+        var y: CGFloat = 0.0
+
+        if clef == .F {
+            y = 500.0
+        }
+
+        let adjustedStart = CGPoint(x: start.x, y: getHigherY(start: start.y, end: end.y) + y)
+        let adjustedEnd = CGPoint(x: end.x + 50, y: getHigherY(start: start.y, end: end.y) + y)
+
+        if start.equalTo(end) {
+            self.drawLine(start: adjustedStart, end: adjustedEnd, thickness: 2)
+        } else {
+            self.drawDottedLine(start: adjustedStart, end: adjustedEnd, thickness: 2)
+        }
+
+        if clef == .G {
+            self.drawLine(start: adjustedEnd, end: CGPoint(x: adjustedEnd.x, y: adjustedEnd.y + 20), thickness: 2)
+        } else {
+            self.drawLine(start: adjustedEnd, end: CGPoint(x: adjustedEnd.x, y: adjustedEnd.y - 20), thickness: 2)
+        }
+    }
+
     func repositionTransformView(first: Bool) {
         if first {
             if let coord = selectedNotations.first?.screenCoordinates {
@@ -1426,6 +1659,8 @@ class MusicSheet: UIView {
                     beamNotes(notations: measure.groups[0])
                 }
             }
+
+            checkOttavaPerMeasure(notations: measure.notationObjects)
         }
 
         return grandStaffMeasurePoints

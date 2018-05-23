@@ -357,4 +357,17 @@ class MenuBar: UIView {
         EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_KEYBOARD)
         print("TOGGLE PRESSED")
     }
+    
+    @IBAction func eightVa(_ sender: UIButton) {
+    }
+    
+    @IBAction func eightVb(_ sender: UIButton) {
+    }
+    
+    @IBAction func fiftheenMa(_ sender: UIButton) {
+    }
+    
+    @IBAction func fiftheenMb(_ sender: UIButton) {
+    }
+    
 }

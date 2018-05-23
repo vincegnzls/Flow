@@ -34,6 +34,7 @@
 		618F02D5209ECD7F0018C213 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F02D4209ECD7F0018C213 /* KeyboardView.swift */; };
 		618F02D7209EE3EC0018C213 /* MIDINoteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F02D6209EE3EC0018C213 /* MIDINoteParser.swift */; };
 		61B1316B1FE1513900ADCDF0 /* ButtonEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */; };
+		61C606D520B46BBA000A1F9C /* OttavaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C606D420B46BBA000A1F9C /* OttavaType.swift */; };
 		61EBB0321FE695B60015F7C2 /* KeySignatureDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
 		7A1C6D9B20AE86BA00F766DD /* ActionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C6D9A20AE86BA00F766DD /* ActionFunctions.swift */; };
@@ -170,6 +171,7 @@
 		618F02D4209ECD7F0018C213 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		618F02D6209EE3EC0018C213 /* MIDINoteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDINoteParser.swift; sourceTree = "<group>"; };
 		61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEffect.swift; sourceTree = "<group>"; };
+		61C606D420B46BBA000A1F9C /* OttavaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OttavaType.swift; sourceTree = "<group>"; };
 		61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureDesignable.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		7A1C6D9A20AE86BA00F766DD /* ActionFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionFunctions.swift; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				864CE5A01FD32F41001FF059 /* Rest */,
 				864CE59E1FD32F2C001FF059 /* Note */,
 				86DBDA7F20368C6E00C834EF /* Chord.swift */,
+				61C606D420B46BBA000A1F9C /* OttavaType.swift */,
 			);
 			path = "Music Notation";
 			sourceTree = "<group>";
@@ -785,6 +788,7 @@
 				61370E171F82A1CB002B6A09 /* AppDelegate.swift in Sources */,
 				8696A8A91FD4EA5800EB81BD /* FileHandler.swift in Sources */,
 				860ACC431FFCA25900A86D50 /* SoundManager.swift in Sources */,
+				61C606D520B46BBA000A1F9C /* OttavaType.swift in Sources */,
 				866CC9032094773C001ADD5B /* IQToolbar.swift in Sources */,
 				610ECE341FE6DAE9009CC0F2 /* TimeSignaturePicker.swift in Sources */,
 				86B8EFEE1FEAC30500DD834E /* Clipboard.swift in Sources */,

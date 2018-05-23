@@ -23,6 +23,7 @@ class Note: MusicNotation {
     var isUpwards: Bool
     var beamed: Bool
     var chord: Chord?
+    var ottava: OttavaType?
     
     init(screenCoordinates: CGPoint? = nil,
          pitch: Pitch,
@@ -30,11 +31,15 @@ class Note: MusicNotation {
          measure: Measure? = nil,
          accidental: Accidental? = nil,
          chord: Chord? = nil,
-         dots: Int = 0) {
+         dots: Int = 0,
+         ottava: OttavaType? = nil) {
         self.pitch = pitch
         self.accidental = accidental
         self.isUpwards = true
         self.beamed = false
+        if type == .quarter {
+            self.ottava = .eightVa
+        }
         
         super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
     }
