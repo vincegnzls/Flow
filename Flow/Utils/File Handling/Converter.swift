@@ -111,6 +111,11 @@ class Converter {
                         notationElement.addChild(name: "rest")
                     }
                     
+                    // Add dots
+                    for _ in 0..<notation.dots {
+                        notationElement.addChild(name: "dot")
+                    }
+                    
                     notationElement.addChild(name: "staff", value: "\(index + 1)")
                     
                     // Set duration and type
@@ -217,21 +222,23 @@ class Converter {
                         let staffNum = Int(notationElement["staff"].string)! - 1
                         let measure = measures[staffNum]
                         
+                        let dots = notationElement["dot"].count
+                        
                         if let step = notationElement["pitch"]["step"].value {
                             let pitch = Pitch(step: Step.convert(step),
                                               octave: Int(notationElement["pitch"]["octave"].string)!)
-                            
+
                             if let accidentalString = notationElement["accidental"].value {
                                 let accidental = Accidental.convert(accidentalString)
-                                let note = Note(pitch: pitch, type: type, accidental: accidental)
+                                let note = Note(pitch: pitch, type: type, accidental: accidental, dots: dots)
                                 measure.add(note)
                             } else {
-                                let note = Note(pitch: pitch, type: type)
+                                let note = Note(pitch: pitch, type: type, dots: dots)
                                 measure.add(note)
                             }
 
                         } else {
-                            let rest = Rest(type: type)
+                            let rest = Rest(type: type, dots: dots)
                             
                             /*if !measures[measureIndex].isAddNoteValid(musicNotation: rest.type) {
                                 measureIndex += 1
