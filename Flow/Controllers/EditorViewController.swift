@@ -457,6 +457,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             if let ottava: OttavaType = self.musicSheet.getCurrentOttavaMode() {
                 note.ottava = ottava
             }
+
+            if let accidental: Accidental = self.musicSheet.getCurrentAccidentalMode() {
+                note.accidental = accidental
+            }
         }
         
         let addAction = AddAction(measure: measure, notation: notation)

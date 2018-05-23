@@ -37,6 +37,12 @@ class MusicSheet: UIView {
         }
     }
 
+    private var accidentalMode: Accidental? = nil {
+        didSet {
+            checkHighlightAccidentalButton()
+        }
+    }
+
     private let sheetYOffset:CGFloat = 20
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
     private let staffSpace:CGFloat = 260 // Spaces between staff
@@ -618,6 +624,11 @@ class MusicSheet: UIView {
         } else {
             print("EMPTYYY")
             EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
+
+            if let accidentalMode = self.accidentalMode {
+                params.put(key: KeyNames.ACCIDENTAL, value: accidentalMode)
+                EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_ACCIDENTAL_BTN, params: params)
+            }
         }
 
         if self.selectedNotations.isEmpty {
@@ -639,6 +650,11 @@ class MusicSheet: UIView {
                 }
             } else {
                 EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
+
+                if let accidentalMode = self.accidentalMode {
+                    params.put(key: KeyNames.ACCIDENTAL, value: accidentalMode)
+                    EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_ACCIDENTAL_BTN, params: params)
+                }
             }
         }
     }
@@ -4008,6 +4024,12 @@ class MusicSheet: UIView {
 
                 self.updateMeasureDraw()
             }
+        } else {
+            if self.accidentalMode == accidental {
+                self.accidentalMode = nil
+            } else {
+                self.accidentalMode = accidental
+            }
         }
 
     }
@@ -4398,6 +4420,14 @@ class MusicSheet: UIView {
         }
         
         return 0
+    }
+
+    public func getCurrentAccidentalMode() -> Accidental? {
+        if let accidentalMode = self.accidentalMode {
+            return self.accidentalMode
+        }
+
+        return nil
     }
 
     public func getCurrentOttavaMode() -> OttavaType? {
