@@ -60,4 +60,6 @@ struct EventNames {
     static let TOGGLE_KEYBOARD = "TOGGLE_KEYBOARD"
 
     static let KEYBOARD_NOTE_PRESSED = "KEYBOARD_NOTE_PRESSED"
+
+    static let OTTAVA = "OTTAVA"
 }

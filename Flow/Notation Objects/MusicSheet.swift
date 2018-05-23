@@ -657,6 +657,10 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.ACTION_PERFORMED)
         EventBroadcaster.instance.addObserver(event: EventNames.ACTION_PERFORMED, observer: Observer(id: "MusicSheet.redirectCursorOnAction", function: self.redirectCursorOnAction))
 
+        // Add listeners for ottava
+        EventBroadcaster.instance.removeObservers(event: EventNames.OTTAVA)
+        EventBroadcaster.instance.addObserver(event: EventNames.OTTAVA, observer: Observer(id: "MusicSheet.ottava", function: self.ottava))
+
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
@@ -4033,6 +4037,83 @@ class MusicSheet: UIView {
         }
 
         return accidentalCount == notations.count
+    }
+
+    public func ottava(params: Parameters) {
+        let ottavaType = params.get(key: KeyNames.OTTAVA) as! OttavaType
+
+        var newNotations = [MusicNotation]()
+
+        if !selectedNotations.isEmpty {
+            for notation in selectedNotations {
+                if let note = notation as? Note {
+                    let newNote = note.duplicate()
+
+                    if note.ottava != ottavaType {
+                        newNote.ottava = ottavaType
+                    } else if note.ottava == ottavaType {
+                        newNote.ottava = nil
+                    }
+
+                    newNotations.append(newNote)
+                } else if let chord = notation as? Chord {
+                    let newChord = chord.duplicate()
+
+                    if chord.ottava != ottavaType {
+                        newChord.ottava = ottavaType
+                    } else if chord.ottava == ottavaType {
+                        newChord.ottava = nil
+                    }
+
+                    newNotations.append(newChord)
+                } else {
+                    newNotations.append(notation.duplicate())
+                }
+            }
+
+            if !newNotations.isEmpty {
+                let editAction = EditAction(old: self.selectedNotations, new: newNotations)
+                editAction.execute()
+            }
+
+            selectedNotations.removeAll()
+            selectedNotations = newNotations
+        } else if let notation = self.hoveredNotation {
+            if let note = notation as? Note {
+                let newNote = note.duplicate()
+
+                if note.ottava != ottavaType {
+                    newNote.ottava = ottavaType
+                } else if note.ottava == ottavaType {
+                    newNote.ottava = nil
+                }
+
+                newNotations.append(newNote)
+            } else if let chord = notation as? Chord {
+                let newChord = chord.duplicate()
+
+                if chord.ottava != ottavaType {
+                    newChord.ottava = ottavaType
+                } else if chord.ottava == ottavaType {
+                    newChord.ottava = nil
+                }
+
+                newNotations.append(newChord)
+            } else {
+                newNotations.append(notation.duplicate())
+            }
+
+            if !newNotations.isEmpty {
+                if let hovered = self.hoveredNotation {
+                    let editAction = EditAction(old: [hovered], new: newNotations)
+                    editAction.execute()
+                }
+            }
+        }
+
+        self.updateMeasureDraw()
+
+        repositionTransformView(first: false)
     }
 
     public func sharp() {

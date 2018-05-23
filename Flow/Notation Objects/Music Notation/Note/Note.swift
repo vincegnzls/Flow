@@ -35,11 +35,9 @@ class Note: MusicNotation {
          ottava: OttavaType? = nil) {
         self.pitch = pitch
         self.accidental = accidental
+        self.ottava = ottava
         self.isUpwards = true
         self.beamed = false
-        if type == .quarter {
-            self.ottava = .eightVa
-        }
         
         super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
     }
@@ -95,6 +93,6 @@ class Note: MusicNotation {
     }
 
     override func duplicate() -> Note {
-        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots)
+        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots, ottava: self.ottava)
     }
 }

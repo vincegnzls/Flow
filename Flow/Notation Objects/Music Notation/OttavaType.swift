@@ -11,6 +11,6 @@ import Foundation
 enum OttavaType {
     
     case
-        eightVa, eightVb, fiftheenMa, fiftheenMb
+        eightVa, eightVb, fifteenMa, fifteenMb
     
 }

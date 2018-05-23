@@ -626,7 +626,7 @@ Tap '+' to create a new composition.</string>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="15ma"/>
                                         <connections>
-                                            <action selector="fiftheenMa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="3Dm-wi-V4V"/>
+                                            <action selector="fifteenMa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="3Dm-wi-V4V"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCO-cJ-Zg9">
@@ -634,7 +634,7 @@ Tap '+' to create a new composition.</string>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="15mb"/>
                                         <connections>
-                                            <action selector="fiftheenMb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="Eyq-43-BXn"/>
+                                            <action selector="fifteenMb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="Eyq-43-BXn"/>
                                         </connections>
                                     </button>
                                 </subviews>

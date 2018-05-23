@@ -359,15 +359,31 @@ class MenuBar: UIView {
     }
     
     @IBAction func eightVa(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.eightVa)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
     }
     
     @IBAction func eightVb(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.eightVb)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
     }
     
-    @IBAction func fiftheenMa(_ sender: UIButton) {
+    @IBAction func fifteenMa(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.fifteenMa)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
     }
     
-    @IBAction func fiftheenMb(_ sender: UIButton) {
+    @IBAction func fifteenMb(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.fifteenMb)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
     }
     
 }
