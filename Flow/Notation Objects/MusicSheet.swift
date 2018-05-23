@@ -4113,20 +4113,28 @@ class MusicSheet: UIView {
 
         for notation in notations {
             if let note = notation as? Note {
-                if ottava == nil {
-                    ottava = note.ottava
-                } else {
-                    if note.ottava != ottava {
-                        return false
+                if note.ottava != nil {
+                    if ottava == nil {
+                        ottava = note.ottava
+                    } else {
+                        if note.ottava != ottava {
+                            return false
+                        }
                     }
+                } else {
+                    return false
                 }
             } else if let chord = notation as? Chord {
-                if ottava == nil {
-                    ottava = chord.ottava
-                } else {
-                    if chord.ottava != ottava {
-                        return false
+                if chord.ottava != nil {
+                    if ottava == nil {
+                        ottava = chord.ottava
+                    } else {
+                        if chord.ottava != ottava {
+                            return false
+                        }
                     }
+                } else {
+                    return false
                 }
             }
         }
