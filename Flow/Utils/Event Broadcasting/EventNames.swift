@@ -62,4 +62,7 @@ struct EventNames {
     static let KEYBOARD_NOTE_PRESSED = "KEYBOARD_NOTE_PRESSED"
 
     static let OTTAVA = "OTTAVA"
+
+    static let OTTAVA_HIGHLIGHT = "OTTAVA_HIGHLIGHT"
+    static let REMOVE_OTTAVA_HIGHLIGHT = "REMOVE_OTTAVA_HIGHLIGHT"
 }

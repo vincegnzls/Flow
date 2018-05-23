@@ -483,6 +483,10 @@ Tap '+' to create a new composition.</string>
                                 </constraints>
                                 <connections>
                                     <outlet property="dSharpBtn" destination="NBh-oB-XfU" id="Ucn-7H-fiF"/>
+                                    <outlet property="eightVaBtn" destination="Z3k-E7-fzk" id="CbY-Ka-Yz7"/>
+                                    <outlet property="eightVbBtn" destination="L8F-Su-3ZI" id="jcg-vv-hqA"/>
+                                    <outlet property="fifteenMaBtn" destination="dv2-Ny-LAM" id="5gu-OZ-Nna"/>
+                                    <outlet property="fifteenMbBtn" destination="PCO-cJ-Zg9" id="zDf-VF-Lif"/>
                                     <outlet property="flatBtn" destination="HO1-ae-mut" id="m9Q-1U-792"/>
                                     <outlet property="naturalizeBtn" destination="uE4-6g-BJV" id="ruX-st-90t"/>
                                     <outlet property="oneDotBtn" destination="rQN-ic-H0l" id="rx7-AI-uf2"/>

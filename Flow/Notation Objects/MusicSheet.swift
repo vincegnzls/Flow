@@ -31,7 +31,11 @@ class MusicSheet: UIView {
         }
     }
 
-    private var ottavaMode: OttavaType? = nil
+    private var ottavaMode: OttavaType? = nil {
+        didSet {
+            checkHighlightOttavaButton()
+        }
+    }
 
     private let sheetYOffset:CGFloat = 20
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
@@ -89,7 +93,7 @@ class MusicSheet: UIView {
     public var hoveredNotation: MusicNotation? {
         didSet {
             checkHighlightAccidentalButton()
-            
+            checkHighlightOttavaButton()
             let parameters = Parameters()
 
             while let highlightView = self.viewWithTag(HIGHLIGHTED_NOTES_TAG) {
@@ -136,6 +140,7 @@ class MusicSheet: UIView {
     public var selectedNotations: [MusicNotation] = [] {
         didSet {
             checkHighlightAccidentalButton()
+            checkHighlightOttavaButton()
             print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
             
             let parameters = Parameters() // parameters for dotted notes
@@ -504,6 +509,68 @@ class MusicSheet: UIView {
         self.addSubview(self.transformView)
         self.transformView.superview?.bringSubview(toFront: self.transformView)
         self.transformView.layer.zPosition = CGFloat.greatestFiniteMagnitude
+    }
+
+    func checkHighlightOttavaButton() -> OttavaType? {
+        var ottava: OttavaType? = nil
+        var params = Parameters()
+
+        if !self.selectedNotations.isEmpty {
+            if sameOttava(notations: self.selectedNotations) {
+                for notation in self.selectedNotations {
+                    if let note = notation as? Note {
+                        if ottava == nil {
+                            ottava = note.ottava
+                        } else {
+                            if note.ottava != nil {
+                                params.put(key: KeyNames.OTTAVA, value: ottava)
+                                EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
+                                return ottava
+                            }
+                        }
+                    } else if let chord = notation as? Chord {
+                        if ottava == nil {
+                            ottava = chord.ottava
+                        } else {
+                            if chord.ottava != nil {
+                                params.put(key: KeyNames.OTTAVA, value: ottava)
+                                EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
+                                return ottava
+                            }
+                        }
+                    }
+                }
+
+                if selectedNotations.count == 1 {
+                    if ottava != nil {
+                        params.put(key: KeyNames.OTTAVA, value: ottava)
+                        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
+                    }
+                }
+            } else {
+                EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT)
+            }
+        } else if let notation = self.hoveredNotation {
+            if let note = notation as? Note {
+                if note.ottava != nil {
+                    params.put(key: KeyNames.OTTAVA, value: note.ottava)
+                    EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
+                    return ottava
+                }
+            } else if let chord = notation as? Chord {
+                params.put(key: KeyNames.OTTAVA, value: chord.ottava)
+                EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
+                return ottava
+            }
+        } else if let ottavaMode = self.ottavaMode {
+            params.put(key: KeyNames.OTTAVA, value: ottavaMode)
+            EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
+            return ottava
+        } else {
+            EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT)
+        }
+
+        return ottava
     }
 
     func checkHighlightAccidentalButton() {

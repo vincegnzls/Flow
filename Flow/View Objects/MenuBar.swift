@@ -20,6 +20,11 @@ class MenuBar: UIView {
     @IBOutlet weak var oneDotBtn: UIButton!
     @IBOutlet weak var twoDotsBtn: UIButton!
     @IBOutlet weak var threeDotsBtn: UIButton!
+
+    @IBOutlet weak var eightVaBtn: UIButton!
+    @IBOutlet weak var eightVbBtn: UIButton!
+    @IBOutlet weak var fifteenMaBtn: UIButton!
+    @IBOutlet weak var fifteenMbBtn: UIButton!
     
     let maxNumOfDots = 3
 
@@ -63,6 +68,36 @@ class MenuBar: UIView {
         
         EventBroadcaster.instance.removeObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
         EventBroadcaster.instance.addObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightOttavaBtn", function: self.highlightOttavaBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightOttavaBtn", function: self.highlightOttavaBtn))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
+    }
+
+    func highlightOttavaBtn(params: Parameters) {
+        removeOttavaHighlight()
+
+        if let ottavaType: OttavaType = params.get(key: KeyNames.OTTAVA) as! OttavaType {
+
+            if ottavaType == .eightVa {
+                self.eightVaBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            } else if ottavaType == .eightVb {
+                self.eightVbBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            } else if ottavaType == .fifteenMa {
+                self.fifteenMaBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            } else if ottavaType == .fifteenMb {
+                self.fifteenMbBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            }
+        }
+    }
+
+    func removeOttavaHighlight() {
+        self.eightVaBtn.backgroundColor = nil
+        self.eightVbBtn.backgroundColor = nil
+        self.fifteenMaBtn.backgroundColor = nil
+        self.fifteenMbBtn.backgroundColor = nil
     }
 
     func highlightAccidentalBtn(params: Parameters) {
