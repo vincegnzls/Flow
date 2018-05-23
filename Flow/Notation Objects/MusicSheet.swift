@@ -701,17 +701,8 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.addObserver(event: EventNames.TITLE_CHANGED, observer: Observer(id: "MusicSheet.titleChanged", function: self.titleChanged))
 
         // Add listeners for accidentals
-        EventBroadcaster.instance.removeObservers(event: EventNames.NATURALIZE_KEY_PRESSED)
-        EventBroadcaster.instance.addObserver(event: EventNames.NATURALIZE_KEY_PRESSED, observer: Observer(id: "MusicSheet.naturalize", function: self.naturalize))
-
-        EventBroadcaster.instance.removeObservers(event: EventNames.FLAT_KEY_PRESSED)
-        EventBroadcaster.instance.addObserver(event: EventNames.FLAT_KEY_PRESSED, observer: Observer(id: "MusicSheet.flat", function: self.flat))
-
-        EventBroadcaster.instance.removeObservers(event: EventNames.SHARP_KEY_PRESSED)
-        EventBroadcaster.instance.addObserver(event: EventNames.SHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.sharp", function: self.sharp))
-
-        EventBroadcaster.instance.removeObservers(event: EventNames.DSHARP_KEY_PRESSED)
-        EventBroadcaster.instance.addObserver(event: EventNames.DSHARP_KEY_PRESSED, observer: Observer(id: "MusicSheet.dsharp", function: self.dsharp))
+        EventBroadcaster.instance.removeObservers(event: EventNames.ACCIDENTAL_PRESS)
+        EventBroadcaster.instance.addObserver(event: EventNames.ACCIDENTAL_PRESS, observer: Observer(id: "MusicSheet.accidentalPress", function: self.accidentalPress))
         
         // Add listeners for dots
         EventBroadcaster.instance.removeObservers(event: EventNames.DOT_KEY_PRESSED)
@@ -3958,15 +3949,18 @@ class MusicSheet: UIView {
         }
     }
 
-    public func naturalize() {
+    public func accidentalPress(params: Parameters) {
+
+        let accidental = params.get(key: KeyNames.ACCIDENTAL) as! Accidental
+
         if !self.selectedNotations.isEmpty {
-            if !sameAccidentals(notations: self.selectedNotations, accidental: .natural) {
+            if !sameAccidentals(notations: self.selectedNotations, accidental: accidental) {
                 for (index, note) in self.selectedNotations.enumerated() {
                     if note is Note {
                         let curNote = note as! Note
 
                         let newNote = curNote.duplicate()
-                        newNote.accidental = .natural
+                        newNote.accidental = accidental
 
                         self.selectedNotations[index] = newNote
 
@@ -4002,68 +3996,8 @@ class MusicSheet: UIView {
             if let curNote = hovered as? Note {
                 let newNote = curNote.duplicate()
 
-                if curNote.accidental != .natural {
-                    newNote.accidental = .natural
-                } else {
-                    newNote.accidental = nil
-                }
-
-                let editAction = EditAction(old: [curNote], new: [newNote])
-
-                editAction.execute()
-
-                self.updateMeasureDraw()
-            }
-        }
-
-    }
-
-    public func flat() {
-        if !self.selectedNotations.isEmpty {
-            if !sameAccidentals(notations: self.selectedNotations, accidental: .flat) {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = .flat
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
-                    }
-                }
-            } else {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = nil
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
-                    }
-                }
-            }
-
-            self.transformView.isHidden = false
-            self.addSubview(self.transformView)
-        } else if let hovered = self.hoveredNotation {
-            if let curNote = hovered as? Note {
-                let newNote = curNote.duplicate()
-
-                if curNote.accidental != .flat {
-                    newNote.accidental = .flat
+                if curNote.accidental != accidental {
+                    newNote.accidental = accidental
                 } else {
                     newNote.accidental = nil
                 }
@@ -4225,126 +4159,6 @@ class MusicSheet: UIView {
                 self.ottavaMode = ottavaType
             }
         }
-    }
-
-    public func sharp() {
-        if !self.selectedNotations.isEmpty {
-            if !sameAccidentals(notations: self.selectedNotations, accidental: .sharp) {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = .sharp
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
-                    }
-                }
-            } else {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = nil
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
-                    }
-                }
-            }
-
-            self.transformView.isHidden = false
-            self.addSubview(self.transformView)
-        } else if let hovered = self.hoveredNotation {
-            if let curNote = hovered as? Note {
-                let newNote = curNote.duplicate()
-
-                if curNote.accidental != .sharp {
-                    newNote.accidental = .sharp
-                } else {
-                    newNote.accidental = nil
-                }
-                
-                let editAction = EditAction(old: [curNote], new: [newNote])
-
-                editAction.execute()
-
-                self.updateMeasureDraw()
-            }
-        }
-
-    }
-
-    public func dsharp() {
-        if !self.selectedNotations.isEmpty {
-            if !sameAccidentals(notations: self.selectedNotations, accidental: .doubleSharp) {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = .doubleSharp
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
-                    }
-                }
-            } else {
-                for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = nil
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
-                    }
-                }
-            }
-
-            self.transformView.isHidden = false
-            self.addSubview(self.transformView)
-        } else if let hovered = self.hoveredNotation {
-            if let curNote = hovered as? Note {
-                let newNote = curNote.duplicate()
-
-                if curNote.accidental != .doubleSharp {
-                    newNote.accidental = .doubleSharp
-                } else {
-                    newNote.accidental = nil
-                }
-
-                let editAction = EditAction(old: [curNote], new: [newNote])
-
-                editAction.execute()
-
-                self.updateMeasureDraw()
-            }
-        }
-
     }
     
     func dotNotation(params: Parameters) {

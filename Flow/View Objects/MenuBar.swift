@@ -207,25 +207,41 @@ class MenuBar: UIView {
     @IBAction func touchNaturalize(_ sender: UIButton) {
         print("naturalize")
         self.removeAccidentalHighlight()
-        EventBroadcaster.instance.postEvent(event: EventNames.NATURALIZE_KEY_PRESSED)
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.natural)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
     
     @IBAction func touchFlat(_ sender: UIButton) {
         print("flat")
         self.removeAccidentalHighlight()
-        EventBroadcaster.instance.postEvent(event: EventNames.FLAT_KEY_PRESSED)
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.flat)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
     
     @IBAction func touchSharp(_ sender: UIButton) {
         print("sharp")
         self.removeAccidentalHighlight()
-        EventBroadcaster.instance.postEvent(event: EventNames.SHARP_KEY_PRESSED)
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.sharp)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
 
     @IBAction func touchDSharp(_ sender: UIButton) {
         print("dsharp")
         self.removeAccidentalHighlight()
-        EventBroadcaster.instance.postEvent(event: EventNames.DSHARP_KEY_PRESSED)
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.doubleSharp)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
     
     @IBAction func touchUndo(_ sender: UIButton) {
