@@ -385,15 +385,16 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                     } else if let note = note as? Note {
                     
                         note.measure = measure
-                        let newChord: Chord = Chord(type: note.type, note: note)
+                        var newChord: Chord = Chord(type: note.type, note: note)
                     
                         if let existingNote = notation as? Note {
                             
                             // if cursor follows an existing CHORD, pour those existing elements to new chord
                             if let chord = existingNote.chord {
-                                for note in chord.notes {
-                                    newChord.notes.append(note)
-                                }
+                                
+                                newChord = chord.duplicate()
+                                newChord.notes.append(note)
+                                
                             // if cursor follows an existing NOTE, put that existing element to new chord
                             } else {
                                 let duplicatedNote = existingNote.duplicate()
@@ -403,6 +404,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                         }
                         
                         if let note = notation as? Note {
+                            
+                            newChord.sortNotes()
+                            
                             if let oldChord = note.chord {
                                 self.editNotations(old: [oldChord], new: [newChord])
                             } else {

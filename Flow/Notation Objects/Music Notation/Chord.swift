@@ -10,14 +10,29 @@ import UIKit
 
 class Chord: MusicNotation {
     
-    var notes: [Note]
+    var notes: [Note] {
+        didSet {
+            for note in notes {
+                note.dots = dots
+            }
+        }
+    }
+    
+    override var dots: Int {
+        didSet {
+            for note in notes {
+                note.dots = dots
+            }
+        }
+    }
     
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType = .quarter,
          measure: Measure? = nil, 
-         notes: [Note] = []) {
+         notes: [Note] = [],
+         dots: Int = 0) {
         self.notes = notes
-        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
+        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
         
         setImage()
     }
@@ -25,21 +40,30 @@ class Chord: MusicNotation {
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType = .quarter,
          measure: Measure? = nil,
-         note: Note) {
+         note: Note,
+         dots: Int = 0) {
         self.notes = []
         notes.append(note)
-        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
+        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
         
         setImage()
     }
  
     override func setImage() {
-        self.image = type.getNoteImage(isUpwards: true)
+        
+        if self.type == .half {
+            self.image = UIImage(named:"half-head")
+        } else if self.type == .whole {
+            self.image = UIImage(named:"whole-head")
+        } else {
+            self.image = UIImage(named:"quarter-head")
+        }
+        
     }
     
     override func duplicate() -> Chord {
         //return super.duplicate()
-        let chord = Chord(type: self.type, measure: self.measure)
+        let chord = Chord(type: self.type, measure: self.measure, dots: self.dots)
         
         for note in notes {
             let duplicatedNote = note.duplicate()
@@ -55,9 +79,11 @@ class Chord: MusicNotation {
         if let index = self.notes.index(of: note) {
             self.notes.remove(at: index)
             
-            if self.notes.count < 2 && self.notes.count > 0 {
+            if self.notes.count < 2 && self.notes.count > 0 { // only one left
                 //self.notes[0].measure = self.measure
                 self.notes[0].chord = nil
+                
+                self.notes[0].setImage()
                 
                 if let chordIndex = measure?.notationObjects.index(of: self) {
                     measure?.notationObjects.remove(at: chordIndex)
@@ -66,4 +92,115 @@ class Chord: MusicNotation {
             }
         }
     }
+    
+    public func sortNotes () {
+        
+        notes = insertionSort(notes) {$0.pitch < $1.pitch}
+        
+        for note in notes {
+            print ("NOTE : \(note.pitch)")
+        }
+        
+    }
+    
+    public static func isSeventh(notes: [Note]) -> Bool {
+        if notes.count > 3 {
+            
+            var minDiff = -1
+            var maxDiff = 0
+            
+            for note in notes.reversed() {
+                for innerNote in notes.reversed() {
+                    
+                    if note == innerNote {
+                        continue
+                    }
+                    
+                    var diff = Pitch.difference(from: note.pitch, to: innerNote.pitch)
+                    
+                    if diff < 0 {
+                        diff = diff * -1
+                    }
+                    
+                    if diff < minDiff || minDiff < 0 {
+                        minDiff = diff
+                    }
+                    
+                    if diff > maxDiff {
+                        maxDiff = diff
+                    }
+                    
+                }
+            }
+            
+            if minDiff == 2 && maxDiff > 5 {
+                return true
+            } else {
+                return false
+            }
+            
+        } else {
+            return false
+        }
+    }
+    
+    public func isSeventh() -> Bool {
+        if self.notes.count > 3 {
+            
+            var minDiff = -1
+            var maxDiff = 0
+            
+            for note in self.notes.reversed() {
+                for innerNote in self.notes.reversed() {
+                    
+                    if note == innerNote {
+                        continue
+                    }
+                    
+                    var diff = Pitch.difference(from: note.pitch, to: innerNote.pitch)
+                    
+                    if diff < 0 {
+                        diff = diff * -1
+                    }
+                    
+                    if diff < minDiff || minDiff < 0 {
+                        minDiff = diff
+                    }
+                    
+                    if diff > maxDiff {
+                        maxDiff = diff
+                    }
+                    
+                }
+            }
+            
+            if minDiff == 2 && maxDiff > 5 {
+                return true
+            } else {
+                return false
+            }
+            
+        } else {
+            return false
+        }
+    }
+    
+    // INSERTION SORT FROM https://github.com/raywenderlich/swift-algorithm-club/tree/master/Insertion%20Sort
+    // by raywenderlich : https://github.com/raywenderlich
+    func insertionSort<T>(_ array: [T], _ isOrderedBefore: (T, T) -> Bool) -> [T] {
+        guard array.count > 1 else { return array }
+        
+        var a = array
+        for x in 1..<a.count {
+            var y = x
+            let temp = a[y]
+            while y > 0 && isOrderedBefore(temp, a[y - 1]) {
+                a[y] = a[y - 1]
+                y -= 1
+            }
+            a[y] = temp
+        }
+        return a
+    }
+    
 }

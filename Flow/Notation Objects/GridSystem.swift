@@ -64,6 +64,8 @@ class GridSystem {
     private var gClefPitches = [Pitch]()
     private var fClefPitches = [Pitch]()
     
+    private var linePitches = [Pitch]() // pitches that belong to a line
+    
     public var recentNotation: MusicNotation?
     
     private init() {
@@ -92,9 +94,14 @@ class GridSystem {
         // starting from the top of g clef staff
         var currGClefPitch = Pitch(step: Step.F, octave: 6)
         
-        for _ in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
+        for i in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
             
             gClefPitches.append(currGClefPitch)
+            
+            if i % 2 == 1 {
+                linePitches.append(currGClefPitch)
+            }
+            
             currGClefPitch.transposeDown()
             
         }
@@ -102,13 +109,22 @@ class GridSystem {
         // starting from the top of f clef staff
         var currFClefPitch = Pitch(step: Step.A, octave: 4)
         
-        for _ in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
+        for i in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
             
             fClefPitches.append(currFClefPitch)
+            
+            if i % 2 == 1 && !linePitches.contains(currFClefPitch) {
+                linePitches.append(currFClefPitch)
+            }
+            
             currFClefPitch.transposeDown()
             
         }
 
+    }
+    
+    public func isPitchInLine (pitch: Pitch) -> Bool {
+        return linePitches.contains(pitch)
     }
     
     public func getMeasureFromPoints(measurePoints:MeasurePoints) -> Measure? {
@@ -323,17 +339,13 @@ class GridSystem {
             var leastDistance:CGFloat?
             if let snapPoints = snapPointsMap[measureCoord] {
                 
-                for (index, snapPoint) in snapPoints.enumerated() {
+                for snapPoint in snapPoints {
                     
                     if (snapPoint.y < currentPoint.y && snapPoint != currentPoint && snapPoint.x == currentPoint.x) {
                         let x2: CGFloat = currentPoint.x - snapPoint.x
                         let y2: CGFloat = currentPoint.y - snapPoint.y
                         
-                        print(index)
-                        print(snapPoint)
-                        
                         let potDistance = (x2 * x2) + (y2 * y2)
-                        print(potDistance)
                         
                         if let theDistance = leastDistance {
                             if (potDistance < theDistance) {
@@ -514,6 +526,25 @@ class GridSystem {
 
         return -1
 
+    }
+    
+    // THIS IS FOR RELOADING THE WHOLE COMPOSITION
+    public func getYFromPitch (pitch: Pitch, clef: Clef, snapPoints: [CGPoint]) -> CGFloat {
+        
+        var pitchToPointMap = [Pitch: CGPoint]()
+        let pitches = getPitches(clef: clef)
+        
+        for i in 0..<snapPoints.count {
+            //print(pitches[i])
+            pitchToPointMap[pitches[i%(NUMBER_OF_SNAPPOINTS_PER_COLUMN+1)]] = snapPoints[i]
+        }
+        
+        if let corresPoint = pitchToPointMap[pitch] {
+            return corresPoint.y
+        }
+        
+        return -1
+        
     }
     
     public func pointXHasANote(x: CGFloat) -> Bool {
