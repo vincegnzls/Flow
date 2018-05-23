@@ -4167,13 +4167,19 @@ class MusicSheet: UIView {
 
             if !newNotations.isEmpty {
                 if let hovered = self.hoveredNotation {
-                    let editAction = EditAction(old: [hovered], new: newNotations)
-                    editAction.execute()
+                    if hovered is Note {
+                        let editAction = EditAction(old: [hovered], new: newNotations)
+                        editAction.execute()
+                        self.updateMeasureDraw()
+                        repositionTransformView(first: false)
+                    } else if hovered is Chord {
+                        let editAction = EditAction(old: [hovered], new: newNotations)
+                        editAction.execute()
+                        self.updateMeasureDraw()
+                        repositionTransformView(first: false)
+                    }
                 }
             }
-
-            self.updateMeasureDraw()
-            repositionTransformView(first: false)
         } else {
             if self.ottavaMode == ottavaType {
                 self.ottavaMode = nil
