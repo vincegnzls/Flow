@@ -295,7 +295,7 @@ class MusicSheet: UIView {
                                 if let coord = curGroup[0].screenCoordinates {
                                     if let ottava = curGroup[0].ottava {
                                         if let measure = curGroup[0].measure {
-                                            drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                                            drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef, notations: curGroup)
                                             print("draw 1")
                                         }
                                     }
@@ -307,7 +307,7 @@ class MusicSheet: UIView {
                                             if let lastCoord = last.screenCoordinates {
                                                 if let firstOttava = first.ottava {
                                                     if let measure = first.measure {
-                                                        drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                                        drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef, notations: curGroup)
                                                         print("draw 2")
                                                     }
                                                 }
@@ -328,7 +328,7 @@ class MusicSheet: UIView {
                         if let coord = curGroup[0].screenCoordinates {
                             if let ottava = curGroup[0].ottava {
                                 if let measure = curGroup[0].measure {
-                                    drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                                    drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef, notations: curGroup)
                                     curGroup.removeAll()
                                     print("draw 3")
                                 }
@@ -341,7 +341,7 @@ class MusicSheet: UIView {
                                     if let lastCoord = last.screenCoordinates {
                                         if let firstOttava = first.ottava {
                                             if let measure = first.measure {
-                                                drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                                drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef, notations: curGroup)
                                                 curGroup.removeAll()
                                                 print("draw 4")
                                             }
@@ -365,7 +365,7 @@ class MusicSheet: UIView {
                                     if let coord = curGroup[0].screenCoordinates {
                                         if let ottava = curGroup[0].ottava {
                                             if let measure = curGroup[0].measure {
-                                                drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                                                drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef, notations: curGroup)
                                                 print("draw 5")
                                             }
                                         }
@@ -377,7 +377,7 @@ class MusicSheet: UIView {
                                                 if let lastCoord = last.screenCoordinates {
                                                     if let firstOttava = first.ottava {
                                                         if let measure = first.measure {
-                                                            drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                                            drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef, notations: curGroup)
                                                             print("draw 6")
                                                         }
                                                     }
@@ -398,7 +398,7 @@ class MusicSheet: UIView {
                             if let coord = curGroup[0].screenCoordinates {
                                 if let ottava = curGroup[0].ottava {
                                     if let measure = curGroup[0].measure {
-                                        drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                                        drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef, notations: curGroup)
                                         curGroup.removeAll()
                                         print("draw 7")
                                     }
@@ -411,7 +411,7 @@ class MusicSheet: UIView {
                                         if let lastCoord = last.screenCoordinates {
                                             if let firstOttava = first.ottava {
                                                 if let measure = first.measure {
-                                                    drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                                    drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef, notations: curGroup)
                                                     curGroup.removeAll()
                                                     print("draw 8")
                                                 }
@@ -432,7 +432,7 @@ class MusicSheet: UIView {
             if let coord = curGroup[0].screenCoordinates {
                 if let ottava = curGroup[0].ottava {
                     if let measure = curGroup[0].measure {
-                        drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef)
+                        drawOttava(start: coord, end: coord, type: ottava, clef: measure.clef, notations: curGroup)
                         curGroup.removeAll()
                         print("draw 9")
                     }
@@ -445,7 +445,7 @@ class MusicSheet: UIView {
                         if let lastCoord = last.screenCoordinates {
                             if let firstOttava = first.ottava {
                                 if let measure = first.measure {
-                                    drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef)
+                                    drawOttava(start: firstCoord, end: lastCoord, type: firstOttava, clef: measure.clef, notations: curGroup)
                                     curGroup.removeAll()
                                     print("draw 10")
                                 }
@@ -461,31 +461,31 @@ class MusicSheet: UIView {
         //curGroup.removeAll()
     }
 
-    func getHigherY(start: CGFloat, end: CGFloat) -> CGFloat {
-        if start < end {
-           if start - 40 > 65 {
-               return 65
-           } else {
-               return start - 40
-           }
-        } else {
-            if end - 40 > 65 {
-                return 65
+    func getHigherOrLowerY(start: CGFloat, end: CGFloat, higher: Bool, notations: [MusicNotation]) -> CGFloat {
+        var highestOrLowestNote = getLowestOrHighestNote(highest: higher, notations: notations)
+
+        if let coord = highestOrLowestNote.screenCoordinates {
+            if higher {
+                if coord.y - 40 > 65 {
+                    return 65
+                } else {
+                    return coord.y - 40
+                }
             } else {
-                return end - 40
+                if coord.y + 40 < 565 {
+                    return 565
+                } else {
+                    return coord.y + 40
+                }
             }
         }
+
+        return 0.0
     }
 
-    func drawOttava(start: CGPoint, end: CGPoint, type: OttavaType, clef: Clef) {
-        var y: CGFloat = 0.0
-
-        if clef == .F {
-            y = 500.0
-        }
-
-        let adjustedStart = CGPoint(x: start.x, y: getHigherY(start: start.y, end: end.y) + y)
-        let adjustedEnd = CGPoint(x: end.x + 50, y: getHigherY(start: start.y, end: end.y) + y)
+    func drawOttava(start: CGPoint, end: CGPoint, type: OttavaType, clef: Clef, notations: [MusicNotation]) {
+        let adjustedStart = CGPoint(x: start.x, y: getHigherOrLowerY(start: start.y, end: end.y, higher: clef == .G, notations: notations))
+        let adjustedEnd = CGPoint(x: end.x + 50, y: getHigherOrLowerY(start: start.y, end: end.y, higher: clef == .G, notations: notations))
 
         if start.equalTo(end) {
             self.drawLine(start: adjustedStart, end: adjustedEnd, thickness: 2)
