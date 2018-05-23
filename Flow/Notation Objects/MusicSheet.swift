@@ -1941,7 +1941,7 @@ class MusicSheet: UIView {
                     if !backtracking{
                         if index < (notes.count/2) && notes.count > 4 {
                             currentXModify += 25
-                        } else if notes.count > 2 {
+                        } else if notes.count > 2 && index != notes.count - 1 {
                             currentXModify += 50
                         } else {
                             currentXModify += 25
@@ -1971,6 +1971,11 @@ class MusicSheet: UIView {
                         }
                     }
                     
+                }
+                
+                if index > 0 && (Pitch.difference(from: note.pitch, to: notes[index-1].pitch) * -1) > 5 {
+                    currentXModify = 0
+                    backtracking = false
                 }
                 
                 if let screenCoordinates = note.screenCoordinates, let accidental = note.accidental {
