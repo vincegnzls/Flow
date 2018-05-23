@@ -4039,6 +4039,32 @@ class MusicSheet: UIView {
         return accidentalCount == notations.count
     }
 
+    public func sameOttava(notations: [MusicNotation]) -> Bool {
+        var ottava: OttavaType? = nil
+
+        for notation in notations {
+            if let note = notation as? Note {
+                if ottava == nil {
+                    ottava = note.ottava
+                } else {
+                    if note.ottava != ottava {
+                        return false
+                    }
+                }
+            } else if let chord = notation as? Chord {
+                if ottava == nil {
+                    ottava = chord.ottava
+                } else {
+                    if chord.ottava != ottava {
+                        return false
+                    }
+                }
+            }
+        }
+
+        return true
+    }
+
     public func ottava(params: Parameters) {
         let ottavaType = params.get(key: KeyNames.OTTAVA) as! OttavaType
 
@@ -4051,7 +4077,7 @@ class MusicSheet: UIView {
 
                     if note.ottava != ottavaType {
                         newNote.ottava = ottavaType
-                    } else if note.ottava == ottavaType {
+                    } else if note.ottava == ottavaType && sameOttava(notations: self.selectedNotations) {
                         newNote.ottava = nil
                     }
 
@@ -4061,7 +4087,7 @@ class MusicSheet: UIView {
 
                     if chord.ottava != ottavaType {
                         newChord.ottava = ottavaType
-                    } else if chord.ottava == ottavaType {
+                    } else if chord.ottava == ottavaType && sameOttava(notations: self.selectedNotations) {
                         newChord.ottava = nil
                     }
 
