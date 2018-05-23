@@ -1934,15 +1934,41 @@ class MusicSheet: UIView {
             var accidentalImageViews = [UIImageView]()
             
             // also check if there is a difference between two notes that is > 5, this would restart the layout back nearest to the chord
+            var backtracking = false
             for (index, note) in notes.enumerated() {
                 
                 if index != 0 {
-                    if notes.count > 2 && index-1 >= notes.count / 2 {
-                        currentXModify -= 25
-                    } else if notes.count > 2 {
-                        currentXModify += 50
-                    } else {
-                        currentXModify += 25
+                    if !backtracking{
+                        if index < (notes.count/2) && notes.count > 4 {
+                            currentXModify += 25
+                        } else if notes.count > 2 {
+                            currentXModify += 50
+                        } else {
+                            currentXModify += 25
+                        }
+                    }
+                    
+                    if index >= notes.count / 2 {
+                        if notes.count > 3 {
+                            if backtracking {
+                                if index == (notes.count/2) + 1 && notes.count > 4 {
+                                    currentXModify -= 25
+                                } else {
+                                    currentXModify -= 50
+                                }
+                            } else {
+                                if notes.count < 5 {
+                                    currentXModify -= 25
+                                }
+                                backtracking = true
+                            }
+                        } else {
+                            if backtracking {
+                                currentXModify -= 25
+                            } else {
+                                backtracking = true
+                            }
+                        }
                     }
                     
                 }
