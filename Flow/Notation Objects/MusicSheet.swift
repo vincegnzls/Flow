@@ -1938,11 +1938,11 @@ class MusicSheet: UIView {
                 
                 if index != 0 {
                     if notes.count > 2 && index-1 >= notes.count / 2 {
-                        currentXModify -= 20
+                        currentXModify -= 25
                     } else if notes.count > 2 {
-                        currentXModify += 40
+                        currentXModify += 50
                     } else {
-                        currentXModify += 20
+                        currentXModify += 25
                     }
                     
                 }
@@ -1991,7 +1991,7 @@ class MusicSheet: UIView {
             var staggerCount = 0
             for (index, note) in notes.enumerated() {
                 if index != 0 {
-                    currentXModify += 20
+                    currentXModify += 25
                     
                     if currentStaggerMax == staggerCount {
                         currentXModify = 0
