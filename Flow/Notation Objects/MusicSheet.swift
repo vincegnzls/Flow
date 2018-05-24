@@ -4171,12 +4171,10 @@ class MusicSheet: UIView {
                         let editAction = EditAction(old: [hovered], new: newNotations)
                         editAction.execute()
                         self.updateMeasureDraw()
-                        repositionTransformView(first: false)
                     } else if hovered is Chord {
                         let editAction = EditAction(old: [hovered], new: newNotations)
                         editAction.execute()
                         self.updateMeasureDraw()
-                        repositionTransformView(first: false)
                     }
                 }
             }
