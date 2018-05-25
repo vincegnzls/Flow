@@ -70,19 +70,19 @@ class MusicNotation: Equatable {
 
         switch type {
             case .whole:
-                return 14 * noteHeadWidth
-            case .half:
                 return 7 * noteHeadWidth
-            case .quarter:
+            case .half:
                 return 3.5 * noteHeadWidth
-            case .eighth:
+            case .quarter:
                 return 1.75 * noteHeadWidth
-            case .sixteenth:
+            case .eighth:
                 return 0.875 * noteHeadWidth
-            case .thirtySecond:
+            case .sixteenth:
                 return 0.4375 * noteHeadWidth
-            case .sixtyFourth:
+            case .thirtySecond:
                 return 0.21875 * noteHeadWidth
+            case .sixtyFourth:
+                return 0.109375 * noteHeadWidth
         }
     }
 
