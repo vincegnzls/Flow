@@ -511,7 +511,7 @@ Tap '+' to create a new composition.</string>
                                 <rect key="frame" x="0.0" y="774" width="1112" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIn-ix-cFN">
-                                        <rect key="frame" x="365" y="15" width="143" height="30"/>
+                                        <rect key="frame" x="364" y="15" width="143" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" title="Show/Hide Keyboard"/>
                                         <connections>
@@ -609,34 +609,34 @@ Tap '+' to create a new composition.</string>
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z3k-E7-fzk" userLabel="8va">
-                                        <rect key="frame" x="541" y="14" width="30" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z3k-E7-fzk" userLabel="8va" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="520" y="5" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="8va"/>
+                                        <state key="normal" image="8va-button"/>
                                         <connections>
                                             <action selector="eightVa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="LIa-5e-ChF"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L8F-Su-3ZI" userLabel="8vb">
-                                        <rect key="frame" x="575" y="15" width="30" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L8F-Su-3ZI" userLabel="8vb" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="580" y="5" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="8vb"/>
+                                        <state key="normal" image="8vb-button"/>
                                         <connections>
                                             <action selector="eightVb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="eju-6W-YT3"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dv2-Ny-LAM" userLabel="15ma">
-                                        <rect key="frame" x="613" y="14" width="37" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dv2-Ny-LAM" userLabel="15ma" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="640" y="5" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="15ma"/>
+                                        <state key="normal" image="15ma-button"/>
                                         <connections>
                                             <action selector="fifteenMa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="3Dm-wi-V4V"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCO-cJ-Zg9">
-                                        <rect key="frame" x="658" y="14" width="38" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCO-cJ-Zg9" userLabel="15mb" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="700" y="5" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="15mb"/>
+                                        <state key="normal" image="15mb-button"/>
                                         <connections>
                                             <action selector="fifteenMb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="Eyq-43-BXn"/>
                                         </connections>
@@ -1407,7 +1407,7 @@ Tap '+' to create a new composition.</string>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Set Key Signature" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZEs-ca-dQD">
-                                            <rect key="frame" x="609" y="69" width="270" height="21"/>
+                                            <rect key="frame" x="608" y="69" width="270" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1458,6 +1458,8 @@ Tap '+' to create a new composition.</string>
         </scene>
     </scenes>
     <resources>
+        <image name="15ma-button" width="115" height="115"/>
+        <image name="15mb-button" width="116" height="115"/>
         <image name="16th-note-icon" width="116" height="115"/>
         <image name="16th-rest-icon" width="116" height="115"/>
         <image name="2-4" width="52" height="60"/>
@@ -1468,6 +1470,8 @@ Tap '+' to create a new composition.</string>
         <image name="6-8" width="52" height="60"/>
         <image name="64th-note-icon" width="116" height="115"/>
         <image name="64th-rest-icon" width="116" height="115"/>
+        <image name="8va-button" width="115" height="115"/>
+        <image name="8vb-button" width="115" height="115"/>
         <image name="block-view-icon" width="116" height="115"/>
         <image name="circle" width="512" height="512"/>
         <image name="controls-arrow-down" width="320" height="320"/>

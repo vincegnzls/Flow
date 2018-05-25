@@ -484,7 +484,7 @@ class MusicSheet: UIView {
     }
 
     func drawOttava(start: CGPoint, end: CGPoint, type: OttavaType, clef: Clef, notations: [MusicNotation]) {
-        let adjustedStart = CGPoint(x: start.x + 10, y: getHigherOrLowerY(start: start.y, end: end.y, higher: clef == .G, notations: notations))
+        let adjustedStart = CGPoint(x: start.x + 50, y: getHigherOrLowerY(start: start.y, end: end.y, higher: clef == .G, notations: notations))
         let adjustedEnd = CGPoint(x: end.x + 50, y: getHigherOrLowerY(start: start.y, end: end.y, higher: clef == .G, notations: notations))
 
         if start.equalTo(end) {
@@ -497,6 +497,36 @@ class MusicSheet: UIView {
             self.drawLine(start: adjustedEnd, end: CGPoint(x: adjustedEnd.x, y: adjustedEnd.y + 20), thickness: 2)
         } else {
             self.drawLine(start: adjustedEnd, end: CGPoint(x: adjustedEnd.x, y: adjustedEnd.y - 20), thickness: 2)
+        }
+
+        if type == .eightVa {
+            let ottavaImage = UIImage(named: "8va")
+
+            let ottavaView = UIImageView(frame: CGRect(x: adjustedStart.x - 50, y: adjustedStart.y - 22.5, width: 50, height: 45))
+            ottavaView.image = ottavaImage
+
+            self.addSubview(ottavaView)
+        } else if type == .eightVb {
+            let ottavaImage = UIImage(named: "8vb")
+
+            let ottavaView = UIImageView(frame: CGRect(x: adjustedStart.x - 50, y: adjustedStart.y - 22.5, width: 50, height: 45))
+            ottavaView.image = ottavaImage
+
+            self.addSubview(ottavaView)
+        } else if type == .fifteenMa {
+            let ottavaImage = UIImage(named: "15ma")
+
+            let ottavaView = UIImageView(frame: CGRect(x: adjustedStart.x - 50, y: adjustedStart.y - 22.5, width: 50, height: 45))
+            ottavaView.image = ottavaImage
+
+            self.addSubview(ottavaView)
+        } else if type == . fifteenMb {
+            let ottavaImage = UIImage(named: "15mb")
+
+            let ottavaView = UIImageView(frame: CGRect(x: adjustedStart.x - 50, y: adjustedStart.y - 22.5, width: 50, height: 45))
+            ottavaView.image = ottavaImage
+
+            self.addSubview(ottavaView)
         }
     }
 
