@@ -92,35 +92,23 @@ class Converter {
             
             for (index, staff) in composition.staffList.enumerated() {
                 let measure = staff.measures[i]
+                let staffIndex = index + 1
                 
                 // Add notes and/or rests
                 for notation in measure.notationObjects {
                     let notationElement = measureElement.addChild(name: "note")
                     
-                    // Add necessary elements depending on note or rest
-                    if let note = notation as? Note {
-                        let pitchElement = notationElement.addChild(name: "pitch")
-                        pitchElement.addChild(name: "step", value: note.pitch.step.toString())
-                        pitchElement.addChild(name: "octave", value: "\(note.pitch.octave)")
+                    if let chord = notation as? Chord {
+                        convertNotationtoXML(notation: chord.notes[0], element: notationElement, staff: staffIndex, divisions: divisions)
                         
-                        if let accidental = note.accidental {
-                            notationElement.addChild(name: "accidental", value: accidental.toString())
+                        for note in chord.notes[1...] {
+                            let chordElement =  measureElement.addChild(name: "note")
+                            chordElement.addChild(name: "chord")
+                            convertNotationtoXML(notation: note, element: chordElement, staff: staffIndex, divisions: divisions)
                         }
-                        
-                    } else if notation is Rest {
-                        notationElement.addChild(name: "rest")
+                    } else {
+                        convertNotationtoXML(notation: notation, element: notationElement, staff: staffIndex, divisions: divisions)
                     }
-                    
-                    // Add dots
-                    for _ in 0..<notation.dots {
-                        notationElement.addChild(name: "dot")
-                    }
-                    
-                    notationElement.addChild(name: "staff", value: "\(index + 1)")
-                    
-                    // Set duration and type
-                    notationElement.addChild(name: "duration", value: "\(notation.type.getDuration(divisions: divisions))")
-                    notationElement.addChild(name: "type", value: notation.type.toString())
                 }
             }
         }
@@ -143,6 +131,33 @@ class Converter {
         print(xmlString)
         
         return xmlString
+    }
+    
+    private static func convertNotationtoXML(notation: MusicNotation, element notationElement: AEXMLElement, staff: Int, divisions: Int) {
+        // Add necessary elements depending on note or rest
+        if let note = notation as? Note {
+            let pitchElement = notationElement.addChild(name: "pitch")
+            pitchElement.addChild(name: "step", value: note.pitch.step.toString())
+            pitchElement.addChild(name: "octave", value: "\(note.pitch.octave)")
+            
+            if let accidental = note.accidental {
+                notationElement.addChild(name: "accidental", value: accidental.toString())
+            }
+            
+        } else if notation is Rest {
+            notationElement.addChild(name: "rest")
+        }
+        
+        // Add dots
+        for _ in 0..<notation.dots {
+            notationElement.addChild(name: "dot")
+        }
+        
+        notationElement.addChild(name: "staff", value: "\(staff)")
+        
+        // Set duration and type
+        notationElement.addChild(name: "duration", value: "\(notation.type.getDuration(divisions: divisions))")
+        notationElement.addChild(name: "type", value: notation.type.toString())
     }
     
     static func musicXMLtoComposition(_ xml: String) -> Composition {

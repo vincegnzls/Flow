@@ -23,6 +23,7 @@ class Note: MusicNotation {
     var isUpwards: Bool
     var beamed: Bool
     var chord: Chord?
+    var connection: Connection?
     
     init(screenCoordinates: CGPoint? = nil,
          pitch: Pitch,

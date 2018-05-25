@@ -105,6 +105,9 @@
 		86B8EFEE1FEAC30500DD834E /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B8EFED1FEAC30500DD834E /* Clipboard.swift */; };
 		86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */; };
 		86CCD7C31FDD783400A0FC8D /* StartMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */; };
+		86CE6CE620B81828003BAAA5 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CE6CE520B81828003BAAA5 /* Connection.swift */; };
+		86CE6CE820B818B1003BAAA5 /* Tie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CE6CE720B818B1003BAAA5 /* Tie.swift */; };
+		86CE6CEA20B819CF003BAAA5 /* Slur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CE6CE920B819CF003BAAA5 /* Slur.swift */; };
 		86DBDA8020368C6E00C834EF /* Chord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DBDA7F20368C6E00C834EF /* Chord.swift */; };
 /* End PBXBuildFile section */
 
@@ -243,6 +246,9 @@
 		86B8EFED1FEAC30500DD834E /* Clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipboard.swift; sourceTree = "<group>"; };
 		86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenuViewController.swift; sourceTree = "<group>"; };
+		86CE6CE520B81828003BAAA5 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
+		86CE6CE720B818B1003BAAA5 /* Tie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tie.swift; sourceTree = "<group>"; };
+		86CE6CE920B819CF003BAAA5 /* Slur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slur.swift; sourceTree = "<group>"; };
 		86DBDA7F20368C6E00C834EF /* Chord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chord.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -294,6 +300,7 @@
 		612909FC1F89FFFC0094F9B7 /* Notation Objects */ = {
 			isa = PBXGroup;
 			children = (
+				86CE6CE420B817BC003BAAA5 /* Connection */,
 				8618F0721FED3CF000DF8A10 /* Action */,
 				8696A8AA1FD4EB4300EB81BD /* Composition */,
 				863374771FD3279F003D7936 /* Music Notation */,
@@ -590,6 +597,16 @@
 			path = Controls;
 			sourceTree = "<group>";
 		};
+		86CE6CE420B817BC003BAAA5 /* Connection */ = {
+			isa = PBXGroup;
+			children = (
+				86CE6CE520B81828003BAAA5 /* Connection.swift */,
+				86CE6CE720B818B1003BAAA5 /* Tie.swift */,
+				86CE6CE920B819CF003BAAA5 /* Slur.swift */,
+			);
+			path = Connection;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -771,6 +788,7 @@
 				8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */,
 				864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */,
 				869F3C5F1FD8FCC500CC236F /* ControlsView.swift in Sources */,
+				86CE6CE820B818B1003BAAA5 /* Tie.swift in Sources */,
 				866CC8F620947725001ADD5B /* IQKeyboardReturnKeyHandler.swift in Sources */,
 				86CCD7C31FDD783400A0FC8D /* StartMenuViewController.swift in Sources */,
 				610ECE381FE7C58E009CC0F2 /* KeySignatureModel.swift in Sources */,
@@ -789,6 +807,7 @@
 				610ECE341FE6DAE9009CC0F2 /* TimeSignaturePicker.swift in Sources */,
 				86B8EFEE1FEAC30500DD834E /* Clipboard.swift in Sources */,
 				86A0287E1FD97C4B00305C0C /* CursorControlsView.swift in Sources */,
+				86CE6CE620B81828003BAAA5 /* Connection.swift in Sources */,
 				7ACB883E2046978D0073B154 /* SheetCursor.swift in Sources */,
 				864CE5B11FD330DA001FF059 /* GridCoordinates.swift in Sources */,
 				6135C82B1FDEC35000AF9EA9 /* Bounds.swift in Sources */,
@@ -812,6 +831,7 @@
 				8618F0781FED3D8C00DF8A10 /* EditAction.swift in Sources */,
 				866CC9012094773B001ADD5B /* IQBarButtonItem.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
+				86CE6CEA20B819CF003BAAA5 /* Slur.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
 				866CC9112094775E001ADD5B /* IQNSArray+Sort.swift in Sources */,
 				61266B7828BD9BC94920F385 /* CompositionTableViewCell.swift in Sources */,
