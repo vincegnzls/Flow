@@ -484,7 +484,7 @@ class MusicSheet: UIView {
     }
 
     func drawOttava(start: CGPoint, end: CGPoint, type: OttavaType, clef: Clef, notations: [MusicNotation]) {
-        let adjustedStart = CGPoint(x: start.x, y: getHigherOrLowerY(start: start.y, end: end.y, higher: clef == .G, notations: notations))
+        let adjustedStart = CGPoint(x: start.x + 10, y: getHigherOrLowerY(start: start.y, end: end.y, higher: clef == .G, notations: notations))
         let adjustedEnd = CGPoint(x: end.x + 50, y: getHigherOrLowerY(start: start.y, end: end.y, higher: clef == .G, notations: notations))
 
         if start.equalTo(end) {
@@ -4206,7 +4206,7 @@ class MusicSheet: UIView {
                 if allDotsAreEqualToNumDots {
                     
                     var removedDottedNotes = [MusicNotation]()
-                    
+
                     for notation in selectedNotations {
                         
                         let dottedNote = notation.duplicate()
