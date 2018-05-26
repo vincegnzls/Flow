@@ -32,22 +32,27 @@ class Chord: MusicNotation {
          type: RestNoteType = .quarter,
          measure: Measure? = nil, 
          notes: [Note] = [],
-         dots: Int = 0) {
+         dots: Int = 0,
+         ottava: OttavaType? = nil) {
         self.notes = notes
+        self.ottava = ottava
+
         super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
         
         setImage()
     }
-    
+
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType = .quarter,
          measure: Measure? = nil,
          note: Note,
-         dots: Int = 0) {
+         dots: Int = 0,
+         ottava: OttavaType? = nil) {
         self.notes = []
+        self.ottava = ottava
         notes.append(note)
         super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
-        
+
         setImage()
     }
  
@@ -65,7 +70,7 @@ class Chord: MusicNotation {
     
     override func duplicate() -> Chord {
         //return super.duplicate()
-        let chord = Chord(type: self.type, measure: self.measure, dots: self.dots)
+        let chord = Chord(type: self.type, measure: self.measure, dots: self.dots, ottava: self.ottava)
         
         for note in notes {
             let duplicatedNote = note.duplicate()

@@ -4521,88 +4521,77 @@ class MusicSheet: UIView {
                 var alreadyEdited = [Int]()
 
                 for (index, note) in self.selectedNotations.enumerated() {
-                    if note is Note {
-                        let curNote = note as! Note
-
-                        let newNote = curNote.duplicate()
-                        newNote.accidental = accidental
-
-                        self.selectedNotations[index] = newNote
-
-                        let editAction = EditAction(old: [curNote], new: [newNote])
-
-                        editAction.execute()
-
-                        self.updateMeasureDraw()
+                    if alreadyEdited.contains(index) {
+                        continue
                     }
-                    
+
                     if let note = note as? Note {
-                        
+
                         if let chord = note.chord{
-                            
+
                             var newNotesInChord = [Note]()
                             var indicesToBeEdited = [Int]()
-                            
+
                             for notation in selectedNotations {
                                 if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
                                     if chord == otherChord {
                                         let newNote = otherNote.duplicate()
                                         newNote.accidental = accidental
-                                        
+
                                         newNotesInChord.append(newNote)
                                         alreadyEdited.append(selectedIndex)
                                         indicesToBeEdited.append(noteIndex)
                                     }
                                 }
                             }
-                            
+
                             let newChord = chord.duplicate()
-                            
+
                             for (index, newNote) in newNotesInChord.enumerated() {
                                 newChord.notes[indicesToBeEdited[index]] = newNote
                                 newNote.chord = newChord
                             }
-                            
+
                             oldNotes.append(chord)
                             newNotes.append(newChord)
-                            
+
                         } else {
-                            
+
                             let newNote = note.duplicate()
                             newNote.accidental = accidental
-                            
+
                             //self.selectedNotations[index] = newNote
-                            
+
                             oldNotes.append(note)
                             newNotes.append(newNote)
-                            
+
                         }
-                        
+
                     } else if let chord = note as? Chord { // for the whole chord
-                        
+
                         var newNotesInChord = [Note]()
                         var indicesToBeEdited = [Int]()
-                        
+
                         for note in chord.notes {
                             if let noteIndex = chord.notes.index(of: note) {
                                 let newNote = note.duplicate()
                                 newNote.accidental = accidental
-                                
+
                                 newNotesInChord.append(newNote)
                                 indicesToBeEdited.append(noteIndex)
                             }
                         }
-                        
+
                         let newChord = chord.duplicate()
-                        
+
                         for (index, newNote) in newNotesInChord.enumerated() {
                             newChord.notes[indicesToBeEdited[index]] = newNote
                             newNote.chord = newChord
                         }
-                        
+
                         oldNotes.append(chord)
                         newNotes.append(newChord)
-                        
+
                     }
                 }
             } else {
