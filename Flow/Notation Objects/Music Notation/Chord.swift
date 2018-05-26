@@ -19,6 +19,14 @@ class Chord: MusicNotation {
             }
         }
     }
+
+    var connection: Connection? {
+        didSet {
+            for note in self.notes {
+                note.connection = connection
+            }
+        }
+    }
     
     override var dots: Int {
         didSet {

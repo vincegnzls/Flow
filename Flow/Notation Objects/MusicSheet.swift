@@ -267,6 +267,88 @@ class MusicSheet: UIView {
         return true
     }
 
+    func drawCurvedLine(from: CGPoint, to: CGPoint, thickness: CGFloat, bendFactor: CGFloat) {
+
+        let center = CGPoint(x: (from.x+to.x)*0.5, y: (from.y+to.y)*0.5)
+        let normal = CGPoint(x: -(from.y-to.y), y: (from.x-to.x))
+        let normalNormalized: CGPoint = {
+            let normalSize = sqrt(normal.x*normal.x + normal.y*normal.y)
+            guard normalSize > 0.0 else { return .zero }
+            return CGPoint(x: normal.x/normalSize, y: normal.y/normalSize)
+        }()
+
+        let path = UIBezierPath()
+
+        path.move(to: from)
+
+        let multiplier: CGFloat = 3.5
+
+        let midControlPoint: CGPoint = CGPoint(x: center.x + normal.x * bendFactor, y: center.y + normal.y * bendFactor)
+        let closeControlPoint: CGPoint = CGPoint(x: midControlPoint.x + normalNormalized.x * thickness * multiplier, y: midControlPoint.y + normalNormalized.y * thickness * multiplier)
+        let farControlPoint: CGPoint = CGPoint(x: midControlPoint.x - normalNormalized.x * thickness * multiplier, y: midControlPoint.y - normalNormalized.y * thickness * multiplier)
+
+
+        path.addQuadCurve(to: to, controlPoint: closeControlPoint)
+        path.addQuadCurve(to: from, controlPoint: farControlPoint)
+        path.close()
+
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.strokeColor = UIColor.black.cgColor
+        shapeLayer.lineWidth = thickness
+        shapeLayer.path = path.cgPath
+        shapeLayer.zPosition = .greatestFiniteMagnitude
+
+        self.layer.addSublayer(shapeLayer)
+        self.curLayers.append(shapeLayer)
+    }
+
+    func drawConnection(connection: Connection, bendFactor: CGFloat, isChord: Bool) {
+        print("DRAW CONNECTION")
+
+        if let first = connection.getFirstNote() {
+            if let last = connection.getLastNote() {
+
+                if let firstCoord = first.screenCoordinates {
+                    if let lastCoord = last.screenCoordinates {
+
+                        let offset: CGFloat = 22
+
+                        if !isChord {
+                            if !first.isUpwards {
+                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y - offset + 8)
+                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y - offset + 8)
+                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor)
+                            } else {
+                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y + offset - 5)
+                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y + offset - 5)
+                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor * -1)
+                            }
+                        } else {
+
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    func checkConnectionPerMeasure(notations: [MusicNotation]) {
+        for notation in notations {
+            if let note = notation as? Note {
+                if let connection = note.connection {
+                    if let first = notations.first {
+                        if note == first {
+                            drawConnection(connection: connection, bendFactor: 0.25, isChord: false)
+                        }
+                    }
+                }
+            } else if let chord = notation as? Chord {
+
+            }
+        }
+    }
+
     func drawDottedLine(start p0: CGPoint, end p1: CGPoint, thickness: CGFloat) {
         let shapeLayer = CAShapeLayer()
         shapeLayer.strokeColor = UIColor.black.cgColor
@@ -455,9 +537,6 @@ class MusicSheet: UIView {
                 }
             }
         }
-
-        print("DRAW CALL")
-
         //curGroup.removeAll()
     }
 
@@ -766,6 +845,10 @@ class MusicSheet: UIView {
         // Add listeners for ottava
         EventBroadcaster.instance.removeObservers(event: EventNames.OTTAVA)
         EventBroadcaster.instance.addObserver(event: EventNames.OTTAVA, observer: Observer(id: "MusicSheet.ottava", function: self.ottava))
+
+        // Add listeners for connection
+        EventBroadcaster.instance.removeObservers(event: EventNames.CONNECTION)
+        EventBroadcaster.instance.addObserver(event: EventNames.CONNECTION, observer: Observer(id: "MusicSheet.connection", function: self.connection))
 
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
@@ -1771,6 +1854,7 @@ class MusicSheet: UIView {
             }
 
             checkOttavaPerMeasure(notations: measure.notationObjects)
+            checkConnectionPerMeasure(notations: measure.notationObjects)
         }
 
         return grandStaffMeasurePoints
@@ -3066,10 +3150,12 @@ class MusicSheet: UIView {
     private func processTranspositions() {
         // Process transpositions
         if self.transpositions != 0 {
+
             var newNotations = [MusicNotation]()
+
             for notation in self.selectedNotations {
                 newNotations.append(notation.duplicate())
-                
+
                 if let note = notation as? Note {
                     note.pitch = self.initialPitches.removeFirst()
                 }
@@ -3095,7 +3181,31 @@ class MusicSheet: UIView {
             
             let editAction = EditAction(old: self.selectedNotations, new: newNotations)
             editAction.execute()
+
+            var newNoteConnections = [Note]()
+
             self.updateMeasureDraw()
+
+            // UPDATE CONNECTIONS OF TRANSPOSED NOTES
+            /*if allNotes(notations: newNotations) {
+                var newNotes = [Note]()
+
+                for note in newNotations {
+                    if let note = note as? Note {
+                        newNotes.append(note)
+                    }
+                }
+
+                for note in newNotes {
+                    if let connection = note.connection {
+                        if connection.notes.count != newNotes.count{
+
+                        } else {
+                            connection.notes = newNotes
+                        }
+                    }
+                }
+            }*/
             
             self.transpositions = 0
             self.initialPitches.removeAll()
@@ -4803,19 +4913,9 @@ class MusicSheet: UIView {
         return true
     }
 
-    func sameConnections(notes: [Notes]) -> Bool {
-        var connectionType: Connection? = nil
-
-        for note in notes {
-            if let noteConnection = note.connection {
-                if connectionType == nil {
-                    connectionType = noteConnection
-                } else {
-                    if noteConnection != connectionType {
-                        return false
-                    }
-                }
-            } else {
+    func allChords(notations: [MusicNotation]) -> Bool {
+        for notation in notations {
+            if notation is Rest || notation is Note {
                 return false
             }
         }
@@ -4823,13 +4923,53 @@ class MusicSheet: UIView {
         return true
     }
 
-    func allNotesOrChords(notations: [MusicNotation]) -> Bool {
-        for notation in notations {
-            if notation is Rest {
-                return false
-            }
-        }
+    func sameConnections(notations: [MusicNotation]) -> Bool {
+        var connectionType: ConnectionType? = nil
 
+        if notations.count > 1 {
+            for notation in notations {
+                if let note = notation as? Note {
+
+                    if let noteConnection = note.connection {
+                        if let type = noteConnection.type {
+                            if connectionType == nil {
+                                connectionType = type
+                            } else {
+                                if connectionType != type {
+                                    return false
+                                }
+                            }
+                        } else {
+                            return false
+                        }
+                    } else {
+                        return false
+                    }
+
+                } else if let chord = notation as? Chord {
+
+                    if let chordConnection = chord.connection {
+                        if let type = chordConnection.type {
+                            if connectionType == nil {
+                                connectionType = type
+                            } else {
+                                if connectionType != type {
+                                    return false
+                                }
+                            }
+                        } else {
+                            return false
+                        }
+                    } else {
+                        return false
+                    }
+
+                }
+            }
+        } else {
+            return false
+        }
+        
         return true
     }
 
@@ -4837,29 +4977,51 @@ class MusicSheet: UIView {
         var connection = params.get(key: KeyNames.CONNECTION) as! Connection
 
         if self.selectedNotations.count > 1 {
-            var selectedNotes = [Note]()
 
-            if allNotesOrChords(notations: self.selectedNotations) {
-                for notation in self.selectedNotations {
-                    if let note = notation as? Note {
-                        selectedNotes.append(note)
+            if connection.type == .tie {
+                if allNotes(notations: self.selectedNotations) {
+
+                    if sameConnections(notations: self.selectedNotations) {
+                        // remove all ties
+                    } else {
+                        var connectedNotes = [Note]()
+                        var newNotes = [Note]()
+
+                        for notation in self.selectedNotations {
+                            if let note = notation as? Note {
+                                connectedNotes.append(note)
+                            }
+                        }
+
+                        connection.notes = connectedNotes
+
+                        for note in connectedNotes {
+                            var newNote = note.duplicate()
+                            newNote.connection = connection
+                            newNotes.append(newNote)
+                        }
+
+                        let editAction = EditAction(old: connectedNotes, new: newNotes)
+                        editAction.execute()
+
+                        for note in newNotes {
+                            if let connection = note.connection {
+                                connection.notes = newNotes
+                            }
+                        }
+
+                        selectedNotations.removeAll()
+                        selectedNotations = newNotes
+
+                        self.updateMeasureDraw()
+                        repositionTransformView(first: false)
                     }
+
+                } else if allChords(notations: self.selectedNotations) {
+
                 }
             }
 
-            if selectedNotes.count > 1 {
-                connection.notes = selectedNotes
-
-                if let first = selectedNotes.first {
-                    let newNote = first.duplicate()
-                    newNote.connection = connection
-
-                    let editAction = EditAction(old: [first], new: [newNote])
-                    editAction.execute()
-                }
-            } else {
-                // DISABLE SLUR / TIE BUTTONS
-            }
         }
     }
 

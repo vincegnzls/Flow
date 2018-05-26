@@ -62,4 +62,6 @@ struct EventNames {
 
     static let OTTAVA_HIGHLIGHT = "OTTAVA_HIGHLIGHT"
     static let REMOVE_OTTAVA_HIGHLIGHT = "REMOVE_OTTAVA_HIGHLIGHT"
+
+    static let CONNECTION = "CONNECTION"
 }
