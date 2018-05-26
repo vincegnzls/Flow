@@ -643,11 +643,11 @@ Tap '+' to create a new composition.</string>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB">
-                                        <rect key="frame" x="766" y="15" width="30" height="30"/>
+                                        <rect key="frame" x="750" y="15" width="59" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Tie"/>
+                                        <state key="normal" title="Connect"/>
                                         <connections>
-                                            <action selector="tie:" destination="VHe-OH-6BV" eventType="touchUpInside" id="VbP-Oa-IoO"/>
+                                            <action selector="connect:" destination="VHe-OH-6BV" eventType="touchUpInside" id="VbP-Oa-IoO"/>
                                         </connections>
                                     </button>
                                 </subviews>

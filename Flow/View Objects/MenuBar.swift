@@ -439,11 +439,11 @@ class MenuBar: UIView {
         EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
     }
     
-    @IBAction func tie(_ sender: UIButton) {
-        let tie = Connection(type: .tie)
+    @IBAction func connect(_ sender: UIButton) {
+        let connection = Connection()
         
         let params = Parameters()
-        params.put(key: KeyNames.CONNECTION, value: tie)
+        params.put(key: KeyNames.CONNECTION, value: connection)
         
         EventBroadcaster.instance.postEvent(event: EventNames.CONNECTION, params: params)
     }

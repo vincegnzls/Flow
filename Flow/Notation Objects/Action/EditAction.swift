@@ -24,7 +24,7 @@ class EditAction: Action {
         self.edit()
         UndoRedoManager.instance.addActionToUndoStack(self)
     }
-    
+
     private func edit() {
         var newIndex = 0
         for old in self.oldNotations {
