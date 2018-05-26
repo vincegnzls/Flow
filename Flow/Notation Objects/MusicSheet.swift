@@ -4803,6 +4803,35 @@ class MusicSheet: UIView {
         return true
     }
 
+    func connection(params: Parameters) {
+        var connection = params.get(key: KeyNames.CONNECTION) as! Connection
+
+        if self.selectedNotations.count > 1 {
+            connection.notes = self.selectedNotations
+            var selectedNotes = [Note]()
+
+            if allNotes(notations: self.selectedNotations) {
+                for notation in self.selectedNotations {
+                    if let note = notation as? Note {
+                        selectedNotes.append(note)
+                    }
+                }
+            }
+
+            if selectedNotes.count > 1 {
+                connection.notes = selectedNotes
+
+                if let first = selectedNotes.first {
+                    let newNote = first.duplicate()
+                    newNote.connection = connection
+
+                    let editAction = EditAction(old: [first], new: [newNote])
+                    editAction.execute()
+                }
+            }
+        }
+    }
+
     public func ottava(params: Parameters) {
         let ottavaType = params.get(key: KeyNames.OTTAVA) as! OttavaType
 

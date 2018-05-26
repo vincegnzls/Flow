@@ -38,4 +38,6 @@ struct KeyNames {
     static let KEYBOARD_NOTE = "KEYBOARD_NOTE"
 
     static let OTTAVA = "OTTAVA"
+
+    static let CONNECTION = "CONNECTION"
 }
