@@ -4509,11 +4509,17 @@ class MusicSheet: UIView {
     }
 
     public func accidentalPress(params: Parameters) {
+        var newNotes = [MusicNotation]()
 
         let accidental = params.get(key: KeyNames.ACCIDENTAL) as! Accidental
 
         if !self.selectedNotations.isEmpty {
+            var oldNotes = [MusicNotation]()
+
             if !sameAccidentals(notations: self.selectedNotations, accidental: accidental) {
+
+                var alreadyEdited = [Int]()
+
                 for (index, note) in self.selectedNotations.enumerated() {
                     if note is Note {
                         let curNote = note as! Note
@@ -4541,7 +4547,7 @@ class MusicSheet: UIView {
                                 if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
                                     if chord == otherChord {
                                         let newNote = otherNote.duplicate()
-                                        newNote.accidental = .natural
+                                        newNote.accidental = accidental
                                         
                                         newNotesInChord.append(newNote)
                                         alreadyEdited.append(selectedIndex)
@@ -4563,7 +4569,7 @@ class MusicSheet: UIView {
                         } else {
                             
                             let newNote = note.duplicate()
-                            newNote.accidental = .natural
+                            newNote.accidental = accidental
                             
                             //self.selectedNotations[index] = newNote
                             
@@ -4580,7 +4586,7 @@ class MusicSheet: UIView {
                         for note in chord.notes {
                             if let noteIndex = chord.notes.index(of: note) {
                                 let newNote = note.duplicate()
-                                newNote.accidental = .natural
+                                newNote.accidental = accidental
                                 
                                 newNotesInChord.append(newNote)
                                 indicesToBeEdited.append(noteIndex)
@@ -4886,72 +4892,6 @@ class MusicSheet: UIView {
                         editAction.execute()
                         self.updateMeasureDraw()
                     }
-                    
-                    if let note = note as? Note {
-                        
-                        if let chord = note.chord {
-                            
-                            var newNotesInChord = [Note]()
-                            var indicesToBeEdited = [Int]()
-                            
-                            for notation in selectedNotations {
-                                if let otherNote = notation as? Note, let otherChord = otherNote.chord, let noteIndex = otherChord.notes.index(of: otherNote), let selectedIndex = selectedNotations.index(of: otherNote) {
-                                    if chord == otherChord {
-                                        let newNote = otherNote.duplicate()
-                                        newNote.accidental = nil
-                                        
-                                        newNotesInChord.append(newNote)
-                                        alreadyEdited.append(selectedIndex)
-                                        indicesToBeEdited.append(noteIndex)
-                                    }
-                                }
-                            }
-                            
-                            let newChord = chord.duplicate()
-                            
-                            for (index, newNote) in newNotesInChord.enumerated() {
-                                newChord.notes[indicesToBeEdited[index]] = newNote
-                                newNote.chord = newChord
-                            }
-                            
-                            oldNotes.append(chord)
-                            newNotes.append(newChord)
-                        } else {
-                            
-                            let newNote = note.duplicate()
-                            newNote.accidental = nil
-                            
-                            oldNotes.append(note)
-                            newNotes.append(newNote)
-                            
-                        }
-                        
-                    } else if let chord = note as? Chord {
-                        
-                        var newNotesInChord = [Note]()
-                        var indicesToBeEdited = [Int]()
-                        
-                        for note in chord.notes {
-                            if let noteIndex = chord.notes.index(of: note) {
-                                let newNote = note.duplicate()
-                                newNote.accidental = nil
-                                
-                                newNotesInChord.append(newNote)
-                                indicesToBeEdited.append(noteIndex)
-                            }
-                        }
-                        
-                        let newChord = chord.duplicate()
-                        
-                        for (index, newNote) in newNotesInChord.enumerated() {
-                            newChord.notes[indicesToBeEdited[index]] = newNote
-                            newNote.chord = newChord
-                        }
-                        
-                        oldNotes.append(chord)
-                        newNotes.append(newChord)
-                        
-                    }
                 }
             }
         } else {
@@ -4963,167 +4903,168 @@ class MusicSheet: UIView {
             
         }
     }
-    
+
     func dotNotation(params: Parameters) {
         let numDots = params.get(key: KeyNames.NUM_OF_DOTS, defaultValue: 0)
         var addedValue: Float = 0
-        
+
         var allDotsAreEqualToNumDots = true
-        
+
         if numDots > 0 {
-            
+
             if !selectedNotations.isEmpty {
-                
+
                 for notation in selectedNotations {
                     if notation.dots != numDots {
                         allDotsAreEqualToNumDots = false
                     }
                 }
-                
+
                 if allDotsAreEqualToNumDots { // for removing dots
-                    
+
                     var oldNotations = [MusicNotation]()
                     var removedDottedNotes = [MusicNotation]()
+                    var alreadyCheckedIndices = [Int]()
 
-                    for notation in selectedNotations {
-                        
+                    for (index, notation) in selectedNotations.enumerated() {
+
                         if alreadyCheckedIndices.contains(index) {
                             continue
                         }
-                        
+
                         if let note = notation as? Note, let chord = note.chord {
-                            
+
                             let newChord = chord.duplicate()
-                            
+
                             for note in chord.notes{
                                 if let selectedIndex = selectedNotations.index(of: note) {
                                     alreadyCheckedIndices.append(selectedIndex)
                                 }
                             }
-                            
+
                             newChord.dots = 0
-                            
+
                             oldNotations.append(chord)
                             removedDottedNotes.append(newChord)
-                            
+
                         } else {
                             let dottedNote = notation.duplicate()
                             dottedNote.dots = 0
-                            
+
                             oldNotations.append(notation)
                             removedDottedNotes.append(dottedNote)
                         }
-                        
+
                     }
-                    
+
                     if !removedDottedNotes.isEmpty {
                         let editAction = EditAction(old: oldNotations, new: removedDottedNotes)
                         editAction.execute()
                     }
-                    
+
                 } else { // adding dots
                     var dottedNotations = [MusicNotation]()
                     var oldNotations = [MusicNotation]()
-                    
+
                     var alreadyCheckedIndices = [Int]()
-                    
+
                     for (index, notation) in selectedNotations.enumerated() {
-                        
+
                         if alreadyCheckedIndices.contains(index) {
                             continue
                         }
-                        
+
                         if let measure = notation.measure {
-                            
+
                             let value = notation.type.getBeatValue(dots: numDots) - notation.type.getBeatValue(dots: notation.dots)
-                            
+
                             if measure.isAddNoteValid(addedValue: addedValue, value: value) {
-                                
+
                                 if let note = notation as? Note, let chord = note.chord {
-                                    
+
                                     let newChord = chord.duplicate()
-                                    
+
                                     for note in chord.notes{
                                         if let selectedIndex = selectedNotations.index(of: note) {
                                             alreadyCheckedIndices.append(selectedIndex)
                                         }
                                     }
-                                    
+
                                     newChord.dots = numDots
-                                    
+
                                     oldNotations.append(chord)
                                     dottedNotations.append(newChord)
-                                    
+
                                     addedValue += value
-                                    
+
                                 } else {
-                                
+
                                     let dottedNote = notation.duplicate()
                                     dottedNote.dots = numDots
-                                    
+
                                     addedValue += value
-                                    
+
                                     oldNotations.append(notation)
                                     dottedNotations.append(dottedNote)
-                                    
+
                                 }
                             } else {
                                 dottedNotations.append(notation)
                             }
                         }
                     }
-                    
+
                     if !dottedNotations.isEmpty {
                         let editAction = EditAction(old: oldNotations, new: dottedNotations)
                         editAction.execute()
                     }
                 }
-                
+
             } else if let hovered = self.hoveredNotation ?? GridSystem.instance.getNoteFromX(x: sheetCursor.curYCursorLocation.x) {
-                
+
                 if hovered.dots == numDots {
-                    
+
                     if let note = hovered as? Note, let chord = note.chord {
-                        
+
                         let removedDottedChord = chord.duplicate()
                         removedDottedChord.dots = 0
-                        
+
                         let editAction = EditAction(old: [chord], new: [removedDottedChord])
                         editAction.execute()
                     } else {
-                        
+
                         let removedDottedNote = hovered.duplicate()
                         removedDottedNote.dots = 0
-                        
+
                         let editAction = EditAction(old: [hovered], new: [removedDottedNote])
                         editAction.execute()
                     }
-                    
+
                 } else {
-                
+
                     if let measure = hovered.measure {
-                        
+
                         let value = hovered.type.getBeatValue(dots: numDots) - hovered.type.getBeatValue(dots:hovered.dots)
-                        
+
                         if measure.isAddNoteValid(value: value) {
-                            
+
                             if let note = hovered as? Note, let chord = note.chord {
                                 let dottedChord = chord.duplicate()
                                 dottedChord.dots = numDots
-                                
+
                                 let editAction = EditAction(old: [chord], new: [dottedChord])
                                 editAction.execute()
                             } else {
                                 let dottedNote = hovered.duplicate()
                                 dottedNote.dots = numDots
-                                
+
                                 let editAction = EditAction(old: [hovered], new: [dottedNote])
                                 editAction.execute()
                             }
-                            
+
                         }
                     }
-                    
+
                 }
             } else {
                 switch numDots {
@@ -5149,7 +5090,7 @@ class MusicSheet: UIView {
                     dotModes = [false, false, false]
                 }
             }
-            
+
             selectedNotations.removeAll()
             self.updateMeasureDraw()
         }
