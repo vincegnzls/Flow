@@ -4803,13 +4803,43 @@ class MusicSheet: UIView {
         return true
     }
 
+    func sameConnections(notes: [Notes]) -> Bool {
+        var connectionType: Connection? = nil
+
+        for note in notes {
+            if let noteConnection = note.connection {
+                if connectionType == nil {
+                    connectionType = noteConnection
+                } else {
+                    if noteConnection != connectionType {
+                        return false
+                    }
+                }
+            } else {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    func allNotesOrChords(notations: [MusicNotation]) -> Bool {
+        for notation in notations {
+            if notation is Rest {
+                return false
+            }
+        }
+
+        return true
+    }
+
     func connection(params: Parameters) {
         var connection = params.get(key: KeyNames.CONNECTION) as! Connection
 
         if self.selectedNotations.count > 1 {
             var selectedNotes = [Note]()
 
-            if allNotes(notations: self.selectedNotations) {
+            if allNotesOrChords(notations: self.selectedNotations) {
                 for notation in self.selectedNotations {
                     if let note = notation as? Note {
                         selectedNotes.append(note)
@@ -4827,6 +4857,8 @@ class MusicSheet: UIView {
                     let editAction = EditAction(old: [first], new: [newNote])
                     editAction.execute()
                 }
+            } else {
+                // DISABLE SLUR / TIE BUTTONS
             }
         }
     }
