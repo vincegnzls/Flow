@@ -4807,7 +4807,6 @@ class MusicSheet: UIView {
         var connection = params.get(key: KeyNames.CONNECTION) as! Connection
 
         if self.selectedNotations.count > 1 {
-            connection.notes = self.selectedNotations
             var selectedNotes = [Note]()
 
             if allNotes(notations: self.selectedNotations) {

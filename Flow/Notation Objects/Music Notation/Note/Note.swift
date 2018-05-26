@@ -24,6 +24,7 @@ class Note: MusicNotation {
     var beamed: Bool
     var chord: Chord?
     var ottava: OttavaType?
+    var connection: Connection?
     
     init(screenCoordinates: CGPoint? = nil,
          pitch: Pitch,
