@@ -23,6 +23,7 @@ class Note: MusicNotation {
     var isUpwards: Bool
     var beamed: Bool
     var chord: Chord?
+    var ottava: OttavaType?
     var connection: Connection?
     
     init(screenCoordinates: CGPoint? = nil,
@@ -31,9 +32,11 @@ class Note: MusicNotation {
          measure: Measure? = nil,
          accidental: Accidental? = nil,
          chord: Chord? = nil,
-         dots: Int = 0) {
+         dots: Int = 0,
+         ottava: OttavaType? = nil) {
         self.pitch = pitch
         self.accidental = accidental
+        self.ottava = ottava
         self.isUpwards = true
         self.beamed = false
         
@@ -91,6 +94,6 @@ class Note: MusicNotation {
     }
 
     override func duplicate() -> Note {
-        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots)
+        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots, ottava: self.ottava)
     }
 }

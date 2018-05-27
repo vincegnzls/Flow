@@ -85,6 +85,36 @@ class SoundManager {
         
         var MIDINum: MIDINoteNumber = 0
 
+        var note = note.duplicate()
+
+        if let ottava = note.ottava {
+            if ottava == .eightVa {
+                if note.pitch.octave + 1 <= 8 {
+                    note.pitch.octave += 1
+                } else {
+                    note.pitch.octave = 8
+                }
+            } else if ottava == .eightVb {
+                if note.pitch.octave - 1 >= 0 {
+                    note.pitch.octave -= 1
+                } else {
+                    note.pitch.octave = 0
+                }
+            } else if ottava == .fifteenMa {
+                if note.pitch.octave + 2 <= 8 {
+                    note.pitch.octave += 2
+                } else {
+                    note.pitch.octave = 8
+                }
+            } else if ottava == .fifteenMb {
+                if note.pitch.octave - 2 >= 0 {
+                    note.pitch.octave -= 2
+                } else {
+                    note.pitch.octave = 0
+                }
+            }
+        }
+
         switch note.pitch.step.toString(){
         case "A":
             switch note.pitch.octave{
@@ -349,6 +379,36 @@ class SoundManager {
     func getNoteMIDINum(note: Note, keySignature: KeySignature) -> Int {
 
         var MIDINum = 30
+
+        var note = note.duplicate()
+
+        if let ottava = note.ottava {
+            if ottava == .eightVa {
+                if note.pitch.octave + 1 <= 8 {
+                    note.pitch.octave += 1
+                } else {
+                    note.pitch.octave = 8
+                }
+            } else if ottava == .eightVb {
+                if note.pitch.octave - 1 >= 0 {
+                    note.pitch.octave -= 1
+                } else {
+                    note.pitch.octave = 0
+                }
+            } else if ottava == .fifteenMa {
+                if note.pitch.octave + 2 <= 8 {
+                    note.pitch.octave += 2
+                } else {
+                    note.pitch.octave = 8
+                }
+            } else if ottava == .fifteenMb {
+                if note.pitch.octave - 2 >= 0 {
+                    note.pitch.octave -= 2
+                } else {
+                    note.pitch.octave = 0
+                }
+            }
+        }
 
         switch note.pitch.step.toString(){
         case "A":
