@@ -61,7 +61,9 @@ class Connection {
             if let newConnection = newNote.connection, let newCNotes = newConnection.notes {
                 for newCNote in newCNotes {
                     if let connection = newCNote.connection {
-                        connection.notes![index] = newNote
+                        if index < connection.notes!.count {
+                            connection.notes![index] = newNote
+                        }
                     }
                 }
             }
