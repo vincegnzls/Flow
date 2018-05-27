@@ -360,7 +360,7 @@ class MusicSheet: UIView {
         for notation in notations {
             if let note = notation as? Note {
                 if let connection = note.connection {
-                    if let first = notations.first {
+                    if let first = connection.getFirstNote() {
                         if note == first {
                             drawConnection(connection: connection, bendFactor: 0.25, isChord: false)
                         }
