@@ -747,15 +747,40 @@ class SoundManager {
 
         var notePlayer = [[Int?]]()
 
-        let x = self.getDurationOfNote(notation: notation)
+        var x = self.getDurationOfNote(notation: notation)
+        
+        if let note = notation as? Note, let conn = note.connection, let connNotes = conn.notes {
+            if conn.type == .tie {
+                x = 0
+                
+                for noteConn in connNotes {
+                    x += getDurationOfNote(notation: noteConn)
+                }
+            }
+        }
 
         for beat in 0..<x {
             if let note = notation as? Note {
-                if beat >= 1 {
-                    //print("Note Added. Adding the Trailing 0s")
-                    notePlayer.append([nil])
+                if let conn = note.connection, let notes = conn.notes, let first = notes.first {
+                    if beat >= 1 {
+                        //print("Note Added. Adding the Trailing 0s")
+                        notePlayer.append([nil])
+                    } else {
+                        if note == first && conn.type == .tie {
+                            notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
+                        } else if conn.type == .slur {
+                            notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
+                        } else {
+                            notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
+                        }
+                    }
                 } else {
-                    notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
+                    if beat >= 1 {
+                        //print("Note Added. Adding the Trailing 0s")
+                        notePlayer.append([nil])
+                    } else {
+                        notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
+                    }
                 }
             } else if let chord = notation as? Chord {
                 if beat >= 1 {
