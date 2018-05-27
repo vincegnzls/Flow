@@ -24,6 +24,17 @@ class DeleteAction: Action {
         var notationsToBeRemoved = [MusicNotation]()
         
         for notation in self.notations {
+            
+            if let note = notation as? Note, let conn = note.connection {
+                if let connNotes = conn.notes {
+                    for note in connNotes {
+                        if let curConn = note.connection {
+                            curConn.notes!.remove(at: curConn.notes!.index(of: note)!)
+                        }
+                    }
+                }
+            }
+            
             if let measure = notation.measure {
                 if let note = notation as? Note { // FOR DELETING GROUP OF NOTES FROM CHORDS
                     if let chord = note.chord {

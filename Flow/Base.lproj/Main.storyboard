@@ -482,6 +482,7 @@ Tap '+' to create a new composition.</string>
                                     <constraint firstItem="iEu-Uq-rfU" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" constant="3" id="slP-uX-hxM"/>
                                 </constraints>
                                 <connections>
+                                    <outlet property="connectBtn" destination="9HY-Gc-gcB" id="GEy-0l-mwx"/>
                                     <outlet property="dSharpBtn" destination="NBh-oB-XfU" id="Ucn-7H-fiF"/>
                                     <outlet property="eightVaBtn" destination="Z3k-E7-fzk" id="CbY-Ka-Yz7"/>
                                     <outlet property="eightVbBtn" destination="L8F-Su-3ZI" id="jcg-vv-hqA"/>
@@ -493,7 +494,6 @@ Tap '+' to create a new composition.</string>
                                     <outlet property="playBtn" destination="Ycl-gp-KaZ" id="PfC-LS-EAk"/>
                                     <outlet property="sharpBtn" destination="ofh-iv-b6S" id="u0B-2T-jm2"/>
                                     <outlet property="threeDotsBtn" destination="MiL-U5-9Q2" id="Y4f-pc-hB3"/>
-                                    <outlet property="tieBtn" destination="9HY-Gc-gcB" id="GEy-0l-mwx"/>
                                     <outlet property="twoDotsBtn" destination="nzu-Uc-umr" id="u7z-re-ofG"/>
                                 </connections>
                             </view>

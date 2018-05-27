@@ -26,7 +26,7 @@ class MenuBar: UIView {
     @IBOutlet weak var fifteenMaBtn: UIButton!
     @IBOutlet weak var fifteenMbBtn: UIButton!
     
-    @IBOutlet weak var tieBtn: UIButton!
+    @IBOutlet weak var connectBtn: UIButton!
     
     let maxNumOfDots = 3
 
@@ -76,6 +76,12 @@ class MenuBar: UIView {
 
         EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
         EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
     }
 
     func highlightOttavaBtn(params: Parameters) {
@@ -100,6 +106,14 @@ class MenuBar: UIView {
         self.eightVbBtn.backgroundColor = nil
         self.fifteenMaBtn.backgroundColor = nil
         self.fifteenMbBtn.backgroundColor = nil
+    }
+    
+    func highlightConnectBtn() {
+        self.connectBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+    }
+    
+    func removeConnectHighlight() {
+        self.connectBtn.backgroundColor = nil
     }
 
     func highlightAccidentalBtn(params: Parameters) {
