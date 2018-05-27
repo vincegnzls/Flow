@@ -770,8 +770,6 @@ class SoundManager {
                             notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
                         } else if conn.type == .slur {
                             notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
-                        } else {
-                            notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
                         }
                     }
                 } else {
@@ -809,7 +807,17 @@ class SoundManager {
         for measure in staff.measures {
             for notation in measure.notationObjects {
 
-                staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                if let note = notation as? Note, let conn = note.connection, let notes = conn.notes {
+                    if let first = notes.first {
+                        if note == first {
+                            staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                        } else if conn.type == .slur {
+                            staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                        }
+                    }
+                } else {
+                    staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                }
 
             }
         }

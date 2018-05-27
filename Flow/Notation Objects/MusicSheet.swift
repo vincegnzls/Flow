@@ -3456,7 +3456,9 @@ class MusicSheet: UIView {
                 newNotations.append(notation.duplicate())
 
                 if let note = notation as? Note {
-                    note.pitch = self.initialPitches.removeFirst()
+                    if !self.initialPitches.isEmpty {
+                        note.pitch = self.initialPitches.removeFirst()
+                    }
                 }
             }
             
