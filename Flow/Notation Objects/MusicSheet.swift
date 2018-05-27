@@ -1829,7 +1829,7 @@ class MusicSheet: UIView {
                 if let chord = note as? Chord {
                     accidentalSpace = self.getAccidentalSpacing(notation: chord)
                 } else if let note = note as? Note {
-                    accidentalSpace = self.getAccidentalSpacing(notation: note)
+                    accidentalSpace = self.getAccidentalSpacing(notation: note) * CGFloat(3.0)
                 }
                 
                 currentStartX = currentStartX + accidentalSpace
@@ -1964,7 +1964,7 @@ class MusicSheet: UIView {
                 let accidentalSpacing = self.getAccidentalSpacing(notation: notation)
                 
                 if accidentalSpacing > 0 {
-                    width += accidentalSpacing + 80.0
+                    width += accidentalSpacing + 30.0
                 }
                 width += notationImage.size.width + noteWidthAlter + notation.getBaseNotationSpace()
             }
@@ -2540,14 +2540,110 @@ class MusicSheet: UIView {
             }
         }
         
+        func getAccidentalSpacingForNote (note: Note) -> CGFloat {
+            if let _ = note.screenCoordinates {
+                if let accidental = note.accidental {
+                    
+                    var printAccidental = true
+                    
+                    if let measure = note.measure {
+                        if let noteIndex = measure.notationObjects.index(of: note) {
+                            if noteIndex != 0 {
+                                var currIndex = noteIndex - 1
+                                
+                                while currIndex > -1 {
+                                    
+                                    if let prevNote = measure.notationObjects[currIndex] as? Note {
+                                        
+                                        if prevNote.pitch == note.pitch {
+                                            if let prevAccidental = prevNote.accidental {
+                                                
+                                                if prevAccidental == accidental {
+                                                    printAccidental = false
+                                                }
+                                                
+                                                break
+                                                
+                                            } else {
+                                                
+                                                if accidental == .natural {
+                                                    printAccidental = false
+                                                } else {
+                                                    printAccidental = true
+                                                }
+                                                break
+                                            }
+                                        }
+                                        
+                                    }
+                                    
+                                    currIndex -= 1
+                                }
+                            } else {
+                                if accidental == .natural {
+                                    printAccidental = false
+                                }
+                            }
+                        }
+                    }
+                    
+                    if printAccidental {
+                        return 5.0
+                    } else {
+                        return 0.0
+                    }
+                } else {
+                    
+                    var printNatural = false
+                    
+                    if let measure = note.measure {
+                        if let noteIndex = measure.notationObjects.index(of: note) {
+                            if noteIndex != 0 {
+                                var currIndex = noteIndex - 1
+                                
+                                while currIndex > -1 {
+                                    
+                                    if let prevNote = measure.notationObjects[currIndex] as? Note {
+                                        
+                                        if prevNote.pitch == note.pitch {
+                                            if let prevAccidental = prevNote.accidental {
+                                                
+                                                if prevAccidental != .natural {
+                                                    printNatural = true
+                                                }
+                                                
+                                                break
+                                            } else {
+                                                break
+                                            }
+                                        }
+                                        
+                                    }
+                                    
+                                    currIndex -= 1
+                                }
+                            }
+                        }
+                    }
+                    
+                    if printNatural {
+                        return 5.0
+                    } else {
+                        return 0.0
+                    }
+                    
+                }
+            } else {
+            
+            return 0.0
+                
+            }
+        }
+        
         if let chord = notation as? Chord {
             return getAccidentalSpacingForChord(chord: chord)
         } else if let note = notation as? Note {
-            if let accidental = note.accidental {
-                return 30.0
-            } else {
-                return 0.0
-            }
+            return getAccidentalSpacingForNote(note: note)
         }
         
         return 0.0
