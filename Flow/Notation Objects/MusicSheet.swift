@@ -1840,7 +1840,7 @@ class MusicSheet: UIView {
                 if let chord = note as? Chord {
                     accidentalSpace = self.getAccidentalSpacing(notation: chord)
                 } else if let note = note as? Note {
-                    accidentalSpace = self.getAccidentalSpacing(notation: note) * CGFloat(3.0)
+                    accidentalSpace = self.getAccidentalSpacing(notation: note)
                 }
                 
                 currentStartX = currentStartX + accidentalSpace
@@ -1969,16 +1969,30 @@ class MusicSheet: UIView {
     private func getMeasureWidth(measure: Measure, withClef: Bool = true, withKeySig: Bool = true, withTimeSig: Bool = true) -> CGFloat {
         // TODO: Modify this if accidentals are implemented
         var width:CGFloat = 0
+        var minWidthNote: CGFloat = 0
+        var accidentalPrintCount = 0
+        var hasAccidentalPrint = false
 
         for notation in measure.notationObjects {
             if let notationImage = notation.image {
                 let accidentalSpacing = self.getAccidentalSpacing(notation: notation)
                 
                 if accidentalSpacing > 0 {
-                    width += accidentalSpacing + 30.0
+                    width += accidentalSpacing
+                    accidentalPrintCount += 1
+                    hasAccidentalPrint = true
                 }
+                
                 width += notationImage.size.width + noteWidthAlter + notation.getBaseNotationSpace()
+                
+                if minWidthNote < notationImage.size.width && notation is Note {
+                    minWidthNote = notationImage.size.width + noteWidthAlter + notation.getBaseNotationSpace()
+                }
             }
+        }
+        
+        if hasAccidentalPrint {
+            width += minWidthNote * CGFloat(accidentalPrintCount)
         }
 
         if withClef {
@@ -2480,11 +2494,11 @@ class MusicSheet: UIView {
                     
                     if index != 0 {
                         if index < (notes.count/2) && notes.count > 4 {
-                            currentXModify += 25
+                            currentXModify += 5
                         } else if notes.count > 2 && index != notes.count - 1 {
-                            currentXModify += 50
+                            currentXModify += 10
                         } else {
-                            currentXModify += 25
+                            currentXModify += 5
                         }
                         
                         if index >= notes.count / 2 {
@@ -2515,7 +2529,7 @@ class MusicSheet: UIView {
                     
                 }
                 
-                return CGFloat(25.0) * CGFloat(currentStaggerMax)
+                return CGFloat(15.0) * CGFloat(currentStaggerMax)
             }
             
             var notesWithAccidental = [Note]()
@@ -3101,8 +3115,6 @@ class MusicSheet: UIView {
             }
             
             DispatchQueue.main.async {
-                
-                print("START REDIRECTING CURSOR")
                 
                 self.remapCurrentMeasure(location: self.sheetCursor.curYCursorLocation) // this is for reassigning current measure points if measure gets resized
                 
