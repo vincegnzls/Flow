@@ -55,6 +55,23 @@ class Connection {
         return nil
     }
 
+    public func replace(_ oldNote: Note, _ newNote: Note) {
+
+        if let connection = oldNote.connection, let cNotes = connection.notes, let index = cNotes.index(of: oldNote) {
+            if let newConnection = newNote.connection, let newCNotes = newConnection.notes {
+                for newCNote in newCNotes {
+                    if let connection = newCNote.connection {
+                        connection.notes![index] = newNote
+                    }
+                }
+            }
+
+        } else {
+
+        }
+
+    }
+
     func getLastNote() -> Note? {
         if let notes = self.notes {
             if notes.count > 1 {
