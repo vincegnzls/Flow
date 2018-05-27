@@ -26,6 +26,8 @@ class MenuBar: UIView {
     @IBOutlet weak var fifteenMaBtn: UIButton!
     @IBOutlet weak var fifteenMbBtn: UIButton!
     
+    @IBOutlet weak var tieBtn: UIButton!
+    
     let maxNumOfDots = 3
 
     /*var compositionInfo: CompositionInfo? {
@@ -435,6 +437,15 @@ class MenuBar: UIView {
         params.put(key: KeyNames.OTTAVA, value: OttavaType.fifteenMb)
 
         EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
+    @IBAction func connect(_ sender: UIButton) {
+        let connection = Connection()
+        
+        let params = Parameters()
+        params.put(key: KeyNames.CONNECTION, value: connection)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.CONNECTION, params: params)
     }
     
 }

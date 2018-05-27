@@ -493,6 +493,7 @@ Tap '+' to create a new composition.</string>
                                     <outlet property="playBtn" destination="Ycl-gp-KaZ" id="PfC-LS-EAk"/>
                                     <outlet property="sharpBtn" destination="ofh-iv-b6S" id="u0B-2T-jm2"/>
                                     <outlet property="threeDotsBtn" destination="MiL-U5-9Q2" id="Y4f-pc-hB3"/>
+                                    <outlet property="tieBtn" destination="9HY-Gc-gcB" id="GEy-0l-mwx"/>
                                     <outlet property="twoDotsBtn" destination="nzu-Uc-umr" id="u7z-re-ofG"/>
                                 </connections>
                             </view>
@@ -639,6 +640,14 @@ Tap '+' to create a new composition.</string>
                                         <state key="normal" image="15mb-button"/>
                                         <connections>
                                             <action selector="fifteenMb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="Eyq-43-BXn"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB">
+                                        <rect key="frame" x="750" y="15" width="59" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Connect"/>
+                                        <connections>
+                                            <action selector="connect:" destination="VHe-OH-6BV" eventType="touchUpInside" id="VbP-Oa-IoO"/>
                                         </connections>
                                     </button>
                                 </subviews>
