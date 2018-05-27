@@ -650,7 +650,7 @@ class MusicSheet: UIView {
     }
 
     func checkHighlightConnectButton() {
-        if sameConnections(notations: self.selectedNotations) {
+        if sameConnections(notations: self.selectedNotations) && sameInstanceConnections(notations: self.selectedNotations) {
             EventBroadcaster.instance.postEvent(event: EventNames.CONNECT_HIGHLIGHT)
         } else {
             EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_CONNECT_HIGHLIGHT)
@@ -5119,6 +5119,7 @@ class MusicSheet: UIView {
             }
         }
 
+        repositionTransformView(first: false)
     }
 
     func sameAccidentals(notations: [MusicNotation], accidental: Accidental) -> Bool {
@@ -5251,6 +5252,20 @@ class MusicSheet: UIView {
         return true
     }
 
+    func sameInstanceConnections(notations: [MusicNotation]) -> Bool {
+        if let fNote = notations.first as? Note, let fConn = fNote.connection {
+            for notation in notations {
+                if let note = notation as? Note, let conn = note.connection {
+                    if fConn !== conn {
+                        return false
+                    }
+                }
+            }
+        }
+
+        return true
+    }
+
     func connection(params: Parameters) {
         let connection = params.get(key: KeyNames.CONNECTION) as! Connection
 
@@ -5258,12 +5273,27 @@ class MusicSheet: UIView {
 
             if allNotes(notations: self.selectedNotations) {
 
-                if sameConnections(notations: self.selectedNotations) {
+                if sameConnections(notations: self.selectedNotations) && sameInstanceConnections(notations: self.selectedNotations) {
                     // remove all connections
                     var newNotes = [Note]()
                     
+                    var connCount: Int? = nil
+                    
                     for notation in self.selectedNotations {
-                        if let note = notation as? Note {
+                        if let note = notation as? Note, let conn = note.connection, let notes = conn.notes, let first = notes.first {
+                            
+                            if connCount == nil {
+                                connCount = notes.count
+                            }
+                            
+                            if let connCount = connCount {
+                            if self.selectedNotations.count != connCount {
+                                    if let firstConn = first.connection {
+                                        firstConn.notes!.remove(at: firstConn.notes!.index(of: note)!)
+                                    }
+                                }
+                            }
+                            
                             let newNote = note.duplicate()
                             newNote.connection = nil
                             
@@ -5313,7 +5343,7 @@ class MusicSheet: UIView {
 
                     self.updateMeasureDraw()
                     repositionTransformView(first: false)
-                    
+
                     EventBroadcaster.instance.postEvent(event: EventNames.CONNECT_HIGHLIGHT)
                 }
 
