@@ -3286,6 +3286,8 @@ class MusicSheet: UIView {
                             return
                         }
                         
+                    } else if action is EditSignatureAction {
+                        self.moveCursorsToNearestSnapPoint(location: self.sheetCursor.curYCursorLocation)
                     }
                     
                     if let nextPoint = nextPoint {
