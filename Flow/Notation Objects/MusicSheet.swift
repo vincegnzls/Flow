@@ -1088,11 +1088,75 @@ class MusicSheet: UIView {
             // END OF DRAWING OF MEASURE
         }
         
-        measurePoints = drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
+        var measureCount = 0
+        var maxWidth: CGFloat = 0
+        
+        while measureCount < 2 {
+            
+            var currMeasureWidth: CGFloat = 0
+            
+            if measureCount == 0 {
+                // getMeasureWidth(measure: Measure, withClef: Bool = true, withKeySig: Bool = true, withTimeSig: Bool = true)
+                
+                if let index = composition?.staffList[0].measures.index(of: gMeasure) {
+                
+                    if index == 0 {
+                        currMeasureWidth = self.getMeasureWidth(measure: gMeasure)
+                    } else {
+                        
+                        var withKeySig = false
+                        var withTimeSig = false
+                        
+                        if composition?.staffList[0].measures[index - 1].keySignature != gMeasure.keySignature {
+                            withKeySig = true
+                        }
+                        
+                        if composition?.staffList[0].measures[index - 1].timeSignature != gMeasure.timeSignature {
+                            withTimeSig = true
+                        }
+                        
+                        currMeasureWidth = self.getMeasureWidth(measure: gMeasure, withClef: false, withKeySig: withKeySig, withTimeSig: withTimeSig)
+                    }
+                }
+                
+                
+            } else {
+        
+                if let index = composition?.staffList[1].measures.index(of: fMeasure) {
+                    
+                    if index == 0 {
+                        currMeasureWidth = self.getMeasureWidth(measure: fMeasure)
+                    } else {
+                        
+                        var withKeySig = false
+                        var withTimeSig = false
+                        
+                        if composition?.staffList[1].measures[index - 1].keySignature != fMeasure.keySignature {
+                            withKeySig = true
+                        }
+                        
+                        if composition?.staffList[1].measures[index - 1].timeSignature != fMeasure.timeSignature {
+                            withTimeSig = true
+                        }
+                        
+                        currMeasureWidth = self.getMeasureWidth(measure: gMeasure, withClef: false, withKeySig: withKeySig, withTimeSig: withTimeSig)
+                    }
+                }
+                
+            }
+            
+            if maxWidth < currMeasureWidth {
+                maxWidth = currMeasureWidth
+            }
+            
+            measureCount += 1
+        }
+        
+        measurePoints = drawParallelMeasures(measures: measures, startX: startX, endX: startX + maxWidth, startYs: startYs,
                                              staffSpace: startPointG - startPointF, leftInnerPadding: adjustKeyTimeSig, rightInnerPadding: 15)
         
-        movingStartX = endX
-        endX = endX + distance
+        movingStartX = startX + maxWidth
+        endX = movingStartX + maxWidth
         
         for measurePoint in measurePoints {
             GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measurePoint)
@@ -1770,6 +1834,17 @@ class MusicSheet: UIView {
 
         for notesToBePrinted in grpdNotesToBePrinted {
             for note in notesToBePrinted {
+                
+                var accidentalSpace: CGFloat = 0
+                
+                if let chord = note as? Chord {
+                    accidentalSpace = self.getAccidentalSpacing(notation: chord)
+                } else if let note = note as? Note {
+                    accidentalSpace = self.getAccidentalSpacing(notation: note) * CGFloat(3.0)
+                }
+                
+                currentStartX = currentStartX + accidentalSpace
+                
                 if let measure = note.measure {
                     if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
                         if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints) {
@@ -1891,26 +1966,35 @@ class MusicSheet: UIView {
         return grandStaffMeasurePoints
     }
 
-    private func getMeasureWidth(measure: Measure, withClef: Bool? = true, withKeySig: Bool? = true, withTimeSig: Bool? = true) -> CGFloat {
+    private func getMeasureWidth(measure: Measure, withClef: Bool = true, withKeySig: Bool = true, withTimeSig: Bool = true) -> CGFloat {
         // TODO: Modify this if accidentals are implemented
         var width:CGFloat = 0
 
         for notation in measure.notationObjects {
             if let notationImage = notation.image {
+                let accidentalSpacing = self.getAccidentalSpacing(notation: notation)
+                
+                if accidentalSpacing > 0 {
+                    width += accidentalSpacing + 30.0
+                }
                 width += notationImage.size.width + noteWidthAlter + notation.getBaseNotationSpace()
             }
         }
 
-        if withClef! {
+        if withClef {
             width += 58.2 // width of clef
         }
 
-        if withKeySig! {
+        if withKeySig {
             width += getKeySignatureWidth(keySignature: measure.keySignature)
         }
 
-        if withTimeSig! {
+        if withTimeSig {
             width += getTimeSignatureWidth(timeSignature: measure.timeSignature)
+        }
+        
+        if !measure.isFull {
+            width += 50.0
         }
 
         return width
@@ -2058,10 +2142,6 @@ class MusicSheet: UIView {
                 }
                 
             }
-            
-            /*for note in chord.notes {
-                drawAccidentalByNote(note: note)
-            }*/
             
             drawAccidentalByChord(chord: chord)
             drawDotsByNotation(notation: chord, hasFlipped: hasFlipped)
@@ -2387,6 +2467,199 @@ class MusicSheet: UIView {
         }
     }
     
+    private func getAccidentalSpacing (notation: MusicNotation) -> CGFloat {
+        
+        func getAccidentalSpacingForChord (chord: Chord) -> CGFloat {
+            
+            func getAccidentalsZigzagWidth (notes: [Note]) -> CGFloat {
+                var currentXModify: CGFloat = 0
+                
+                // also check if there is a difference between two notes that is > 5, this would restart the layout back nearest to the chord
+                
+                for (index, _) in notes.enumerated() {
+                    
+                    if index != 0 {
+                        if index < (notes.count/2) && notes.count > 4 {
+                            currentXModify += 25
+                        } else if notes.count > 2 && index != notes.count - 1 {
+                            currentXModify += 50
+                        } else {
+                            currentXModify += 25
+                        }
+                        
+                        if index >= notes.count / 2 {
+                            return currentXModify
+                        }
+                        
+                    }
+                }
+                
+                return 0
+            }
+            
+            func getAccidentalsStaggeredWidth (notes: [Note]) ->CGFloat {
+                var currentStaggerMax: Int = 3
+                
+                // also check if there is a difference between two notes that is > 5, this would restart the layout back nearest to the chord
+                var staggerCount = 0
+                for (index, _) in notes.enumerated() {
+                    if index != 0 {
+                        
+                        if currentStaggerMax == staggerCount {
+                            currentStaggerMax += 1
+                            staggerCount = 0
+                        }
+                    }
+                    
+                    staggerCount += 1
+                    
+                }
+                
+                return CGFloat(25.0) * CGFloat(currentStaggerMax)
+            }
+            
+            var notesWithAccidental = [Note]()
+            
+            var topStackNote: Note?
+            
+            for note in chord.notes.reversed() {
+                if let _ = note.accidental {
+                    topStackNote = note
+                    break
+                }
+            }
+            
+            for note in chord.notes.reversed() {
+                if note == topStackNote {
+                    notesWithAccidental.append(note)
+                    continue
+                }
+                
+                if let _ = note.accidental {
+                    notesWithAccidental.append(note)
+                }
+            }
+            
+            if notesWithAccidental.isEmpty {
+                return 0.0
+            }
+            
+            if Chord.isSeventh(notes: notesWithAccidental) {
+                return getAccidentalsZigzagWidth(notes: notesWithAccidental)
+            } else {
+                return getAccidentalsStaggeredWidth(notes: notesWithAccidental)
+            }
+        }
+        
+        func getAccidentalSpacingForNote (note: Note) -> CGFloat {
+            if let _ = note.screenCoordinates {
+                if let accidental = note.accidental {
+                    
+                    var printAccidental = true
+                    
+                    if let measure = note.measure {
+                        if let noteIndex = measure.notationObjects.index(of: note) {
+                            if noteIndex != 0 {
+                                var currIndex = noteIndex - 1
+                                
+                                while currIndex > -1 {
+                                    
+                                    if let prevNote = measure.notationObjects[currIndex] as? Note {
+                                        
+                                        if prevNote.pitch == note.pitch {
+                                            if let prevAccidental = prevNote.accidental {
+                                                
+                                                if prevAccidental == accidental {
+                                                    printAccidental = false
+                                                }
+                                                
+                                                break
+                                                
+                                            } else {
+                                                
+                                                if accidental == .natural {
+                                                    printAccidental = false
+                                                } else {
+                                                    printAccidental = true
+                                                }
+                                                break
+                                            }
+                                        }
+                                        
+                                    }
+                                    
+                                    currIndex -= 1
+                                }
+                            } else {
+                                if accidental == .natural {
+                                    printAccidental = false
+                                }
+                            }
+                        }
+                    }
+                    
+                    if printAccidental {
+                        return 5.0
+                    } else {
+                        return 0.0
+                    }
+                } else {
+                    
+                    var printNatural = false
+                    
+                    if let measure = note.measure {
+                        if let noteIndex = measure.notationObjects.index(of: note) {
+                            if noteIndex != 0 {
+                                var currIndex = noteIndex - 1
+                                
+                                while currIndex > -1 {
+                                    
+                                    if let prevNote = measure.notationObjects[currIndex] as? Note {
+                                        
+                                        if prevNote.pitch == note.pitch {
+                                            if let prevAccidental = prevNote.accidental {
+                                                
+                                                if prevAccidental != .natural {
+                                                    printNatural = true
+                                                }
+                                                
+                                                break
+                                            } else {
+                                                break
+                                            }
+                                        }
+                                        
+                                    }
+                                    
+                                    currIndex -= 1
+                                }
+                            }
+                        }
+                    }
+                    
+                    if printNatural {
+                        return 5.0
+                    } else {
+                        return 0.0
+                    }
+                    
+                }
+            } else {
+            
+            return 0.0
+                
+            }
+        }
+        
+        if let chord = notation as? Chord {
+            return getAccidentalSpacingForChord(chord: chord)
+        } else if let note = notation as? Note {
+            return getAccidentalSpacingForNote(note: note)
+        }
+        
+        return 0.0
+    }
+    
     private func drawAccidentalByChord (chord: Chord) {
         
         func drawAccidentalsZigzag (notes: [Note]) {
@@ -2560,30 +2833,6 @@ class MusicSheet: UIView {
                 
             }
         }
-        
-        /*if largestDiffInPitch > 1 { // zigzag
-            
-            drawAccidentalsZigzag(notes: notesWithAccidental)
-            
-        } else {
-            
-            if chord.notes.count < 4 { //  zigzag
-                
-                for note in notesWithAccidental {
-                    
-                }
-                
-            } else { // stagger
-                
-                var currentStaggerMax = 2
-                
-                for note in notesWithAccidental {
-                    
-                }
-                
-            }
-            
-        }*/
         
         if Chord.isSeventh(notes: notesWithAccidental) {
             drawAccidentalsStaggered(notes: notesWithAccidental)
@@ -2852,6 +3101,11 @@ class MusicSheet: UIView {
             }
             
             DispatchQueue.main.async {
+                
+                print("START REDIRECTING CURSOR")
+                
+                self.remapCurrentMeasure(location: self.sheetCursor.curYCursorLocation) // this is for reassigning current measure points if measure gets resized
+                
                 if let action = params.get(key: KeyNames.ACTION_DONE) as? Action {
                     
                     let type = params.get(key: KeyNames.ACTION_TYPE, defaultValue: "")
@@ -3043,6 +3297,8 @@ class MusicSheet: UIView {
                             return
                         }
                         
+                    } else if action is EditSignatureAction {
+                        self.moveCursorsToNearestSnapPoint(location: self.sheetCursor.curYCursorLocation)
                     }
                     
                     if let nextPoint = nextPoint {
