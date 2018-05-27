@@ -511,10 +511,10 @@ Tap '+' to create a new composition.</string>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Uy-OO-nyR" userLabel="Bottom Menu">
                                 <rect key="frame" x="0.0" y="774" width="1112" height="60"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIn-ix-cFN">
-                                        <rect key="frame" x="363" y="15" width="143" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIn-ix-cFN" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="395" y="8" width="45" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <state key="normal" title="Show/Hide Keyboard"/>
+                                        <state key="normal" title="Show/Hide Keyboard" image="piano-button"/>
                                         <connections>
                                             <action selector="toggleKeyboard:" destination="VHe-OH-6BV" eventType="touchUpInside" id="rnd-Lz-15e"/>
                                         </connections>
@@ -611,41 +611,41 @@ Tap '+' to create a new composition.</string>
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z3k-E7-fzk" userLabel="8va" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="520" y="5" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="491" y="8" width="45" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" image="8va-button"/>
                                         <connections>
                                             <action selector="eightVa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="LIa-5e-ChF"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L8F-Su-3ZI" userLabel="8vb" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="580" y="5" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="544" y="8" width="45" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" image="8vb-button"/>
                                         <connections>
                                             <action selector="eightVb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="eju-6W-YT3"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dv2-Ny-LAM" userLabel="15ma" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="640" y="5" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="597" y="8" width="45" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" image="15ma-button"/>
                                         <connections>
                                             <action selector="fifteenMa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="3Dm-wi-V4V"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCO-cJ-Zg9" userLabel="15mb" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="700" y="5" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="650" y="8" width="45" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" image="15mb-button"/>
                                         <connections>
                                             <action selector="fifteenMb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="Eyq-43-BXn"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB">
-                                        <rect key="frame" x="750" y="15" width="59" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Connect"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB">
+                                        <rect key="frame" x="738" y="8" width="45" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <state key="normal" image="tie-slur-button"/>
                                         <connections>
                                             <action selector="connect:" destination="VHe-OH-6BV" eventType="touchUpInside" id="VbP-Oa-IoO"/>
                                         </connections>
@@ -1516,6 +1516,7 @@ Tap '+' to create a new composition.</string>
         <image name="natural-icon" width="43" height="43"/>
         <image name="one-dot-icon" width="115" height="115"/>
         <image name="paste-icon" width="50" height="50"/>
+        <image name="piano-button" width="115" height="115"/>
         <image name="play-icon" width="100" height="100"/>
         <image name="quarter-note-icon" width="115" height="115"/>
         <image name="quarter-rest-icon" width="115" height="115"/>
@@ -1524,6 +1525,7 @@ Tap '+' to create a new composition.</string>
         <image name="sharp-icon" width="44" height="43"/>
         <image name="show-menu-arrow" width="228" height="115"/>
         <image name="three-dot-icon" width="116" height="115"/>
+        <image name="tie-slur-button" width="116" height="115"/>
         <image name="time-key-icon" width="100" height="100"/>
         <image name="two-dot-icon" width="115" height="115"/>
         <image name="undo-icon" width="50" height="50"/>
