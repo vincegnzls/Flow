@@ -642,7 +642,7 @@ Tap '+' to create a new composition.</string>
                                             <action selector="fifteenMb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="Eyq-43-BXn"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="738" y="8" width="45" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" image="tie-slur-button"/>

@@ -117,7 +117,7 @@ class MenuBar: UIView {
     }
 
     func highlightAccidentalBtn(params: Parameters) {
-        if let accidental: Accidental = params.get(key: KeyNames.ACCIDENTAL) as! Accidental {
+        if let accidental: Accidental = params.get(key: KeyNames.ACCIDENTAL) as? Accidental {
 
             print("ACCIDENTAL: \(accidental.toString())")
 

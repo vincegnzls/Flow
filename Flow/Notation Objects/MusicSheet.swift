@@ -5287,7 +5287,7 @@ class MusicSheet: UIView {
                             }
                             
                             if let connCount = connCount {
-                            if self.selectedNotations.count != connCount {
+                                if self.selectedNotations.count != connCount {
                                     if let firstConn = first.connection {
                                         firstConn.notes!.remove(at: firstConn.notes!.index(of: note)!)
                                     }
