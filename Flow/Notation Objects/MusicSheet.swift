@@ -649,7 +649,7 @@ class MusicSheet: UIView {
 
     func checkHighlightOttavaButton() -> OttavaType? {
         var ottava: OttavaType? = nil
-        var params = Parameters()
+        let params = Parameters()
 
         if !self.selectedNotations.isEmpty {
             if sameOttava(notations: self.selectedNotations) {
@@ -659,7 +659,7 @@ class MusicSheet: UIView {
                             ottava = note.ottava
                         } else {
                             if note.ottava != nil {
-                                params.put(key: KeyNames.OTTAVA, value: ottava)
+                                params.put(key: KeyNames.OTTAVA, value: ottava!)
                                 EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                                 return ottava
                             }
@@ -669,7 +669,7 @@ class MusicSheet: UIView {
                             ottava = chord.ottava
                         } else {
                             if chord.ottava != nil {
-                                params.put(key: KeyNames.OTTAVA, value: ottava)
+                                params.put(key: KeyNames.OTTAVA, value: ottava!)
                                 EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                                 return ottava
                             }
@@ -679,7 +679,7 @@ class MusicSheet: UIView {
 
                 if selectedNotations.count == 1 {
                     if ottava != nil {
-                        params.put(key: KeyNames.OTTAVA, value: ottava)
+                        params.put(key: KeyNames.OTTAVA, value: ottava!)
                         EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                     }
                 }
@@ -689,12 +689,12 @@ class MusicSheet: UIView {
         } else if let notation = self.hoveredNotation {
             if let note = notation as? Note {
                 if note.ottava != nil {
-                    params.put(key: KeyNames.OTTAVA, value: note.ottava)
+                    params.put(key: KeyNames.OTTAVA, value: note.ottava!)
                     EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                     return ottava
                 }
             } else if let chord = notation as? Chord {
-                params.put(key: KeyNames.OTTAVA, value: chord.ottava)
+                params.put(key: KeyNames.OTTAVA, value: chord.ottava!)
                 EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                 return ottava
             }
