@@ -48,7 +48,7 @@ class SoundManager {
     
     func setup() {
         self.grandStaffMixer = AKMixer(self.fNotePlayer, self.gNotePlayer)
-        self.grandStaffMixer.volume = 5.0
+        self.grandStaffMixer.volume = 2.0
         AudioKit.output = self.grandStaffMixer
     }
     
@@ -66,7 +66,7 @@ class SoundManager {
 
         let FMPiano = AKSampler()
         
-        FMPiano.volume = 5.0
+        FMPiano.volume = 2.0
 
         do{
             try FMPiano.loadWav("Support Objects/Grand Piano")
@@ -920,7 +920,7 @@ class SoundManager {
                 }
             } else {
                 self.grandStaffMixer = AKMixer()
-                self.grandStaffMixer.volume = 5.0
+                self.grandStaffMixer.volume = 2.0
                 AudioKit.output = self.grandStaffMixer
 
                 for i in gNotesMIDI[self.curBeat] {
@@ -948,7 +948,7 @@ class SoundManager {
                 }
             } else {
                 self.grandStaffMixer = AKMixer()
-                self.grandStaffMixer.volume = 5.0
+                self.grandStaffMixer.volume = 2.0
                 AudioKit.output = self.grandStaffMixer
 
                 for i in fNotesMIDI[self.curBeat] {
