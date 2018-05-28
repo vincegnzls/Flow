@@ -238,6 +238,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
     public func hideViews() {
         self.keyboardView.isHidden = true
+        scrollView.minimumZoomScale = 1.0
     }
 
     public func toggleKeyboard() {
