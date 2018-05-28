@@ -23,13 +23,20 @@ class DeleteAction: Action {
     func execute() {
         var notationsToBeRemoved = [MusicNotation]()
         
+        var connCount: Int? = nil
+        
         for notation in self.notations {
             
-            if let note = notation as? Note, let conn = note.connection {
-                if let connNotes = conn.notes {
-                    for note in connNotes {
-                        if let curConn = note.connection {
-                            curConn.notes!.remove(at: curConn.notes!.index(of: note)!)
+            if let note = notation as? Note, let conn = note.connection, let notes = conn.notes, let first = notes.first {
+                
+                if connCount == nil {
+                    connCount = notes.count
+                }
+                
+                if let connCount = connCount {
+                    if notations.count != connCount {
+                        if let firstConn = first.connection {
+                            firstConn.notes!.remove(at: firstConn.notes!.index(of: note)!)
                         }
                     }
                 }

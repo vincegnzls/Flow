@@ -61,7 +61,9 @@ class Connection {
             if let newConnection = newNote.connection, let newCNotes = newConnection.notes {
                 for newCNote in newCNotes {
                     if let connection = newCNote.connection {
-                        connection.notes![index] = newNote
+                        if index < connection.notes!.count {
+                            connection.notes![index] = newNote
+                        }
                     }
                 }
             }
@@ -82,5 +84,25 @@ class Connection {
         }
 
         return nil
+    }
+
+    func updateType() {
+        if let notes = self.notes {
+            if notes.count > 0 {
+                var isEqual = true
+                let initialPitch = notes[0].pitch
+                for notation in notes[1...] {
+                    if notation.pitch != initialPitch {
+                        isEqual = false
+                        self.type = .slur
+                        break
+                    }
+                }
+
+                if isEqual {
+                    self.type = .tie
+                }
+            }
+        }
     }
 }

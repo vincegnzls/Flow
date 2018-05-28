@@ -80,6 +80,10 @@ class Note: MusicNotation {
                 }
             }
         }
+
+        if let conn = self.connection {
+            conn.updateType()
+        }
     }
     
     func transposeDown() {
@@ -93,6 +97,10 @@ class Note: MusicNotation {
                     self.pitch.transposeDown()
                 }
             }
+        }
+
+        if let conn = self.connection {
+            conn.updateType()
         }
     }
 
