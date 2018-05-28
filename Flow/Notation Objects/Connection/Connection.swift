@@ -32,11 +32,7 @@ class Connection {
         }
     }
 
-    var type: ConnectionType? {
-        didSet {
-            print("CONN TYPEEEE: \(type)")
-        }
-    }
+    var type: ConnectionType?
 
     init(notes: [Note]? = nil, type: ConnectionType? = nil) {
         self.notes = notes
