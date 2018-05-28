@@ -788,7 +788,7 @@ Tap '+' to create a new composition.</string>
                                 </subviews>
                             </view>
                             <view alpha="0.94999999999999996" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLW-3Y-Rf2" customClass="NotationControlsView" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="450" y="545" width="400" height="100"/>
+                                <rect key="frame" x="350" y="545" width="400" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yvv-DJ-7yL" userLabel="NotesView">
