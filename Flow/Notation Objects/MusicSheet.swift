@@ -147,6 +147,7 @@ class MusicSheet: UIView {
         didSet {
             checkHighlightAccidentalButton()
             checkHighlightOttavaButton()
+            checkHighlightConnectButton()
             print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
             
             let parameters = Parameters() // parameters for dotted notes
@@ -265,6 +266,100 @@ class MusicSheet: UIView {
         }
 
         return true
+    }
+
+    func drawCurvedLine(from: CGPoint, to: CGPoint, thickness: CGFloat, bendFactor: CGFloat) {
+
+        let center = CGPoint(x: (from.x+to.x)*0.5, y: (from.y+to.y)*0.5)
+        let normal = CGPoint(x: -(from.y-to.y), y: (from.x-to.x))
+        let normalNormalized: CGPoint = {
+            let normalSize = sqrt(normal.x*normal.x + normal.y*normal.y)
+            guard normalSize > 0.0 else { return .zero }
+            return CGPoint(x: normal.x/normalSize, y: normal.y/normalSize)
+        }()
+
+        let path = UIBezierPath()
+
+        path.move(to: from)
+
+        let multiplier: CGFloat = 3.5
+
+        let midControlPoint: CGPoint = CGPoint(x: center.x + normal.x * bendFactor, y: center.y + normal.y * bendFactor)
+        let closeControlPoint: CGPoint = CGPoint(x: midControlPoint.x + normalNormalized.x * thickness * multiplier, y: midControlPoint.y + normalNormalized.y * thickness * multiplier)
+        let farControlPoint: CGPoint = CGPoint(x: midControlPoint.x - normalNormalized.x * thickness * multiplier, y: midControlPoint.y - normalNormalized.y * thickness * multiplier)
+
+
+        path.addQuadCurve(to: to, controlPoint: closeControlPoint)
+        path.addQuadCurve(to: from, controlPoint: farControlPoint)
+        path.close()
+
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.strokeColor = UIColor.black.cgColor
+        shapeLayer.lineWidth = thickness
+        shapeLayer.path = path.cgPath
+        shapeLayer.zPosition = .greatestFiniteMagnitude
+
+        self.layer.addSublayer(shapeLayer)
+        self.curLayers.append(shapeLayer)
+    }
+
+    func downward(notes: [Note]) -> Bool {
+
+        var down = 0
+        var up = 0
+
+        for note in notes {
+            if note.isUpwards {
+                up += 1
+            } else {
+                down += 1
+            }
+        }
+
+        return down >= up
+    }
+
+    func drawConnection(connection: Connection, bendFactor: CGFloat, isChord: Bool) {
+        print("DRAW CONNECTION")
+
+        if connection.notes!.count > 1 {
+            if let first = connection.getFirstNote(), let last = connection.getLastNote() {
+                if let firstCoord = first.screenCoordinates, let lastCoord = last.screenCoordinates  {
+                    let offset: CGFloat = 22
+
+                    if !isChord {
+
+                        if let notes = connection.notes {
+
+                            if downward(notes: notes) {
+                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y - offset + 8)
+                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y - offset + 8)
+                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor)
+                            } else {
+                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y + offset - 5)
+                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y + offset - 5)
+                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor * -1)
+                            }
+                        }
+                        
+                    } else {
+
+                    }
+                }
+            }
+        }
+    }
+
+    func checkConnectionPerMeasure(notations: [MusicNotation]) {
+        for notation in notations {
+            if let note = notation as? Note, let connection = note.connection, let first = connection.getFirstNote() {
+                if note == first {
+                    drawConnection(connection: connection, bendFactor: 0.25, isChord: false)
+                }
+            } else if let chord = notation as? Chord {
+
+            }
+        }
     }
 
     func drawDottedLine(start p0: CGPoint, end p1: CGPoint, thickness: CGFloat) {
@@ -455,9 +550,6 @@ class MusicSheet: UIView {
                 }
             }
         }
-
-        print("DRAW CALL")
-
         //curGroup.removeAll()
     }
 
@@ -547,9 +639,17 @@ class MusicSheet: UIView {
         self.transformView.layer.zPosition = CGFloat.greatestFiniteMagnitude
     }
 
+    func checkHighlightConnectButton() {
+        if sameConnections(notations: self.selectedNotations) && sameInstanceConnections(notations: self.selectedNotations) {
+            EventBroadcaster.instance.postEvent(event: EventNames.CONNECT_HIGHLIGHT)
+        } else {
+            EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_CONNECT_HIGHLIGHT)
+        }
+    }
+
     func checkHighlightOttavaButton() -> OttavaType? {
         var ottava: OttavaType? = nil
-        var params = Parameters()
+        let params = Parameters()
 
         if !self.selectedNotations.isEmpty {
             if sameOttava(notations: self.selectedNotations) {
@@ -559,7 +659,7 @@ class MusicSheet: UIView {
                             ottava = note.ottava
                         } else {
                             if note.ottava != nil {
-                                params.put(key: KeyNames.OTTAVA, value: ottava)
+                                params.put(key: KeyNames.OTTAVA, value: ottava!)
                                 EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                                 return ottava
                             }
@@ -569,7 +669,7 @@ class MusicSheet: UIView {
                             ottava = chord.ottava
                         } else {
                             if chord.ottava != nil {
-                                params.put(key: KeyNames.OTTAVA, value: ottava)
+                                params.put(key: KeyNames.OTTAVA, value: ottava!)
                                 EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                                 return ottava
                             }
@@ -579,7 +679,7 @@ class MusicSheet: UIView {
 
                 if selectedNotations.count == 1 {
                     if ottava != nil {
-                        params.put(key: KeyNames.OTTAVA, value: ottava)
+                        params.put(key: KeyNames.OTTAVA, value: ottava!)
                         EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                     }
                 }
@@ -589,12 +689,12 @@ class MusicSheet: UIView {
         } else if let notation = self.hoveredNotation {
             if let note = notation as? Note {
                 if note.ottava != nil {
-                    params.put(key: KeyNames.OTTAVA, value: note.ottava)
+                    params.put(key: KeyNames.OTTAVA, value: note.ottava!)
                     EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                     return ottava
                 }
             } else if let chord = notation as? Chord {
-                params.put(key: KeyNames.OTTAVA, value: chord.ottava)
+                params.put(key: KeyNames.OTTAVA, value: chord.ottava!)
                 EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                 return ottava
             }
@@ -767,10 +867,21 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.OTTAVA)
         EventBroadcaster.instance.addObserver(event: EventNames.OTTAVA, observer: Observer(id: "MusicSheet.ottava", function: self.ottava))
 
+        // Add listeners for connection
+        EventBroadcaster.instance.removeObservers(event: EventNames.CONNECTION)
+        EventBroadcaster.instance.addObserver(event: EventNames.CONNECTION, observer: Observer(id: "MusicSheet.connection", function: self.connection))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.UNDO_REDO)
+        EventBroadcaster.instance.addObserver(event: EventNames.UNDO_REDO, observer: Observer(id: "MusicSheet.removeSelected", function: self.removeSelected))
+
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
         self.addGestureRecognizer(panGesture)
+    }
+    
+    func removeSelected() {
+        self.selectedNotations.removeAll()
     }
 
     func onCompositionLoad (params: Parameters) {
@@ -974,11 +1085,75 @@ class MusicSheet: UIView {
             // END OF DRAWING OF MEASURE
         }
         
-        measurePoints = drawParallelMeasures(measures: measures, startX: startX, endX: endX, startYs: startYs,
+        var measureCount = 0
+        var maxWidth: CGFloat = 0
+        
+        while measureCount < 2 {
+            
+            var currMeasureWidth: CGFloat = 0
+            
+            if measureCount == 0 {
+                // getMeasureWidth(measure: Measure, withClef: Bool = true, withKeySig: Bool = true, withTimeSig: Bool = true)
+                
+                if let index = composition?.staffList[0].measures.index(of: gMeasure) {
+                
+                    if index == 0 {
+                        currMeasureWidth = self.getMeasureWidth(measure: gMeasure)
+                    } else {
+                        
+                        var withKeySig = false
+                        var withTimeSig = false
+                        
+                        if composition?.staffList[0].measures[index - 1].keySignature != gMeasure.keySignature {
+                            withKeySig = true
+                        }
+                        
+                        if composition?.staffList[0].measures[index - 1].timeSignature != gMeasure.timeSignature {
+                            withTimeSig = true
+                        }
+                        
+                        currMeasureWidth = self.getMeasureWidth(measure: gMeasure, withClef: false, withKeySig: withKeySig, withTimeSig: withTimeSig)
+                    }
+                }
+                
+                
+            } else {
+        
+                if let index = composition?.staffList[1].measures.index(of: fMeasure) {
+                    
+                    if index == 0 {
+                        currMeasureWidth = self.getMeasureWidth(measure: fMeasure)
+                    } else {
+                        
+                        var withKeySig = false
+                        var withTimeSig = false
+                        
+                        if composition?.staffList[1].measures[index - 1].keySignature != fMeasure.keySignature {
+                            withKeySig = true
+                        }
+                        
+                        if composition?.staffList[1].measures[index - 1].timeSignature != fMeasure.timeSignature {
+                            withTimeSig = true
+                        }
+                        
+                        currMeasureWidth = self.getMeasureWidth(measure: gMeasure, withClef: false, withKeySig: withKeySig, withTimeSig: withTimeSig)
+                    }
+                }
+                
+            }
+            
+            if maxWidth < currMeasureWidth {
+                maxWidth = currMeasureWidth
+            }
+            
+            measureCount += 1
+        }
+        
+        measurePoints = drawParallelMeasures(measures: measures, startX: startX, endX: startX + maxWidth, startYs: startYs,
                                              staffSpace: startPointG - startPointF, leftInnerPadding: adjustKeyTimeSig, rightInnerPadding: 15)
         
-        movingStartX = endX
-        endX = endX + distance
+        movingStartX = startX + maxWidth
+        endX = movingStartX + maxWidth
         
         for measurePoint in measurePoints {
             GridSystem.instance.appendMeasurePointToLatestArray(measurePoints: measurePoint)
@@ -1656,6 +1831,17 @@ class MusicSheet: UIView {
 
         for notesToBePrinted in grpdNotesToBePrinted {
             for note in notesToBePrinted {
+                
+                var accidentalSpace: CGFloat = 0
+                
+                if let chord = note as? Chord {
+                    accidentalSpace = self.getAccidentalSpacing(notation: chord)
+                } else if let note = note as? Note {
+                    accidentalSpace = self.getAccidentalSpacing(notation: note)
+                }
+                
+                currentStartX = currentStartX + accidentalSpace
+                
                 if let measure = note.measure {
                     if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
                         if let snapPoints = GridSystem.instance.getSnapPointsFromPoints(measurePoints: measurePoints) {
@@ -1771,31 +1957,55 @@ class MusicSheet: UIView {
             }
 
             checkOttavaPerMeasure(notations: measure.notationObjects)
+            checkConnectionPerMeasure(notations: measure.notationObjects)
         }
 
         return grandStaffMeasurePoints
     }
 
-    private func getMeasureWidth(measure: Measure, withClef: Bool? = true, withKeySig: Bool? = true, withTimeSig: Bool? = true) -> CGFloat {
+    private func getMeasureWidth(measure: Measure, withClef: Bool = true, withKeySig: Bool = true, withTimeSig: Bool = true) -> CGFloat {
         // TODO: Modify this if accidentals are implemented
         var width:CGFloat = 0
+        var minWidthNote: CGFloat = 0
+        var accidentalPrintCount = 0
+        var hasAccidentalPrint = false
 
         for notation in measure.notationObjects {
             if let notationImage = notation.image {
+                let accidentalSpacing = self.getAccidentalSpacing(notation: notation)
+                
+                if accidentalSpacing > 0 {
+                    width += accidentalSpacing
+                    accidentalPrintCount += 1
+                    hasAccidentalPrint = true
+                }
+                
                 width += notationImage.size.width + noteWidthAlter + notation.getBaseNotationSpace()
+                
+                if minWidthNote < notationImage.size.width && notation is Note {
+                    minWidthNote = notationImage.size.width + noteWidthAlter + notation.getBaseNotationSpace()
+                }
             }
         }
+        
+        if hasAccidentalPrint {
+            width += minWidthNote * CGFloat(accidentalPrintCount)
+        }
 
-        if withClef! {
+        if withClef {
             width += 58.2 // width of clef
         }
 
-        if withKeySig! {
+        if withKeySig {
             width += getKeySignatureWidth(keySignature: measure.keySignature)
         }
 
-        if withTimeSig! {
+        if withTimeSig {
             width += getTimeSignatureWidth(timeSignature: measure.timeSignature)
+        }
+        
+        if !measure.isFull {
+            width += 50.0
         }
 
         return width
@@ -1943,10 +2153,6 @@ class MusicSheet: UIView {
                 }
                 
             }
-            
-            /*for note in chord.notes {
-                drawAccidentalByNote(note: note)
-            }*/
             
             drawAccidentalByChord(chord: chord)
             drawDotsByNotation(notation: chord, hasFlipped: hasFlipped)
@@ -2272,6 +2478,199 @@ class MusicSheet: UIView {
         }
     }
     
+    private func getAccidentalSpacing (notation: MusicNotation) -> CGFloat {
+        
+        func getAccidentalSpacingForChord (chord: Chord) -> CGFloat {
+            
+            func getAccidentalsZigzagWidth (notes: [Note]) -> CGFloat {
+                var currentXModify: CGFloat = 0
+                
+                // also check if there is a difference between two notes that is > 5, this would restart the layout back nearest to the chord
+                
+                for (index, _) in notes.enumerated() {
+                    
+                    if index != 0 {
+                        if index < (notes.count/2) && notes.count > 4 {
+                            currentXModify += 5
+                        } else if notes.count > 2 && index != notes.count - 1 {
+                            currentXModify += 10
+                        } else {
+                            currentXModify += 5
+                        }
+                        
+                        if index >= notes.count / 2 {
+                            return currentXModify
+                        }
+                        
+                    }
+                }
+                
+                return 0
+            }
+            
+            func getAccidentalsStaggeredWidth (notes: [Note]) ->CGFloat {
+                var currentStaggerMax: Int = 3
+                
+                // also check if there is a difference between two notes that is > 5, this would restart the layout back nearest to the chord
+                var staggerCount = 0
+                for (index, _) in notes.enumerated() {
+                    if index != 0 {
+                        
+                        if currentStaggerMax == staggerCount {
+                            currentStaggerMax += 1
+                            staggerCount = 0
+                        }
+                    }
+                    
+                    staggerCount += 1
+                    
+                }
+                
+                return CGFloat(15.0) * CGFloat(currentStaggerMax)
+            }
+            
+            var notesWithAccidental = [Note]()
+            
+            var topStackNote: Note?
+            
+            for note in chord.notes.reversed() {
+                if let _ = note.accidental {
+                    topStackNote = note
+                    break
+                }
+            }
+            
+            for note in chord.notes.reversed() {
+                if note == topStackNote {
+                    notesWithAccidental.append(note)
+                    continue
+                }
+                
+                if let _ = note.accidental {
+                    notesWithAccidental.append(note)
+                }
+            }
+            
+            if notesWithAccidental.isEmpty {
+                return 0.0
+            }
+            
+            if Chord.isSeventh(notes: notesWithAccidental) {
+                return getAccidentalsZigzagWidth(notes: notesWithAccidental)
+            } else {
+                return getAccidentalsStaggeredWidth(notes: notesWithAccidental)
+            }
+        }
+        
+        func getAccidentalSpacingForNote (note: Note) -> CGFloat {
+            if let _ = note.screenCoordinates {
+                if let accidental = note.accidental {
+                    
+                    var printAccidental = true
+                    
+                    if let measure = note.measure {
+                        if let noteIndex = measure.notationObjects.index(of: note) {
+                            if noteIndex != 0 {
+                                var currIndex = noteIndex - 1
+                                
+                                while currIndex > -1 {
+                                    
+                                    if let prevNote = measure.notationObjects[currIndex] as? Note {
+                                        
+                                        if prevNote.pitch == note.pitch {
+                                            if let prevAccidental = prevNote.accidental {
+                                                
+                                                if prevAccidental == accidental {
+                                                    printAccidental = false
+                                                }
+                                                
+                                                break
+                                                
+                                            } else {
+                                                
+                                                if accidental == .natural {
+                                                    printAccidental = false
+                                                } else {
+                                                    printAccidental = true
+                                                }
+                                                break
+                                            }
+                                        }
+                                        
+                                    }
+                                    
+                                    currIndex -= 1
+                                }
+                            } else {
+                                if accidental == .natural {
+                                    printAccidental = false
+                                }
+                            }
+                        }
+                    }
+                    
+                    if printAccidental {
+                        return 5.0
+                    } else {
+                        return 0.0
+                    }
+                } else {
+                    
+                    var printNatural = false
+                    
+                    if let measure = note.measure {
+                        if let noteIndex = measure.notationObjects.index(of: note) {
+                            if noteIndex != 0 {
+                                var currIndex = noteIndex - 1
+                                
+                                while currIndex > -1 {
+                                    
+                                    if let prevNote = measure.notationObjects[currIndex] as? Note {
+                                        
+                                        if prevNote.pitch == note.pitch {
+                                            if let prevAccidental = prevNote.accidental {
+                                                
+                                                if prevAccidental != .natural {
+                                                    printNatural = true
+                                                }
+                                                
+                                                break
+                                            } else {
+                                                break
+                                            }
+                                        }
+                                        
+                                    }
+                                    
+                                    currIndex -= 1
+                                }
+                            }
+                        }
+                    }
+                    
+                    if printNatural {
+                        return 5.0
+                    } else {
+                        return 0.0
+                    }
+                    
+                }
+            } else {
+            
+            return 0.0
+                
+            }
+        }
+        
+        if let chord = notation as? Chord {
+            return getAccidentalSpacingForChord(chord: chord)
+        } else if let note = notation as? Note {
+            return getAccidentalSpacingForNote(note: note)
+        }
+        
+        return 0.0
+    }
+    
     private func drawAccidentalByChord (chord: Chord) {
         
         func drawAccidentalsZigzag (notes: [Note]) {
@@ -2445,30 +2844,6 @@ class MusicSheet: UIView {
                 
             }
         }
-        
-        /*if largestDiffInPitch > 1 { // zigzag
-            
-            drawAccidentalsZigzag(notes: notesWithAccidental)
-            
-        } else {
-            
-            if chord.notes.count < 4 { //  zigzag
-                
-                for note in notesWithAccidental {
-                    
-                }
-                
-            } else { // stagger
-                
-                var currentStaggerMax = 2
-                
-                for note in notesWithAccidental {
-                    
-                }
-                
-            }
-            
-        }*/
         
         if Chord.isSeventh(notes: notesWithAccidental) {
             drawAccidentalsStaggered(notes: notesWithAccidental)
@@ -2737,6 +3112,9 @@ class MusicSheet: UIView {
             }
             
             DispatchQueue.main.async {
+                
+                self.remapCurrentMeasure(location: self.sheetCursor.curYCursorLocation) // this is for reassigning current measure points if measure gets resized
+                
                 if let action = params.get(key: KeyNames.ACTION_DONE) as? Action {
                     
                     let type = params.get(key: KeyNames.ACTION_TYPE, defaultValue: "")
@@ -2751,8 +3129,8 @@ class MusicSheet: UIView {
                         switch type {
                         case ActionFunctions.EXECUTE :
                             var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
-                            if let note = addAction.notations[addAction.notations.count-1] as? Note {
-                                currentPoint = note.screenCoordinates!
+                            if let note = addAction.notations[addAction.notations.count-1] as? Note, let coord = note.screenCoordinates {
+                                currentPoint = coord
                             } else if let chord = addAction.notations[addAction.notations.count-1] as? Chord {
                                 currentPoint = chord.notes[0].screenCoordinates!
                             }
@@ -2928,6 +3306,8 @@ class MusicSheet: UIView {
                             return
                         }
                         
+                    } else if action is EditSignatureAction {
+                        self.moveCursorsToNearestSnapPoint(location: self.sheetCursor.curYCursorLocation)
                     }
                     
                     if let nextPoint = nextPoint {
@@ -3066,12 +3446,16 @@ class MusicSheet: UIView {
     private func processTranspositions() {
         // Process transpositions
         if self.transpositions != 0 {
+
             var newNotations = [MusicNotation]()
+
             for notation in self.selectedNotations {
                 newNotations.append(notation.duplicate())
-                
+
                 if let note = notation as? Note {
-                    note.pitch = self.initialPitches.removeFirst()
+                    if !self.initialPitches.isEmpty {
+                        note.pitch = self.initialPitches.removeFirst()
+                    }
                 }
             }
             
@@ -3095,6 +3479,7 @@ class MusicSheet: UIView {
             
             let editAction = EditAction(old: self.selectedNotations, new: newNotations)
             editAction.execute()
+
             self.updateMeasureDraw()
             
             self.transpositions = 0
@@ -4710,7 +5095,7 @@ class MusicSheet: UIView {
                     }
                     
                 } else {
-                    
+
                     newNotes.append(newNote)
                     
                     if newNotes.count > 0 {
@@ -4731,6 +5116,7 @@ class MusicSheet: UIView {
             }
         }
 
+        repositionTransformView(first: false)
     }
 
     func sameAccidentals(notations: [MusicNotation], accidental: Accidental) -> Bool {
@@ -4803,19 +5189,9 @@ class MusicSheet: UIView {
         return true
     }
 
-    func sameConnections(notes: [Notes]) -> Bool {
-        var connectionType: Connection? = nil
-
-        for note in notes {
-            if let noteConnection = note.connection {
-                if connectionType == nil {
-                    connectionType = noteConnection
-                } else {
-                    if noteConnection != connectionType {
-                        return false
-                    }
-                }
-            } else {
+    func allChords(notations: [MusicNotation]) -> Bool {
+        for notation in notations {
+            if notation is Rest || notation is Note {
                 return false
             }
         }
@@ -4823,10 +5199,64 @@ class MusicSheet: UIView {
         return true
     }
 
-    func allNotesOrChords(notations: [MusicNotation]) -> Bool {
-        for notation in notations {
-            if notation is Rest {
-                return false
+    func sameConnections(notations: [MusicNotation]) -> Bool {
+        var connectionType: ConnectionType? = nil
+
+        if notations.count > 1 {
+            for notation in notations {
+                if let note = notation as? Note {
+
+                    if let noteConnection = note.connection {
+                        if let type = noteConnection.type {
+                            if connectionType == nil {
+                                connectionType = type
+                            } else {
+                                if connectionType != type {
+                                    return false
+                                }
+                            }
+                        } else {
+                            return false
+                        }
+                    } else {
+                        return false
+                    }
+
+                } else if let chord = notation as? Chord {
+
+                    if let chordConnection = chord.connection {
+                        if let type = chordConnection.type {
+                            if connectionType == nil {
+                                connectionType = type
+                            } else {
+                                if connectionType != type {
+                                    return false
+                                }
+                            }
+                        } else {
+                            return false
+                        }
+                    } else {
+                        return false
+                    }
+
+                }
+            }
+        } else {
+            return false
+        }
+        
+        return true
+    }
+
+    func sameInstanceConnections(notations: [MusicNotation]) -> Bool {
+        if let fNote = notations.first as? Note, let fConn = fNote.connection {
+            for notation in notations {
+                if let note = notation as? Note, let conn = note.connection {
+                    if fConn !== conn {
+                        return false
+                    }
+                }
             }
         }
 
@@ -4834,32 +5264,91 @@ class MusicSheet: UIView {
     }
 
     func connection(params: Parameters) {
-        var connection = params.get(key: KeyNames.CONNECTION) as! Connection
+        let connection = params.get(key: KeyNames.CONNECTION) as! Connection
 
         if self.selectedNotations.count > 1 {
-            var selectedNotes = [Note]()
 
-            if allNotesOrChords(notations: self.selectedNotations) {
-                for notation in self.selectedNotations {
-                    if let note = notation as? Note {
-                        selectedNotes.append(note)
+            if allNotes(notations: self.selectedNotations) {
+
+                if sameConnections(notations: self.selectedNotations) && sameInstanceConnections(notations: self.selectedNotations) {
+                    // remove all connections
+                    var newNotes = [Note]()
+                    
+                    var connCount: Int? = nil
+                    
+                    for notation in self.selectedNotations {
+                        if let note = notation as? Note, let conn = note.connection, let notes = conn.notes, let first = notes.first {
+                            
+                            if connCount == nil {
+                                connCount = notes.count
+                            }
+                            
+                            if let connCount = connCount {
+                                if self.selectedNotations.count != connCount {
+                                    if let firstConn = first.connection {
+                                        firstConn.notes!.remove(at: firstConn.notes!.index(of: note)!)
+                                    }
+                                }
+                            }
+                            
+                            let newNote = note.duplicate()
+                            newNote.connection = nil
+                            
+                            newNotes.append(newNote)
+                        }
                     }
-                }
-            }
-
-            if selectedNotes.count > 1 {
-                connection.notes = selectedNotes
-
-                if let first = selectedNotes.first {
-                    let newNote = first.duplicate()
-                    newNote.connection = connection
-
-                    let editAction = EditAction(old: [first], new: [newNote])
+                    
+                    let editAction = EditAction(old: selectedNotations, new: newNotes)
                     editAction.execute()
+                    
+                    selectedNotations.removeAll()
+                    selectedNotations = newNotes
+                    
+                    self.updateMeasureDraw()
+                    repositionTransformView(first: false)
+                    
+                    EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_CONNECT_HIGHLIGHT)
+                } else {
+                    var connectedNotes = [Note]()
+                    var newNotes = [Note]()
+
+                    for notation in self.selectedNotations {
+                        if let note = notation as? Note {
+                            connectedNotes.append(note)
+                        }
+                    }
+
+                    connection.notes = connectedNotes
+
+                    for note in connectedNotes {
+                        let newNote = note.duplicate()
+                        newNote.connection = connection
+                        newNotes.append(newNote)
+                    }
+
+                    let editAction = EditAction(old: connectedNotes, new: newNotes)
+                    editAction.execute()
+
+                    for note in newNotes {
+                        if let connection = note.connection {
+                            connection.notes = newNotes
+                        }
+                    }
+
+                    selectedNotations.removeAll()
+                    selectedNotations = newNotes
+
+                    self.updateMeasureDraw()
+                    repositionTransformView(first: false)
+
+                    EventBroadcaster.instance.postEvent(event: EventNames.CONNECT_HIGHLIGHT)
                 }
-            } else {
-                // DISABLE SLUR / TIE BUTTONS
+
+            } else if allChords(notations: self.selectedNotations) {
+
             }
+
+
         }
     }
 
@@ -5152,6 +5641,22 @@ class MusicSheet: UIView {
             retrograde.append(notations[arrayIndex].duplicate())
         }
 
+        /*var newNotes = [Note]()
+
+        if allNotes(notations: retrograde) {
+            for notation in retrograde {
+                if let note = notation as? Note {
+                    newNotes.append(note)
+                }
+            }
+
+            for notation in retrograde {
+                if let note = notation as? Note, let connection = note.connection {
+                    connection.notes = newNotes
+                }
+            }
+        }*/
+
         let editAction = EditAction(old: notations, new: retrograde)
 
         editAction.execute()
@@ -5199,6 +5704,26 @@ class MusicSheet: UIView {
         let oldNotes = Array(notations[1..<notations.count])
         
         print("OLD NOTES COUNT: \(oldNotes.count)")
+
+        /*var newNotes = [Note]()
+
+        if allNotes(notations: invertedNotes) {
+            for notation in invertedNotes {
+                if let note = notation as? Note {
+                    newNotes.append(note)
+                }
+            }
+
+            for notation in invertedNotes {
+                if let note = notation as? Note, let connection = note.connection {
+                    connection.notes = newNotes
+
+                    if let fNote = notations.first as? Note {
+                        connection.notes!.insert(fNote, at: 0)
+                    }
+                }
+            }
+        }*/
         
         let editAction = EditAction(old: oldNotes, new: invertedNotes)
         

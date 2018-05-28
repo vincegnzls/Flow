@@ -24,8 +24,65 @@ class EditAction: Action {
         self.edit()
         UndoRedoManager.instance.addActionToUndoStack(self)
     }
-    
+
     private func edit() {
+
+        var index = 0
+        
+        for oldNotation in self.oldNotations {
+            if self.oldNotations.count == self.newNotations.count {
+                if index < self.newNotations.count {
+                    if let oldNote = oldNotation as? Note, let newNote = self.newNotations[index] as? Note {
+                        if let newConnection = newNote.connection {
+                            newConnection.replace(oldNote, newNote)
+                        } else if let oldConnection = oldNote.connection {
+                            if self.newNotations.count == 1 {
+                                //oldConnection.notes!.remove(at: oldConnection.notes!.index(of: oldNote)!)
+                                newNote.connection = oldConnection
+                                oldConnection.replace(oldNote, newNote)
+                                newNote.connection = oldConnection
+                            }
+                        }
+                    }
+                    
+                    index += 1
+                }
+            } else {
+                if oldNotations.count > newNotations.count {
+                    /*if let oldNote = oldNotation as? Note, let oldConn = oldNote.connection {
+                        for oldNote2 in self.oldNotations {
+                            if let oldNote3 = oldNote2 as? Note {
+                                oldConn.notes!.remove(at: oldConn.notes!.index(of: oldNote3)!)
+                            }
+                        }
+                        
+                        //oldConn.note!.
+                    }*/
+                    
+                    if let oldNote = oldNotation as? Note {
+                        
+                        if let newNote = newNotations.first as? Note {
+                            newNote.connection = oldNote.connection
+                        }
+                        
+                        if let oldConn = oldNote.connection {
+                            for oldNoteConn in oldConn.notes! {
+                                oldNoteConn.connection = nil
+                            }
+                        }
+                        
+                        oldNote.connection = nil
+                        
+                        /*if oldNote == self.oldNotations.last {
+                            if let newNote = newNotations.first as? Note, let newNoteConn = newNote.connection {
+                                newNoteConn.replace(oldNote, newNote)
+                            }
+                        }*/
+                    }
+                }
+            }
+        }
+
         var newIndex = 0
         for old in self.oldNotations {
             if let measure = old.measure {
@@ -76,6 +133,11 @@ class EditAction: Action {
                 
                 if newIndex < self.oldNotations.count {
                     measure.replace(new, self.oldNotations[newIndex])
+                    
+                    if let oldNote = self.oldNotations[newIndex] as? Note, let newNote = new as? Note, let newConn = newNote.connection {
+                        newConn.replace(newNote, oldNote)
+                    }
+                    
                     newIndex += 1
                 } else {
                     measure.remove(new)

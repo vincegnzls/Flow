@@ -34,6 +34,7 @@
 		618F02D5209ECD7F0018C213 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F02D4209ECD7F0018C213 /* KeyboardView.swift */; };
 		618F02D7209EE3EC0018C213 /* MIDINoteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F02D6209EE3EC0018C213 /* MIDINoteParser.swift */; };
 		61B1316B1FE1513900ADCDF0 /* ButtonEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */; };
+		61C1CBAA20B9622000B36746 /* ConnectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C1CBA920B9622000B36746 /* ConnectionType.swift */; };
 		61C606D520B46BBA000A1F9C /* OttavaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C606D420B46BBA000A1F9C /* OttavaType.swift */; };
 		61EBB0321FE695B60015F7C2 /* KeySignatureDesignable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */; };
 		61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EC34951F8A7C4200A4A5D6 /* Line.swift */; };
@@ -107,8 +108,6 @@
 		86C7EBD21FDFD9B0001D8C12 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */; };
 		86CCD7C31FDD783400A0FC8D /* StartMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */; };
 		86CE6CE620B81828003BAAA5 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CE6CE520B81828003BAAA5 /* Connection.swift */; };
-		86CE6CE820B818B1003BAAA5 /* Tie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CE6CE720B818B1003BAAA5 /* Tie.swift */; };
-		86CE6CEA20B819CF003BAAA5 /* Slur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CE6CE920B819CF003BAAA5 /* Slur.swift */; };
 		86DBDA8020368C6E00C834EF /* Chord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DBDA7F20368C6E00C834EF /* Chord.swift */; };
 /* End PBXBuildFile section */
 
@@ -174,6 +173,7 @@
 		618F02D4209ECD7F0018C213 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		618F02D6209EE3EC0018C213 /* MIDINoteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDINoteParser.swift; sourceTree = "<group>"; };
 		61B1316A1FE1513900ADCDF0 /* ButtonEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonEffect.swift; sourceTree = "<group>"; };
+		61C1CBA920B9622000B36746 /* ConnectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionType.swift; sourceTree = "<group>"; };
 		61C606D420B46BBA000A1F9C /* OttavaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OttavaType.swift; sourceTree = "<group>"; };
 		61EBB0311FE695B60015F7C2 /* KeySignatureDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySignatureDesignable.swift; sourceTree = "<group>"; };
 		61EC34951F8A7C4200A4A5D6 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -249,8 +249,6 @@
 		86C7EBD11FDFD9B0001D8C12 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		86CCD7C21FDD783400A0FC8D /* StartMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenuViewController.swift; sourceTree = "<group>"; };
 		86CE6CE520B81828003BAAA5 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
-		86CE6CE720B818B1003BAAA5 /* Tie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tie.swift; sourceTree = "<group>"; };
-		86CE6CE920B819CF003BAAA5 /* Slur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slur.swift; sourceTree = "<group>"; };
 		86DBDA7F20368C6E00C834EF /* Chord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chord.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -604,8 +602,7 @@
 			isa = PBXGroup;
 			children = (
 				86CE6CE520B81828003BAAA5 /* Connection.swift */,
-				86CE6CE720B818B1003BAAA5 /* Tie.swift */,
-				86CE6CE920B819CF003BAAA5 /* Slur.swift */,
+				61C1CBA920B9622000B36746 /* ConnectionType.swift */,
 			);
 			path = Connection;
 			sourceTree = "<group>";
@@ -779,6 +776,7 @@
 				866CC9152094775E001ADD5B /* IQUITextFieldView+Additions.swift in Sources */,
 				866CC9042094773C001ADD5B /* IQTitleBarButtonItem.swift in Sources */,
 				861B3DD41FDC1E0E003FE0A5 /* Parameters.swift in Sources */,
+				61C1CBAA20B9622000B36746 /* ConnectionType.swift in Sources */,
 				86B8EFEC1FEAA5E600DD834E /* Step.swift in Sources */,
 				8632C97C2000877B00D69CB4 /* Converter.swift in Sources */,
 				866CC90A2094774F001ADD5B /* IQKeyboardManagerConstants.swift in Sources */,
@@ -791,7 +789,6 @@
 				8696A8AE1FD4EB6500EB81BD /* KeySignature.swift in Sources */,
 				864CE5A41FD32FD6001FF059 /* Rest.swift in Sources */,
 				869F3C5F1FD8FCC500CC236F /* ControlsView.swift in Sources */,
-				86CE6CE820B818B1003BAAA5 /* Tie.swift in Sources */,
 				866CC8F620947725001ADD5B /* IQKeyboardReturnKeyHandler.swift in Sources */,
 				86CCD7C31FDD783400A0FC8D /* StartMenuViewController.swift in Sources */,
 				610ECE381FE7C58E009CC0F2 /* KeySignatureModel.swift in Sources */,
@@ -835,7 +832,6 @@
 				8618F0781FED3D8C00DF8A10 /* EditAction.swift in Sources */,
 				866CC9012094773B001ADD5B /* IQBarButtonItem.swift in Sources */,
 				864CE5AA1FD3301E001FF059 /* Accidental.swift in Sources */,
-				86CE6CEA20B819CF003BAAA5 /* Slur.swift in Sources */,
 				61EC34961F8A7C4200A4A5D6 /* Line.swift in Sources */,
 				866CC9112094775E001ADD5B /* IQNSArray+Sort.swift in Sources */,
 				61266B7828BD9BC94920F385 /* CompositionTableViewCell.swift in Sources */,

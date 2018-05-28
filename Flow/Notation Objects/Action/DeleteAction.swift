@@ -23,7 +23,25 @@ class DeleteAction: Action {
     func execute() {
         var notationsToBeRemoved = [MusicNotation]()
         
+        var connCount: Int? = nil
+        
         for notation in self.notations {
+            
+            if let note = notation as? Note, let conn = note.connection, let notes = conn.notes, let first = notes.first {
+                
+                if connCount == nil {
+                    connCount = notes.count
+                }
+                
+                if let connCount = connCount {
+                    if notations.count != connCount {
+                        if let firstConn = first.connection {
+                            firstConn.notes!.remove(at: firstConn.notes!.index(of: note)!)
+                        }
+                    }
+                }
+            }
+            
             if let measure = notation.measure {
                 if let note = notation as? Note { // FOR DELETING GROUP OF NOTES FROM CHORDS
                     if let chord = note.chord {

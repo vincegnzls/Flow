@@ -33,10 +33,12 @@ class Note: MusicNotation {
          accidental: Accidental? = nil,
          chord: Chord? = nil,
          dots: Int = 0,
-         ottava: OttavaType? = nil) {
+         ottava: OttavaType? = nil,
+         connection: Connection? = nil) {
         self.pitch = pitch
         self.accidental = accidental
         self.ottava = ottava
+        self.connection = connection
         self.isUpwards = true
         self.beamed = false
         
@@ -64,8 +66,9 @@ class Note: MusicNotation {
             }
         }*/
     }
-    
+
     func transposeUp() {
+
         if let clef = self.measure?.clef {
             if clef == .G {
                 if pitch.octave * 8 + pitch.step.rawValue < 51 {
@@ -76,6 +79,10 @@ class Note: MusicNotation {
                     self.pitch.transposeUp()
                 }
             }
+        }
+
+        if let conn = self.connection {
+            conn.updateType()
         }
     }
     
@@ -91,9 +98,13 @@ class Note: MusicNotation {
                 }
             }
         }
+
+        if let conn = self.connection {
+            conn.updateType()
+        }
     }
 
     override func duplicate() -> Note {
-        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots, ottava: self.ottava)
+        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots, ottava: self.ottava, connection: self.connection)
     }
 }

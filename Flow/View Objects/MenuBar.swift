@@ -26,6 +26,8 @@ class MenuBar: UIView {
     @IBOutlet weak var fifteenMaBtn: UIButton!
     @IBOutlet weak var fifteenMbBtn: UIButton!
     
+    @IBOutlet weak var connectBtn: UIButton!
+    
     let maxNumOfDots = 3
 
     /*var compositionInfo: CompositionInfo? {
@@ -74,6 +76,12 @@ class MenuBar: UIView {
 
         EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
         EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
     }
 
     func highlightOttavaBtn(params: Parameters) {
@@ -99,9 +107,17 @@ class MenuBar: UIView {
         self.fifteenMaBtn.backgroundColor = nil
         self.fifteenMbBtn.backgroundColor = nil
     }
+    
+    func highlightConnectBtn() {
+        self.connectBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+    }
+    
+    func removeConnectHighlight() {
+        self.connectBtn.backgroundColor = nil
+    }
 
     func highlightAccidentalBtn(params: Parameters) {
-        if let accidental: Accidental = params.get(key: KeyNames.ACCIDENTAL) as! Accidental {
+        if let accidental: Accidental = params.get(key: KeyNames.ACCIDENTAL) as? Accidental {
 
             print("ACCIDENTAL: \(accidental.toString())")
 
@@ -435,6 +451,15 @@ class MenuBar: UIView {
         params.put(key: KeyNames.OTTAVA, value: OttavaType.fifteenMb)
 
         EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
+    @IBAction func connect(_ sender: UIButton) {
+        let connection = Connection()
+        
+        let params = Parameters()
+        params.put(key: KeyNames.CONNECTION, value: connection)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.CONNECTION, params: params)
     }
     
 }

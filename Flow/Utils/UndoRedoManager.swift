@@ -29,6 +29,7 @@ class UndoRedoManager {
         if let action = self.undoStack.popLast() {
             action.undo()
             EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+            EventBroadcaster.instance.postEvent(event: EventNames.UNDO_REDO)
             
             self.addActionToRedoStack(action)
         }
@@ -38,6 +39,7 @@ class UndoRedoManager {
         if let action = self.redoStack.popLast() {
             action.redo()
             EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+            EventBroadcaster.instance.postEvent(event: EventNames.UNDO_REDO)
             
             self.addActionToUndoStack(action)
         }
