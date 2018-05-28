@@ -558,14 +558,14 @@ class MusicSheet: UIView {
 
         if let coord = highestOrLowestNote.screenCoordinates {
             if higher {
-                if coord.y - 40 > 65 {
-                    return 65
+                if coord.y - 40 > 85 {
+                    return 85
                 } else {
                     return coord.y - 40
                 }
             } else {
-                if coord.y + 40 < 565 {
-                    return 565
+                if coord.y + 40 < 540 {
+                    return 540
                 } else {
                     return coord.y + 40
                 }

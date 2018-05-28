@@ -35,9 +35,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        scrollView.zoomScale = 1.0
-        
+    
         toggleKeyboard()
         
         // Revise back button
