@@ -344,6 +344,20 @@ class MusicSheet: UIView {
                         
                     } else {
 
+                        if let notations = connection.notes {
+                            
+                            if downward(notes: notations) {
+                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y - offset + 8)
+                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y - offset + 8)
+                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor)
+                            } else {
+                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y + offset - 5)
+                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y + offset - 5)
+                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor * -1)
+                            }
+                            
+                        }
+                        
                     }
                 }
             }
@@ -356,8 +370,11 @@ class MusicSheet: UIView {
                 if note == first {
                     drawConnection(connection: connection, bendFactor: 0.25, isChord: false)
                 }
-            } else if let chord = notation as? Chord {
-
+            } else if let chord = notation as? Chord, let connection = chord.connection, let first = connection.getFirstNote() {
+                if chord == first {
+                    drawConnection(connection: connection, bendFactor: 0.25, isChord: true)
+                }
+                
             }
         }
     }
@@ -3974,13 +3991,17 @@ class MusicSheet: UIView {
     private func scrollMusicSheetToYIfPointNotVisible (y: CGFloat, targetPoint: CGPoint, animated: Bool = true) {
         if let outerScrollView = self.superview as? UIScrollView {
             
+            let convertedPoint = self.convert(targetPoint, to: outerScrollView)
+            
             let r:CGRect = CGRect(x: outerScrollView.contentOffset.x, y: outerScrollView.contentOffset.y,
                                   width: outerScrollView.frame.width,
                                   height: outerScrollView.frame.height)
             
-            if !r.contains(targetPoint) {
-                outerScrollView.setContentOffset(
-                    CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: animated)
+            if !r.contains(convertedPoint) {
+                
+                let redirectPoint = self.convert(CGPoint(x: outerScrollView.contentOffset.x, y: y), to: outerScrollView)
+                
+                outerScrollView.setContentOffset(redirectPoint, animated: animated)
             }
         }
     }
@@ -3988,13 +4009,17 @@ class MusicSheet: UIView {
     private func scrollMusicSheetToXIfPointNotVisible (x: CGFloat, targetPoint: CGPoint, animated: Bool = true) {
         if let outerScrollView = self.superview as? UIScrollView {
             
+            let convertedPoint = self.convert(targetPoint, to: outerScrollView)
+            
             let r:CGRect = CGRect(x: outerScrollView.contentOffset.x, y: outerScrollView.contentOffset.y,
                                   width: outerScrollView.frame.width,
                                   height: outerScrollView.frame.height)
             
-            if !r.contains(targetPoint) {
-                outerScrollView.setContentOffset(
-                    CGPoint(x: x, y: outerScrollView.contentOffset.y), animated: animated)
+            if !r.contains(convertedPoint) {
+                
+                let redirectPoint = self.convert(CGPoint(x: x, y: outerScrollView.contentOffset.y), to: outerScrollView)
+                
+                outerScrollView.setContentOffset(redirectPoint, animated: animated)
             }
         }
     }
