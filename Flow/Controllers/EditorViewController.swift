@@ -35,7 +35,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         toggleKeyboard()
         
         // Revise back button
@@ -221,7 +221,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         let heightScale = size.height / musicSheet.bounds.height
         let minScale = min(widthScale, heightScale)
         
-        scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 2
         scrollView.zoomScale = minScale
     }
@@ -237,6 +236,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
     public func hideViews() {
         self.keyboardView.isHidden = true
+        scrollView.minimumZoomScale = 1.0
     }
 
     public func toggleKeyboard() {
@@ -530,10 +530,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        scrollView.minimumZoomScale = 0.6
+        
         if musicSheet.frame.width <= scrollView.frame.width {
             let shiftWidth = scrollView.frame.width/2.0 - scrollView.contentSize.width/2.0
             scrollView.contentInset.left = shiftWidth
         } else { scrollView.contentInset.top = 0 }
+        
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {

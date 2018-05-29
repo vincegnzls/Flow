@@ -323,33 +323,27 @@ class MusicSheet: UIView {
         print("DRAW CONNECTION")
 
         if connection.notes!.count > 1 {
-            if let first = connection.getFirstNote() {
-                if let last = connection.getLastNote() {
+            if let first = connection.getFirstNote(), let last = connection.getLastNote() {
+                if let firstCoord = first.screenCoordinates, let lastCoord = last.screenCoordinates  {
+                    let offset: CGFloat = 22
 
-                    if let firstCoord = first.screenCoordinates {
-                        if let lastCoord = last.screenCoordinates {
+                    if !isChord {
 
-                            let offset: CGFloat = 22
+                        if let notes = connection.notes {
 
-                            if !isChord {
-
-                                if let notes = connection.notes {
-
-                                    if downward(notes: notes) {
-                                        let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y - offset + 8)
-                                        let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y - offset + 8)
-                                        drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor)
-                                    } else {
-                                        let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y + offset - 5)
-                                        let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y + offset - 5)
-                                        drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor * -1)
-                                    }
-                                }
+                            if downward(notes: notes) {
+                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y - offset + 8)
+                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y - offset + 8)
+                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor)
                             } else {
-
+                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y + offset - 5)
+                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y + offset - 5)
+                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor * -1)
                             }
-
                         }
+                        
+                    } else {
+
                     }
                 }
             }
@@ -358,13 +352,9 @@ class MusicSheet: UIView {
 
     func checkConnectionPerMeasure(notations: [MusicNotation]) {
         for notation in notations {
-            if let note = notation as? Note {
-                if let connection = note.connection {
-                    if let first = connection.getFirstNote() {
-                        if note == first {
-                            drawConnection(connection: connection, bendFactor: 0.25, isChord: false)
-                        }
-                    }
+            if let note = notation as? Note, let connection = note.connection, let first = connection.getFirstNote() {
+                if note == first {
+                    drawConnection(connection: connection, bendFactor: 0.25, isChord: false)
                 }
             } else if let chord = notation as? Chord {
 
@@ -568,14 +558,14 @@ class MusicSheet: UIView {
 
         if let coord = highestOrLowestNote.screenCoordinates {
             if higher {
-                if coord.y - 40 > 65 {
-                    return 65
+                if coord.y - 40 > 85 {
+                    return 85
                 } else {
                     return coord.y - 40
                 }
             } else {
-                if coord.y + 40 < 565 {
-                    return 565
+                if coord.y + 40 < 540 {
+                    return 540
                 } else {
                     return coord.y + 40
                 }
@@ -659,7 +649,7 @@ class MusicSheet: UIView {
 
     func checkHighlightOttavaButton() -> OttavaType? {
         var ottava: OttavaType? = nil
-        var params = Parameters()
+        let params = Parameters()
 
         if !self.selectedNotations.isEmpty {
             if sameOttava(notations: self.selectedNotations) {
@@ -669,7 +659,7 @@ class MusicSheet: UIView {
                             ottava = note.ottava
                         } else {
                             if note.ottava != nil {
-                                params.put(key: KeyNames.OTTAVA, value: ottava)
+                                params.put(key: KeyNames.OTTAVA, value: ottava!)
                                 EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                                 return ottava
                             }
@@ -679,7 +669,7 @@ class MusicSheet: UIView {
                             ottava = chord.ottava
                         } else {
                             if chord.ottava != nil {
-                                params.put(key: KeyNames.OTTAVA, value: ottava)
+                                params.put(key: KeyNames.OTTAVA, value: ottava!)
                                 EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                                 return ottava
                             }
@@ -689,7 +679,7 @@ class MusicSheet: UIView {
 
                 if selectedNotations.count == 1 {
                     if ottava != nil {
-                        params.put(key: KeyNames.OTTAVA, value: ottava)
+                        params.put(key: KeyNames.OTTAVA, value: ottava!)
                         EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                     }
                 }
@@ -699,12 +689,12 @@ class MusicSheet: UIView {
         } else if let notation = self.hoveredNotation {
             if let note = notation as? Note {
                 if note.ottava != nil {
-                    params.put(key: KeyNames.OTTAVA, value: note.ottava)
+                    params.put(key: KeyNames.OTTAVA, value: note.ottava!)
                     EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                     return ottava
                 }
             } else if let chord = notation as? Chord {
-                params.put(key: KeyNames.OTTAVA, value: chord.ottava)
+                params.put(key: KeyNames.OTTAVA, value: chord.ottava!)
                 EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA_HIGHLIGHT, params: params)
                 return ottava
             }
@@ -880,11 +870,18 @@ class MusicSheet: UIView {
         // Add listeners for connection
         EventBroadcaster.instance.removeObservers(event: EventNames.CONNECTION)
         EventBroadcaster.instance.addObserver(event: EventNames.CONNECTION, observer: Observer(id: "MusicSheet.connection", function: self.connection))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.UNDO_REDO)
+        EventBroadcaster.instance.addObserver(event: EventNames.UNDO_REDO, observer: Observer(id: "MusicSheet.removeSelected", function: self.removeSelected))
 
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
         self.addGestureRecognizer(panGesture)
+    }
+    
+    func removeSelected() {
+        self.selectedNotations.removeAll()
     }
 
     func onCompositionLoad (params: Parameters) {
@@ -3132,8 +3129,8 @@ class MusicSheet: UIView {
                         switch type {
                         case ActionFunctions.EXECUTE :
                             var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
-                            if let note = addAction.notations[addAction.notations.count-1] as? Note {
-                                currentPoint = note.screenCoordinates!
+                            if let note = addAction.notations[addAction.notations.count-1] as? Note, let coord = note.screenCoordinates {
+                                currentPoint = coord
                             } else if let chord = addAction.notations[addAction.notations.count-1] as? Chord {
                                 currentPoint = chord.notes[0].screenCoordinates!
                             }
@@ -5287,7 +5284,7 @@ class MusicSheet: UIView {
                             }
                             
                             if let connCount = connCount {
-                            if self.selectedNotations.count != connCount {
+                                if self.selectedNotations.count != connCount {
                                     if let firstConn = first.connection {
                                         firstConn.notes!.remove(at: firstConn.notes!.index(of: note)!)
                                     }

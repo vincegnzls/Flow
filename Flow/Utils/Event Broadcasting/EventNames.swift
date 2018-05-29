@@ -67,4 +67,6 @@ struct EventNames {
     static let REMOVE_CONNECT_HIGHLIGHT = "REMOVE_CONNECT_HIGHLIGHT"
 
     static let CONNECTION = "CONNECTION"
+    
+    static let UNDO_REDO = "UNDO_REDO"
 }
