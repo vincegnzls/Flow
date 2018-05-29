@@ -26,6 +26,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var titleTextField: MaxLengthTextField!
     @IBOutlet weak var bottomMenu: UIView!
     @IBOutlet weak var keyboardView: KeyboardView!
+    @IBOutlet weak var transposeView: UIView!
+    @IBOutlet weak var riView: UIView!
     
     var backButton : UIBarButtonItem!
     
@@ -37,7 +39,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         super.viewDidLoad()
     
         toggleKeyboard()
-        
         // Revise back button
         
         // Disable the swipe to make sure you get your chance to save
@@ -209,6 +210,15 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.addObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
         EventBroadcaster.instance.removeObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "EditorViewController.hideViews", function: self.hideViews))
         EventBroadcaster.instance.addObserver(event: EventNames.PLAY_KEY_PRESSED, observer: Observer(id: "EditorViewController.hideViews", function: self.hideViews))
+        EventBroadcaster.instance.removeObserver(event: EventNames.SHOW_TRANSFORM_VIEW, observer: Observer(id: "EditorViewController.showTransformView", function: self.showTransformView))
+        EventBroadcaster.instance.addObserver(event: EventNames.SHOW_TRANSFORM_VIEW, observer: Observer(id: "EditorViewController.showTransformView", function: self.showTransformView))
+        EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_TRANSFORM_VIEW, observer: Observer(id: "EditorViewController.hideTransformView", function: self.hideTransformView))
+        EventBroadcaster.instance.addObserver(event: EventNames.HIDE_TRANSFORM_VIEW, observer: Observer(id: "EditorViewController.hideTransformView", function: self.hideTransformView))
+        EventBroadcaster.instance.removeObserver(event: EventNames.SHOW_RI_VIEW, observer: Observer(id: "EditorViewController.showRiView", function: self.showRiView))
+        EventBroadcaster.instance.addObserver(event: EventNames.SHOW_RI_VIEW, observer: Observer(id: "EditorViewController.showRiView", function: self.showRiView))
+        EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_RI_VIEW, observer: Observer(id: "EditorViewController.hideRiView", function: self.hideRiView))
+        EventBroadcaster.instance.addObserver(event: EventNames.HIDE_RI_VIEW, observer: Observer(id: "EditorViewController.hideRiView", function: self.hideRiView))
+        
     }
     
     override func viewWillLayoutSubviews() {
@@ -232,6 +242,36 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     @IBAction func onTapSave(_ sender: UIBarButtonItem) {
         self.save()
+    }
+    
+    var currNoteOrigin: CGPoint?
+    public func showTransformView(params: Parameters) {
+        if var frame = params.get(key: KeyNames.TRANSORM_VIEW_FRAME) as? CGRect {
+            
+            currNoteOrigin = CGPoint(x: frame.origin.x, y: frame.origin.y)
+            
+            let adjustedPoint = musicSheet.convert(frame.origin, to: self.scrollView)
+            let adjustedSize = self.transposeView.frame.size
+            
+            frame.origin = adjustedPoint
+            frame.size = adjustedSize
+            
+            self.transposeView.frame = frame
+        }
+        
+        self.transposeView.isHidden = false
+    }
+    
+    public func hideTransformView() {
+        self.transposeView.isHidden = true
+    }
+    
+    public func showRiView() {
+        self.riView.isHidden = false
+    }
+    
+    public func hideRiView() {
+        self.riView.isHidden = true
     }
 
     public func hideViews() {
@@ -536,6 +576,12 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         scrollView.minimumZoomScale = 0.6
         
+        if let currNoteOrigin = currNoteOrigin {
+            let adjustedOrigin = musicSheet.convert(currNoteOrigin, to: self.scrollView)
+            
+            self.transposeView.frame.origin = adjustedOrigin
+        }
+        
         if musicSheet.frame.width <= scrollView.frame.width {
             let shiftWidth = scrollView.frame.width/2.0 - scrollView.contentSize.width/2.0
             scrollView.contentInset.left = shiftWidth
@@ -584,6 +630,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         return false
     }
     
+    
     @IBAction func onTouchHideButton(_ sender: UIButton) {
 //        self.bottomMenu.isHidden = true
         let originalTransform = self.bottomMenu.transform
@@ -613,5 +660,28 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         defaults.set(false, forKey: Constants.keyIsBottomMenuHidden)
     }
 
+    @IBAction func transposeUp(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.TRANSPOSE, value: TranspositionDirection.up)
+        EventBroadcaster.instance.postEvent(event: EventNames.TRANSPOSE, params: params)
+    }
+    
+    @IBAction func transposeDown(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.TRANSPOSE, value: TranspositionDirection.down)
+        EventBroadcaster.instance.postEvent(event: EventNames.TRANSPOSE, params: params)
+    }
+    
+    @IBAction func retrograde(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.RETROGRADE_INVERSE, value: "retrograde")
+        EventBroadcaster.instance.postEvent(event: EventNames.RETROGRADE_INVERSE, params: params)
+    }
+    
+    @IBAction func inversion(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.RETROGRADE_INVERSE, value: "inversion")
+        EventBroadcaster.instance.postEvent(event: EventNames.RETROGRADE_INVERSE, params: params)
+    }
 }
 
