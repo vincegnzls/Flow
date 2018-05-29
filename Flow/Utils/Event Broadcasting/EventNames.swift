@@ -69,4 +69,13 @@ struct EventNames {
     static let CONNECTION = "CONNECTION"
     
     static let UNDO_REDO = "UNDO_REDO"
+    
+    static let SHOW_TRANSFORM_VIEW = "SHOW_TRANSFORM_VIEW"
+    static let HIDE_TRANSFORM_VIEW = "HIDE_TRANSFORM_VIEW"
+    
+    static let SHOW_RI_VIEW = "SHOW_RI_VIEW"
+    static let HIDE_RI_VIEW = "HIDE_RI_VIEW"
+    
+    static let TRANSPOSE = "TRANSPOSE"
+    static let RETROGRADE_INVERSE = "RETROGRADE_INVERSE"
 }

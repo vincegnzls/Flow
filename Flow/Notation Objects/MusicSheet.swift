@@ -92,8 +92,8 @@ class MusicSheet: UIView {
     private let playbackHighlightRect = CAShapeLayer()
     private var playbackScrollLock = false
     
-    @IBOutlet var transformView: UIView!
-    @IBOutlet var riView: UIView!
+    //@IBOutlet var transformView: UIView!
+    //@IBOutlet var riView: UIView!
     
     public var composition: Composition?
     public var hoveredNotation: MusicNotation? {
@@ -158,7 +158,8 @@ class MusicSheet: UIView {
                 
                 parameters.put(key: KeyNames.CURRENT_DOT_MODES, value: dotModes)
 
-                self.transformView.isHidden = true
+                //self.transformView.isHidden = true
+                EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TRANSFORM_VIEW)
 
                 /*if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                     if let newMeasure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {
@@ -218,21 +219,29 @@ class MusicSheet: UIView {
                 }
                 
                 if let coord = selectedNotations.last?.screenCoordinates {
-                    self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                    self.transformView.isHidden = false
-                    self.addSubview(self.transformView)
+                    //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                    let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                    let params = Parameters()
+                    params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
+                    
+                    EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW, params: params)
+                    /*self.transformView.isHidden = false
+                    self.addSubview(self.transformView)*/
                 }
 
                 if selectedNotations.count > 1 {
                     //let params = Parameters()
 
                     if allNotes(notations: selectedNotations) {
-                        self.riView.isHidden = false
+                        //self.riView.isHidden = false
+                        EventBroadcaster.instance.postEvent(event: EventNames.SHOW_RI_VIEW)
                     } else {
-                        self.riView.isHidden = true
+                        //self.riView.isHidden = true
+                        EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
                     }
                 } else {
-                    self.riView.isHidden = true
+                    //self.riView.isHidden = true
+                    EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
                 }
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
@@ -642,18 +651,28 @@ class MusicSheet: UIView {
     func repositionTransformView(first: Bool) {
         if first {
             if let coord = selectedNotations.first?.screenCoordinates {
-                self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                let params = Parameters()
+                params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW, params: params)
             }
         } else {
             if let coord = selectedNotations.last?.screenCoordinates {
-                self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                let params = Parameters()
+                params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW, params: params)
             }
         }
 
-        self.transformView.isHidden = false
+        /*self.transformView.isHidden = false
         self.addSubview(self.transformView)
         self.transformView.superview?.bringSubview(toFront: self.transformView)
-        self.transformView.layer.zPosition = CGFloat.greatestFiniteMagnitude
+        self.transformView.layer.zPosition = CGFloat.greatestFiniteMagnitude*/
     }
 
     func checkHighlightConnectButton() {
@@ -890,11 +909,41 @@ class MusicSheet: UIView {
         
         EventBroadcaster.instance.removeObservers(event: EventNames.UNDO_REDO)
         EventBroadcaster.instance.addObserver(event: EventNames.UNDO_REDO, observer: Observer(id: "MusicSheet.removeSelected", function: self.removeSelected))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.TRANSPOSE)
+        EventBroadcaster.instance.addObserver(event: EventNames.TRANSPOSE, observer: Observer(id: "MusicSheet.transpose", function: self.transpose))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.RETROGRADE_INVERSE)
+        EventBroadcaster.instance.addObserver(event: EventNames.RETROGRADE_INVERSE, observer: Observer(id: "MusicSheet.retrogradeInverse", function: self.retrogradeInverse))
 
         // Set up pan gesture for dragging
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
         panGesture.maximumNumberOfTouches = 1
         self.addGestureRecognizer(panGesture)
+    }
+    
+    func retrogradeInverse(params: Parameters) {
+        let params = params.get(key: KeyNames.RETROGRADE_INVERSE) as? String
+        
+        if params == "retrograde" {
+            if self.selectedNotations.count > 1 {
+                self.retrograde(notations: self.selectedNotations)
+            }
+        } else {
+            if self.selectedNotations.count > 1 {
+                self.inverse(notations: self.selectedNotations)
+            }
+        }
+    }
+    
+    func transpose(params: Parameters) {
+        let direction = params.get(key: KeyNames.TRANSPOSE) as? TranspositionDirection
+        
+        if direction == .up {
+            self.transposeUp()
+        } else if direction == .down {
+            self.transposeDown()
+        }
     }
     
     func removeSelected() {
@@ -3018,8 +3067,10 @@ class MusicSheet: UIView {
     func transposeUp() {
         if !self.selectedNotations.isEmpty {
             self.transpose(direction: .up)
-            self.transformView.isHidden = false
-            self.addSubview(self.transformView)
+            //self.transformView.isHidden = false
+            //EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW)
+            
+            //self.addSubview(self.transformView)
 
             /*let params = Parameters()
 
@@ -3035,8 +3086,9 @@ class MusicSheet: UIView {
     func transposeDown() {
         if !self.selectedNotations.isEmpty {
             self.transpose(direction: .down)
-            self.transformView.isHidden = false
-            self.addSubview(self.transformView)
+            //EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW)
+            //self.transformView.isHidden = false
+            //self.addSubview(self.transformView)
 
             /*let params = Parameters()
 
@@ -5108,8 +5160,9 @@ class MusicSheet: UIView {
                 self.updateMeasureDraw()
             }
             
-            self.transformView.isHidden = false
-            self.addSubview(self.transformView)
+            EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW)
+            /*self.transformView.isHidden = false
+            self.addSubview(self.transformView)*/
         } else if let hovered = self.hoveredNotation {
             if let curNote = hovered as? Note {
                 
@@ -5847,7 +5900,7 @@ class MusicSheet: UIView {
         return nil
     }
 
-    @IBAction func transposeUp(_ sender: UIButton) {
+    /*@IBAction func transposeUp(_ sender: UIButton) {
         self.transposeUp()
     }
     
@@ -5865,6 +5918,6 @@ class MusicSheet: UIView {
         if selectedNotations.count > 1 {
             self.inverse(notations: self.selectedNotations)
         }
-    }
+    }*/
     
 }

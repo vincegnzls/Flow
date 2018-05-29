@@ -40,4 +40,10 @@ struct KeyNames {
     static let OTTAVA = "OTTAVA"
 
     static let CONNECTION = "CONNECTION"
+    
+    static let TRANSORM_VIEW_FRAME = "TRANSORM_VIEW_FRAME"
+    
+    static let TRANSPOSE = "TRANSPOSE"
+    
+    static let RETROGRADE_INVERSE = "RETROGRADE_INVERSE"
 }

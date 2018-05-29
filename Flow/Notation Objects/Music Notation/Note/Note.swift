@@ -103,6 +103,26 @@ class Note: MusicNotation {
             conn.updateType()
         }
     }
+    
+    func convertOttavaPitch() -> Pitch? {
+        if let ottava = self.ottava {
+            if ottava == .eightVa {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave + 1)
+                return newPitch
+            } else if ottava == .eightVb {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave - 1)
+                return newPitch
+            } else if ottava == .fifteenMa {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave + 2)
+                return newPitch
+            } else  if ottava == .fifteenMb {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave - 2)
+                return newPitch
+            }
+        }
+        
+        return nil
+    }
 
     override func duplicate() -> Note {
         return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots, ottava: self.ottava, connection: self.connection)
