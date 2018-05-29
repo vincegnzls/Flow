@@ -10,7 +10,13 @@ import UIKit
 
 class Chord: MusicNotation {
     
-    var notes: [Note]
+    var notes: [Note] {
+        didSet {
+            for note in self.notes {
+                note.chord = self
+            }
+        }
+    }
 
     var ottava: OttavaType? {
         didSet {
@@ -81,6 +87,7 @@ class Chord: MusicNotation {
             }
             note.dots = self.dots
             note.ottava = self.ottava
+            note.chord = self
         }
     }
  
