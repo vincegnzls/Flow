@@ -1759,10 +1759,13 @@ class MusicSheet: UIView {
             if fIndex == fNotations.count {
                 fReachedEnd = true
             }
-
+            
             if gTally == fTally {
                 if gIndex < gNotations.count {
-                    gTally += gNotations[gIndex].type.getBeatValue()
+                    
+                    let gNotation = gNotations[gIndex]
+                    
+                    gTally += gNotation.type.getBeatValue(dots: gNotation.dots)
                     notesToBePrinted.append(gNotations[gIndex])
 
                     gIndex += 1
@@ -1770,7 +1773,10 @@ class MusicSheet: UIView {
                     gAlreadyAdded = true
                 }
                 if fIndex < fNotations.count {
-                    fTally += fNotations[fIndex].type.getBeatValue()
+                    
+                    let fNotation = fNotations[fIndex]
+                    
+                    fTally += fNotation.type.getBeatValue(dots: fNotation.dots)
                     notesToBePrinted.append(fNotations[fIndex])
 
                     fIndex += 1
@@ -1779,7 +1785,10 @@ class MusicSheet: UIView {
                 }
             } else if gTally < fTally {
                 if gIndex < gNotations.count {
-                    gTally += gNotations[gIndex].type.getBeatValue()
+                    
+                    let gNotation = gNotations[gIndex]
+                    
+                    gTally += gNotation.type.getBeatValue(dots: gNotation.dots)
                     notesToBePrinted.append(gNotations[gIndex])
 
                     gIndex += 1
@@ -1788,7 +1797,10 @@ class MusicSheet: UIView {
                 }
             } else if fTally < gTally {
                 if fIndex < fNotations.count {
-                    fTally += fNotations[fIndex].type.getBeatValue()
+                    
+                    let fNotation = fNotations[fIndex]
+                    
+                    fTally += fNotation.type.getBeatValue(dots: fNotation.dots)
                     notesToBePrinted.append(fNotations[fIndex])
 
                     fIndex += 1
@@ -1799,14 +1811,20 @@ class MusicSheet: UIView {
             
             if gReachedEnd && !fReachedEnd && !fAlreadyAdded {
                 if fIndex < fNotations.count {
-                    fTally += fNotations[fIndex].type.getBeatValue()
+                    
+                    let fNotation = fNotations[fIndex]
+                    
+                    fTally += fNotation.type.getBeatValue(dots: fNotation.dots)
                     notesToBePrinted.append(fNotations[fIndex])
                     
                     fIndex += 1
                 }
             } else if fReachedEnd && !gReachedEnd && !gAlreadyAdded {
                 if gIndex < gNotations.count {
-                    gTally += gNotations[gIndex].type.getBeatValue()
+                    
+                    let gNotation = gNotations[gIndex]
+                    
+                    gTally += gNotation.type.getBeatValue(dots: gNotation.dots)
                     notesToBePrinted.append(gNotations[gIndex])
                     
                     gIndex += 1
