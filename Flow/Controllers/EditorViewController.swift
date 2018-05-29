@@ -399,6 +399,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                             } else {
                                 let duplicatedNote = existingNote.duplicate()
                                 
+                                if duplicatedNote.dots > 0 {
+                                    newChord.dots = duplicatedNote.dots
+                                }
+                                
                                 newChord.notes.append(duplicatedNote)
                             }
                         }
