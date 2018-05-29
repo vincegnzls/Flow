@@ -48,7 +48,7 @@ class SoundManager {
     
     func setup() {
         self.grandStaffMixer = AKMixer(self.fNotePlayer, self.gNotePlayer)
-        self.grandStaffMixer.volume = 5.0
+        self.grandStaffMixer.volume = 2.0
         AudioKit.output = self.grandStaffMixer
     }
     
@@ -66,7 +66,7 @@ class SoundManager {
 
         let FMPiano = AKSampler()
         
-        FMPiano.volume = 5.0
+        FMPiano.volume = 2.0
 
         do{
             try FMPiano.loadWav("Support Objects/Grand Piano")
@@ -84,6 +84,36 @@ class SoundManager {
         }
         
         var MIDINum: MIDINoteNumber = 0
+
+        var note = note.duplicate()
+
+        if let ottava = note.ottava {
+            if ottava == .eightVa {
+                if note.pitch.octave + 1 <= 8 {
+                    note.pitch.octave += 1
+                } else {
+                    note.pitch.octave = 8
+                }
+            } else if ottava == .eightVb {
+                if note.pitch.octave - 1 >= 0 {
+                    note.pitch.octave -= 1
+                } else {
+                    note.pitch.octave = 0
+                }
+            } else if ottava == .fifteenMa {
+                if note.pitch.octave + 2 <= 8 {
+                    note.pitch.octave += 2
+                } else {
+                    note.pitch.octave = 8
+                }
+            } else if ottava == .fifteenMb {
+                if note.pitch.octave - 2 >= 0 {
+                    note.pitch.octave -= 2
+                } else {
+                    note.pitch.octave = 0
+                }
+            }
+        }
 
         switch note.pitch.step.toString(){
         case "A":
@@ -349,6 +379,36 @@ class SoundManager {
     func getNoteMIDINum(note: Note, keySignature: KeySignature) -> Int {
 
         var MIDINum = 30
+
+        var note = note.duplicate()
+
+        if let ottava = note.ottava {
+            if ottava == .eightVa {
+                if note.pitch.octave + 1 <= 8 {
+                    note.pitch.octave += 1
+                } else {
+                    note.pitch.octave = 8
+                }
+            } else if ottava == .eightVb {
+                if note.pitch.octave - 1 >= 0 {
+                    note.pitch.octave -= 1
+                } else {
+                    note.pitch.octave = 0
+                }
+            } else if ottava == .fifteenMa {
+                if note.pitch.octave + 2 <= 8 {
+                    note.pitch.octave += 2
+                } else {
+                    note.pitch.octave = 8
+                }
+            } else if ottava == .fifteenMb {
+                if note.pitch.octave - 2 >= 0 {
+                    note.pitch.octave -= 2
+                } else {
+                    note.pitch.octave = 0
+                }
+            }
+        }
 
         switch note.pitch.step.toString(){
         case "A":
@@ -687,15 +747,38 @@ class SoundManager {
 
         var notePlayer = [[Int?]]()
 
-        let x = self.getDurationOfNote(notation: notation)
+        var x = self.getDurationOfNote(notation: notation)
+        
+        if let note = notation as? Note, let conn = note.connection, let connNotes = conn.notes {
+            if conn.type == .tie {
+                x = 0
+                
+                for noteConn in connNotes {
+                    x += getDurationOfNote(notation: noteConn)
+                }
+            }
+        }
 
         for beat in 0..<x {
             if let note = notation as? Note {
-                if beat >= 1 {
-                    //print("Note Added. Adding the Trailing 0s")
-                    notePlayer.append([nil])
+                if let conn = note.connection, let notes = conn.notes, let first = notes.first {
+                    if beat >= 1 {
+                        //print("Note Added. Adding the Trailing 0s")
+                        notePlayer.append([nil])
+                    } else {
+                        if note == first && conn.type == .tie {
+                            notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
+                        } else if conn.type == .slur {
+                            notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
+                        }
+                    }
                 } else {
-                    notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
+                    if beat >= 1 {
+                        //print("Note Added. Adding the Trailing 0s")
+                        notePlayer.append([nil])
+                    } else {
+                        notePlayer.append([getNoteMIDINum(note: note, keySignature: keySignature)])
+                    }
                 }
             } else if let chord = notation as? Chord {
                 if beat >= 1 {
@@ -724,7 +807,17 @@ class SoundManager {
         for measure in staff.measures {
             for notation in measure.notationObjects {
 
-                staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                if let note = notation as? Note, let conn = note.connection, let notes = conn.notes {
+                    if let first = notes.first {
+                        if note == first {
+                            staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                        } else if conn.type == .slur {
+                            staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                        }
+                    }
+                } else {
+                    staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                }
 
             }
         }
@@ -827,7 +920,7 @@ class SoundManager {
                 }
             } else {
                 self.grandStaffMixer = AKMixer()
-                self.grandStaffMixer.volume = 5.0
+                self.grandStaffMixer.volume = 2.0
                 AudioKit.output = self.grandStaffMixer
 
                 for i in gNotesMIDI[self.curBeat] {
@@ -855,7 +948,7 @@ class SoundManager {
                 }
             } else {
                 self.grandStaffMixer = AKMixer()
-                self.grandStaffMixer.volume = 5.0
+                self.grandStaffMixer.volume = 2.0
                 AudioKit.output = self.grandStaffMixer
 
                 for i in fNotesMIDI[self.curBeat] {

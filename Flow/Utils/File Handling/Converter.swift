@@ -260,7 +260,8 @@ class Converter {
                 // Get notes and/or rests
                 //var measureIndex = 0
                 if let notationElements = measureElement["note"].all {
-                    for var i in 0..<notationElements.count {
+                    var i = 0
+                    while i < notationElements.count {
                         // First notationElement
                         let notationElement = notationElements[i]
                         
@@ -301,9 +302,11 @@ class Converter {
                                 measure.add(chord)
                             } else {
                                 measure.add(convertXMLToNotation(notationElement))
+                                i += 1
                             }
                         } else {
                             measure.add(convertXMLToNotation(notationElement))
+                            i += 1
                         }
                     }
                 }

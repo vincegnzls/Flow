@@ -20,6 +20,13 @@ class MenuBar: UIView {
     @IBOutlet weak var oneDotBtn: UIButton!
     @IBOutlet weak var twoDotsBtn: UIButton!
     @IBOutlet weak var threeDotsBtn: UIButton!
+
+    @IBOutlet weak var eightVaBtn: UIButton!
+    @IBOutlet weak var eightVbBtn: UIButton!
+    @IBOutlet weak var fifteenMaBtn: UIButton!
+    @IBOutlet weak var fifteenMbBtn: UIButton!
+    
+    @IBOutlet weak var connectBtn: UIButton!
     
     let maxNumOfDots = 3
 
@@ -63,10 +70,54 @@ class MenuBar: UIView {
         
         EventBroadcaster.instance.removeObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
         EventBroadcaster.instance.addObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightOttavaBtn", function: self.highlightOttavaBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightOttavaBtn", function: self.highlightOttavaBtn))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
+    }
+
+    func highlightOttavaBtn(params: Parameters) {
+        removeOttavaHighlight()
+
+        if let ottavaType: OttavaType = params.get(key: KeyNames.OTTAVA) as! OttavaType {
+
+            if ottavaType == .eightVa {
+                self.eightVaBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            } else if ottavaType == .eightVb {
+                self.eightVbBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            } else if ottavaType == .fifteenMa {
+                self.fifteenMaBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            } else if ottavaType == .fifteenMb {
+                self.fifteenMbBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            }
+        }
+    }
+
+    func removeOttavaHighlight() {
+        self.eightVaBtn.backgroundColor = nil
+        self.eightVbBtn.backgroundColor = nil
+        self.fifteenMaBtn.backgroundColor = nil
+        self.fifteenMbBtn.backgroundColor = nil
+    }
+    
+    func highlightConnectBtn() {
+        self.connectBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+    }
+    
+    func removeConnectHighlight() {
+        self.connectBtn.backgroundColor = nil
     }
 
     func highlightAccidentalBtn(params: Parameters) {
-        if let accidental: Accidental = params.get(key: KeyNames.ACCIDENTAL) as! Accidental {
+        if let accidental: Accidental = params.get(key: KeyNames.ACCIDENTAL) as? Accidental {
 
             print("ACCIDENTAL: \(accidental.toString())")
 
@@ -172,25 +223,41 @@ class MenuBar: UIView {
     @IBAction func touchNaturalize(_ sender: UIButton) {
         print("naturalize")
         self.removeAccidentalHighlight()
-        EventBroadcaster.instance.postEvent(event: EventNames.NATURALIZE_KEY_PRESSED)
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.natural)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
     
     @IBAction func touchFlat(_ sender: UIButton) {
         print("flat")
         self.removeAccidentalHighlight()
-        EventBroadcaster.instance.postEvent(event: EventNames.FLAT_KEY_PRESSED)
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.flat)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
     
     @IBAction func touchSharp(_ sender: UIButton) {
         print("sharp")
         self.removeAccidentalHighlight()
-        EventBroadcaster.instance.postEvent(event: EventNames.SHARP_KEY_PRESSED)
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.sharp)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
 
     @IBAction func touchDSharp(_ sender: UIButton) {
         print("dsharp")
         self.removeAccidentalHighlight()
-        EventBroadcaster.instance.postEvent(event: EventNames.DSHARP_KEY_PRESSED)
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.doubleSharp)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
     
     @IBAction func touchUndo(_ sender: UIButton) {
@@ -357,4 +424,42 @@ class MenuBar: UIView {
         EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_KEYBOARD)
         print("TOGGLE PRESSED")
     }
+    
+    @IBAction func eightVa(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.eightVa)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
+    @IBAction func eightVb(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.eightVb)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
+    @IBAction func fifteenMa(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.fifteenMa)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
+    @IBAction func fifteenMb(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.fifteenMb)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
+    @IBAction func connect(_ sender: UIButton) {
+        let connection = Connection()
+        
+        let params = Parameters()
+        params.put(key: KeyNames.CONNECTION, value: connection)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.CONNECTION, params: params)
+    }
+    
 }
