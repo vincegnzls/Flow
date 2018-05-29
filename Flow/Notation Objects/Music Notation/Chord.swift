@@ -13,15 +13,23 @@ class Chord: MusicNotation {
     var notes: [Note] {
         didSet {
             for note in notes {
-                note.dots = dots
+                note.dots = self.dots
             }
         }
     }
     
     override var dots: Int {
         didSet {
-            for note in notes {
-                note.dots = dots
+            for note in self.notes {
+                note.dots = self.dots
+            }
+        }
+    }
+    
+    override var measure: Measure? {
+        didSet {
+            for note in self.notes {
+                note.measure = self.measure
             }
         }
     }
@@ -34,6 +42,7 @@ class Chord: MusicNotation {
         self.notes = notes
         super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
         
+        self.setup()
         setImage()
     }
     
@@ -46,7 +55,17 @@ class Chord: MusicNotation {
         notes.append(note)
         super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
         
+        self.setup()
         setImage()
+    }
+    
+    private func setup() {
+        for note in self.notes {
+            if let measure = self.measure {
+                self.measure = measure
+            }
+            note.dots = self.dots
+        }
     }
  
     override func setImage() {
