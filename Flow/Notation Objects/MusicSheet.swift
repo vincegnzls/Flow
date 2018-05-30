@@ -352,20 +352,8 @@ class MusicSheet: UIView {
                         }
                         
                     } else {
-
-                        if let notations = connection.notes {
-                            
-                            if downward(notes: notations) {
-                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y - offset + 8)
-                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y - offset + 8)
-                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor)
-                            } else {
-                                let adjustedFirst = CGPoint(x: firstCoord.x + offset, y: firstCoord.y + offset - 5)
-                                let adjustedLast = CGPoint(x: lastCoord.x + offset, y: lastCoord.y + offset - 5)
-                                drawCurvedLine(from: adjustedFirst, to: adjustedLast, thickness: 1, bendFactor: bendFactor * -1)
-                            }
-                            
-                        }
+                        
+                        
                         
                     }
                 }
@@ -379,11 +367,14 @@ class MusicSheet: UIView {
                 if note == first {
                     drawConnection(connection: connection, bendFactor: 0.25, isChord: false)
                 }
-            } else if let chord = notation as? Chord, let connection = chord.connection, let first = connection.getFirstNote() {
-                if chord == first {
-                    drawConnection(connection: connection, bendFactor: 0.25, isChord: true)
+            } else if let chord = notation as? Chord {
+                for note in chord.notes {
+                    if let connection = note.connection, let first = connection.getFirstNote() {
+                        if note == first {
+                            drawConnection(connection: connection, bendFactor: 0.25, isChord: false)
+                        }
+                    }
                 }
-                
             }
         }
     }
@@ -5441,7 +5432,71 @@ class MusicSheet: UIView {
                 }
 
             } else if allChords(notations: self.selectedNotations) {
-
+                var firstIndex = 0
+                var secondIndex = 1
+                
+                if secondIndex < selectedNotations.count {
+                
+                    var newNotes = [MusicNotation]()
+                    
+                    while secondIndex < selectedNotations.count {
+                        
+                        if let firstChord = selectedNotations[firstIndex] as? Chord, let secondChord = selectedNotations[secondIndex] as? Chord {
+                            
+                            let firstDuplicatedChord = firstChord.duplicate()
+                            let secondDuplicatedChord = secondChord.duplicate()
+                            
+                            let firstChordCount = firstChord.notes.count
+                            let secondChordCount = secondChord.notes.count
+                            
+                            var leastCount = -1
+                            
+                            if firstChordCount < secondChordCount {
+                                leastCount = firstChordCount
+                            } else {
+                                leastCount = secondChordCount
+                            }
+                            
+                            for index in 0..<leastCount {
+                                let connection = Connection()
+                                
+                                var notes = [Note]()
+                                
+                                notes.append(firstDuplicatedChord.notes[index])
+                                notes.append(secondDuplicatedChord.notes[index])
+                                
+                                connection.notes = notes
+                                
+                                firstDuplicatedChord.notes[index].connection = connection
+                            }
+                            
+                            newNotes.append(firstDuplicatedChord)
+                            
+                            if secondIndex + 1 == selectedNotations.count {
+                                newNotes.append(secondDuplicatedChord)
+                            }
+                            
+                        }
+                        
+                        firstIndex += 1
+                        secondIndex += 1
+                    }
+                    
+                    let editAction = EditAction(old: selectedNotations, new: newNotes)
+                    editAction.execute()
+                    
+                    selectedNotations.removeAll()
+                    selectedNotations = newNotes
+                    
+                    self.updateMeasureDraw()
+                    repositionTransformView(first: false)
+                    
+                    self.updateMeasureDraw()
+                    repositionTransformView(first: false)
+                    
+                }
+            } else { // hybrid selection
+                
             }
 
 
