@@ -227,6 +227,26 @@ class Chord: MusicNotation {
         }
     }
     
+    func convertOttavaPitch() -> Pitch? {
+        if let ottava = self.ottava {
+            if ottava == .eightVa {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave + 1)
+                return newPitch
+            } else if ottava == .eightVb {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave - 1)
+                return newPitch
+            } else if ottava == .fifteenMa {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave + 2)
+                return newPitch
+            } else  if ottava == .fifteenMb {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave - 2)
+                return newPitch
+            }
+        }
+        
+        return nil
+    }
+    
     // INSERTION SORT FROM https://github.com/raywenderlich/swift-algorithm-club/tree/master/Insertion%20Sort
     // by raywenderlich : https://github.com/raywenderlich
     func insertionSort<T>(_ array: [T], _ isOrderedBefore: (T, T) -> Bool) -> [T] {
