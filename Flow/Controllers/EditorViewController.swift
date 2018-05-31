@@ -28,6 +28,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var keyboardView: KeyboardView!
     @IBOutlet weak var transposeView: UIView!
     @IBOutlet weak var riView: UIView!
+    @IBOutlet weak var connectBtn: UIButton!
     
     var backButton : UIBarButtonItem!
     
@@ -219,6 +220,34 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_RI_VIEW, observer: Observer(id: "EditorViewController.hideRiView", function: self.hideRiView))
         EventBroadcaster.instance.addObserver(event: EventNames.HIDE_RI_VIEW, observer: Observer(id: "EditorViewController.hideRiView", function: self.hideRiView))
         
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "MenuBar.hideConnectBtn", function: self.hideConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "MenuBar.hideConnectBtn", function: self.hideConnectBtn))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "MenuBar.showConnectBtn", function: self.showConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "MenuBar.showConnectBtn", function: self.showConnectBtn))
+    }
+    
+    func highlightConnectBtn() {
+        self.connectBtn.setImage(UIImage(named: "tie-slur-button-selected"), for: .normal)
+    }
+    
+    func removeConnectHighlight() {
+        self.connectBtn.setImage(UIImage(named: "tie-slur-button"), for: .normal)
+    }
+    
+    func hideConnectBtn() {
+        self.connectBtn.isHidden = true
+    }
+    
+    func showConnectBtn() {
+        self.connectBtn.isHidden = false
     }
     
     override func viewWillLayoutSubviews() {
@@ -257,6 +286,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             frame.size = adjustedSize
             
             self.transposeView.frame = frame
+            self.riView.frame = CGRect(x: frame.origin.x + 57, y: frame.origin.y, width: riView.frame.size.width, height: riView.frame.height)
+            self.connectBtn.frame = CGRect(x: frame.origin.x + 167, y: frame.origin.y + 20, width: connectBtn.frame.size.width, height: connectBtn.frame.height)
         }
         
         self.transposeView.isHidden = false
@@ -580,6 +611,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             let adjustedOrigin = musicSheet.convert(currNoteOrigin, to: self.scrollView)
             
             self.transposeView.frame.origin = adjustedOrigin
+            self.riView.frame.origin = CGPoint(x: adjustedOrigin.x + 57, y: adjustedOrigin.y)
+            self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167, y: adjustedOrigin.y + 20)
         }
         
         if musicSheet.frame.width <= scrollView.frame.width {
@@ -682,6 +715,15 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         let params = Parameters()
         params.put(key: KeyNames.RETROGRADE_INVERSE, value: "inversion")
         EventBroadcaster.instance.postEvent(event: EventNames.RETROGRADE_INVERSE, params: params)
+    }
+    
+    @IBAction func connect(_ sender: UIButton) {
+        let connection = Connection()
+        
+        let params = Parameters()
+        params.put(key: KeyNames.CONNECTION, value: connection)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.CONNECTION, params: params)
     }
 }
 

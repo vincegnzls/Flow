@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L3C-ZS-342">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L3C-ZS-342">
     <device id="ipad10_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="TimesNewRomanBold.ttf">
+            <string>TimesNewRomanPS-BoldMT</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="154-Sg-OxG">
@@ -482,7 +487,6 @@ Tap '+' to create a new composition.</string>
                                     <constraint firstItem="iEu-Uq-rfU" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" constant="3" id="slP-uX-hxM"/>
                                 </constraints>
                                 <connections>
-                                    <outlet property="connectBtn" destination="9HY-Gc-gcB" id="GEy-0l-mwx"/>
                                     <outlet property="dSharpBtn" destination="NBh-oB-XfU" id="Ucn-7H-fiF"/>
                                     <outlet property="eightVaBtn" destination="Z3k-E7-fzk" id="CbY-Ka-Yz7"/>
                                     <outlet property="eightVbBtn" destination="L8F-Su-3ZI" id="jcg-vv-hqA"/>
@@ -670,8 +674,39 @@ Tap '+' to create a new composition.</string>
                                             <constraint firstAttribute="height" constant="640" id="KPP-b0-DlP"/>
                                         </constraints>
                                     </view>
+                                    <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jgu-f4-OfY" userLabel="RetrogradeInversion">
+                                        <rect key="frame" x="530" y="267" width="100" height="105"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oVX-49-dcL" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="57" width="100" height="37"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Inverse" image="controls-invert"/>
+                                                <connections>
+                                                    <action selector="inversion:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="n6p-AN-BFE"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DpG-Ff-gPa" userLabel="Retrograde" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="8" width="100" height="37"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" image="controls-retrograde"/>
+                                                <connections>
+                                                    <action selector="retrograde:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="v0o-TK-yBl"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="640" y="297" width="45" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <state key="normal" image="tie-slur-button"/>
+                                        <connections>
+                                            <action selector="connect:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="kRX-rr-W5V"/>
+                                        </connections>
+                                    </button>
                                     <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S6z-Dj-MLs" userLabel="TranposeKeys">
-                                        <rect key="frame" x="473" y="267" width="242" height="105"/>
+                                        <rect key="frame" x="473" y="267" width="50" height="105"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SFC-dm-Sgp" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
@@ -688,37 +723,6 @@ Tap '+' to create a new composition.</string>
                                                 <state key="normal" title="Down" image="controls-arrow-down"/>
                                                 <connections>
                                                     <action selector="transposeDown:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="bSU-Vn-wAA"/>
-                                                </connections>
-                                            </button>
-                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jgu-f4-OfY" userLabel="RetrogradeInversion">
-                                                <rect key="frame" x="65" y="0.0" width="100" height="105"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oVX-49-dcL" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="57" width="100" height="37"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <state key="normal" title="Inverse" image="controls-invert"/>
-                                                        <connections>
-                                                            <action selector="inversion:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="n6p-AN-BFE"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DpG-Ff-gPa" userLabel="Retrograde" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="8" width="100" height="37"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <state key="normal" image="controls-retrograde"/>
-                                                        <connections>
-                                                            <action selector="retrograde:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="v0o-TK-yBl"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </view>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                <rect key="frame" x="178" y="30" width="45" height="45"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                <state key="normal" image="tie-slur-button"/>
-                                                <connections>
-                                                    <action selector="connect:" destination="VHe-OH-6BV" eventType="touchUpInside" id="VbP-Oa-IoO"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -1180,6 +1184,7 @@ Tap '+' to create a new composition.</string>
                     <size key="freeformSize" width="1112" height="834"/>
                     <connections>
                         <outlet property="bottomMenu" destination="9Uy-OO-nyR" id="qAP-7j-PpZ"/>
+                        <outlet property="connectBtn" destination="9HY-Gc-gcB" id="5H3-f9-1Rs"/>
                         <outlet property="keyboardView" destination="Ae9-dp-GQa" id="UWE-BK-yB1"/>
                         <outlet property="menuBar" destination="VHe-OH-6BV" id="EC9-aQ-TAh"/>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
@@ -1198,7 +1203,7 @@ Tap '+' to create a new composition.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2W-99-FM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="87U-aK-pku" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2800" y="129"/>
+            <point key="canvasLocation" x="2799.8201438848923" y="128.77697841726621"/>
         </scene>
         <!--Time Signature View Controller-->
         <scene sceneID="haZ-5N-Hbc">

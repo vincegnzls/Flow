@@ -163,6 +163,8 @@ class MusicSheet: UIView {
 
                 //self.transformView.isHidden = true
                 EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TRANSFORM_VIEW)
+                EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
+                EventBroadcaster.instance.postEvent(event: EventNames.HIDE_CONNECT_BTN)
 
                 /*if let measureCoord = GridSystem.instance.selectedMeasureCoord {
                     if let newMeasure = GridSystem.instance.getMeasureFromPoints(measurePoints: measureCoord) {

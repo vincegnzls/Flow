@@ -26,8 +26,6 @@ class MenuBar: UIView {
     @IBOutlet weak var fifteenMaBtn: UIButton!
     @IBOutlet weak var fifteenMbBtn: UIButton!
     
-    @IBOutlet weak var connectBtn: UIButton!
-    
     let maxNumOfDots = 3
 
     /*var compositionInfo: CompositionInfo? {
@@ -76,26 +74,6 @@ class MenuBar: UIView {
 
         EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
         EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
-        
-        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
-        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
-        
-        EventBroadcaster.instance.removeObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
-        EventBroadcaster.instance.addObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
-        
-        EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "MenuBar.hideConnectBtn", function: self.hideConnectBtn))
-        EventBroadcaster.instance.addObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "MenuBar.hideConnectBtn", function: self.hideConnectBtn))
-        
-        EventBroadcaster.instance.removeObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "MenuBar.showConnectBtn", function: self.showConnectBtn))
-        EventBroadcaster.instance.addObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "MenuBar.showConnectBtn", function: self.showConnectBtn))
-    }
-    
-    func hideConnectBtn() {
-        self.connectBtn.isHidden = true
-    }
-    
-    func showConnectBtn() {
-        self.connectBtn.isHidden = false
     }
 
     func highlightOttavaBtn(params: Parameters) {
@@ -120,14 +98,6 @@ class MenuBar: UIView {
         self.eightVbBtn.backgroundColor = nil
         self.fifteenMaBtn.backgroundColor = nil
         self.fifteenMbBtn.backgroundColor = nil
-    }
-    
-    func highlightConnectBtn() {
-        self.connectBtn.setImage(UIImage(named: "tie-slur-button-selected"), for: .normal)
-    }
-    
-    func removeConnectHighlight() {
-        self.connectBtn.setImage(UIImage(named: "tie-slur-button"), for: .normal)
     }
 
     func highlightAccidentalBtn(params: Parameters) {
@@ -465,15 +435,6 @@ class MenuBar: UIView {
         params.put(key: KeyNames.OTTAVA, value: OttavaType.fifteenMb)
 
         EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
-    }
-    
-    @IBAction func connect(_ sender: UIButton) {
-        let connection = Connection()
-        
-        let params = Parameters()
-        params.put(key: KeyNames.CONNECTION, value: connection)
-        
-        EventBroadcaster.instance.postEvent(event: EventNames.CONNECTION, params: params)
     }
     
 }
