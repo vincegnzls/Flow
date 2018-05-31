@@ -218,7 +218,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.addObserver(event: EventNames.SHOW_RI_VIEW, observer: Observer(id: "EditorViewController.showRiView", function: self.showRiView))
         EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_RI_VIEW, observer: Observer(id: "EditorViewController.hideRiView", function: self.hideRiView))
         EventBroadcaster.instance.addObserver(event: EventNames.HIDE_RI_VIEW, observer: Observer(id: "EditorViewController.hideRiView", function: self.hideRiView))
-        
     }
     
     override func viewWillLayoutSubviews() {

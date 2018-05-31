@@ -715,7 +715,7 @@ Tap '+' to create a new composition.</string>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="178" y="30" width="45" height="45"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" image="tie-slur-button"/>
                                                 <connections>
                                                     <action selector="connect:" destination="VHe-OH-6BV" eventType="touchUpInside" id="VbP-Oa-IoO"/>
