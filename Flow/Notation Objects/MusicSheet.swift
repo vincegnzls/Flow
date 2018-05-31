@@ -234,13 +234,19 @@ class MusicSheet: UIView {
 
                     if allNotes(notations: selectedNotations) {
                         //self.riView.isHidden = false
+                        EventBroadcaster.instance.postEvent(event: EventNames.SHOW_CONNECT_BTN)
                         EventBroadcaster.instance.postEvent(event: EventNames.SHOW_RI_VIEW)
                     } else {
+                        
+                        if allChords(notations: selectedNotations) {
+                            EventBroadcaster.instance.postEvent(event: EventNames.SHOW_CONNECT_BTN)
+                        }
                         //self.riView.isHidden = true
                         EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
                     }
                 } else {
                     //self.riView.isHidden = true
+                    EventBroadcaster.instance.postEvent(event: EventNames.HIDE_CONNECT_BTN) 
                     EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
                 }
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)

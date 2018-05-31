@@ -82,6 +82,20 @@ class MenuBar: UIView {
         
         EventBroadcaster.instance.removeObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
         EventBroadcaster.instance.addObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "MenuBar.hideConnectBtn", function: self.hideConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "MenuBar.hideConnectBtn", function: self.hideConnectBtn))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "MenuBar.showConnectBtn", function: self.showConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "MenuBar.showConnectBtn", function: self.showConnectBtn))
+    }
+    
+    func hideConnectBtn() {
+        self.connectBtn.isHidden = true
+    }
+    
+    func showConnectBtn() {
+        self.connectBtn.isHidden = false
     }
 
     func highlightOttavaBtn(params: Parameters) {
