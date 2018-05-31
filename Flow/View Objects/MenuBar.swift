@@ -123,11 +123,11 @@ class MenuBar: UIView {
     }
     
     func highlightConnectBtn() {
-        self.connectBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+        self.connectBtn.setImage(UIImage(named: "tie-slur-button-selected"), for: .normal)
     }
     
     func removeConnectHighlight() {
-        self.connectBtn.backgroundColor = nil
+        self.connectBtn.setImage(UIImage(named: "tie-slur-button"), for: .normal)
     }
 
     func highlightAccidentalBtn(params: Parameters) {
