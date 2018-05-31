@@ -113,11 +113,11 @@ class Measure: Hashable {
                 notation.measure = self
             }
 
-            if self.isFullWithNotes {
+            /*if self.isFullWithNotes {
                 let params = Parameters()
                 params.put(key: KeyNames.ARROW_KEY_DIRECTION, value: ArrowKey.right)
                 EventBroadcaster.instance.postEvent(event: EventNames.ARROW_KEY_PRESSED, params: params)
-            }
+            }*/
             return  true
             //self.fillWithRests()
         } else {
@@ -166,11 +166,11 @@ class Measure: Hashable {
                 notation.measure = self
             }
 
-            if self.isFullWithNotes {
+            /*if self.isFullWithNotes {
                 let params = Parameters()
                 params.put(key: KeyNames.ARROW_KEY_DIRECTION, value: ArrowKey.right)
                 EventBroadcaster.instance.postEvent(event: EventNames.ARROW_KEY_PRESSED, params: params)
-            }
+            }*/
 
             return  true
         } else {
