@@ -760,17 +760,28 @@ class SoundManager {
         } else if let chord = notation as? Chord {
             
             var allTies = true
+            var nextDuration = 0
             
             for note in chord.notes {
                 if let connection = note.connection {
+                    
                     if connection.type == .slur {
                         allTies = false
                     }
+                    
+                    if let connNotes = connection.notes {
+                        for note in connNotes {
+                            nextDuration += getDurationOfNote(notation: note)
+                        }
+                    }
+                    
+                } else {
+                    allTies = false
                 }
             }
             
             if allTies {
-                x += getDurationOfNote(notation: notation)
+                x += nextDuration
             }
             
         }
