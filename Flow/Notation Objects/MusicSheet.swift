@@ -5397,33 +5397,53 @@ class MusicSheet: UIView {
                     EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_CONNECT_HIGHLIGHT)
                 } else {
                     var connectedNotes = [Note]()
-                    var newNotes = [Note]()
+                    var oldNotations = [MusicNotation]()
+                    var newNotes = [MusicNotation]()
+                    var newNotesForConnection = [Note]()
 
                     for notation in self.selectedNotations {
                         if let note = notation as? Note {
                             connectedNotes.append(note)
+                            oldNotations.append(note)
                         }
                     }
 
                     connection.notes = connectedNotes
 
                     for note in connectedNotes {
-                        let newNote = note.duplicate()
-                        newNote.connection = connection
-                        newNotes.append(newNote)
+                        
+                        if let chord = note.chord, let index = chord.notes.index(of: note) {
+                            let newNote = note.duplicate()
+                            let newChord = chord.duplicate()
+                            
+                            newNote.connection = connection
+                            newChord.notes[index] = newNote
+                            
+                            if let connIndex = oldNotations.index(of: note) {
+                                oldNotations[connIndex] = chord
+                            }
+                            
+                            newNotes.append(newChord)
+                            newNotesForConnection.append(newNote)
+                        } else {
+                            let newNote = note.duplicate()
+                            newNote.connection = connection
+                            newNotes.append(newNote)
+                            newNotesForConnection.append(newNote)
+                        }
                     }
 
-                    let editAction = EditAction(old: connectedNotes, new: newNotes)
+                    let editAction = EditAction(old: oldNotations, new: newNotes)
                     editAction.execute()
 
-                    for note in newNotes {
+                    for note in newNotesForConnection {
                         if let connection = note.connection {
-                            connection.notes = newNotes
+                            connection.notes = newNotesForConnection
                         }
                     }
 
                     selectedNotations.removeAll()
-                    selectedNotations = newNotes
+                    selectedNotations = newNotesForConnection
 
                     self.updateMeasureDraw()
                     repositionTransformView(first: false)
@@ -5491,11 +5511,10 @@ class MusicSheet: UIView {
                     self.updateMeasureDraw()
                     repositionTransformView(first: false)
                     
-                    self.updateMeasureDraw()
-                    repositionTransformView(first: false)
-                    
                 }
             } else { // hybrid selection
+                
+                
                 
             }
 

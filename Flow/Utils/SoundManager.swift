@@ -757,6 +757,22 @@ class SoundManager {
                     x += getDurationOfNote(notation: noteConn)
                 }
             }
+        } else if let chord = notation as? Chord {
+            
+            var allTies = true
+            
+            for note in chord.notes {
+                if let connection = note.connection {
+                    if connection.type == .slur {
+                        allTies = false
+                    }
+                }
+            }
+            
+            if allTies {
+                x += getDurationOfNote(notation: notation)
+            }
+            
         }
 
         for beat in 0..<x {
@@ -803,20 +819,80 @@ class SoundManager {
 
     func preProcessStaff(staff: Staff) -> [[Int?]] {
         var staffPlayer = [[Int?]]()
+        var modifiedChord: Chord?
+        
+        var skipPitches = [Pitch]()
 
         for measure in staff.measures {
             for notation in measure.notationObjects {
-
+                
                 if let note = notation as? Note, let conn = note.connection, let notes = conn.notes {
                     if let first = notes.first {
                         if note == first {
                             staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                            
+                            if conn.type == .tie {
+                                
+                                if skipPitches.count > 0 {
+                                    skipPitches.removeAll()
+                                }
+                                
+                                skipPitches.append(note.pitch)
+                            }
+                            
                         } else if conn.type == .slur {
                             staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
                         }
                     }
+                } else if let chord = notation as? Chord {
+                    
+                    if skipPitches.count > 0 {
+                        let dupliChord = chord.duplicate()
+                        
+                        for pitch in skipPitches {
+                            dupliChord.notes = dupliChord.notes.filter {$0.pitch != pitch}
+                        }
+                        
+                        if dupliChord.notes.count > 0 {
+                            staffPlayer.append(contentsOf: addNotation(notation: dupliChord, keySignature: measure.keySignature))
+                        }
+                        
+                        skipPitches.removeAll()
+                       
+                    } else {
+                        staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                    }
+                    
+                    for note in chord.notes {
+                        
+                        if let connection = note.connection, let notes = connection.notes {
+                            if let first = notes.first {
+                                if note == first {
+                                    if notes.count > 1 {
+                                        if connection.type != .slur { // slur check
+                                            skipPitches.append(note.pitch)
+                                        }
+                                    }
+                                } else {
+                                    modifiedChord = chord.duplicate()
+                                    
+                                    if connection.type != .slur {
+                                        modifiedChord?.removeNote(note: note)
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                    
+                    
+                    
                 } else {
                     staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                    
+                    if skipPitches.count > 0 {
+                        skipPitches.removeAll()
+                    }
                 }
 
             }
