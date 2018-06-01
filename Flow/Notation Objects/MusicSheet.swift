@@ -3979,6 +3979,8 @@ class MusicSheet: UIView {
 
                                     GridSystem.instance.currentStaffIndex =
                                             GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: newMeasurePoints)
+                                    
+                                    GridSystem.instance.selectedMeasureCoord = newMeasurePoints
 
                                     if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: newMeasurePoints) {
 
@@ -4033,6 +4035,8 @@ class MusicSheet: UIView {
                                     
                                     GridSystem.instance.currentStaffIndex =
                                             GridSystem.instance.getStaffIndexFromMeasurePoint(measurePoints: newMeasurePoints)
+                                    
+                                    GridSystem.instance.selectedMeasureCoord = newMeasurePoints
 
                                     if let firstMeasurePoints = GridSystem.instance.getFirstMeasurePointFromStaff(measurePoints: newMeasurePoints) {
 
