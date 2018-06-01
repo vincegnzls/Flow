@@ -1221,7 +1221,7 @@ class MusicSheet: UIView {
                             withTimeSig = true
                         }
                         
-                        currMeasureWidth = self.getMeasureWidth(measure: gMeasure, withClef: false, withKeySig: withKeySig, withTimeSig: withTimeSig)
+                        currMeasureWidth = self.getMeasureWidth(measure: fMeasure, withClef: false, withKeySig: withKeySig, withTimeSig: withTimeSig)
                     }
                 }
                 
