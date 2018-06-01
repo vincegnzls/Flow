@@ -287,7 +287,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             
             self.transposeView.frame = frame
             self.riView.frame = CGRect(x: frame.origin.x + 57, y: frame.origin.y, width: riView.frame.size.width, height: riView.frame.height)
-            self.connectBtn.frame = CGRect(x: frame.origin.x + 167, y: frame.origin.y + 20, width: connectBtn.frame.size.width, height: connectBtn.frame.height)
         }
         
         self.transposeView.isHidden = false
@@ -299,10 +298,30 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     public func showRiView() {
         self.riView.isHidden = false
+        
+        if let currNoteOrigin = currNoteOrigin {
+            let adjustedOrigin = musicSheet.convert(currNoteOrigin, to: self.scrollView)
+            
+            if !self.riView.isHidden {
+                self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167, y: adjustedOrigin.y + 27)
+            } else {
+                self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167 - self.riView.frame.size.width, y: adjustedOrigin.y + 27)
+            }
+        }
     }
     
     public func hideRiView() {
         self.riView.isHidden = true
+        
+        if let currNoteOrigin = currNoteOrigin {
+            let adjustedOrigin = musicSheet.convert(currNoteOrigin, to: self.scrollView)
+            
+            if !self.riView.isHidden {
+                self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167, y: adjustedOrigin.y + 27)
+            } else {
+                self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167 - self.riView.frame.size.width, y: adjustedOrigin.y + 27)
+            }
+        }
     }
 
     public func hideViews() {
@@ -612,7 +631,11 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             
             self.transposeView.frame.origin = adjustedOrigin
             self.riView.frame.origin = CGPoint(x: adjustedOrigin.x + 57, y: adjustedOrigin.y)
-            self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167, y: adjustedOrigin.y + 20)
+            if !self.riView.isHidden {
+                self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167, y: adjustedOrigin.y + 27)
+            } else {
+                self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167 - self.riView.frame.size.width, y: adjustedOrigin.y + 27)
+            }
         }
         
         if musicSheet.frame.width <= scrollView.frame.width {
