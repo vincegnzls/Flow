@@ -181,6 +181,10 @@ class GridSystem {
     public func clearMeasurePointMap() {
         measureMap.removeAll()
     }
+    
+    public func clearParallelMeasureMap() {
+        parallelMeasureMap.removeAll()
+    }
 
     public func createNewMeasurePointsArray() {
         measurePointsInStaff.append([MeasurePoints]())

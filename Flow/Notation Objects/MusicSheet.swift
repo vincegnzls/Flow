@@ -1014,6 +1014,18 @@ class MusicSheet: UIView {
             GridSystem.instance.recentActionType = nil
         }
         
+        self.checkForHoveredNotation(location: sheetCursor.curYCursorLocation)
+        
+        // if ever the measurePoints changed due to adaptive measure
+        // redirect cursor to the new measurepoints with the same measure
+        if let measurePoints = GridSystem.instance.selectedMeasureCoord {
+            if !measureCoords.contains(measurePoints) {
+                if let measure = GridSystem.instance.getMeasureFromPoints(measurePoints: measurePoints), let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
+                    GridSystem.instance.selectedMeasureCoord = measurePoints
+                    self.moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
+                }
+            }
+        }
         executeLock = false
         print("FINISHED DRAWING")
     }
@@ -3443,6 +3455,11 @@ class MusicSheet: UIView {
             scrollMusicSheetToXIfPointNotVisible(x: measurePoints.upperLeftPoint.x - 140, targetPoint: sheetCursor.curYCursorLocation)
         }
         
+        checkForHoveredNotation(location: location)
+        
+    }
+    
+    private func checkForHoveredNotation(location: CGPoint) {
         if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: location) {
             self.hoveredNotation = notation
         } else {
@@ -3464,7 +3481,6 @@ class MusicSheet: UIView {
                 }
             }
         }
-        
     }
 
     private func drawLedgerLinesIfApplicable (measurePoints: GridSystem.MeasurePoints,upToLocation: CGPoint) {
@@ -3676,6 +3692,7 @@ class MusicSheet: UIView {
         gMeasurePoints.removeAll()
         fMeasurePoints.removeAll()
         GridSystem.instance.clearNotationSnapPointMap()
+        GridSystem.instance.clearParallelMeasureMap()
 
         executeLock = true
         self.setNeedsDisplay()
