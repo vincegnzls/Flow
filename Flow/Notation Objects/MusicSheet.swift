@@ -92,9 +92,6 @@ class MusicSheet: UIView {
     private let playbackHighlightRect = CAShapeLayer()
     private var playbackScrollLock = false
     
-    private var recentAction: Action?
-    private var recentActionType: String?
-    
     //@IBOutlet var transformView: UIView!
     //@IBOutlet var riView: UIView!
     
@@ -1011,10 +1008,10 @@ class MusicSheet: UIView {
             newlyOpened = false
         }
         
-        if let action = recentAction, let actionType = recentActionType {
+        if let action = GridSystem.instance.recentAction, let actionType = GridSystem.instance.recentActionType {
             redirectCursorOnAction(action: action, actionType: actionType)
-            recentAction = nil
-            recentActionType = nil
+            GridSystem.instance.recentAction = nil
+            GridSystem.instance.recentActionType = nil
         }
         
         executeLock = false
@@ -3217,8 +3214,8 @@ class MusicSheet: UIView {
         let action = params.get(key: KeyNames.ACTION_DONE) as? Action
         let type = params.get(key: KeyNames.ACTION_TYPE, defaultValue: "")
         
-        recentAction = action
-        recentActionType = type
+        GridSystem.instance.recentAction = action
+        GridSystem.instance.recentActionType = type
     }
     
     private func redirectCursorOnAction(action: Action, actionType: String) {
@@ -3415,14 +3412,13 @@ class MusicSheet: UIView {
         
             if let nextPoint = nextPoint {
                 self.remapCurrentMeasure(location: nextPoint)
-                self.sheetCursor.curXCursorLocation.x = nextPoint.x
+                //self.sheetCursor.curXCursorLocation.x = nextPoint.x
                 
                 if let measurePoints = GridSystem.instance.selectedMeasureCoord, let measure = GridSystem.instance.getCurrentMeasure() {
                     if measure.isFull {
                         moveCursorsToNextMeasure(measurePoints: measurePoints)
                     } else {
-                        self.moveCursorX(location: self.sheetCursor.curXCursorLocation)
-                        self.moveCursorY(location: nextPoint)
+                        moveCursorsToNearestSnapPoint(location: nextPoint)
                     }
                 }
             }

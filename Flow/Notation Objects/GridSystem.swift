@@ -22,11 +22,14 @@ class GridSystem {
             if oldValue != nil {
             
                 if let oldPoints = oldValue, let newPoints = selectedMeasureCoord {
+                    
                     if let oldMeasure = getMeasureFromPoints(measurePoints: oldPoints), let newMeasure = getMeasureFromPoints(measurePoints: newPoints) {
                         if oldMeasure !== newMeasure {
                             
-                            oldMeasure.fillWithRests(isAction: true)
-                            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                            if self.recentActionType == nil && self.recentAction == nil {
+                                oldMeasure.fillWithRests(isAction: true)
+                                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                            }
 
                             let params:Parameters = Parameters()
                             params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
@@ -67,6 +70,8 @@ class GridSystem {
     private var linePitches = [Pitch]() // pitches that belong to a line
     
     public var recentNotation: MusicNotation?
+    public var recentAction: Action?
+    public var recentActionType: String?
     
     private init() {
         //GridSystem.sharedInstance = self
@@ -171,6 +176,10 @@ class GridSystem {
     
     public func clearNotationSnapPointMap() {
         noteSnapPointsMap.removeAll()
+    }
+    
+    public func clearMeasurePointMap() {
+        measureMap.removeAll()
     }
 
     public func createNewMeasurePointsArray() {
