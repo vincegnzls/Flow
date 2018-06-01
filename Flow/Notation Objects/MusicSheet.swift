@@ -994,10 +994,6 @@ class MusicSheet: UIView {
             for i in 0..<measureSplices.count {
                 setupGrandStaff(startX: movingStartX, startY: startY, measures: measureSplices[i])
             }
-            
-            for notation in self.selectedNotations {
-                self.highlightNotation(notation)
-            }
 
         }
         
@@ -1028,6 +1024,10 @@ class MusicSheet: UIView {
         }
         executeLock = false
         print("FINISHED DRAWING")
+        
+        for notation in self.selectedNotations {
+            self.highlightNotation(notation)
+        }
     }
 
     //Setup a grand staff
