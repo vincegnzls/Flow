@@ -4248,13 +4248,11 @@ class MusicSheet: UIView {
                 var notation = notation
 
                 if let chord = notation as? Chord {
-                    notation = getLowestOrHighestNoteChord(highest: true, notations: chord.notes)
+                    notation = getLowestOrHighestNoteChord(highest: false, notations: chord.notes)
+                    let curHeight = notation.screenCoordinates!.y - highestY
 
-                    for note in chord.notes {
-                        let curHeight = note.screenCoordinates!.y - highestY
-
-                        assembleNoteForBeaming(notation: note, stemHeight: curHeight, isUpwards: true)
-                    }
+                    assembleNoteForBeaming(notation: chord, stemHeight: curHeight, isUpwards: true)
+                    
                 } else {
                     let curHeight = notation.screenCoordinates!.y - highestY
 
@@ -4392,6 +4390,8 @@ class MusicSheet: UIView {
             let lowestNote = getLowestOrHighestNote(highest: false, notations: notations)
             let lowestY: CGFloat = lowestNote.screenCoordinates!.y + stemHeight + 5
             var startX: CGFloat = 0.0
+            var adjustStartX: CGFloat = 0.0
+            var adjustEndX: CGFloat = 0.0
 
             if let notation = notations[0] as? Chord {
                 startX = notation.notes[0].screenCoordinates!.x + noteXOffset + 0.5
@@ -4411,18 +4411,37 @@ class MusicSheet: UIView {
 
             var curSameNotes = [MusicNotation]()
 
-            for notation in notations {
+            for (index, notation) in notations.enumerated() {
                 var notation = notation
+                var hasFlipped = false // use this to move the start x by 24.9
                 
                 if notation is Chord {
                     if let chord = notation as? Chord {
-                        notation = getLowestOrHighestNoteChord(highest: false, notations: chord.notes)
-
-                        for note in chord.notes {
-                            let curHeight = lowestY - note.screenCoordinates!.y
-
-                            assembleNoteForBeaming(notation: note, stemHeight: curHeight, isUpwards: false)
+                        
+                        notation = getLowestOrHighestNoteChord(highest: true, notations: chord.notes)
+                        let curHeight = lowestY - notation.screenCoordinates!.y
+                        
+                        assembleNoteForBeaming(notation: chord, stemHeight: curHeight, isUpwards: false)
+                        
+                        for (index, note) in chord.notes.enumerated() {
+                            if index > 0 {
+                                if Pitch.difference(from: note.pitch, to: chord.notes[index-1].pitch) == 1 {
+                                    hasFlipped = true
+                                    break
+                                }
+                            }
                         }
+                        
+                        if hasFlipped {
+                            
+                            if index == 0 {
+                                adjustStartX = 23.7
+                            } else if index == notations.count - 1 {
+                                adjustEndX = 23.7
+                            }
+                            
+                        }
+                        
                     }
                 } else {
                     let curHeight = lowestY - notation.screenCoordinates!.y
@@ -4513,7 +4532,6 @@ class MusicSheet: UIView {
 
             if curSameNotes.count > 1 {
                 // add appropriate flags for beaming
-                print("I AM ALIVE")
                 if curSameNotes[0].type == RestNoteType.sixteenth {
                     let _ = self.drawLine(start: CGPoint(x: curSameNotes[0].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), end: CGPoint(x: curSameNotes[curSameNotes.count - 1].screenCoordinates!.x + noteXOffset + 0.5 + 2, y: lowestY - lineSpace / 2 - lineSpace / 4), thickness: lineSpace / 2)
                 } else if curSameNotes[0].type == RestNoteType.thirtySecond {
@@ -4554,45 +4572,94 @@ class MusicSheet: UIView {
             }
 
             // draws the beam based on lowest note
-            let _ = self.drawLine(start: CGPoint(x: startX, y: lowestY), end: CGPoint(x: endX, y: lowestY), thickness: lineSpace / 2)
+            // ONLY DRAWS THIS FOR EIGHTH NOTES
+            let _ = self.drawLine(start: CGPoint(x: startX + adjustStartX, y: lowestY), end: CGPoint(x: endX + adjustEndX, y: lowestY), thickness: lineSpace / 2)
         }
     }
 
-    public func assembleNoteForBeaming(notation: MusicNotation, stemHeight: CGFloat, isUpwards: Bool) {
-        let noteHead = UIImage(named: "quarter-head")
-
-        var notationImageView: UIImageView
-
-        let noteX: CGFloat = notation.screenCoordinates!.x + noteXOffset
-        let noteY: CGFloat = notation.screenCoordinates!.y + noteYOffset
-
-        let noteWidth: CGFloat = noteHead!.size.width + noteWidthAlter
-        let noteHeight: CGFloat = noteHead!.size.height + noteHeightAlter
-
-        notationImageView = UIImageView(frame: CGRect(x: noteX, y: noteY, width: noteWidth, height: noteHeight))
-
-        notationImageView.image = noteHead
-
-        self.addSubview(notationImageView)
+    public func assembleNoteForBeaming(notation: MusicNotation, stemHeight: CGFloat, isUpwards: Bool, flipped: Bool = false, insideChord: Bool = false) {
         
-        drawDotsByNotation(notation: notation)
-        
-        if let note = notation as? Note {
-            drawAccidentalByNote(note: note)
+        if let chord = notation as? Chord {
+            var flipped = false
+            var hasFlipped = false
             
-            if let measure = note.measure, let screenCoordinates = note.screenCoordinates {
-                if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
-                    drawLedgerLinesIfApplicable(measurePoints: measurePoints, upToLocation: screenCoordinates)
+            let noteX: CGFloat = chord.notes[0].screenCoordinates!.x + noteXOffset
+            var noteY: CGFloat = chord.notes[chord.notes.count - 1].screenCoordinates!.y + noteYOffset
+            
+            if isUpwards {
+                noteY = chord.notes[0].screenCoordinates!.y + noteYOffset
+            }
+            
+            for (index, note) in chord.notes.enumerated() {
+                if index > 0 {
+                    if Pitch.difference(from: note.pitch, to: chord.notes[index-1].pitch) == 1 && !flipped {
+                        flipped = true
+                        hasFlipped = true
+                        assembleNoteForBeaming(notation: note, stemHeight: stemHeight, isUpwards: isUpwards, flipped: flipped, insideChord: true)
+                    } else {
+                        flipped = false
+                        assembleNoteForBeaming(notation: note, stemHeight: stemHeight, isUpwards: isUpwards, insideChord: true)
+                    }
+                } else {
+                    flipped = false
+                    assembleNoteForBeaming(notation: note, stemHeight: stemHeight, isUpwards: isUpwards, insideChord: true)
                 }
             }
-        }
-
-        if isUpwards {
-            let _ = self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 4), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 4), thickness: 2.3)
-            //drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 23.9 + 22, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+            
+            if isUpwards {
+                let _ = self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 4), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 4), thickness: 2.3)
+                //drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 23.9 + 22, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+            } else {
+                if hasFlipped {
+                    let _ = self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset + 0.5), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset + stemHeight + 3), thickness: 2.3)
+                } else {
+                    let _ = self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + 3), end: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + stemHeight + 3), thickness: 2.3)
+                }
+                //drawLine(start: CGPoint(x: noteX + 0.5, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 0.5 + 22, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+            }
         } else {
-            let _ = self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + 3), end: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + stemHeight + 3), thickness: 2.3)
-            //drawLine(start: CGPoint(x: noteX + 0.5, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 0.5 + 22, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+        
+            let noteHead = UIImage(named: "quarter-head")
+
+            var notationImageView: UIImageView
+
+            var noteX: CGFloat = notation.screenCoordinates!.x + noteXOffset
+            let noteY: CGFloat = notation.screenCoordinates!.y + noteYOffset
+            
+            if flipped {
+                noteX += 24
+            }
+
+            let noteWidth: CGFloat = noteHead!.size.width + noteWidthAlter
+            let noteHeight: CGFloat = noteHead!.size.height + noteHeightAlter
+
+            notationImageView = UIImageView(frame: CGRect(x: noteX, y: noteY, width: noteWidth, height: noteHeight))
+
+            notationImageView.image = noteHead
+
+            self.addSubview(notationImageView)
+            
+            drawDotsByNotation(notation: notation)
+            
+            if let note = notation as? Note {
+                drawAccidentalByNote(note: note)
+                
+                if let measure = note.measure, let screenCoordinates = note.screenCoordinates {
+                    if let measurePoints = GridSystem.instance.getPointsFromMeasure(measure: measure) {
+                        drawLedgerLinesIfApplicable(measurePoints: measurePoints, upToLocation: screenCoordinates)
+                    }
+                }
+            }
+
+            if !insideChord {
+                if isUpwards {
+                    let _ = self.drawLine(start: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - 4), end: CGPoint(x: noteX + 24.9, y: noteY - noteYOffset - stemHeight - 4), thickness: 2.3)
+                    //drawLine(start: CGPoint(x: noteX + 23.9, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 23.9 + 22, y: noteY - noteYOffset - stemHeight + lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                } else {
+                    let _ = self.drawLine(start: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + 3), end: CGPoint(x: noteX + 1.5, y: noteY - noteYOffset + stemHeight + 3), thickness: 2.3)
+                    //drawLine(start: CGPoint(x: noteX + 0.5, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), end: CGPoint(x: noteX + 0.5 + 22, y: noteY - noteYOffset + stemHeight - lineSpace / 2 + lineSpace / 4), thickness: lineSpace / 2)
+                }
+            }
         }
     }
 
