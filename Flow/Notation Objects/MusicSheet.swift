@@ -3376,9 +3376,19 @@ class MusicSheet: UIView {
                     if let chord = deleteAction.notations[0] as? Chord {
                         self.remapCurrentMeasure(location: chord.notes[0].screenCoordinates!)
                         self.moveCursorsToNearestSnapPoint(location: chord.notes[0].screenCoordinates!)
+                        
+                        if let point = GridSystem.instance.getLeftXSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
+                            nextPoint = point
+                        }
+                        
                     } else {
-                        self.remapCurrentMeasure(location: deleteAction.notations[0].screenCoordinates!)
-                        self.moveCursorsToNearestSnapPoint(location: deleteAction.notations[0].screenCoordinates!)
+                        let notation = deleteAction.notations[0]
+                        self.remapCurrentMeasure(location: notation.screenCoordinates!)
+                        self.moveCursorsToNearestSnapPoint(location: notation.screenCoordinates!)
+                        
+                        if let point = GridSystem.instance.getLeftXSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
+                            nextPoint = point
+                        }
                     }
                     
                 case ActionFunctions.REDO :
@@ -3386,9 +3396,18 @@ class MusicSheet: UIView {
                     if let chord = deleteAction.notations[0] as? Chord {
                         self.remapCurrentMeasure(location: chord.notes[0].screenCoordinates!)
                         self.moveCursorsToNearestSnapPoint(location: chord.notes[0].screenCoordinates!)
+                        
+                        if let point = GridSystem.instance.getLeftXSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
+                            nextPoint = point
+                        }
                     } else {
-                        self.remapCurrentMeasure(location: deleteAction.notations[0].screenCoordinates!)
-                        self.moveCursorsToNearestSnapPoint(location: deleteAction.notations[0].screenCoordinates!)
+                        let notation = deleteAction.notations[0]
+                        self.remapCurrentMeasure(location: notation.screenCoordinates!)
+                        self.moveCursorsToNearestSnapPoint(location: notation.screenCoordinates!)
+                        
+                        if let point = GridSystem.instance.getLeftXSnapPoint(currentPoint: sheetCursor.curYCursorLocation) {
+                            nextPoint = point
+                        }
                     }
                     
                 case ActionFunctions.UNDO :
