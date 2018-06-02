@@ -3446,7 +3446,7 @@ class MusicSheet: UIView {
                 //self.sheetCursor.curXCursorLocation.x = nextPoint.x
                 
                 if let measurePoints = GridSystem.instance.selectedMeasureCoord, let measure = GridSystem.instance.getCurrentMeasure() {
-                    if measure.isFull {
+                    if measure.isFull && action is AddAction {
                         moveCursorsToNextMeasure(measurePoints: measurePoints)
                     } else {
                         moveCursorsToNearestSnapPoint(location: nextPoint)
@@ -4062,15 +4062,19 @@ class MusicSheet: UIView {
 
     private func scrollMusicSheetToY (y: CGFloat, animated: Bool = true) {
         if let outerScrollView = self.superview as? UIScrollView {
-            outerScrollView.setContentOffset(
-                CGPoint(x: outerScrollView.contentOffset.x, y: y), animated: animated)
+            
+            let convertedPoint = self.convert(CGPoint(x: outerScrollView.contentOffset.x, y: y), to: outerScrollView)
+            
+            outerScrollView.setContentOffset(convertedPoint, animated: animated)
         }
     }
     
     private func scrollMusicSheetToX (x: CGFloat, animated: Bool = true) {
         if let outerScrollView = self.superview as? UIScrollView {
-            outerScrollView.setContentOffset(
-                CGPoint(x: x, y: outerScrollView.contentOffset.y), animated: animated)
+            
+            let convertedPoint = self.convert(CGPoint(x: x, y: outerScrollView.contentOffset.y), to: outerScrollView)
+            
+            outerScrollView.setContentOffset(convertedPoint, animated: animated)
         }
     }
     
