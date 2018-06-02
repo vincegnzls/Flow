@@ -252,6 +252,14 @@ class MusicSheet: UIView {
                     //self.riView.isHidden = true
                     EventBroadcaster.instance.postEvent(event: EventNames.HIDE_CONNECT_BTN) 
                     EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
+                    
+                    if let selected = selectedNotations.first {
+                        if selected is Note || selected is Chord {
+                            
+                        } else {
+                            EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TRANSFORM_VIEW)
+                        }
+                    }
                 }
                 //EventBroadcaster.instance.postEvent(event: EventNames.ENABLE_ACCIDENTALS)
             }
