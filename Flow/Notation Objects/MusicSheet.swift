@@ -3478,8 +3478,12 @@ class MusicSheet: UIView {
         if let measurePoints = GridSystem.instance.selectedMeasureCoord {
             sheetCursor.showLedgerLinesGuide(measurePoints: measurePoints, upToLocation: location, lineSpace: lineSpace)
             
-            scrollMusicSheetToYIfPointNotVisible(y: measurePoints.lowerRightPoint.y - 140, targetPoint: sheetCursor.curYCursorLocation)
-            scrollMusicSheetToXIfPointNotVisible(x: measurePoints.upperLeftPoint.x - 140, targetPoint: sheetCursor.curYCursorLocation)
+            if GridSystem.instance.recentAction is EditAction {
+                // do nothing
+            } else {
+                scrollMusicSheetToYIfPointNotVisible(y: measurePoints.lowerRightPoint.y - 140, targetPoint: sheetCursor.curYCursorLocation)
+                scrollMusicSheetToXIfPointNotVisible(x: measurePoints.upperLeftPoint.x - 140, targetPoint: sheetCursor.curYCursorLocation)
+            }
         }
         
         checkForHoveredNotation(location: location)
