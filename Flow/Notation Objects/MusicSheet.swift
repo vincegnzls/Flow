@@ -1018,7 +1018,9 @@ class MusicSheet: UIView {
             GridSystem.instance.recentActionType = nil
         }
         
-        self.checkForHoveredNotation(location: sheetCursor.curYCursorLocation)
+        if selectedNotations.isEmpty {
+            self.checkForHoveredNotation(location: sheetCursor.curYCursorLocation)
+        }
         
         // if ever the measurePoints changed due to adaptive measure
         // redirect cursor to the new measurepoints with the same measure
