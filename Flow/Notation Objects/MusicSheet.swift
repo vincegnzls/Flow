@@ -2460,6 +2460,10 @@ class MusicSheet: UIView {
             if let accidental = note.accidental {
 
                 var printAccidental = true
+                
+                if accidental == .natural {
+                    printAccidental = false
+                }
 
                 if let measure = note.measure {
                     if let noteIndex = measure.notationObjects.index(of: note) {
@@ -2475,6 +2479,8 @@ class MusicSheet: UIView {
 
                                             if prevAccidental == accidental {
                                                 printAccidental = false
+                                            } else if accidental == .natural {
+                                                printAccidental = true
                                             }
 
                                             break
@@ -2681,6 +2687,10 @@ class MusicSheet: UIView {
                     
                     var printAccidental = true
                     
+                    if accidental == .natural {
+                        printAccidental = false
+                    }
+                    
                     if let measure = note.measure {
                         if let noteIndex = measure.notationObjects.index(of: note) {
                             if noteIndex != 0 {
@@ -2695,6 +2705,8 @@ class MusicSheet: UIView {
                                                 
                                                 if prevAccidental == accidental {
                                                     printAccidental = false
+                                                } else if accidental == .natural {
+                                                    printAccidental = true
                                                 }
                                                 
                                                 break
