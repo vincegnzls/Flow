@@ -287,6 +287,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             
             self.transposeView.frame = frame
             self.riView.frame = CGRect(x: frame.origin.x + 57, y: frame.origin.y, width: riView.frame.size.width, height: riView.frame.height)
+            self.connectBtn.frame.origin = CGPoint(x: frame.origin.x + 167, y: frame.origin.y + 27)
         }
         
         self.transposeView.isHidden = false
@@ -730,13 +731,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     @IBAction func retrograde(_ sender: UIButton) {
         let params = Parameters()
-        params.put(key: KeyNames.RETROGRADE_INVERSE, value: "retrograde")
+        params.put(key: KeyNames.RETROGRADE_INVERSE, value: true)
         EventBroadcaster.instance.postEvent(event: EventNames.RETROGRADE_INVERSE, params: params)
     }
     
     @IBAction func inversion(_ sender: UIButton) {
         let params = Parameters()
-        params.put(key: KeyNames.RETROGRADE_INVERSE, value: "inversion")
+        params.put(key: KeyNames.RETROGRADE_INVERSE, value: false)
         EventBroadcaster.instance.postEvent(event: EventNames.RETROGRADE_INVERSE, params: params)
     }
     

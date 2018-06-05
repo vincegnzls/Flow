@@ -932,9 +932,9 @@ class MusicSheet: UIView {
     }
     
     func retrogradeInverse(params: Parameters) {
-        let params = params.get(key: KeyNames.RETROGRADE_INVERSE) as? String
+        let params = params.get(key: KeyNames.RETROGRADE_INVERSE, defaultValue: false)
         
-        if params == "retrograde" {
+        if params {
             if self.selectedNotations.count > 1 {
                 self.retrograde(notations: self.selectedNotations)
             }
