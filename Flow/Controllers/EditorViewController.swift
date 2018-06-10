@@ -29,6 +29,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var transposeView: UIView!
     @IBOutlet weak var riView: UIView!
     @IBOutlet weak var connectBtn: UIButton!
+    @IBOutlet weak var retrogradeBtn: UIButton!
+    @IBOutlet weak var inversionBtn: UIButton!
     
     var backButton : UIBarButtonItem!
     
@@ -243,11 +245,11 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     }
     
     func hideConnectBtn() {
-        self.connectBtn.isHidden = true
+        self.connectBtn.isEnabled = false
     }
     
     func showConnectBtn() {
-        self.connectBtn.isHidden = false
+        self.connectBtn.isEnabled = true
     }
     
     override func viewWillLayoutSubviews() {
@@ -291,16 +293,22 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         }
         
         self.transposeView.isHidden = false
+        self.riView.isHidden = false
+        self.connectBtn.isHidden = false
     }
     
     public func hideTransformView() {
         self.transposeView.isHidden = true
+        self.riView.isHidden = true
+        self.connectBtn.isHidden = true
     }
     
     public func showRiView() {
         self.riView.isHidden = false
+        self.retrogradeBtn.isEnabled = true
+        self.inversionBtn.isEnabled = true
         
-        if let currNoteOrigin = currNoteOrigin {
+        /*if let currNoteOrigin = currNoteOrigin {
             let adjustedOrigin = musicSheet.convert(currNoteOrigin, to: self.scrollView)
             
             if !self.riView.isHidden {
@@ -308,13 +316,15 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             } else {
                 self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167 - self.riView.frame.size.width, y: adjustedOrigin.y + 27)
             }
-        }
+        }*/
     }
     
     public func hideRiView() {
-        self.riView.isHidden = true
+        //self.riView.isHidden = true
+        self.retrogradeBtn.isEnabled = false
+        self.inversionBtn.isEnabled = false
         
-        if let currNoteOrigin = currNoteOrigin {
+        /*if let currNoteOrigin = currNoteOrigin {
             let adjustedOrigin = musicSheet.convert(currNoteOrigin, to: self.scrollView)
             
             if !self.riView.isHidden {
@@ -322,7 +332,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             } else {
                 self.connectBtn.frame.origin = CGPoint(x: adjustedOrigin.x + 167 - self.riView.frame.size.width, y: adjustedOrigin.y + 27)
             }
-        }
+        }*/
     }
 
     public func hideViews() {
