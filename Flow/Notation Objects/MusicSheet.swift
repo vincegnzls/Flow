@@ -107,6 +107,8 @@ class MusicSheet: UIView {
             }
 
             if let notation = hoveredNotation ?? GridSystem.instance.getNoteFromX(x: self.sheetCursor.curYCursorLocation.x) {
+                hoveredNotation = notation
+                
                 if let measure = notation.measure {
                     measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
                 }
@@ -114,11 +116,11 @@ class MusicSheet: UIView {
                 if notation is Note {
                     if let coord = notation.screenCoordinates {
                         //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                        let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                        let params = Parameters()
+                        params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
+                        
                         if oldValue !== hoveredNotation {
-                            let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
-                            let params = Parameters()
-                            params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
-                            
                             EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW, params: params)
                             EventBroadcaster.instance.postEvent(event: EventNames.HIDE_CONNECT_BTN)
                             EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
@@ -240,9 +242,9 @@ class MusicSheet: UIView {
                     }
                 }
                 
-                if let coord = selectedNotations.last?.screenCoordinates {
+                if let coord = selectedNotations.last?.screenCoordinates, let firstCoord = selectedNotations.first?.screenCoordinates {
                     //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                    let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                    let frame = CGRect(x: coord.x + 60, y: firstCoord.y - 53, width: 0, height: 0)
                     let params = Parameters()
                     params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
                     
@@ -688,9 +690,9 @@ class MusicSheet: UIView {
                 EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW, params: params)
             }
         } else {
-            if let coord = selectedNotations.last?.screenCoordinates {
+            if let coord = selectedNotations.last?.screenCoordinates, let firstCoord = selectedNotations.first?.screenCoordinates{
                 //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                let frame = CGRect(x: coord.x + 60, y: firstCoord.y - 53, width: 0, height: 0)
                 let params = Parameters()
                 params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
                 
@@ -6099,10 +6101,10 @@ class MusicSheet: UIView {
         }
 
         self.selectedNotations = invertedNotes
+        
+        repositionTransformView(first: false)
 
         self.updateMeasureDraw()
-
-        repositionTransformView(first: false)
     }
 
     func invertNote(note: Note, steps: Int) -> Note {
