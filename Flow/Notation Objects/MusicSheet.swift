@@ -114,13 +114,15 @@ class MusicSheet: UIView {
                 if notation is Note {
                     if let coord = notation.screenCoordinates {
                         //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                        let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
-                        let params = Parameters()
-                        params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
-                        
-                        EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW, params: params)
-                        EventBroadcaster.instance.postEvent(event: EventNames.HIDE_CONNECT_BTN)
-                        EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
+                        if oldValue !== hoveredNotation {
+                            let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                            let params = Parameters()
+                            params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
+                            
+                            EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW, params: params)
+                            EventBroadcaster.instance.postEvent(event: EventNames.HIDE_CONNECT_BTN)
+                            EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
+                        }
                         /*self.transformView.isHidden = false
                          self.addSubview(self.transformView)*/
                     }
