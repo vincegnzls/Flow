@@ -106,9 +106,30 @@ class MusicSheet: UIView {
                 highlightView.removeFromSuperview()
             }
 
-            if let notation = hoveredNotation{
+            if let notation = hoveredNotation ?? GridSystem.instance.getNoteFromX(x: self.sheetCursor.curYCursorLocation.x) {
+                hoveredNotation = notation
+                
                 if let measure = notation.measure {
                     measure.updateInvalidNotes(invalidNotes: measure.getInvalidNotes(without: notation))
+                }
+                
+                if notation is Note {
+                    if let coord = notation.screenCoordinates {
+                        //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
+                        let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                        let params = Parameters()
+                        params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
+                        
+                        if oldValue !== hoveredNotation {
+                            EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW, params: params)
+                            EventBroadcaster.instance.postEvent(event: EventNames.HIDE_CONNECT_BTN)
+                            EventBroadcaster.instance.postEvent(event: EventNames.HIDE_RI_VIEW)
+                        }
+                        /*self.transformView.isHidden = false
+                         self.addSubview(self.transformView)*/
+                    }
+                } else {
+                    EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TRANSFORM_VIEW)
                 }
 
                 /*if notation is Note {
@@ -121,6 +142,7 @@ class MusicSheet: UIView {
             } else {
                 
                 parameters.put(key: KeyNames.CURRENT_DOT_MODES, value: dotModes)
+                EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TRANSFORM_VIEW)
                 
                 //EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
                 //disable accidentals
@@ -220,9 +242,9 @@ class MusicSheet: UIView {
                     }
                 }
                 
-                if let coord = selectedNotations.last?.screenCoordinates {
+                if let coord = selectedNotations.last?.screenCoordinates, let firstCoord = selectedNotations.first?.screenCoordinates {
                     //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                    let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                    let frame = CGRect(x: coord.x + 60, y: firstCoord.y - 53, width: 0, height: 0)
                     let params = Parameters()
                     params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
                     
@@ -668,9 +690,9 @@ class MusicSheet: UIView {
                 EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW, params: params)
             }
         } else {
-            if let coord = selectedNotations.last?.screenCoordinates {
+            if let coord = selectedNotations.last?.screenCoordinates, let firstCoord = selectedNotations.first?.screenCoordinates{
                 //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                let frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: 0, height: 0)
+                let frame = CGRect(x: coord.x + 60, y: firstCoord.y - 53, width: 0, height: 0)
                 let params = Parameters()
                 params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
                 
@@ -3094,7 +3116,7 @@ class MusicSheet: UIView {
     }
 
     func transposeUp() {
-        if !self.selectedNotations.isEmpty {
+        //if !self.selectedNotations.isEmpty {
             self.transpose(direction: .up)
             //self.transformView.isHidden = false
             //EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW)
@@ -3109,11 +3131,11 @@ class MusicSheet: UIView {
                 EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSPOSE_KEYS, params: params)
             }*/
             //return;
-        }
+        //}
     }
 
     func transposeDown() {
-        if !self.selectedNotations.isEmpty {
+        //if !self.selectedNotations.isEmpty {
             self.transpose(direction: .down)
             //EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSFORM_VIEW)
             //self.transformView.isHidden = false
@@ -3127,7 +3149,7 @@ class MusicSheet: UIView {
                 EventBroadcaster.instance.postEvent(event: EventNames.SHOW_TRANSPOSE_KEYS, params: params)
             }*/
             //return;
-        }
+        //}
     }
 
     func onArrowKeyPressed(params: Parameters) {
@@ -3202,7 +3224,41 @@ class MusicSheet: UIView {
     }
     
     private func transpose(direction: TranspositionDirection) {
-        for notation in self.selectedNotations {
+        if !self.selectedNotations.isEmpty {
+            for notation in self.selectedNotations {
+                if let note = notation as? Note {
+                    if self.transpositions == 0 {
+                        self.initialPitches.append(note.pitch)
+                    }
+                    
+                    if direction == .up {
+                        note.transposeUp()
+                    } else {
+                        note.transposeDown()
+                    }
+                    
+                } else if let chord = notation as? Chord {
+                    for note in chord.notes {
+                        if self.transpositions == 0 {
+                            self.initialPitches.append(note.pitch)
+                        }
+                        
+                        if direction == .up {
+                            note.transposeUp()
+                        } else {
+                            note.transposeDown()
+                        }
+                    }
+                }
+            }
+            
+            SoundManager.instance.playNotations(notations: self.selectedNotations, tempo: (composition?.tempo)!)
+            
+            self.transpositions += 1
+            self.updateMeasureDraw()
+        } else if let notation = hoveredNotation ?? GridSystem.instance.getNoteFromX(x: self.sheetCursor.curYCursorLocation.x) {
+        
+            
             if let note = notation as? Note {
                 if self.transpositions == 0 {
                     self.initialPitches.append(note.pitch)
@@ -3214,22 +3270,16 @@ class MusicSheet: UIView {
                     note.transposeDown()
                 }
                 
-            } else if let chord = notation as? Chord {
-                for note in chord.notes {
-                    if self.transpositions == 0 {
-                        self.initialPitches.append(note.pitch)
-                    }
-                    
-                    if direction == .up {
-                        note.transposeUp()
-                    } else {
-                        note.transposeDown()
-                    }
-                }
+                SoundManager.instance.playNotations(notations: [note], tempo: (composition?.tempo)!)
+                
+                self.transpositions += 1
+                
+                self.updateMeasureDraw()
+                
+                //self.highlightNotation(note, true)
             }
+            
         }
-        self.transpositions += 1
-        self.updateMeasureDraw()
     }
     
     private func reassignRecentAction (params: Parameters) {
@@ -3313,7 +3363,7 @@ class MusicSheet: UIView {
                 switch actionType {
                 case ActionFunctions.EXECUTE :
                     
-                    if editAction.newNotations[editAction.newNotations.count - 1] is Chord {
+                    if editAction.newNotations.count - 1 > 0 && editAction.newNotations[editAction.newNotations.count - 1] is Chord {
                         self.moveCursorsToNearestSnapPoint(location: self.sheetCursor.curYCursorLocation)
                     } else {
                         var currentPoint: CGPoint = self.sheetCursor.curYCursorLocation
@@ -3593,6 +3643,7 @@ class MusicSheet: UIView {
 
             var newNotations = [MusicNotation]()
 
+
             for notation in self.selectedNotations {
                 newNotations.append(notation.duplicate())
 
@@ -3602,6 +3653,9 @@ class MusicSheet: UIView {
                     }
                 }
             }
+            
+            let editAction = EditAction(old: self.selectedNotations, new: newNotations)
+            editAction.execute()
             
             /*if self.transpositions > 0 {
                 for _ in 0..<self.transpositions {
@@ -3620,9 +3674,6 @@ class MusicSheet: UIView {
                     }
                 }
             }*/
-            
-            let editAction = EditAction(old: self.selectedNotations, new: newNotations)
-            editAction.execute()
 
             self.updateMeasureDraw()
             
@@ -6050,10 +6101,10 @@ class MusicSheet: UIView {
         }
 
         self.selectedNotations = invertedNotes
+        
+        repositionTransformView(first: false)
 
         self.updateMeasureDraw()
-
-        repositionTransformView(first: false)
     }
 
     func invertNote(note: Note, steps: Int) -> Note {

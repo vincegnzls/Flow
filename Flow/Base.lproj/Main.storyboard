@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L3C-ZS-342">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L3C-ZS-342">
     <device id="ipad10_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="TimesNewRomanBold.ttf">
-            <string>TimesNewRomanPS-BoldMT</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="154-Sg-OxG">
@@ -1185,11 +1180,13 @@ Tap '+' to create a new composition.</string>
                     <connections>
                         <outlet property="bottomMenu" destination="9Uy-OO-nyR" id="qAP-7j-PpZ"/>
                         <outlet property="connectBtn" destination="9HY-Gc-gcB" id="5H3-f9-1Rs"/>
+                        <outlet property="inversionBtn" destination="oVX-49-dcL" id="XAT-Fl-fRM"/>
                         <outlet property="keyboardView" destination="Ae9-dp-GQa" id="UWE-BK-yB1"/>
                         <outlet property="menuBar" destination="VHe-OH-6BV" id="EC9-aQ-TAh"/>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>
                         <outlet property="musicSheetHeight" destination="KPP-b0-DlP" id="wYN-6H-ZMN"/>
                         <outlet property="musicSheetWidth" destination="FNs-ij-IW5" id="I0R-5D-Npb"/>
+                        <outlet property="retrogradeBtn" destination="DpG-Ff-gPa" id="DL5-qa-tlh"/>
                         <outlet property="riView" destination="Jgu-f4-OfY" id="F1l-yT-4In"/>
                         <outlet property="scrollView" destination="9Me-FI-wrK" id="TfR-zs-wl6"/>
                         <outlet property="tempoSlider" destination="Q0u-RV-0u3" id="RWk-I1-jfO"/>
