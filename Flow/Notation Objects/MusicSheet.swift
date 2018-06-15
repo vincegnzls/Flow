@@ -3787,6 +3787,7 @@ class MusicSheet: UIView {
         measureCoords.removeAll()
         gMeasurePoints.removeAll()
         fMeasurePoints.removeAll()
+        //GridSystem.instance.clearMeasurePointsInStaff()
         GridSystem.instance.clearNotationSnapPointMap()
         GridSystem.instance.clearParallelMeasureMap()
 

@@ -51,7 +51,7 @@ class GridSystem {
         didSet {
             if (oldValue != currentStaffIndex) {
                 EventBroadcaster.instance.postEvent(event: EventNames.STAFF_SWITCHED)
-                print ("Staff switched!")
+                print ("Staff switched! = \(currentStaffIndex)")
             }
         }
     }
@@ -185,6 +185,10 @@ class GridSystem {
     public func clearParallelMeasureMap() {
         parallelMeasureMap.removeAll()
     }
+    
+    public func clearMeasurePointsInStaff() {
+        measurePointsInStaff.removeAll()
+    }
 
     public func createNewMeasurePointsArray() {
         measurePointsInStaff.append([MeasurePoints]())
@@ -198,7 +202,7 @@ class GridSystem {
 
     public func getStaffIndexFromMeasurePoint(measurePoints: MeasurePoints) -> Int {
         var index = 0
-
+        
         for measurePointsArray in measurePointsInStaff {
             if measurePointsArray.contains(measurePoints) {
                 return index

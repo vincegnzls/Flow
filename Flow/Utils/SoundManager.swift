@@ -1009,6 +1009,101 @@ class SoundManager {
         
         return staffPlayer
     }
+    
+    func preProcessStaffFrom(startingMeasureIndex: Int, startingNoteIndex: Int, staff: Staff) -> [[Int?]] {
+        var staffPlayer = [[Int?]]()
+        var modifiedChord: Chord?
+        
+        var skipPitches = [Pitch]()
+        
+        for (index, measure) in staff.measures.enumerated() {
+            
+            if index < startingMeasureIndex {
+                continue
+            }
+            
+            for (notationIndex, notation) in measure.notationObjects.enumerated() {
+                
+                if index == startingMeasureIndex {
+                    if notationIndex < startingNoteIndex {
+                        continue
+                    }
+                }
+                
+                if let note = notation as? Note, let conn = note.connection, let notes = conn.notes {
+                    if let first = notes.first {
+                        if note == first {
+                            staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                            
+                            if conn.type == .tie {
+                                
+                                if skipPitches.count > 0 {
+                                    skipPitches.removeAll()
+                                }
+                                
+                                skipPitches.append(note.pitch)
+                            }
+                            
+                        } else if conn.type == .slur {
+                            staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                        }
+                    }
+                } else if let chord = notation as? Chord {
+                    
+                    if skipPitches.count > 0 {
+                        let dupliChord = chord.duplicate()
+                        
+                        for pitch in skipPitches {
+                            dupliChord.notes = dupliChord.notes.filter {$0.pitch != pitch}
+                        }
+                        
+                        if dupliChord.notes.count > 0 {
+                            staffPlayer.append(contentsOf: addNotation(notation: dupliChord, keySignature: measure.keySignature))
+                        }
+                        
+                        skipPitches.removeAll()
+                        
+                    } else {
+                        staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                    }
+                    
+                    for note in chord.notes {
+                        
+                        if let connection = note.connection, let notes = connection.notes {
+                            if let first = notes.first {
+                                if note == first {
+                                    if notes.count > 1 {
+                                        if connection.type != .slur { // slur check
+                                            skipPitches.append(note.pitch)
+                                        }
+                                    }
+                                } else {
+                                    modifiedChord = chord.duplicate()
+                                    
+                                    if connection.type != .slur {
+                                        modifiedChord?.removeNote(note: note)
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                    
+                    
+                    
+                } else {
+                    staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                    
+                    if skipPitches.count > 0 {
+                        skipPitches.removeAll()
+                    }
+                }
+                
+            }
+        }
+        
+        return staffPlayer
+    }
 
     func preProcessStaff(staff: Staff) -> [[Int?]] {
         var staffPlayer = [[Int?]]()
@@ -1102,13 +1197,92 @@ class SoundManager {
                 for notation in measure.notationObjects {
                     let x = self.getDurationOfNote(notation: notation)
 
-                    for beat in 0..<x {
+                    for _ in 0..<x {
                         measures.append(measure)
                     }
                 }
             }
         }
 
+        return measures
+    }
+    
+    func getCompMeasureStarting (from: Measure, comp: Composition) -> [Measure] {
+        var measures = [Measure]()
+        
+        if let firstStaff = comp.staffList.first {
+            
+            if let startingIndex = firstStaff.measures.index(of: from) {
+            
+                for (index, measure) in firstStaff.measures.enumerated() {
+                    
+                    if index < startingIndex {
+                        continue
+                    }
+                    
+                    for notation in measure.notationObjects {
+                        let x = self.getDurationOfNote(notation: notation)
+                        
+                        for _ in 0..<x {
+                            measures.append(measure)
+                        }
+                    }
+                    
+                }
+            }
+        }
+        
+        return measures
+    }
+    
+    func getCompMeasureStarting (from: MusicNotation, comp: Composition) -> [Measure] {
+        var measures = [Measure]()
+        
+        if let firstStaff = comp.staffList.first {
+            
+            if let notationMeasure = from.measure, let notationIndex = notationMeasure.notationObjects.index(of: from) {
+            
+                if let startingIndex = firstStaff.measures.index(of: notationMeasure) {
+                    
+                    for (index, measure) in firstStaff.measures.enumerated() {
+                        
+                        if index < startingIndex {
+                            continue
+                        }
+                        
+                        if measure == notationMeasure {
+                            
+                            for (currNotationIndex, notation) in measure.notationObjects.enumerated() {
+                                
+                                if currNotationIndex < notationIndex {
+                                    continue
+                                }
+                                
+                                let x = self.getDurationOfNote(notation: notation)
+                                
+                                for _ in 0..<x {
+                                    measures.append(measure)
+                                }
+                            }
+                            
+                        } else {
+                        
+                            for notation in measure.notationObjects {
+                                let x = self.getDurationOfNote(notation: notation)
+                                
+                                for _ in 0..<x {
+                                    measures.append(measure)
+                                }
+                            }
+                            
+                        }
+                        
+                    }
+                }
+                
+            }
+        }
+        
         return measures
     }
 
@@ -1132,10 +1306,37 @@ class SoundManager {
         
         self.loadSound()
         
-        self.gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
-        self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
+        var currentMeasureIndex = 0
+        
+        if let currentMeasure = GridSystem.instance.getCurrentMeasure() {
+            for staff in composition.staffList {
+                if staff.measures.contains(currentMeasure) {
+                    if let index = staff.measures.index(of: currentMeasure) {
+                        currentMeasureIndex = index
+                    }
+                }
+            }
+        }
+        
+        if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x), let currentMeasure = GridSystem.instance.getCurrentMeasure(), let currentNoteIndex = currentMeasure.notationObjects.index(of: noteFromX) {
+        
+        self.gNotesMIDI = preProcessStaffFrom(startingMeasureIndex: currentMeasureIndex, startingNoteIndex: currentNoteIndex, staff: composition.staffList[0])
+        self.fNotesMIDI = preProcessStaffFrom(startingMeasureIndex: currentMeasureIndex, startingNoteIndex: currentNoteIndex, staff: composition.staffList[1])
+            
+        } else {
+            self.gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
+            self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
+        }
+        
+        if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x) {
 
-        self.compMeasures = getCompMeasures(comp: composition)
+            self.compMeasures = getCompMeasureStarting(from: noteFromX, comp: composition)
+            
+        } else {
+            
+            self.compMeasures = getCompMeasures(comp: composition)
+            
+        }
         
         do {
             try AudioKit.start()
