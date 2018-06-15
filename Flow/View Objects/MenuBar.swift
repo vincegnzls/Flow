@@ -10,18 +10,29 @@ import UIKit
 
 class MenuBar: UIView {
     
-    @IBOutlet weak var compositionTitleButton: UIButton!
+//    @IBOutlet weak var compositionTitleButton: UIButton!
     @IBOutlet weak var playBtn: UIButton!
     @IBOutlet weak var naturalizeBtn: UIButton!
     @IBOutlet weak var flatBtn: UIButton!
     @IBOutlet weak var sharpBtn: UIButton!
     @IBOutlet weak var dSharpBtn: UIButton!
+    
+    @IBOutlet weak var oneDotBtn: UIButton!
+    @IBOutlet weak var twoDotsBtn: UIButton!
+    @IBOutlet weak var threeDotsBtn: UIButton!
 
-    var compositionInfo: CompositionInfo? {
+    @IBOutlet weak var eightVaBtn: UIButton!
+    @IBOutlet weak var eightVbBtn: UIButton!
+    @IBOutlet weak var fifteenMaBtn: UIButton!
+    @IBOutlet weak var fifteenMbBtn: UIButton!
+    
+    let maxNumOfDots = 3
+
+    /*var compositionInfo: CompositionInfo? {
         didSet {
             self.compositionTitleButton.setTitle(compositionInfo?.name, for: .normal)
         }
-    }
+    }*/
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,9 +59,72 @@ class MenuBar: UIView {
 
         EventBroadcaster.instance.removeObserver(event: EventNames.ENABLE_ACCIDENTALS, observer: Observer(id: "MenuBar.enableAccidentals", function: self.enableAccidentals))
         EventBroadcaster.instance.addObserver(event: EventNames.ENABLE_ACCIDENTALS, observer: Observer(id: "MenuBar.enableAccidentals", function: self.enableAccidentals))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.HIGHLIGHT_ACCIDENTAL_BTN, observer: Observer(id: "MenuBar.highlightAccidentalBtn", function: self.highlightAccidentalBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_ACCIDENTAL_BTN, observer: Observer(id: "MenuBar.highlightAccidentalBtn", function: self.highlightAccidentalBtn))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT, observer: Observer(id: "MenuBar.removeAccidentalHighlight", function: self.removeAccidentalHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT, observer: Observer(id: "MenuBar.removeAccidentalHighlight", function: self.removeAccidentalHighlight))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
+        EventBroadcaster.instance.addObserver(event: EventNames.UPDATE_INVALID_DOTS, observer: Observer(id: "MenuBar.updateInvalidDots", function: self.updateInvalidDots))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightOttavaBtn", function: self.highlightOttavaBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightOttavaBtn", function: self.highlightOttavaBtn))
+
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_OTTAVA_HIGHLIGHT, observer: Observer(id: "MenuBar.removeOttavaHighlight", function: self.removeOttavaHighlight))
     }
 
-    @IBAction func touchCompositionTitle(_ sender: UIButton) {
+    func highlightOttavaBtn(params: Parameters) {
+        removeOttavaHighlight()
+
+        if let ottavaType: OttavaType = params.get(key: KeyNames.OTTAVA) as! OttavaType {
+
+            if ottavaType == .eightVa {
+                self.eightVaBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            } else if ottavaType == .eightVb {
+                self.eightVbBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            } else if ottavaType == .fifteenMa {
+                self.fifteenMaBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            } else if ottavaType == .fifteenMb {
+                self.fifteenMbBtn.backgroundColor = UIColor(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 0.7)
+            }
+        }
+    }
+
+    func removeOttavaHighlight() {
+        self.eightVaBtn.backgroundColor = nil
+        self.eightVbBtn.backgroundColor = nil
+        self.fifteenMaBtn.backgroundColor = nil
+        self.fifteenMbBtn.backgroundColor = nil
+    }
+
+    func highlightAccidentalBtn(params: Parameters) {
+        if let accidental: Accidental = params.get(key: KeyNames.ACCIDENTAL) as? Accidental {
+
+            print("ACCIDENTAL: \(accidental.toString())")
+
+            if accidental == .natural {
+                self.naturalizeBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            } else if accidental == .sharp {
+                self.sharpBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            } else if accidental == .flat {
+                self.flatBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            } else if accidental == .doubleSharp {
+                self.dSharpBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            }
+        }
+    }
+
+    func removeAccidentalHighlight() {
+        self.naturalizeBtn.backgroundColor = nil
+        self.sharpBtn.backgroundColor = nil
+        self.flatBtn.backgroundColor = nil
+        self.dSharpBtn.backgroundColor = nil
+    }
+
+    /*@IBAction func touchCompositionTitle(_ sender: UIButton) {
         // Create the alert controller
         let alertController = UIAlertController(title: "Change title", message: "Enter a new title for your composition", preferredStyle: .alert)
 
@@ -80,7 +154,7 @@ class MenuBar: UIView {
 
         // Present the dialog box
         self.window?.rootViewController?.present(alertController, animated: true, completion: nil)
-    }
+    }*/
 
     @IBAction func touchCopy(_ sender: UIButton) {
         EventBroadcaster.instance.postEvent(event: EventNames.COPY_KEY_PRESSED)
@@ -88,6 +162,10 @@ class MenuBar: UIView {
 
     @IBAction func touchCut(_ sender: UIButton) {
         EventBroadcaster.instance.postEvent(event: EventNames.CUT_KEY_PRESSED)
+    }
+    
+    @IBAction func touchPaste(_ sender: UIButton) {
+        EventBroadcaster.instance.postEvent(event: EventNames.PASTE_KEY_PRESSED)
     }
 
     @IBAction func touchPlay(_ sender: UIButton) {
@@ -126,27 +204,237 @@ class MenuBar: UIView {
         self.dSharpBtn.isUserInteractionEnabled = true
     }
     
-    @IBAction func touchPaste(_ sender: UIButton) {
-        EventBroadcaster.instance.postEvent(event: EventNames.PASTE_KEY_PRESSED)
-    }
-    
     @IBAction func touchNaturalize(_ sender: UIButton) {
         print("naturalize")
-        EventBroadcaster.instance.postEvent(event: EventNames.NATURALIZE_KEY_PRESSED)
+        self.removeAccidentalHighlight()
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.natural)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
     
     @IBAction func touchFlat(_ sender: UIButton) {
         print("flat")
-        EventBroadcaster.instance.postEvent(event: EventNames.FLAT_KEY_PRESSED)
+        self.removeAccidentalHighlight()
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.flat)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
     
     @IBAction func touchSharp(_ sender: UIButton) {
         print("sharp")
-        EventBroadcaster.instance.postEvent(event: EventNames.SHARP_KEY_PRESSED)
+        self.removeAccidentalHighlight()
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.sharp)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
 
     @IBAction func touchDSharp(_ sender: UIButton) {
         print("dsharp")
-        EventBroadcaster.instance.postEvent(event: EventNames.DSHARP_KEY_PRESSED)
+        self.removeAccidentalHighlight()
+
+        var params = Parameters()
+        params.put(key: KeyNames.ACCIDENTAL, value: Accidental.doubleSharp)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.ACCIDENTAL_PRESS, params: params)
     }
+    
+    @IBAction func touchUndo(_ sender: UIButton) {
+        UndoRedoManager.instance.undo()
+    }
+    
+    @IBAction func touchRedo(_ sender: UIButton) {
+        UndoRedoManager.instance.redo()
+    }
+    
+    @IBAction func touchOneDot(_ sender: UIButton) {
+        print("ONE DOT")
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NUM_OF_DOTS, value: 1)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
+    }
+    
+    @IBAction func touchTwoDots(_ sender: UIButton) {
+        print("Two DOT")
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NUM_OF_DOTS, value: 2)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
+    }
+    
+    @IBAction func touchThreeDots(_ sender: UIButton) {
+        print("Three DOT")
+        
+        let params = Parameters()
+        params.put(key: KeyNames.NUM_OF_DOTS, value: 3)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.DOT_KEY_PRESSED, params: params)
+    }
+    
+    private func highlightDotButton(numDot: Int) {
+        switch numDot {
+        case 1:
+            oneDotBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        case 2:
+            twoDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        case 3:
+            threeDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        default:
+            oneDotBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            twoDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            threeDotsBtn.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        }
+    }
+    
+    private func removeHighlightDotButton(numDot: Int) {
+        switch numDot {
+        case 1:
+            oneDotBtn.backgroundColor = nil
+        case 2:
+            twoDotsBtn.backgroundColor = nil
+        case 3:
+            threeDotsBtn.backgroundColor = nil
+        default:
+            oneDotBtn.backgroundColor = nil
+            twoDotsBtn.backgroundColor = nil
+            threeDotsBtn.backgroundColor = nil
+        }
+    }
+    
+    private func enableDotButton(numDot: Int, enabled: Bool) {
+        switch numDot {
+        case 1:
+            oneDotBtn.isEnabled = enabled
+        case 2:
+            twoDotsBtn.isEnabled = enabled
+        case 3:
+            threeDotsBtn.isEnabled = enabled
+        default:
+            oneDotBtn.isEnabled = enabled
+            twoDotsBtn.isEnabled = enabled
+            threeDotsBtn.isEnabled = enabled
+        }
+    }
+    
+    private func updateInvalidDots(parameters: Parameters) {
+        if let selectedNotations = parameters.get(key: KeyNames.SELECTED_NOTATIONS) as? [MusicNotation] {
+            
+            if selectedNotations.count > 0 {
+            
+            var measures = [Measure]()
+            var addedValueToMeasureMap = [Measure: Float]()
+            var dotBools = [Int: Bool]()
+        
+                for dots in 1...maxNumOfDots {
+                
+                    var allDotsAreEqualToNumDots = true
+                    
+                    for notation in selectedNotations {
+                        if notation.dots != dots {
+                            allDotsAreEqualToNumDots = false
+                        }
+                    }
+                    
+                    if allDotsAreEqualToNumDots {
+                        dotBools[dots] = true
+                        
+                        highlightDotButton(numDot: dots)
+                    } else {
+                        removeHighlightDotButton(numDot: dots)
+                    
+                        for notation in selectedNotations {
+                            
+                            if let measure = notation.measure {
+                                if let existingAddedValue = addedValueToMeasureMap[measure] {
+                                    addedValueToMeasureMap[measure] = existingAddedValue + (notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue(dots: notation.dots))
+                                } else {
+                                    addedValueToMeasureMap[measure] = notation.type.getBeatValue(dots: dots) - notation.type.getBeatValue(dots: notation.dots)
+                                    measures.append(measure)
+                                }
+                            }
+                            
+                        }
+                        
+                        for measure in measures {
+                            if measure.isAddNoteValid(value: addedValueToMeasureMap[measure]!) {
+                                dotBools[dots] = true
+                            } else {
+                                dotBools[dots] = false
+                                break
+                            }
+                        }
+                        
+                    }
+                    
+                    if let dotBool = dotBools[dots] {
+                        enableDotButton(numDot: dots, enabled: dotBool)
+                    }
+                    
+                }
+                
+            } else {
+                removeHighlightDotButton(numDot: -1)
+                
+                if let dotModes = parameters.get(key: KeyNames.CURRENT_DOT_MODES) as? [Bool] {
+                    enableDotButton(numDot: -1, enabled: true)
+                    
+                    for (index, dotMode) in dotModes.enumerated() {
+                        let numDot = index+1
+                        
+                        if dotMode {
+                            highlightDotButton(numDot: numDot)
+                        } else {
+                            removeHighlightDotButton(numDot: numDot)
+                        }
+                    }
+                } else {
+                    
+                    enableDotButton(numDot: -1, enabled: false)
+                    
+                }
+            }
+        }
+    }
+    
+    @IBAction func toggleKeyboard(_ sender: UIButton) {
+        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_KEYBOARD)
+        print("TOGGLE PRESSED")
+    }
+    
+    @IBAction func eightVa(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.eightVa)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
+    @IBAction func eightVb(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.eightVb)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
+    @IBAction func fifteenMa(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.fifteenMa)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
+    @IBAction func fifteenMb(_ sender: UIButton) {
+        let params = Parameters()
+        params.put(key: KeyNames.OTTAVA, value: OttavaType.fifteenMb)
+
+        EventBroadcaster.instance.postEvent(event: EventNames.OTTAVA, params: params)
+    }
+    
 }

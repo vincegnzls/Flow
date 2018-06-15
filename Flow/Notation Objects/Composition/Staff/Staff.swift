@@ -19,4 +19,14 @@ class Staff {
     func addMeasure(_ measure: Measure) {
         self.measures.append(measure)
     }
+
+    func removeAllNotes() {
+        for measure in self.measures {
+            measure.removeAllNotations()
+        }
+    }
+
+    func duplicate() -> Staff {
+        return Staff(measures: self.measures)
+    }
 }

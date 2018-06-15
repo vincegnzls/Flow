@@ -22,11 +22,14 @@ class GridSystem {
             if oldValue != nil {
             
                 if let oldPoints = oldValue, let newPoints = selectedMeasureCoord {
+                    
                     if let oldMeasure = getMeasureFromPoints(measurePoints: oldPoints), let newMeasure = getMeasureFromPoints(measurePoints: newPoints) {
                         if oldMeasure !== newMeasure {
                             
-                            oldMeasure.fillWithRests()
-                            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                            if self.recentActionType == nil && self.recentAction == nil {
+                                oldMeasure.fillWithRests(isAction: true)
+                                EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+                            }
 
                             let params:Parameters = Parameters()
                             params.put(key: KeyNames.NEW_MEASURE, value: newMeasure)
@@ -64,7 +67,11 @@ class GridSystem {
     private var gClefPitches = [Pitch]()
     private var fClefPitches = [Pitch]()
     
+    private var linePitches = [Pitch]() // pitches that belong to a line
+    
     public var recentNotation: MusicNotation?
+    public var recentAction: Action?
+    public var recentActionType: String?
     
     private init() {
         //GridSystem.sharedInstance = self
@@ -92,9 +99,14 @@ class GridSystem {
         // starting from the top of g clef staff
         var currGClefPitch = Pitch(step: Step.F, octave: 6)
         
-        for _ in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
+        for i in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
             
             gClefPitches.append(currGClefPitch)
+            
+            if i % 2 == 1 {
+                linePitches.append(currGClefPitch)
+            }
+            
             currGClefPitch.transposeDown()
             
         }
@@ -102,13 +114,22 @@ class GridSystem {
         // starting from the top of f clef staff
         var currFClefPitch = Pitch(step: Step.A, octave: 4)
         
-        for _ in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
+        for i in 0...NUMBER_OF_SNAPPOINTS_PER_COLUMN {
             
             fClefPitches.append(currFClefPitch)
+            
+            if i % 2 == 1 && !linePitches.contains(currFClefPitch) {
+                linePitches.append(currFClefPitch)
+            }
+            
             currFClefPitch.transposeDown()
             
         }
 
+    }
+    
+    public func isPitchInLine (pitch: Pitch) -> Bool {
+        return linePitches.contains(pitch)
     }
     
     public func getMeasureFromPoints(measurePoints:MeasurePoints) -> Measure? {
@@ -155,6 +176,14 @@ class GridSystem {
     
     public func clearNotationSnapPointMap() {
         noteSnapPointsMap.removeAll()
+    }
+    
+    public func clearMeasurePointMap() {
+        measureMap.removeAll()
+    }
+    
+    public func clearParallelMeasureMap() {
+        parallelMeasureMap.removeAll()
     }
 
     public func createNewMeasurePointsArray() {
@@ -323,17 +352,13 @@ class GridSystem {
             var leastDistance:CGFloat?
             if let snapPoints = snapPointsMap[measureCoord] {
                 
-                for (index, snapPoint) in snapPoints.enumerated() {
+                for snapPoint in snapPoints {
                     
                     if (snapPoint.y < currentPoint.y && snapPoint != currentPoint && snapPoint.x == currentPoint.x) {
                         let x2: CGFloat = currentPoint.x - snapPoint.x
                         let y2: CGFloat = currentPoint.y - snapPoint.y
                         
-                        print(index)
-                        print(snapPoint)
-                        
                         let potDistance = (x2 * x2) + (y2 * y2)
-                        print(potDistance)
                         
                         if let theDistance = leastDistance {
                             if (potDistance < theDistance) {
@@ -514,6 +539,97 @@ class GridSystem {
 
         return -1
 
+    }
+    
+    // THIS IS FOR RELOADING THE WHOLE COMPOSITION
+    public func getYFromPitch (pitch: Pitch, clef: Clef, snapPoints: [CGPoint]) -> CGFloat {
+        
+        var pitchToPointMap = [Pitch: CGPoint]()
+        let pitches = getPitches(clef: clef)
+        
+        for i in 0..<snapPoints.count {
+            //print(pitches[i])
+            pitchToPointMap[pitches[i%(NUMBER_OF_SNAPPOINTS_PER_COLUMN+1)]] = snapPoints[i]
+        }
+        
+        if let corresPoint = pitchToPointMap[pitch] {
+            return corresPoint.y
+        }
+        
+        return -1
+        
+    }
+    
+    public func pointXHasANote(x: CGFloat) -> Bool {
+        var containsANote = false
+        
+        if let measurePoints = selectedMeasureCoord {
+            if let snapPoints = getSnapPointsFromPoints(measurePoints: measurePoints) {
+            
+                for snapPoint in snapPoints {
+                    
+                    if snapPoint.x == x {
+                        
+                        if let _ = GridSystem.instance.getNotationFromSnapPoint(snapPoint: snapPoint) {
+                            containsANote = true
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+        }
+        
+        return containsANote
+    }
+    
+    public func getNoteFromX (x: CGFloat) -> MusicNotation? {
+        
+        if let measurePoints = selectedMeasureCoord {
+            if let snapPoints = getSnapPointsFromPoints(measurePoints: measurePoints) {
+                
+                for snapPoint in snapPoints {
+                    
+                    if snapPoint.x == x {
+                        
+                        if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: snapPoint) {
+                            return notation
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+        }
+        
+        return nil
+    }
+    
+    public func getNotesFromX (x: CGFloat) -> [MusicNotation] {
+        
+        var notations = [MusicNotation]()
+        
+        if let measurePoints = selectedMeasureCoord {
+            if let snapPoints = getSnapPointsFromPoints(measurePoints: measurePoints) {
+                
+                for snapPoint in snapPoints {
+                    
+                    if snapPoint.x == x {
+                        
+                        if let notation = GridSystem.instance.getNotationFromSnapPoint(snapPoint: snapPoint) {
+                            notations.append(notation)
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+        }
+        
+        return notations
     }
 
     public static func getMaximum64s (timeSig: TimeSignature) -> Int {

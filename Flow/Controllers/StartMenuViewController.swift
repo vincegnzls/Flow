@@ -26,23 +26,15 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
     
     // MARK: Properties
     private var isCollectionViewShowing = false
+    private var editingIndex: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.setupView()
         
-        self.setupMenuShadow()
+        self.setupBottomMenu()
         self.setupLists()
-
-        /*for i in 1..<5 {
-            self.compositions.append(CompositionInfo(name: "Composition \(i)"))
-            //self.compositions.append(CompositionInfo(name:"Composition 2"))
-        }
-        self.compositions.append(CompositionInfo(name: "The quick brown fox jumps over the lazy dog. " +
-                "The quick brown fox jumps over the lazy dog. " +
-                "The quick brown fox jumps over the lazy dog."))*/
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -74,19 +66,26 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         let defaults = UserDefaults.standard
 
         self.isCollectionViewShowing = defaults.bool(forKey: Constants.keyIsCollectionViewShowing)
-        print(self.isCollectionViewShowing)
 
         self.collectionView.isHidden = !self.isCollectionViewShowing
         self.tableView.isHidden = self.isCollectionViewShowing
+        
+        if self.isCollectionViewShowing {
+            self.changeViewBtn.setImage(UIImage(named: "list-view-icon"), for: .normal)
+        } else {
+            self.changeViewBtn.setImage(UIImage(named: "block-view-icon"), for: .normal)
+        }
     }
 
-    private func setupMenuShadow() {
+    private func setupBottomMenu() {
         if self.menu != nil {
-            self.menu.layer.shadowColor = UIColor.black.cgColor
+            /*self.menu.layer.shadowColor = UIColor.black.cgColor
             self.menu.layer.shadowOpacity = 0.1
             self.menu.layer.shadowOffset = CGSize.zero
             self.menu.layer.shadowRadius = 5
-            self.menu.layer.shadowPath = UIBezierPath(rect: self.menu.bounds).cgPath
+            self.menu.layer.shadowPath = UIBezierPath(rect: self.menu.bounds).cgPath*/
+            self.menu.layer.borderWidth = 1
+            self.menu.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
         }
     }
     
@@ -165,7 +164,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
              }
 
         let composition = FileHandler.instance.compositions[indexPath.row]
-        cell.nameLabel.text = composition.name
+        cell.nameTextField.text = composition.name
         cell.lastEditedLabel.text = composition.lastEditedString
 
         return cell
@@ -195,7 +194,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             self.showAlertPopup(cell: cell, index: indexPath)
         }
     }
-
+    
     // MARK: TableViewSource protocol
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -212,7 +211,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
                 }
 
         let composition = FileHandler.instance.compositions[indexPath.row]
-        cell.nameLabel.text = composition.name
+        cell.nameTextField.text = composition.name
         cell.lastEditedLabel.text = composition.lastEditedString
 
         return cell
@@ -256,6 +255,18 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             print("Export tapped")
             let compositionInfo = FileHandler.instance.compositions[index.row]
             self.shareComposition(compositionInfo: compositionInfo, cell: cell)
+        })
+        
+        alert.addAction(UIAlertAction(title: "Rename", style: .default) { _ in
+            if let tableCell = cell as? CompositionTableViewCell {
+                tableCell.nameTextField.isUserInteractionEnabled = true
+                tableCell.nameTextField.becomeFirstResponder()
+                self.editingIndex = index.row
+            } else if let collectionCell = cell as? CompositionCollectionViewCell {
+                collectionCell.nameTextField.isUserInteractionEnabled = true
+                collectionCell.nameTextField.becomeFirstResponder()
+                self.editingIndex = index.row
+            }
         })
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
@@ -346,6 +357,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
                     duration: 0.5,
                     options: [.transitionFlipFromLeft, .showHideTransitionViews],
                     completion:nil)
+            self.changeViewBtn.setImage(UIImage(named: "list-view-icon"), for: .normal)
         } else {
             // Show List
             UIView.transition(from: self.collectionView,
@@ -353,6 +365,7 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
             duration: 0.5,
             options: [.transitionFlipFromRight, .showHideTransitionViews],
             completion: nil)
+            self.changeViewBtn.setImage(UIImage(named: "block-view-icon"), for: .normal)
         }
 
         self.isCollectionViewShowing = !self.isCollectionViewShowing
@@ -360,5 +373,31 @@ class StartMenuViewController: UIViewController, UICollectionViewDataSource, UIC
         // Set preference to new view
         let defaults = UserDefaults.standard
         defaults.set(self.isCollectionViewShowing, forKey: Constants.keyIsCollectionViewShowing)
+    }
+    
+    private func onTitleChanged(_ sender: MaxLengthTextField) {
+        sender.isUserInteractionEnabled = false
+        let title: String
+        if let textFieldText = sender.text, !textFieldText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            title = textFieldText
+        } else {
+            title = "Untitled Composition"
+        }
+        
+        sender.text = title
+        if let index = self.editingIndex {
+            FileHandler.instance.compositions[index].name = title
+            FileHandler.instance.compositions[index].lastEdited = Date()
+            FileHandler.instance.saveCompositionList()
+        }
+    }
+    
+    @IBAction func onTableViewCellTitleChanged(_ sender: MaxLengthTextField) {
+        self.onTitleChanged(sender)
+    }
+    
+    
+    @IBAction func onCollectionViewCellTitleChanged(_ sender: MaxLengthTextField) {
+        self.onTitleChanged(sender)
     }
 }

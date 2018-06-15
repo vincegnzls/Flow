@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "keysig-a-1.png",
+      "filename" : "A.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "keysig-a-2.png",
+      "filename" : "A-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "keysig-a.png",
+      "filename" : "A-2.png",
       "scale" : "3x"
     }
   ],

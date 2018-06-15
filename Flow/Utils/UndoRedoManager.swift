@@ -25,8 +25,12 @@ class UndoRedoManager {
     }
     
     func undo() {
+//        print("Number of actions in undo stack: \(self.undoStack.count)")
         if let action = self.undoStack.popLast() {
             action.undo()
+            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+            EventBroadcaster.instance.postEvent(event: EventNames.UNDO_REDO)
+            
             self.addActionToRedoStack(action)
         }
     }
@@ -34,6 +38,9 @@ class UndoRedoManager {
     func redo() {
         if let action = self.redoStack.popLast() {
             action.redo()
+            EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
+            EventBroadcaster.instance.postEvent(event: EventNames.UNDO_REDO)
+            
             self.addActionToUndoStack(action)
         }
     }

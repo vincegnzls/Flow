@@ -92,30 +92,23 @@ class Converter {
             
             for (index, staff) in composition.staffList.enumerated() {
                 let measure = staff.measures[i]
+                let staffIndex = index + 1
                 
                 // Add notes and/or rests
                 for notation in measure.notationObjects {
                     let notationElement = measureElement.addChild(name: "note")
                     
-                    // Add necessary elements depending on note or rest
-                    if let note = notation as? Note {
-                        let pitchElement = notationElement.addChild(name: "pitch")
-                        pitchElement.addChild(name: "step", value: note.pitch.step.toString())
-                        pitchElement.addChild(name: "octave", value: "\(note.pitch.octave)")
+                    if let chord = notation as? Chord {
+                        convertNotationtoXML(notation: chord.notes[0], element: notationElement, staff: staffIndex, divisions: divisions)
                         
-                        if let accidental = note.accidental {
-                            notationElement.addChild(name: "accidental", value: accidental.toString())
+                        for note in chord.notes[1...] {
+                            let chordElement =  measureElement.addChild(name: "note")
+                            chordElement.addChild(name: "chord")
+                            convertNotationtoXML(notation: note, element: chordElement, staff: staffIndex, divisions: divisions)
                         }
-                        
-                    } else if notation is Rest {
-                        notationElement.addChild(name: "rest")
+                    } else {
+                        convertNotationtoXML(notation: notation, element: notationElement, staff: staffIndex, divisions: divisions)
                     }
-                    
-                    notationElement.addChild(name: "staff", value: "\(index + 1)")
-                    
-                    // Set duration and type
-                    notationElement.addChild(name: "duration", value: "\(notation.type.getDuration(divisions: divisions))")
-                    notationElement.addChild(name: "type", value: notation.type.toString())
                 }
             }
         }
@@ -138,6 +131,62 @@ class Converter {
         print(xmlString)
         
         return xmlString
+    }
+    
+    private static func convertNotationtoXML(notation: MusicNotation, element notationElement: AEXMLElement, staff: Int, divisions: Int) {
+        // Add necessary elements depending on note or rest
+        if let note = notation as? Note {
+            let pitchElement = notationElement.addChild(name: "pitch")
+            pitchElement.addChild(name: "step", value: note.pitch.step.toString())
+            pitchElement.addChild(name: "octave", value: "\(note.pitch.octave)")
+            
+            if let accidental = note.accidental {
+                notationElement.addChild(name: "accidental", value: accidental.toString())
+            }
+            
+        } else if notation is Rest {
+            notationElement.addChild(name: "rest")
+        }
+        
+        // Add dots
+        for _ in 0..<notation.dots {
+            notationElement.addChild(name: "dot")
+        }
+        
+        notationElement.addChild(name: "staff", value: "\(staff)")
+        
+        // Set duration and type
+        notationElement.addChild(name: "duration", value: "\(notation.type.getDuration(divisions: divisions))")
+        notationElement.addChild(name: "type", value: notation.type.toString())
+    }
+    
+    private static func convertXMLToNotation(_ notationElement: AEXMLElement) -> MusicNotation {
+        let type = RestNoteType.convert(notationElement["type"].string)
+        
+        let dots = notationElement["dot"].count
+        
+        if let step = notationElement["pitch"]["step"].value {
+            let pitch = Pitch(step: Step.convert(step),
+                              octave: Int(notationElement["pitch"]["octave"].string)!)
+            
+            if let accidentalString = notationElement["accidental"].value {
+                let accidental = Accidental.convert(accidentalString)
+                let note = Note(pitch: pitch, type: type, accidental: accidental, dots: dots)
+                return note
+            } else {
+                let note = Note(pitch: pitch, type: type, dots: dots)
+                return note
+            }
+            
+        } else {
+            let rest = Rest(type: type, dots: dots)
+            
+            /*if !measures[measureIndex].isAddNoteValid(musicNotation: rest.type) {
+             measureIndex += 1
+             }*/
+            
+            return rest
+        }
     }
     
     static func musicXMLtoComposition(_ xml: String) -> Composition {
@@ -168,9 +217,10 @@ class Converter {
                     previousTimeSignature = TimeSignature(beats: beats, beatType: beatType)
                 }
                 
-                if let tempoString = measureElement["attributes"]["sound"].attributes["tempo"] {
+                if let tempoString = measureElement["sound"].attributes["tempo"] {
                     if let tempo = Double(tempoString) {
                         composition.tempo = tempo
+                        print("Tempo: \(tempo)")
                     }
                 }
                 
@@ -210,33 +260,53 @@ class Converter {
                 // Get notes and/or rests
                 //var measureIndex = 0
                 if let notationElements = measureElement["note"].all {
-                    for notationElement in notationElements {
-                        let type = RestNoteType.convert(notationElement["type"].string)
+                    var i = 0
+                    while i < notationElements.count {
+                        // First notationElement
+                        let notationElement = notationElements[i]
                         
                         let staffNum = Int(notationElement["staff"].string)! - 1
                         let measure = measures[staffNum]
                         
-                        if let step = notationElement["pitch"]["step"].value {
-                            let pitch = Pitch(step: Step.convert(step),
-                                              octave: Int(notationElement["pitch"]["octave"].string)!)
+                        if i < notationElements.count - 1 {
+                            let notationElement1 = notationElements[i]
+                            let notationElement2 = notationElements[i + 1]
                             
-                            if let accidentalString = notationElement["accidental"].value {
-                                let accidental = Accidental.convert(accidentalString)
-                                let note = Note(pitch: pitch, type: type, accidental: accidental)
-                                measure.addToMeasure(note)
+                            if notationElement1["chord"].count == 0 && notationElement2["chord"].count > 0 {
+                                // This means that notationElement1 is the start of the chord
+                                
+                                // Create the array for the notes in the chord
+                                var chordNotes = [convertXMLToNotation(notationElement1),
+                                                  convertXMLToNotation(notationElement2)]
+                                
+                                // Get all the notes that are part of the chord
+                                for j in (i + 1)..<notationElements.count - 1 {
+                                    let newNotationElement = notationElements[j]
+                                    
+                                    if newNotationElement["chord"].count == 0 {
+                                        // Skip the elements that are already part of the chord
+                                        i = j
+                                        break
+                                    } else {
+                                        chordNotes.append(convertXMLToNotation(newNotationElement))
+                                    }
+                                }
+                                
+                                // Get the chord information
+                                let firstNote = chordNotes[0]
+                                let type = firstNote.type
+                                let dots = firstNote.dots
+                                
+                                // Create the chord
+                                let chord = Chord(type: type, measure: measure, notes: chordNotes as! [Note], dots: dots)
+                                measure.add(chord)
                             } else {
-                                let note = Note(pitch: pitch, type: type)
-                                measure.addToMeasure(note)
+                                measure.add(convertXMLToNotation(notationElement))
+                                i += 1
                             }
-
                         } else {
-                            let rest = Rest(type: type)
-                            
-                            /*if !measures[measureIndex].isAddNoteValid(musicNotation: rest.type) {
-                                measureIndex += 1
-                            }*/
-                            
-                            measure.addToMeasure(rest)
+                            measure.add(convertXMLToNotation(notationElement))
+                            i += 1
                         }
                     }
                 }

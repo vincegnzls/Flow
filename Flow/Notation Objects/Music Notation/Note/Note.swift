@@ -22,17 +22,27 @@ class Note: MusicNotation {
     }
     var isUpwards: Bool
     var beamed: Bool
+    var chord: Chord?
+    var ottava: OttavaType?
+    var connection: Connection?
     
     init(screenCoordinates: CGPoint? = nil,
          pitch: Pitch,
          type: RestNoteType,
          measure: Measure? = nil,
-         accidental: Accidental? = nil) {
+         accidental: Accidental? = nil,
+         chord: Chord? = nil,
+         dots: Int = 0,
+         ottava: OttavaType? = nil,
+         connection: Connection? = nil) {
         self.pitch = pitch
         self.accidental = accidental
+        self.ottava = ottava
+        self.connection = connection
         self.isUpwards = true
         self.beamed = false
-        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure)
+        
+        super.init(screenCoordinates: screenCoordinates, type: type, measure: measure, dots: dots)
     }
     
     // Set the image based on the note type and location in the staff
@@ -56,8 +66,9 @@ class Note: MusicNotation {
             }
         }*/
     }
-    
+
     func transposeUp() {
+
         if let clef = self.measure?.clef {
             if clef == .G {
                 if pitch.octave * 8 + pitch.step.rawValue < 51 {
@@ -68,6 +79,10 @@ class Note: MusicNotation {
                     self.pitch.transposeUp()
                 }
             }
+        }
+
+        if let conn = self.connection {
+            conn.updateType()
         }
     }
     
@@ -83,9 +98,33 @@ class Note: MusicNotation {
                 }
             }
         }
+
+        if let conn = self.connection {
+            conn.updateType()
+        }
+    }
+    
+    func convertOttavaPitch() -> Pitch? {
+        if let ottava = self.ottava {
+            if ottava == .eightVa {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave + 1)
+                return newPitch
+            } else if ottava == .eightVb {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave - 1)
+                return newPitch
+            } else if ottava == .fifteenMa {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave + 2)
+                return newPitch
+            } else  if ottava == .fifteenMb {
+                let newPitch = Pitch(step: self.pitch.step, octave: self.pitch.octave - 2)
+                return newPitch
+            }
+        }
+        
+        return nil
     }
 
     override func duplicate() -> Note {
-        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental)
+        return Note(screenCoordinates: self.screenCoordinates, pitch: self.pitch, type: self.type, measure: self.measure, accidental: self.accidental, chord: self.chord, dots: self.dots, ottava: self.ottava, connection: self.connection)
     }
 }

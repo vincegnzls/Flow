@@ -27,10 +27,11 @@ class AddAction: Action {
     }
 
     func execute() {
-        /*for (notation, measure) in zip(notations, measures) {
-            measure.addToMeasure(notation)
-        }*/
-        
+        self.add()
+        UndoRedoManager.instance.addActionToUndoStack(self)
+    }
+    
+    private func add() {
         for notation in self.notations {
             var measureIndex = 0
             
@@ -44,17 +45,27 @@ class AddAction: Action {
             
             let measure = measures[measureIndex]
             
-            measure.addToMeasure(notation)
+            measure.add(notation)
         }
-        
-        EventBroadcaster.instance.postEvent(event: EventNames.CHANGES_MADE)
     }
     
     func undo() {
+        for notation in self.notations {
+            notation.measure?.remove(notation)
+        }
         
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.UNDO)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
     
     func redo() {
+        self.add()
         
+        let params = Parameters()
+        params.put(key: KeyNames.ACTION_DONE, value: self)
+        params.put(key: KeyNames.ACTION_TYPE, value: ActionFunctions.REDO)
+        EventBroadcaster.instance.postEvent(event: EventNames.ACTION_PERFORMED, params: params)
     }
 }

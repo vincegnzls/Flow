@@ -29,13 +29,17 @@ class MusicNotation: Equatable {
         }
     }
     
+    var dots = 0
+    
     init(screenCoordinates: CGPoint? = nil,
          type: RestNoteType,
-         measure: Measure? = nil) {
+         measure: Measure? = nil,
+         dots: Int = 0) {
         self.screenCoordinates = screenCoordinates
         self.type = type
         self.isSelected = false
         self.measure = measure
+        self.dots = dots
         self.setImage()
 
     }
@@ -51,7 +55,7 @@ class MusicNotation: Equatable {
 
 
     func duplicate() -> MusicNotation {
-        return MusicNotation(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure)
+        return MusicNotation(screenCoordinates: self.screenCoordinates, type: self.type, measure: self.measure, dots: self.dots)
     }
     
     static func == (lhs: MusicNotation, rhs: MusicNotation) -> Bool {
@@ -60,25 +64,25 @@ class MusicNotation: Equatable {
 
     func getBaseNotationSpace() -> CGFloat {
 
-        // TODO: adjust this if dotted or with accidentals
-
         let noteHeadWidth = UIImage(named: "quarter-head")!.size.width - 3
 
+        let dotSpace: CGFloat = 5.0 * CGFloat(dots)
+        
         switch type {
             case .whole:
-                return 14 * noteHeadWidth
+                return 7 * noteHeadWidth + dotSpace
             case .half:
-                return 7 * noteHeadWidth
+                return 3.5 * noteHeadWidth + dotSpace
             case .quarter:
-                return 3.5 * noteHeadWidth
+                return 1.75 * noteHeadWidth + dotSpace
             case .eighth:
-                return 1.75 * noteHeadWidth
+                return 0.875 * noteHeadWidth + dotSpace
             case .sixteenth:
-                return 0.875 * noteHeadWidth
+                return 0.4375 * noteHeadWidth + dotSpace
             case .thirtySecond:
-                return 0.4375 * noteHeadWidth
+                return 0.21875 * noteHeadWidth + dotSpace
             case .sixtyFourth:
-                return 0.21875 * noteHeadWidth
+                return 0.109375 * noteHeadWidth + dotSpace
         }
     }
 

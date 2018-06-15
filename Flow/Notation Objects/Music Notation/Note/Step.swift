@@ -15,6 +15,18 @@ enum Step: Int {
     A,
     B
     
+    func toValue() -> Int {
+        switch self {
+        case .C: return 0
+        case .D: return 1
+        case .E: return 2
+        case .F: return 3
+        case .G: return 4
+        case .A: return 5
+        case .B: return 6
+        }
+    }
+    
     func toString() -> String {
         switch self {
         case .C: return "C"
