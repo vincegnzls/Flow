@@ -243,9 +243,26 @@ class MusicSheet: UIView {
                     }
                 }
                 
-                if let coord = selectedNotations.last?.screenCoordinates, let firstCoord = selectedNotations.first?.screenCoordinates {
+                if let last = selectedNotations.last, let first = selectedNotations.first {
+                    
+                    var firstCoord = CGPoint()
+                    var lastCoord = CGPoint()
+                    
+                    if let lastChord = last as? Chord {
+                        lastCoord = (lastChord.notes.first?.screenCoordinates)!
+                    } else {
+                        lastCoord = last.screenCoordinates!
+                    }
+                    
+                    if let firstChord = first as? Chord {
+                        firstCoord = (firstChord.notes.first?.screenCoordinates)!
+                    } else {
+                        firstCoord = first.screenCoordinates!
+                    }
+                    
                     //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                    let frame = CGRect(x: coord.x + 60, y: firstCoord.y - 53, width: 0, height: 0)
+                    print(selectedNotations)
+                    let frame = CGRect(x: lastCoord.x + 60, y: firstCoord.y - 53, width: 0, height: 0)
                     let params = Parameters()
                     params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
                     

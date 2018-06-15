@@ -1466,7 +1466,6 @@ class SoundManager {
         if !self.gNotesMIDI.isEmpty && self.curBeat < self.gNotesMIDI.count {
             if self.gNotesMIDI[self.curBeat].count <= 1 {
                 if let noteNumber = self.gNotesMIDI[self.curBeat][0] {
-                    self.gNotePlayer.stop()
                     
                     self.gNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
                 }
