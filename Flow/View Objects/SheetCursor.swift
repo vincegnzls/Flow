@@ -112,6 +112,24 @@ class SheetCursor : CAShapeLayer {
         curYCursorLocation = location
     }
     
+    public func hideCursorY(){
+        yVisible = false
+        
+        for ledgerLine in ledgerLineGuides {
+            ledgerLine.opacity = 0
+        }
+    }
+    
+    public func showCursorY() {
+        yVisible = true
+        
+        for (index, ledgerLine) in ledgerLineGuides.enumerated() {
+            if ledgerVisibility[index] {
+                ledgerLine.opacity = 1
+            }
+        }
+    }
+    
     public func hideCursors() {
         xVisible = false
         yVisible = false

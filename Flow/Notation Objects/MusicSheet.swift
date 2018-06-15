@@ -16,6 +16,7 @@ enum TranspositionDirection {
 class MusicSheet: UIView {
 
     private let HIGHLIGHTED_NOTES_TAG = 2500
+    private let HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG = 2502
     private let TIME_SIGNATURES_TAG = 2501
     
     private var executeLock = false
@@ -3873,7 +3874,7 @@ class MusicSheet: UIView {
         }
     }
 
-    func highlightNotation(_ notation: MusicNotation) {
+    func highlightNotation(_ notation: MusicNotation, forPlayback: Bool = false) {
         var notationImageView: UIImageView?
 
         var image: UIImage? = nil
@@ -3981,7 +3982,12 @@ class MusicSheet: UIView {
                 notationImageView.image = image
                 notationImageView.image = notationImageView.image!.withRenderingMode(.alwaysTemplate)
                 notationImageView.tintColor = color
-                notationImageView.tag = HIGHLIGHTED_NOTES_TAG
+                
+                if forPlayback {
+                    notationImageView.tag = HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG
+                } else {
+                    notationImageView.tag = HIGHLIGHTED_NOTES_TAG
+                }
 
                 self.addSubview(notationImageView)
             }
@@ -4927,10 +4933,9 @@ class MusicSheet: UIView {
 
     public func play() {
         print("Play")
-
+        
         if !SoundManager.instance.isPlaying {
-            
-            sheetCursor.hideCursors()
+            sheetCursor.hideCursorY()
             
             for view in self.subviews {
                 if view.tag == HIGHLIGHTED_NOTES_TAG {
@@ -4959,9 +4964,42 @@ class MusicSheet: UIView {
             }
         } else {
             SoundManager.instance.stopPlaying()
+            
+            if let gNotation = SoundManager.instance.currentGNotePlaying,
+                let fNotation = SoundManager.instance.currentFNotePlaying {
+                
+                if let gCoord = gNotation.screenCoordinates, let fCoord = fNotation.screenCoordinates {
+                    
+                    if gNotation.type.getBeatValue(dots: gNotation.dots) <= fNotation.type.getBeatValue(dots: fNotation.dots) {
+                        self.remapCurrentMeasure(location: CGPoint(x: gCoord.x + noteXOffset, y: gCoord.y))
+                        self.moveCursorsToNearestSnapPoint(location: CGPoint(x: gCoord.x + noteXOffset, y: gCoord.y))
+                    } else if fNotation.type.getBeatValue(dots: fNotation.dots) <= gNotation.type.getBeatValue(dots: gNotation.dots) {
+                        self.remapCurrentMeasure(location: CGPoint(x: fCoord.x + noteXOffset, y: fCoord.y))
+                        self.moveCursorsToNearestSnapPoint(location: CGPoint(x: fCoord.x + noteXOffset, y: fCoord.y))
+                    }
+                    
+                }
+            }
+            
+            SoundManager.instance.currentGNotePlaying = nil
+            SoundManager.instance.currentFNotePlaying = nil
             playBackTimer.invalidate()
             
             self.enableInteraction()
+            
+            for view in self.subviews {
+                if view.tag == HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG {
+                    view.removeFromSuperview()
+                }
+            }
+            
+            for view in self.subviews {
+                if view.tag == HIGHLIGHTED_NOTES_TAG {
+                    view.isHidden = false
+                }
+            }
+            
+            sheetCursor.showCursorY()
             
         }
 
@@ -4970,25 +5008,65 @@ class MusicSheet: UIView {
     func enableInteraction() {
         self.isUserInteractionEnabled = true
         
-        for view in self.subviews {
-            if view.tag == HIGHLIGHTED_NOTES_TAG {
-                view.isHidden = false
-            }
-        }
-        
-        sheetCursor.showCursors()
+        //sheetCursor.showCursors()
         
         self.playbackHighlightRect.path = nil
     }
 
     @objc
     func updateTime() {
+        
+        for view in self.subviews {
+            if view.tag == HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG {
+                view.removeFromSuperview()
+            }
+        }
+        
+        if let gNotation = SoundManager.instance.currentGNotePlaying,
+            let fNotation = SoundManager.instance.currentFNotePlaying {
+            highlightNotation(gNotation, forPlayback: true)
+            highlightNotation(fNotation, forPlayback: true)
+            
+            if let gCoord = gNotation.screenCoordinates, let fCoord = fNotation.screenCoordinates {
+            
+                if gNotation.type.getBeatValue(dots: gNotation.dots) <= fNotation.type.getBeatValue(dots: fNotation.dots) {
+                    sheetCursor.moveCursorX(location: CGPoint(x: gCoord.x + noteXOffset, y: sheetCursor.curXCursorLocation.y))
+                } else if fNotation.type.getBeatValue(dots: fNotation.dots) <= gNotation.type.getBeatValue(dots: gNotation.dots) {
+                    sheetCursor.moveCursorX(location: CGPoint(x: fCoord.x + noteXOffset, y: sheetCursor.curXCursorLocation.y))
+                }
+                
+            }
+        }
+        
         //TODO: IMPLEMENT PLAYBACK FRONTEND
+        
+        /*var xIterate: CGFloat = 0
 
-        /*let xIterate: CGFloat = CGFloat(SoundManager.instance.tempo / 10)
+        if let noteType = SoundManager.instance.currentNoteTypePlaying {
+            print("currently playing \(noteType.toString())")
+            
+            switch noteType {
+            case .whole:
+                xIterate = CGFloat(SoundManager.instance.tempo / 180)
+            case .half:
+                xIterate = CGFloat(SoundManager.instance.tempo / 150)
+            case .quarter:
+                xIterate = CGFloat(SoundManager.instance.tempo / 120)
+            case .eighth:
+                xIterate = CGFloat(SoundManager.instance.tempo / 90)
+            case .sixteenth:
+                xIterate = CGFloat(SoundManager.instance.tempo / 60)
+            case .thirtySecond:
+                xIterate = CGFloat(SoundManager.instance.tempo / 30)
+            case .sixtyFourth:
+                xIterate = CGFloat(SoundManager.instance.tempo / 6.25)
+            }
+        }
+        
+        //let xIterate: CGFloat = CGFloat(SoundManager.instance.tempo / 10)
 
         sheetCursor.moveCursorX(location: CGPoint(x: sheetCursor.curXCursorLocation.x + xIterate, y: sheetCursor.curXCursorLocation.y))*/
-
+        
     }
 
     private func highlightParallelMeasures(parameters: Parameters) {
@@ -5012,7 +5090,7 @@ class MusicSheet: UIView {
                         let path = CGPath(rect: r, transform: nil)
                         playbackHighlightRect.path = path
 
-                        let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.3)
+                        let highlightColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.2)
                         playbackHighlightRect.fillColor = highlightColor.cgColor
                         
                         self.layer.addSublayer(playbackHighlightRect)

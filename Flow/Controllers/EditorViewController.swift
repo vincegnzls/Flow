@@ -453,19 +453,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                     if let note = note as? Note {
                         SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
-                } else if let hovered = self.musicSheet.hoveredNotation {
-                    //EditAction editAction = EditAction(old: [hovered], new: note)
-                    
-                    GridSystem.instance.recentNotation = note
-                    
-                    self.editNotations(old: [hovered], new: [note])
-
-                    addGrandStaff()
-                    
-                    if let note = note as? Note {
-                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
-                    }
-//                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 } else if let notation = GridSystem.instance.getNoteFromX(x: musicSheet.sheetCursor.curYCursorLocation.x) {
                     // if cursor has a note above or below it, then CREATE CHORD
                     
@@ -526,6 +513,19 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                         SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
                     }
                     
+                } else if let hovered = self.musicSheet.hoveredNotation {
+                    //EditAction editAction = EditAction(old: [hovered], new: note)
+                    
+                    GridSystem.instance.recentNotation = note
+                    
+                    self.editNotations(old: [hovered], new: [note])
+                    
+                    addGrandStaff()
+                    
+                    if let note = note as? Note {
+                        SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
+                    }
+                    //                    EventBroadcaster.instance.postEvent(event: EventNames.MEASURE_UPDATE)
                 } else {
                     
                     // instantiate add action
