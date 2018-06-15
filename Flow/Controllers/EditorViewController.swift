@@ -223,17 +223,28 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.addObserver(event: EventNames.HIDE_RI_VIEW, observer: Observer(id: "EditorViewController.hideRiView", function: self.hideRiView))
         
         
-        EventBroadcaster.instance.removeObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
-        EventBroadcaster.instance.addObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.highlightConnectBtn", function: self.highlightConnectBtn))
+        EventBroadcaster.instance.removeObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "EditorViewController.highlightConnectBtn", function: self.highlightConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.CONNECT_HIGHLIGHT, observer: Observer(id: "EditorViewController.highlightConnectBtn", function: self.highlightConnectBtn))
         
-        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
-        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "MenuBar.removeConnectHighlight", function: self.removeConnectHighlight))
+        EventBroadcaster.instance.removeObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "EditorViewController.removeConnectHighlight", function: self.removeConnectHighlight))
+        EventBroadcaster.instance.addObserver(event: EventNames.REMOVE_CONNECT_HIGHLIGHT, observer: Observer(id: "EditorViewController.removeConnectHighlight", function: self.removeConnectHighlight))
         
-        EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "MenuBar.hideConnectBtn", function: self.hideConnectBtn))
-        EventBroadcaster.instance.addObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "MenuBar.hideConnectBtn", function: self.hideConnectBtn))
+        EventBroadcaster.instance.removeObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "EditorViewController.hideConnectBtn", function: self.hideConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.HIDE_CONNECT_BTN, observer: Observer(id: "EditorViewController.hideConnectBtn", function: self.hideConnectBtn))
         
-        EventBroadcaster.instance.removeObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "MenuBar.showConnectBtn", function: self.showConnectBtn))
-        EventBroadcaster.instance.addObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "MenuBar.showConnectBtn", function: self.showConnectBtn))
+        EventBroadcaster.instance.removeObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "EditorViewController.showConnectBtn", function: self.showConnectBtn))
+        EventBroadcaster.instance.addObserver(event: EventNames.SHOW_CONNECT_BTN, observer: Observer(id: "EditorViewController.showConnectBtn", function: self.showConnectBtn))
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.TOGGLE_TRANSFORM_VIEWS, observer: Observer(id: "EditorViewController.showConnectBtn", function: self.toggleAllTransformViewsVisibility))
+        EventBroadcaster.instance.addObserver(event: EventNames.TOGGLE_TRANSFORM_VIEWS, observer: Observer(id: "EditorViewController.showConnectBtn", function: self.toggleAllTransformViewsVisibility))
+    }
+    
+    func toggleAllTransformViewsVisibility(params: Parameters) {
+        let hidden = params.get(key: KeyNames.TRANSFORM_VIEW_TOGGLE, defaultValue: false)
+        
+        self.transposeView.isHidden = hidden
+        self.riView.isHidden = hidden
+        self.connectBtn.isHidden = hidden
     }
     
     func highlightConnectBtn() {

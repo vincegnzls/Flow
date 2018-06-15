@@ -80,5 +80,7 @@ struct EventNames {
     static let RETROGRADE_INVERSE = "RETROGRADE_INVERSE"
     
     static let HIDE_CONNECT_BTN = "HIDE_CONNECT_BTN"
-    static let SHOW_CONNECT_BTN = "SHOW_CONNECT_BTN" 
+    static let SHOW_CONNECT_BTN = "SHOW_CONNECT_BTN"
+    
+    static let TOGGLE_TRANSFORM_VIEWS = "TOGGLE_TRANSFORM_VIEWS"
 }

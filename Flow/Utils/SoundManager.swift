@@ -894,7 +894,7 @@ class SoundManager {
             }
         }
         
-        if !self.fNotesMIDI.isEmpty && self.curBeat < self.fNotesMIDI.count {
+        /*if !self.fNotesMIDI.isEmpty && self.curBeat < self.fNotesMIDI.count {
             if self.fNotesMIDI[self.curBeat].count <= 1 {
                 if let noteNumber = self.fNotesMIDI[self.curBeat][0] {
                     self.fNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
@@ -920,11 +920,11 @@ class SoundManager {
                     }
                 }
             }
-        }
+        }*/
         
         self.curBeat += 1
         
-        if self.curBeat > self.gNotesMIDI.count + 5 && self.curBeat > self.fNotesMIDI.count + 5 {
+        if self.curBeat > self.gNotesMIDI.count + 5 {
             self.timer.invalidate()
             self.isPlaying = false
         }
@@ -1357,10 +1357,20 @@ class SoundManager {
         }
         currentMeasurePlaying = nil
         EventBroadcaster.instance.postEvent(event: EventNames.STOP_PLAYBACK)
+        
+        let params = Parameters()
+        params.put(key: KeyNames.TRANSFORM_VIEW_TOGGLE, value: false)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_TRANSFORM_VIEWS, params: params)
     }
     
     func musicPlayback(_ composition: Composition){
         self.stopPlaying()
+        
+        let params = Parameters()
+        params.put(key: KeyNames.TRANSFORM_VIEW_TOGGLE, value: true)
+        
+        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_TRANSFORM_VIEWS, params: params)
         //self.timer.invalidate()
         self.tempo = composition.tempo
         
@@ -1456,6 +1466,8 @@ class SoundManager {
         if !self.gNotesMIDI.isEmpty && self.curBeat < self.gNotesMIDI.count {
             if self.gNotesMIDI[self.curBeat].count <= 1 {
                 if let noteNumber = self.gNotesMIDI[self.curBeat][0] {
+                    self.gNotePlayer.stop()
+                    
                     self.gNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
                 }
             } else {

@@ -46,4 +46,6 @@ struct KeyNames {
     static let TRANSPOSE = "TRANSPOSE"
     
     static let RETROGRADE_INVERSE = "RETROGRADE_INVERSE"
+    
+    static let TRANSFORM_VIEW_TOGGLE = "TRANSFORM_VIEW_TOGGLE"
 }
