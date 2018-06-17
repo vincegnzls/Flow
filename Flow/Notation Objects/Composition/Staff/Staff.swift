@@ -12,6 +12,14 @@ class Staff {
 
     var measures: [Measure]
     
+    var clef: Clef {
+        if measures.count > 0 {
+            return measures[0].clef
+        } else {
+            return Clef.G
+        }
+    }
+    
     init(measures: [Measure] = []) {
         self.measures = measures
     }

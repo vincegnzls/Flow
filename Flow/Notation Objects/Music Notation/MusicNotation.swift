@@ -85,5 +85,9 @@ class MusicNotation: Equatable {
                 return 0.109375 * noteHeadWidth + dotSpace
         }
     }
+    
+    func getBeatValue() -> Float {
+        return self.type.getBeatValue(dots: self.dots)
+    }
 
 }

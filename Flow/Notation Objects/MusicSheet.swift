@@ -4854,7 +4854,6 @@ class MusicSheet: UIView {
 
     public func copy() {
         self.superview!.hideAllToasts()
-        print("Copy")
         if !self.selectedNotations.isEmpty {
             Clipboard.instance.copy(self.selectedNotations)
             self.superview!.makeToast("Copied notations", duration: 1.5, position: .bottom, image: UIImage(named: "copy-icon-white"))
@@ -4871,7 +4870,6 @@ class MusicSheet: UIView {
 
     public func cut() {
         self.superview!.hideAllToasts()
-        print("Cut")
         if !self.selectedNotations.isEmpty {
             Clipboard.instance.cut(self.selectedNotations)
             self.selectedNotations.removeAll()
@@ -4895,52 +4893,115 @@ class MusicSheet: UIView {
     public func paste() {
         selectedNotations.removeAll()
         
-        print("Paste")
         var measures = [Measure]()
+        
+        var startGIndex: Int?
+        var startFIndex: Int?
+        
         if !self.selectedNotations.isEmpty {
             for notation in self.selectedNotations {
                 if let measure = notation.measure {
                     if !measures.contains(measure) {
+                        if measure.clef == .G && startGIndex == nil {
+                            startGIndex = measure.notationObjects.index(of: notation)!
+                        } else if measure.clef == .F && startFIndex == nil {
+                            startFIndex = measure.notationObjects.index(of: notation)!
+                        }
+                        
                         measures.append(measure)
                     }
                 }
             }
             
-            let startMeasure = measures[0]
-            let firstNotation = self.selectedNotations[0]
-            if let startIndex = startMeasure.notationObjects.index(of: firstNotation) {
-                Clipboard.instance.paste(measures: measures, at: startIndex)
-                
-                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
-            }
+//            let startMeasure = measures[0]
+//            let firstNotation = self.selectedNotations[0]
+//            if let startIndex = startMeasure.notationObjects.index(of: firstNotation) {
+//
+//            }
+            
+            Clipboard.instance.paste(measures: measures, atG: startGIndex, atF: startFIndex)
+            
+            EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
             
         } else if let selectedMeasure = GridSystem.instance.getCurrentMeasure() {
+            var startIndex: Int?
+            var startGMeasure: Measure?
+            var startFMeasure: Measure?
+            
             if let staves = self.composition?.staffList {
                 for staff in staves {
-                    if let startIndex = staff.measures.index(of: selectedMeasure) {
-                        measures = Array(staff.measures[startIndex...])
+                    if let start = staff.measures.index(of: selectedMeasure) {
+                        startIndex = start
+                        //measures = Array(staff.measures[startIndex...])
+                    }
+                }
+                
+                for staff in staves {
+                    if let start = startIndex {
+                        let measure = staff.measures[start]
+                        if measure.clef == .G {
+                            startGMeasure = measure
+                        } else {
+                            startFMeasure = measure
+                        }
+                        measures.append(contentsOf: Array(staff.measures[start...]))
                     }
                 }
             }
             
-            let startMeasure = measures[0]
             if let hovered = self.hoveredNotation ?? GridSystem.instance.getNoteFromX(x: sheetCursor.curYCursorLocation.x) {
-                if let startIndex = startMeasure.notationObjects.index(of: hovered) {
-                    Clipboard.instance.paste(measures: measures, at: startIndex)
+                var item = hovered
+                if let note = hovered as? Note, let chord = note.chord {
+                    item = chord
+                }
+                if let startNoteIndex = selectedMeasure.notationObjects.index(of: item) {
+                    var findClef = Clef.G
+                    var size = 0
+                    if selectedMeasure.clef == .G {
+                        startGIndex = startNoteIndex
+                        size = selectedMeasure.notationObjects.startIndex.distance(to: startNoteIndex)
+                        findClef = .F
+                    } else {
+                        startFIndex = startNoteIndex
+                        size = selectedMeasure.notationObjects.startIndex.distance(to: startNoteIndex)
+                    }
                     
-                    EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
-                } else if let note = hovered as? Note, let chord = note.chord {
+                    // Get start index of the other staff
+                    if let staves = self.composition?.staffList, let start = startIndex {
+                        for staff in staves {
+                            if staff.clef == findClef {
+                                let measure = staff.measures[start]
+                                
+                                if measure.notationObjects.count > size {
+                                    if findClef == .G {
+                                        startGIndex = size
+                                    } else {
+                                        startFIndex = size
+                                    }
+                                } else {
+                                    if findClef == .G {
+                                        startGIndex = measure.notationObjects.count - 1
+                                    } else {
+                                        startFIndex = measure.notationObjects.count - 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    Clipboard.instance.paste(measures: measures, atG: startGIndex, atF: startFIndex)
+                    
+                } /*else if let note = hovered as? Note, let chord = note.chord {
                     if let startIndex = startMeasure.notationObjects.index(of: chord) {
                         Clipboard.instance.paste(measures: measures, at: startIndex)
                         
-                        EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
                     }
-                }
+                }*/
             } else {
-                Clipboard.instance.paste(measures: measures, at: startMeasure.notationObjects.count)
-                
-                EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
+                Clipboard.instance.paste(measures: measures, atG: startGMeasure?.notationObjects.count, atF: startFMeasure?.notationObjects.count)
             }
+            
+            EventBroadcaster.instance.postEvent(event: EventNames.ADD_GRAND_STAFF)
         }
         
         self.updateMeasureDraw()
