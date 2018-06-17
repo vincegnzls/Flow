@@ -83,6 +83,7 @@ class Note: MusicNotation {
 
         if let conn = self.connection {
             conn.updateType()
+            print("UPDATE CONN: \(conn.type)")
         }
     }
     
@@ -101,6 +102,7 @@ class Note: MusicNotation {
 
         if let conn = self.connection {
             conn.updateType()
+            print("UPDATE CONN: \(conn.type)")
         }
     }
     

@@ -24,15 +24,22 @@ class SoundManager {
     var gNotesMIDI: [[Int?]]
     var fNotesMIDI: [[Int?]]
     
+    var gNotesType: [[RestNoteType?]]
+    var fNotesType: [[RestNoteType?]]
+    
+    var gNotesConnType: [[ConnectionType?]]
+    var fNotesConnType: [[ConnectionType?]]
+    
     var gNotes: [MusicNotation]
     var fNotes: [MusicNotation]
 
     var compMeasures: [Measure]
     
-    let gNotePlayer: AKSampler
-    let fNotePlayer: AKSampler
+    var gNotePlayer: AKSampler
+    var fNotePlayer: AKSampler
     
-    var grandStaffMixer: AKMixer
+    var grandStaffMixerG: AKMixer
+    var grandStaffMixerF: AKMixer
     
     var curBeat: Int
     
@@ -41,26 +48,31 @@ class SoundManager {
         self.isPlaying = false
         self.gNotesMIDI = [[Int?]]()
         self.fNotesMIDI = [[Int?]]()
+        self.gNotesType = [[RestNoteType?]]()
+        self.fNotesType = [[RestNoteType?]]()
+        self.gNotesConnType = [[ConnectionType?]]()
+        self.fNotesConnType = [[ConnectionType?]]()
         self.gNotes = [MusicNotation]()
         self.fNotes = [MusicNotation]()
         self.compMeasures = [Measure]()
         self.curBeat = 0
         self.gNotePlayer = AKSampler()
         self.fNotePlayer = AKSampler()
-        self.grandStaffMixer = AKMixer()
+        self.grandStaffMixerG = AKMixer()
+        self.grandStaffMixerF = AKMixer()
         self.setup()
     }
     
     func setup() {
-        self.grandStaffMixer = AKMixer(self.fNotePlayer, self.gNotePlayer)
-        self.grandStaffMixer.volume = 2.0
-        AudioKit.output = self.grandStaffMixer
+        self.grandStaffMixerG = AKMixer()
+        self.grandStaffMixerG.volume = 2.0
+        AudioKit.output = self.grandStaffMixerG
     }
     
     func loadSound () {
         do{
-            try self.gNotePlayer.loadWav("Support Objects/Grand Piano")
-            try self.fNotePlayer.loadWav("Support Objects/Grand Piano")
+            try self.gNotePlayer.loadWav("Support Objects/Grand Piano-trimmed")
+            try self.fNotePlayer.loadWav("Support Objects/Grand Piano-trimmed")
         } catch {
             return
         }
@@ -70,18 +82,23 @@ class SoundManager {
         print("MIDI Piano Note")
 
         let FMPiano = AKSampler()
+        self.grandStaffMixerG.stop()
+        let mixer = AKMixer()
+        
+        mixer.volume = 2.0
+        mixer.connect(input: FMPiano)
         
         FMPiano.volume = 2.0
 
         do{
-            try FMPiano.loadWav("Support Objects/Grand Piano")
+            try FMPiano.loadWav("Support Objects/Grand Piano-tailed")
             print("WAV Loaded")
         }catch{
             AKLog("File not found")
             return
         }
 
-        AudioKit.output = FMPiano
+        AudioKit.output = mixer
         do{
             try AudioKit.start()
         }catch let error as NSError{
@@ -833,35 +850,237 @@ class SoundManager {
         return notePlayer
     }
     
-    func playNotations(notations: [MusicNotation], tempo: Double) {
-        self.timer.invalidate()
-        self.tempo = tempo
-        self.loadSound()
+    func addNotationConnType(notation: MusicNotation) -> [[ConnectionType?]] {
         
-        self.gNotesMIDI = preProcessNotations(notations: notations)
-        //self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
+        var connType = [[ConnectionType?]]()
         
-        do {
-            try AudioKit.start()
-        } catch let error as NSError{
-            print(error.debugDescription)
-        }
+        var x = self.getDurationOfNote(notation: notation)
         
-        self.curBeat = 0
-        
-        if #available(iOS 10.0, *) {
-            self.timer = Timer.scheduledTimer(withTimeInterval: 60 / tempo * 0.0078125, repeats: true) {_ in
-                self.updateTime2()
+        if let note = notation as? Note, let conn = note.connection, let connNotes = conn.notes {
+            if conn.type == .tie {
+                x = 0
+                
+                for noteConn in connNotes {
+                    x += getDurationOfNote(notation: noteConn)
+                }
             }
-        } else {
-            self.timer = Timer.scheduledTimer(timeInterval: 60 / tempo * 0.0078125,
-                                              target: self,
-                                              selector: #selector(self.updateTime2),
-                                              userInfo: nil,
-                                              repeats: true)
+        } else if let chord = notation as? Chord {
+            
+            var allTies = true
+            var nextDuration = 0
+            
+            for note in chord.notes {
+                if let connection = note.connection {
+                    
+                    if connection.type == .slur {
+                        allTies = false
+                    }
+                    
+                    if let connNotes = connection.notes {
+                        for note in connNotes {
+                            nextDuration += getDurationOfNote(notation: note)
+                        }
+                    }
+                    
+                } else {
+                    allTies = false
+                }
+            }
+            
+            if allTies {
+                x += nextDuration
+            }
+            
         }
         
-        RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
+        for beat in 0..<x {
+            if let note = notation as? Note {
+                if let conn = note.connection, let notes = conn.notes, let first = notes.first {
+                    if beat >= 1 {
+                        //print("Note Added. Adding the Trailing 0s")
+                        connType.append([nil])
+                    } else {
+                        connType.append([note.connection?.type])
+                    }
+                } else {
+                    if beat >= 1 {
+                        //print("Note Added. Adding the Trailing 0s")
+                        connType.append([nil])
+                    } else {
+                        connType.append([note.connection?.type])
+                    }
+                }
+            } else if let chord = notation as? Chord {
+                if beat >= 1 {
+                    //print("Note Added. Adding the Trailing 0s")
+                    connType.append([nil])
+                } else {
+                    var n = [ConnectionType?]()
+                    
+                    for note in chord.notes {
+                        n.append(note.connection?.type)
+                    }
+                    
+                    connType.append(n)
+                }
+            } else {
+                connType.append([nil])
+            }
+        }
+        
+        return connType
+    }
+    
+    func addNotationType(notation: MusicNotation) -> [[RestNoteType?]] {
+        
+        var noteType = [[RestNoteType?]]()
+        
+        var x = self.getDurationOfNote(notation: notation)
+        
+        if let note = notation as? Note, let conn = note.connection, let connNotes = conn.notes {
+            if conn.type == .tie {
+                x = 0
+                
+                for noteConn in connNotes {
+                    x += getDurationOfNote(notation: noteConn)
+                }
+            }
+        } else if let chord = notation as? Chord {
+            
+            var allTies = true
+            var nextDuration = 0
+            
+            for note in chord.notes {
+                if let connection = note.connection {
+                    
+                    if connection.type == .slur {
+                        allTies = false
+                    }
+                    
+                    if let connNotes = connection.notes {
+                        for note in connNotes {
+                            nextDuration += getDurationOfNote(notation: note)
+                        }
+                    }
+                    
+                } else {
+                    allTies = false
+                }
+            }
+            
+            if allTies {
+                x += nextDuration
+            }
+            
+        }
+        
+        for beat in 0..<x {
+            if let note = notation as? Note {
+                if let conn = note.connection, let notes = conn.notes, let first = notes.first {
+                    if beat >= 1 {
+                        //print("Note Added. Adding the Trailing 0s")
+                        noteType.append([nil])
+                    } else {
+                        noteType.append([note.type])
+                    }
+                } else {
+                    if beat >= 1 {
+                        //print("Note Added. Adding the Trailing 0s")
+                        noteType.append([nil])
+                    } else {
+                        noteType.append([note.type])
+                    }
+                }
+            } else if let chord = notation as? Chord {
+                if beat >= 1 {
+                    //print("Note Added. Adding the Trailing 0s")
+                    noteType.append([nil])
+                } else {
+                    var n = [RestNoteType?]()
+                    
+                    for note in chord.notes {
+                        n.append(note.type)
+                    }
+                    
+                    noteType.append(n)
+                }
+            } else {
+                noteType.append([nil])
+            }
+        }
+        
+        return noteType
+    }
+    
+    func playNotations(notations: [MusicNotation], tempo: Double) {
+        
+        if notations.count > 1 {
+            self.timer.invalidate()
+            self.grandStaffMixerG.stop()
+            self.grandStaffMixerF.stop()
+            self.tempo = tempo
+            self.loadSound()
+            
+            self.gNotesMIDI = preProcessNotations(notations: notations)
+            //self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
+            
+            do {
+                try AudioKit.start()
+            } catch let error as NSError{
+                print(error.debugDescription)
+            }
+            
+            self.curBeat = 0
+            
+            if #available(iOS 10.0, *) {
+                self.timer = Timer.scheduledTimer(withTimeInterval: 60 / tempo * 0.0078125, repeats: true) {_ in
+                    self.updateTime2()
+                }
+            } else {
+                self.timer = Timer.scheduledTimer(timeInterval: 60 / tempo * 0.0078125,
+                                                  target: self,
+                                                  selector: #selector(self.updateTime2),
+                                                  userInfo: nil,
+                                                  repeats: true)
+            }
+            
+            RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
+        } else {
+            if let note = notations[0] as? Note {
+                if let keySig = note.measure?.keySignature {
+                    self.playNote(note: note, keySignature: keySig)
+                }
+            } else {
+                self.timer.invalidate()
+                self.tempo = tempo
+                self.loadSound()
+                
+                self.gNotesMIDI = preProcessNotations(notations: notations)
+                //self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
+                
+                do {
+                    try AudioKit.start()
+                } catch let error as NSError{
+                    print(error.debugDescription)
+                }
+                
+                self.curBeat = 0
+                
+                if #available(iOS 10.0, *) {
+                    self.timer = Timer.scheduledTimer(withTimeInterval: 60 / tempo * 0.0078125, repeats: true) {_ in
+                        self.updateTime2()
+                    }
+                } else {
+                    self.timer = Timer.scheduledTimer(timeInterval: 60 / tempo * 0.0078125,
+                                                      target: self,
+                                                      selector: #selector(self.updateTime2),
+                                                      userInfo: nil,
+                                                      repeats: true)
+                }
+                
+                RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
+            }
+        }
     }
     
     @objc
@@ -869,23 +1088,61 @@ class SoundManager {
         if !self.gNotesMIDI.isEmpty && self.curBeat < self.gNotesMIDI.count {
             if self.gNotesMIDI[self.curBeat].count <= 1 {
                 if let noteNumber = self.gNotesMIDI[self.curBeat][0] {
+                    
+                    self.grandStaffMixerG = AKMixer()
+                    self.grandStaffMixerG.volume = 2.0
+                    AudioKit.output = self.grandStaffMixerG
+                    
+                    self.gNotePlayer = AKSampler()
+                    self.gNotePlayer.volume = 2.0
+                    
+                    if self.gNotesType[self.curBeat][0] == .whole || self.gNotesType[self.curBeat][0] == .half || self.gNotesConnType[self.curBeat][0] == .slur {
+                        do{
+                            try self.gNotePlayer.loadWav("Support Objects/Grand Piano-long")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano")
+                        } catch {
+                            return
+                        }
+                    } else {
+                        do{
+                            try self.gNotePlayer.loadWav("Support Objects/Grand Piano-tailed")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano-trimmed")
+                        } catch {
+                            return
+                        }
+                    }
+                    
+                    self.grandStaffMixerG.connect(self.gNotePlayer)
+                    
                     self.gNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
                 }
             } else {
-                self.grandStaffMixer = AKMixer()
-                self.grandStaffMixer.volume = 2.0
-                AudioKit.output = self.grandStaffMixer
+                self.grandStaffMixerG.stop()
+                self.grandStaffMixerG = AKMixer()
+                self.grandStaffMixerG.volume = 2.0
+                AudioKit.output = self.grandStaffMixerG
                 
                 for i in gNotesMIDI[self.curBeat] {
                     let player = AKSampler()
+                    player.volume = 2.0
                     
-                    do{
-                        try player.loadWav("Support Objects/Grand Piano")
-                    } catch {
-                        return
+                    if self.gNotesType[self.curBeat][0] == .whole || self.gNotesType[self.curBeat][0] == .half || self.gNotesConnType[self.curBeat][0] == .slur {
+                        do{
+                            try player.loadWav("Support Objects/Grand Piano-long")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano")
+                        } catch {
+                            return
+                        }
+                    } else {
+                        do{
+                            try player.loadWav("Support Objects/Grand Piano-tailed")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano-trimmed")
+                        } catch {
+                            return
+                        }
                     }
                     
-                    self.grandStaffMixer.connect(player)
+                    self.grandStaffMixerG.connect(player)
                     
                     if let n = i {
                         player.play(noteNumber: MIDINoteNumber(n))
@@ -935,6 +1192,10 @@ class SoundManager {
     }
     
     func preProcessNotations(notations: [MusicNotation]) -> [[Int?]] {
+        
+        self.gNotesType.removeAll()
+        self.gNotesConnType.removeAll()
+        
         var staffPlayer = [[Int?]]()
         var modifiedChord: Chord?
         
@@ -946,6 +1207,8 @@ class SoundManager {
                 if let first = notes.first {
                     if note == first {
                         staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: (notation.measure?.keySignature)!))
+                        self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                        self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
                         
                         if conn.type == .tie {
                             
@@ -958,6 +1221,8 @@ class SoundManager {
                         
                     } else if conn.type == .slur {
                         staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: (notation.measure?.keySignature)!))
+                        self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                        self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
                     }
                 }
             } else if let chord = notation as? Chord {
@@ -971,12 +1236,16 @@ class SoundManager {
                     
                     if dupliChord.notes.count > 0 {
                         staffPlayer.append(contentsOf: addNotation(notation: dupliChord, keySignature: (notation.measure?.keySignature)!))
+                        self.gNotesType.append(contentsOf: addNotationType(notation: dupliChord))
+                        self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
                     }
                     
                     skipPitches.removeAll()
                     
                 } else {
                     staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: (notation.measure?.keySignature)!))
+                    self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                    self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
                 }
                 
                 for note in chord.notes {
@@ -1005,6 +1274,8 @@ class SoundManager {
                 
             } else {
                 staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: (notation.measure?.keySignature)!))
+                self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
                 
                 if skipPitches.count > 0 {
                     skipPitches.removeAll()
@@ -1018,6 +1289,14 @@ class SoundManager {
     func preProcessStaffFrom(startingMeasureIndex: Int, startingNoteIndex: Int, staff: Staff, clef: Clef) -> [[Int?]] {
         var staffPlayer = [[Int?]]()
         var modifiedChord: Chord?
+        
+        if clef == .G {
+            self.gNotesType.removeAll()
+            self.gNotesConnType.removeAll()
+        } else if clef == .F {
+            self.fNotesType.removeAll()
+            self.fNotesConnType.removeAll()
+        }
         
         var skipPitches = [Pitch]()
         
@@ -1042,6 +1321,14 @@ class SoundManager {
                             staffPlayer.append(contentsOf: addNotation)
                             
                             if clef == .G {
+                                self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                                self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                            } else if clef == .F {
+                                self.fNotesType.append(contentsOf: addNotationType(notation: notation))
+                                self.fNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                            }
+                            
+                            if clef == .G {
                                 for _ in 0..<addNotation.count {
                                     gNotes.append(notation)
                                 }
@@ -1063,6 +1350,14 @@ class SoundManager {
                         } else if conn.type == .slur {
                             let addNotation = self.addNotation(notation: notation, keySignature: measure.keySignature)
                             staffPlayer.append(contentsOf: addNotation)
+                            
+                            if clef == .G {
+                                self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                                self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                            } else if clef == .F {
+                                self.fNotesType.append(contentsOf: addNotationType(notation: notation))
+                                self.fNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                            }
                             
                             if clef == .G {
                                 for _ in 0..<addNotation.count {
@@ -1089,6 +1384,14 @@ class SoundManager {
                             staffPlayer.append(contentsOf: addNotation)
                             
                             if clef == .G {
+                                self.gNotesType.append(contentsOf: addNotationType(notation: dupliChord))
+                                self.gNotesConnType.append(contentsOf: addNotationConnType(notation: dupliChord))
+                            } else if clef == .F {
+                                self.fNotesType.append(contentsOf: addNotationType(notation: dupliChord))
+                                self.fNotesConnType.append(contentsOf: addNotationConnType(notation: dupliChord))
+                            }
+                            
+                            if clef == .G {
                                 for _ in 0..<addNotation.count {
                                     gNotes.append(notation)
                                 }
@@ -1104,6 +1407,14 @@ class SoundManager {
                     } else {
                         let addNotation = self.addNotation(notation: notation, keySignature: measure.keySignature)
                         staffPlayer.append(contentsOf: addNotation)
+                        
+                        if clef == .G {
+                            self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                            self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                        } else if clef == .F {
+                            self.fNotesType.append(contentsOf: addNotationType(notation: notation))
+                            self.fNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                        }
                         
                         if clef == .G {
                             for _ in 0..<addNotation.count {
@@ -1145,6 +1456,14 @@ class SoundManager {
                     staffPlayer.append(contentsOf: addNotation)
                     
                     if clef == .G {
+                        self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                        self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                    } else if clef == .F {
+                        self.fNotesType.append(contentsOf: addNotationType(notation: notation))
+                        self.fNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                    }
+                    
+                    if clef == .G {
                         for _ in 0..<addNotation.count {
                             gNotes.append(notation)
                         }
@@ -1169,6 +1488,14 @@ class SoundManager {
         var staffPlayer = [[Int?]]()
         var modifiedChord: Chord?
         
+        if staff.measures[0].clef == .G {
+            self.gNotesType.removeAll()
+            self.gNotesConnType.removeAll()
+        } else if staff.measures[0].clef == .F {
+            self.fNotesType.removeAll()
+            self.fNotesConnType.removeAll()
+        }
+        
         var skipPitches = [Pitch]()
 
         for measure in staff.measures {
@@ -1178,6 +1505,14 @@ class SoundManager {
                     if let first = notes.first {
                         if note == first {
                             staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                            
+                            if measure.clef == .G {
+                                self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                                self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                            } else if measure.clef == .F {
+                                self.fNotesType.append(contentsOf: addNotationType(notation: notation))
+                                self.fNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                            }
                             
                             if conn.type == .tie {
                                 
@@ -1190,6 +1525,14 @@ class SoundManager {
                             
                         } else if conn.type == .slur {
                             staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                            
+                            if measure.clef == .G {
+                                self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                                self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                            } else if measure.clef == .F {
+                                self.fNotesType.append(contentsOf: addNotationType(notation: notation))
+                                self.fNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                            }
                         }
                     }
                 } else if let chord = notation as? Chord {
@@ -1203,12 +1546,28 @@ class SoundManager {
                         
                         if dupliChord.notes.count > 0 {
                             staffPlayer.append(contentsOf: addNotation(notation: dupliChord, keySignature: measure.keySignature))
+                            
+                            if measure.clef == .G {
+                                self.gNotesType.append(contentsOf: addNotationType(notation: dupliChord))
+                                self.gNotesConnType.append(contentsOf: addNotationConnType(notation: dupliChord))
+                            } else if measure.clef == .F {
+                                self.fNotesType.append(contentsOf: addNotationType(notation: dupliChord))
+                                self.fNotesConnType.append(contentsOf: addNotationConnType(notation: dupliChord))
+                            }
                         }
                         
                         skipPitches.removeAll()
                        
                     } else {
                         staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                        
+                        if measure.clef == .G {
+                            self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                            self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                        } else if measure.clef == .F {
+                            self.fNotesType.append(contentsOf: addNotationType(notation: notation))
+                            self.fNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                        }
                     }
                     
                     for note in chord.notes {
@@ -1237,6 +1596,14 @@ class SoundManager {
                     
                 } else {
                     staffPlayer.append(contentsOf: addNotation(notation: notation, keySignature: measure.keySignature))
+                    
+                    if measure.clef == .G {
+                        self.gNotesType.append(contentsOf: addNotationType(notation: notation))
+                        self.gNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                    } else if measure.clef == .F {
+                        self.fNotesType.append(contentsOf: addNotationType(notation: notation))
+                        self.fNotesConnType.append(contentsOf: addNotationConnType(notation: notation))
+                    }
                     
                     if skipPitches.count > 0 {
                         skipPitches.removeAll()
@@ -1348,6 +1715,8 @@ class SoundManager {
 
     func stopPlaying() {
         self.timer.invalidate()
+        self.grandStaffMixerG.stop()
+        self.grandStaffMixerF.stop()
         do {
             /*try AudioKit.stop()
             gNotePlayer.stop()
@@ -1395,6 +1764,8 @@ class SoundManager {
         
             self.gNotesMIDI = preProcessStaffFrom(startingMeasureIndex: currentMeasureIndex, startingNoteIndex: currentNoteIndex, staff: composition.staffList[0], clef: Clef.G)
             self.fNotesMIDI = preProcessStaffFrom(startingMeasureIndex: currentMeasureIndex, startingNoteIndex: currentNoteIndex, staff: composition.staffList[1], clef: Clef.F)
+            
+            print("NOTES TYPE COUNT: \(self.gNotesType.count)")
             
         } else {
             self.gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
@@ -1464,26 +1835,66 @@ class SoundManager {
         }
         
         if !self.gNotesMIDI.isEmpty && self.curBeat < self.gNotesMIDI.count {
+            //print("NOTES TYPE COUNT: \(self.gNotesType.count)")
             if self.gNotesMIDI[self.curBeat].count <= 1 {
                 if let noteNumber = self.gNotesMIDI[self.curBeat][0] {
+                    
+                    
+                    self.grandStaffMixerG = AKMixer()
+                    self.grandStaffMixerG.volume = 2.0
+                    AudioKit.output = self.grandStaffMixerG
+                    
+                    self.gNotePlayer = AKSampler()
+                    self.gNotePlayer.volume = 2.0
+                    
+                    if self.gNotesType[self.curBeat][0] == .whole || self.gNotesType[self.curBeat][0] == .half || self.gNotesConnType[self.curBeat][0] == .slur {
+                        do{
+                            
+                            try self.gNotePlayer.loadWav("Support Objects/Grand Piano-long")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano")
+                        } catch {
+                            return
+                        }
+                    } else {
+                        do{
+                            try self.gNotePlayer.loadWav("Support Objects/Grand Piano-tailed")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano-trimmed")
+                        } catch {
+                            return
+                        }
+                    }
+
+                    self.grandStaffMixerG.connect(self.gNotePlayer)
                     
                     self.gNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
                 }
             } else {
-                self.grandStaffMixer = AKMixer()
-                self.grandStaffMixer.volume = 2.0
-                AudioKit.output = self.grandStaffMixer
+                self.grandStaffMixerG.stop()
+                self.grandStaffMixerG = AKMixer()
+                self.grandStaffMixerG.volume = 2.0
+                AudioKit.output = self.grandStaffMixerG
 
                 for i in gNotesMIDI[self.curBeat] {
                     var player = AKSampler()
-
-                    do{
-                        try player.loadWav("Support Objects/Grand Piano")
-                    } catch {
-                        return
+                    player.volume = 2.0
+                    
+                    if self.gNotesType[self.curBeat][0] == .whole || self.gNotesType[self.curBeat][0] == .half || self.gNotesConnType[self.curBeat][0] == .slur {
+                        do{
+                            try player.loadWav("Support Objects/Grand Piano-long")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano")
+                        } catch {
+                            return
+                        }
+                    } else {
+                        do{
+                            try player.loadWav("Support Objects/Grand Piano-tailed")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano-trimmed")
+                        } catch {
+                            return
+                        }
                     }
 
-                    self.grandStaffMixer.connect(player)
+                    self.grandStaffMixerG.connect(player)
 
                     if let n = i {
                         player.play(noteNumber: MIDINoteNumber(n))
@@ -1493,25 +1904,65 @@ class SoundManager {
         }
         
         if !self.fNotesMIDI.isEmpty && self.curBeat < self.fNotesMIDI.count {
+            
             if self.fNotesMIDI[self.curBeat].count <= 1 {
                 if let noteNumber = self.fNotesMIDI[self.curBeat][0] {
+                    
+                    
+                    self.grandStaffMixerF = AKMixer()
+                    self.grandStaffMixerF.volume = 2.0
+                    AudioKit.output = self.grandStaffMixerF
+                    
+                    self.fNotePlayer = AKSampler()
+                    self.fNotePlayer.volume = 2.0
+                    
+                    if self.fNotesType[self.curBeat][0] == .whole || self.fNotesType[self.curBeat][0] == .half || self.fNotesConnType[self.curBeat][0] == .slur {
+                        do{
+                            try self.fNotePlayer.loadWav("Support Objects/Grand Piano-long")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano")
+                        } catch {
+                            return
+                        }
+                    } else {
+                        do{
+                            try self.fNotePlayer.loadWav("Support Objects/Grand Piano-tailed")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano-trimmed")
+                        } catch {
+                            return
+                        }
+                    }
+                    
+                    self.grandStaffMixerF.connect(self.fNotePlayer)
+                    
                     self.fNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
                 }
             } else {
-                self.grandStaffMixer = AKMixer()
-                self.grandStaffMixer.volume = 2.0
-                AudioKit.output = self.grandStaffMixer
+                self.grandStaffMixerF.stop()
+                self.grandStaffMixerF = AKMixer()
+                self.grandStaffMixerF.volume = 2.0
+                AudioKit.output = self.grandStaffMixerF
 
                 for i in fNotesMIDI[self.curBeat] {
                     var player = AKSampler()
-
-                    do{
-                        try player.loadWav("Support Objects/Grand Piano")
-                    } catch {
-                        return
+                    player.volume = 2.0
+                    
+                    if self.fNotesType[self.curBeat][0] == .whole || self.fNotesType[self.curBeat][0] == .half || self.fNotesConnType[self.curBeat][0] == .slur {
+                        do{
+                            try player.loadWav("Support Objects/Grand Piano-long")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano")
+                        } catch {
+                            return
+                        }
+                    } else {
+                        do{
+                            try player.loadWav("Support Objects/Grand Piano-tailed")
+                            //try self.fNotePlayer.loadWav("Support Objects/Grand Piano-trimmed")
+                        } catch {
+                            return
+                        }
                     }
 
-                    self.grandStaffMixer.connect(player)
+                    self.grandStaffMixerF.connect(player)
 
                     if let n = i {
                         player.play(noteNumber: MIDINoteNumber(n))
