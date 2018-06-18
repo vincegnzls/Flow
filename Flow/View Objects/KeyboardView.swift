@@ -19,13 +19,17 @@ class KeyboardView: AKKeyboardView, AKKeyboardDelegate {
     //let bank = AKOscillatorBank()
     let pianoSound = AKSampler()
     
+    public var keyboardInputType: RestNoteType
+    
     override init(frame: CGRect) {
+        self.keyboardInputType = .quarter
         super.init(frame: frame)
         self.setup()
         print("INIT KEYBOARD")
     }
     
     required init?(coder aDecoder: NSCoder) {
+        self.keyboardInputType = .quarter
         super.init(coder: aDecoder)
         self.setup()
         print("INIT KEYBOARD")

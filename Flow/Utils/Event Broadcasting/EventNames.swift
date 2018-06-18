@@ -83,4 +83,6 @@ struct EventNames {
     static let SHOW_CONNECT_BTN = "SHOW_CONNECT_BTN"
     
     static let TOGGLE_TRANSFORM_VIEWS = "TOGGLE_TRANSFORM_VIEWS"
+    
+    static let CHANGE_KEYBOARD_INPUT_TYPE = "CHANGE_KEYBOARD_INPUT_TYPE"
 }
