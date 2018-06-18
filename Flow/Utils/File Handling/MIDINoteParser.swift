@@ -13,7 +13,7 @@ import AudioKitUI
 class MIDINoteParser {
     static let instance = MIDINoteParser()
     
-    func parse(noteNumber: MIDINoteNumber) -> Note {
+    func parse(noteNumber: MIDINoteNumber, type: RestNoteType) -> Note {
 
         var pitch = Pitch()
         var accidental: Accidental? = nil
@@ -77,7 +77,9 @@ class MIDINoteParser {
         } else if noteNumber % 12 == 11 {
             pitch.step = .B
         }
+        
+        print("PARSER: \(pitch.step)")
 
-        return Note(pitch: pitch, type: .quarter, accidental: accidental)
+        return Note(pitch: pitch, type: type, accidental: accidental)
     }
 }

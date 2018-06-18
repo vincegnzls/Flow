@@ -353,7 +353,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
     public func toggleKeyboard() {
         self.keyboardView.isHidden = !self.keyboardView.isHidden
-        self.keyboardView.layer.zPosition = .greatestFiniteMagnitude
         
         if !self.keyboardView.isHidden {
             self.keyboardView.keyboardInputType = .quarter

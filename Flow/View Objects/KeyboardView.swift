@@ -20,9 +20,11 @@ class KeyboardView: AKKeyboardView, AKKeyboardDelegate {
     let pianoSound = AKSampler()
     
     public var keyboardInputType: RestNoteType
+    public var isRest: Bool
     
     override init(frame: CGRect) {
         self.keyboardInputType = .quarter
+        self.isRest = false
         super.init(frame: frame)
         self.setup()
         print("INIT KEYBOARD")
@@ -30,6 +32,7 @@ class KeyboardView: AKKeyboardView, AKKeyboardDelegate {
     
     required init?(coder aDecoder: NSCoder) {
         self.keyboardInputType = .quarter
+        self.isRest = false
         super.init(coder: aDecoder)
         self.setup()
         print("INIT KEYBOARD")
@@ -46,7 +49,7 @@ class KeyboardView: AKKeyboardView, AKKeyboardDelegate {
         pianoSound.volume = 5.0
 
         do{
-            try pianoSound.loadWav("Support Objects/Grand Piano")
+            try pianoSound.loadWav("Support Objects/Grand Piano-tailed")
             print("WAV Loaded")
         }catch{
             AKLog("File not found")
@@ -60,16 +63,29 @@ class KeyboardView: AKKeyboardView, AKKeyboardDelegate {
         } catch let error as NSError{
             print(error.debugDescription)
         }
+        
+        EventBroadcaster.instance.removeObserver(event: EventNames.CHANGE_KEYBOARD_INPUT_TYPE, observer: Observer(id: "NotationControlsView.changeKeyboardInputType", function: self.changeKeyboardInputType))
+        EventBroadcaster.instance.addObserver(event: EventNames.CHANGE_KEYBOARD_INPUT_TYPE, observer: Observer(id: "NotationControlsView.changeKeyboardInputType", function: self.changeKeyboardInputType))
+    }
+    
+    func changeKeyboardInputType(params: Parameters) {
+        let restNoteType: RestNoteType = params.get(key: KeyNames.NOTE_KEY_TYPE) as! RestNoteType
+        let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
+        
+        self.keyboardInputType = restNoteType
+        self.isRest = isRest
     }
     
     func noteOn(note: MIDINoteNumber) {
         //SoundManager.instance.pl
-        print("Note Number: \(note)")
+        
         pianoSound.play(noteNumber: note + 3)
 
         let params = Parameters()
-        params.put(key: KeyNames.KEYBOARD_NOTE, value: MIDINoteParser.instance.parse(noteNumber: note + 3))
+        params.put(key: KeyNames.KEYBOARD_NOTE, value: MIDINoteParser.instance.parse(noteNumber: note, type: self.keyboardInputType))
+        params.put(key: KeyNames.IS_REST_KEY, value: self.isRest)
 
+        print("Note Number: \(note) \(self.keyboardInputType) \(self.isRest)")
         EventBroadcaster.instance.postEvent(event: EventNames.KEYBOARD_NOTE_PRESSED, params: params)
     }
     

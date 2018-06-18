@@ -67,8 +67,8 @@ class NotationControlsView: DraggableView {
 
         EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
         EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
-        EventBroadcaster.instance.removeObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
-        EventBroadcaster.instance.addObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "EditorViewController.toggleKeyboard", function: self.toggleKeyboard))
+        EventBroadcaster.instance.removeObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "NotationControls.toggleKeyboard", function: self.toggleKeyboard))
+        EventBroadcaster.instance.addObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "NotationControls.toggleKeyboard", function: self.toggleKeyboard))
     }
     
     @IBAction func wholeNote(_ sender: UIButton) {
@@ -85,12 +85,6 @@ class NotationControlsView: DraggableView {
             self.thirtySecondNote.backgroundColor = nil
             self.sixtyFourthNote.backgroundColor = nil
             self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
         } else {
             noteKeyTapped(noteType: RestNoteType.whole, isRest: false)
         }
@@ -109,13 +103,6 @@ class NotationControlsView: DraggableView {
             self.sixteenthNote.backgroundColor = nil
             self.thirtySecondNote.backgroundColor = nil
             self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
         } else {
             noteKeyTapped(noteType: RestNoteType.half, isRest: false)
         }
@@ -134,13 +121,6 @@ class NotationControlsView: DraggableView {
             self.sixteenthNote.backgroundColor = nil
             self.thirtySecondNote.backgroundColor = nil
             self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
         } else {
             noteKeyTapped(noteType: RestNoteType.quarter, isRest: false)
         }
@@ -159,13 +139,6 @@ class NotationControlsView: DraggableView {
             self.sixteenthNote.backgroundColor = nil
             self.thirtySecondNote.backgroundColor = nil
             self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
         } else {
             noteKeyTapped(noteType: RestNoteType.eighth, isRest: false)
         }
@@ -184,13 +157,6 @@ class NotationControlsView: DraggableView {
             self.sixteenthNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
             self.thirtySecondNote.backgroundColor = nil
             self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
         } else {
             noteKeyTapped(noteType: RestNoteType.sixteenth, isRest: false)
         }
@@ -209,13 +175,6 @@ class NotationControlsView: DraggableView {
             self.sixteenthNote.backgroundColor = nil
             self.thirtySecondNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
             self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
         } else {
             noteKeyTapped(noteType: RestNoteType.thirtySecond, isRest: false)
         }
@@ -224,201 +183,49 @@ class NotationControlsView: DraggableView {
     @IBAction func sixtyFourthNote(_ sender: UIButton) {
         print("SIXTY FOURTH NOTE")
         
-        if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
-            
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
-        } else {
-            noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
-        }
+        noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
     }
     
     @IBAction func wholeRest(_ sender: UIButton) {
         print("WHOLE NOTE")
         
-        if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.whole, isRest: true)
-            
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
-        } else {
-            noteKeyTapped(noteType: RestNoteType.whole, isRest: true)
-        }
+        noteKeyTapped(noteType: RestNoteType.whole, isRest: true)
     }
     
     @IBAction func halfRest(_ sender: UIButton) {
         print("HALF NOTE")
         
-        if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.half, isRest: true)
-            
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
-        } else {
-            noteKeyTapped(noteType: RestNoteType.half, isRest: true)
-        }
+        noteKeyTapped(noteType: RestNoteType.half, isRest: true)
     }
     
     @IBAction func quarterRest(_ sender: UIButton) {
         print("QUARTER NOTE")
         
-        if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.quarter, isRest: true)
-            
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
-        } else {
-            noteKeyTapped(noteType: RestNoteType.quarter, isRest: true)
-        }
+        noteKeyTapped(noteType: RestNoteType.quarter, isRest: true)
     }
     
     @IBAction func eighthRest(_ sender: UIButton) {
         print("EIGHTH NOTE")
         
-        if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.eighth, isRest: true)
-            
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
-        } else {
-            noteKeyTapped(noteType: RestNoteType.eighth, isRest: true)
-        }
+        noteKeyTapped(noteType: RestNoteType.eighth, isRest: true)
     }
     
     @IBAction func sixteenthRest(_ sender: UIButton) {
         print("SIXTEENTH NOTE")
         
-        if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.sixteenth, isRest: true)
-            
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
-        } else {
-            noteKeyTapped(noteType: RestNoteType.sixteenth, isRest: true)
-        }
+        noteKeyTapped(noteType: RestNoteType.sixteenth, isRest: true)
     }
     
     @IBAction func thirtySecondRest(_ sender: UIButton) {
         print("THIRTY SECOND NOTE")
         
-        if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.thirtySecond, isRest: true)
-            
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.sixtyFourthRest.backgroundColor = nil
-        } else {
-            noteKeyTapped(noteType: RestNoteType.thirtySecond, isRest: true)
-        }
+        noteKeyTapped(noteType: RestNoteType.thirtySecond, isRest: true)
     }
     
     @IBAction func sixtyFourthRest(_ sender: UIButton) {
         print("SIXTY FOURTH NOTE")
         
-        if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.sixtyFourth, isRest: true)
-            
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-        } else {
-            noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: true)
-        }
+        noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: true)
     }
     
     @IBAction func deleteNote(_ sender: UIButton) {
@@ -502,13 +309,6 @@ class NotationControlsView: DraggableView {
             self.sixteenthNote.backgroundColor = nil
             self.thirtySecondNote.backgroundColor = nil
             self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
-            self.halfRest.backgroundColor = nil
-            self.quarterRest.backgroundColor = nil
-            self.eighthRest.backgroundColor = nil
-            self.sixteenthRest.backgroundColor = nil
-            self.thirtySecondRest.backgroundColor = nil
-            self.sixtyFourthRest.backgroundColor = nil
         }
     }
 
