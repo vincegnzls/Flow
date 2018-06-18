@@ -1790,79 +1790,89 @@ class SoundManager {
         gNotes.removeAll()
         fNotes.removeAll()
         
-        if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x), let currentMeasure = GridSystem.instance.getCurrentMeasure(), let currentNoteIndex = currentMeasure.notationObjects.index(of: noteFromX) {
+        if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x), let currentMeasure = GridSystem.instance.getCurrentMeasure() {
             
-            var gStartIndex = 0
-            var fStartIndex = 0
+            var noteToBeChecked = noteFromX
             
-            var gSkipAmount: Float = 0
-            var fSkipAmount: Float = 0
-            
-            if currentMeasure.clef == .G {
-                gStartIndex = currentNoteIndex
-            } else if currentMeasure.clef == .F {
-                fStartIndex = currentNoteIndex
+            if let note = noteFromX as? Note, let chord = note.chord {
+                noteToBeChecked = chord
             }
             
-            if currentNoteIndex != 0 {
-                var amountBeforeIndex: Float = 0
+            if let currentNoteIndex = currentMeasure.notationObjects.index(of: noteToBeChecked) {
             
-                for staff in composition.staffList {
-                    
-                    if staff.measures[0].clef == currentMeasure.clef {
-                        var cntDownIndex = currentNoteIndex - 1
-                        
-                        while cntDownIndex >= 0 {
-                            amountBeforeIndex += currentMeasure.notationObjects[cntDownIndex].getBeatValue()
-                            
-                            cntDownIndex -= 1
-                        }
-                    }
-                    
+                var gStartIndex = 0
+                var fStartIndex = 0
+                
+                var gSkipAmount: Float = 0
+                var fSkipAmount: Float = 0
+                
+                if currentMeasure.clef == .G {
+                    gStartIndex = currentNoteIndex
+                } else if currentMeasure.clef == .F {
+                    fStartIndex = currentNoteIndex
                 }
                 
-                for staff in composition.staffList {
-                    
-                    if staff.measures[0].clef != currentMeasure.clef {
-                        let parallelMeasure = staff.measures[currentMeasureIndex]
+                if currentNoteIndex != 0 {
+                    var amountBeforeIndex: Float = 0
+                
+                    for staff in composition.staffList {
                         
-                        if !parallelMeasure.notationObjects.isEmpty {
-                        
-                            var startIndex = 0
-                            var currentAmount: Float = 0
+                        if staff.measures[0].clef == currentMeasure.clef {
+                            var cntDownIndex = currentNoteIndex - 1
                             
-                            while currentAmount <= amountBeforeIndex {
-                                currentAmount += parallelMeasure.notationObjects[startIndex].getBeatValue()
-                                startIndex += 1
+                            while cntDownIndex >= 0 {
+                                amountBeforeIndex += currentMeasure.notationObjects[cntDownIndex].getBeatValue()
+                                
+                                cntDownIndex -= 1
                             }
-                            //currentAmount -= parallelMeasure.notationObjects[startIndex].getBeatValue()
-                            
-                            if currentAmount >= amountBeforeIndex {
-                                if parallelMeasure.clef == .G {
-                                    gSkipAmount = currentAmount - amountBeforeIndex
-                                } else if parallelMeasure.clef == .F {
-                                    fSkipAmount = currentAmount - amountBeforeIndex
-                                }
-                            }
-                            
-                            startIndex -= 1
-                            
-                            if parallelMeasure.clef == .G {
-                                gStartIndex = startIndex
-                            } else if parallelMeasure.clef == .F {
-                                fStartIndex = startIndex
-                            }
-                            
                         }
+                        
                     }
                     
+                    for staff in composition.staffList {
+                        
+                        if staff.measures[0].clef != currentMeasure.clef {
+                            let parallelMeasure = staff.measures[currentMeasureIndex]
+                            
+                            if !parallelMeasure.notationObjects.isEmpty {
+                            
+                                var startIndex = 0
+                                var currentAmount: Float = 0
+                                
+                                while currentAmount <= amountBeforeIndex {
+                                    currentAmount += parallelMeasure.notationObjects[startIndex].getBeatValue()
+                                    startIndex += 1
+                                }
+                                //currentAmount -= parallelMeasure.notationObjects[startIndex].getBeatValue()
+                                
+                                if currentAmount >= amountBeforeIndex {
+                                    if parallelMeasure.clef == .G {
+                                        gSkipAmount = currentAmount - amountBeforeIndex
+                                    } else if parallelMeasure.clef == .F {
+                                        fSkipAmount = currentAmount - amountBeforeIndex
+                                    }
+                                }
+                                
+                                startIndex -= 1
+                                
+                                if parallelMeasure.clef == .G {
+                                    gStartIndex = startIndex
+                                } else if parallelMeasure.clef == .F {
+                                    fStartIndex = startIndex
+                                }
+                                
+                            }
+                        }
+                        
+                    }
                 }
-            }
-        
-            self.gNotesMIDI = preProcessStaffFrom(startingMeasureIndex: currentMeasureIndex, startingNoteIndex: gStartIndex, staff: composition.staffList[0], clef: Clef.G, skipAmount: gSkipAmount)
-            self.fNotesMIDI = preProcessStaffFrom(startingMeasureIndex: currentMeasureIndex, startingNoteIndex: fStartIndex, staff: composition.staffList[1], clef: Clef.F, skipAmount: fSkipAmount)
             
-            print("NOTES TYPE COUNT: \(self.gNotesType.count)")
+                self.gNotesMIDI = preProcessStaffFrom(startingMeasureIndex: currentMeasureIndex, startingNoteIndex: gStartIndex, staff: composition.staffList[0], clef: Clef.G, skipAmount: gSkipAmount)
+                self.fNotesMIDI = preProcessStaffFrom(startingMeasureIndex: currentMeasureIndex, startingNoteIndex: fStartIndex, staff: composition.staffList[1], clef: Clef.F, skipAmount: fSkipAmount)
+                
+                print("NOTES TYPE COUNT: \(self.gNotesType.count)")
+            
+            }
             
         } else {
             self.gNotesMIDI = preProcessStaff(staff: composition.staffList[0])

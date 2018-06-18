@@ -3913,7 +3913,7 @@ class MusicSheet: UIView {
         
         if let chord = notation as? Chord {
             for note in chord.notes {
-                highlightNotation(note)
+                highlightNotation(note, forPlayback: forPlayback)
             }
         } else if let note = notation as? Note {
             
@@ -5117,10 +5117,22 @@ class MusicSheet: UIView {
         
         if let gNotation = SoundManager.instance.currentGNotePlaying,
             let fNotation = SoundManager.instance.currentFNotePlaying {
+            
             highlightNotation(gNotation, forPlayback: true)
             highlightNotation(fNotation, forPlayback: true)
             
-            if let gCoord = gNotation.screenCoordinates, let fCoord = fNotation.screenCoordinates {
+            var gCoord: CGPoint? = gNotation.screenCoordinates
+            var fCoord: CGPoint? = fNotation.screenCoordinates
+            
+            if let chord = gNotation as? Chord {
+                gCoord = chord.notes[0].screenCoordinates
+            }
+            
+            if let chord = fNotation as? Chord {
+                fCoord = chord.notes[0].screenCoordinates
+            }
+            
+            if let gCoord = gCoord, let fCoord = fCoord {
             
                 if gNotation.type.getBeatValue(dots: gNotation.dots) <= fNotation.type.getBeatValue(dots: fNotation.dots) {
                     sheetCursor.moveCursorX(location: CGPoint(x: gCoord.x + noteXOffset, y: sheetCursor.curXCursorLocation.y))
