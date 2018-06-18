@@ -125,7 +125,7 @@ class Clipboard {
                 if oldNotations.count > 0 {
                     let editAction = EditAction(old: oldNotations, new: newNotations)
                     editAction.execute()
-                } else {
+                } else if newNotations.count > 0 {
                     let addAction = AddAction(measures: measures, notations: newNotations)
                     addAction.execute()
                     
