@@ -31,15 +31,18 @@ class NotationControlsView: DraggableView {
     @IBOutlet var sixtyFourthRest: UIButton!
     
     private var keyboardInputOn: Bool
+    private var activeKeyboardInputType: RestNoteType
     
     override init(frame: CGRect) {
         self.keyboardInputOn = false
+        self.activeKeyboardInputType = .whole
         super.init(frame: frame)
         self.setup()
     }
     
     required init?(coder: NSCoder) {
         self.keyboardInputOn = false
+        self.activeKeyboardInputType = .whole
         super.init(coder: coder)
         self.setup()
     }
@@ -85,6 +88,12 @@ class NotationControlsView: DraggableView {
             self.thirtySecondNote.backgroundColor = nil
             self.sixtyFourthNote.backgroundColor = nil
             self.wholeRest.backgroundColor = nil
+            
+            self.activeKeyboardInputType = .whole
+            
+            if !sender.isEnabled {
+                updateSelected()
+            }
         } else {
             noteKeyTapped(noteType: RestNoteType.whole, isRest: false)
         }
@@ -183,49 +192,75 @@ class NotationControlsView: DraggableView {
     @IBAction func sixtyFourthNote(_ sender: UIButton) {
         print("SIXTY FOURTH NOTE")
         
-        noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
+        if self.keyboardInputOn {
+            noteKeyboardTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
+            
+            self.wholeNote.backgroundColor = nil
+            self.halfNote.backgroundColor = nil
+            self.quarterNote.backgroundColor = nil
+            self.eighthNote.backgroundColor = nil
+            self.sixteenthNote.backgroundColor = nil
+            self.thirtySecondNote.backgroundColor = nil
+            self.sixtyFourthNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+        } else {
+            noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
+        }
     }
     
     @IBAction func wholeRest(_ sender: UIButton) {
         print("WHOLE NOTE")
         
         noteKeyTapped(noteType: RestNoteType.whole, isRest: true)
+        
+        updateSelected()
     }
     
     @IBAction func halfRest(_ sender: UIButton) {
         print("HALF NOTE")
         
         noteKeyTapped(noteType: RestNoteType.half, isRest: true)
+        
+        updateSelected()
     }
     
     @IBAction func quarterRest(_ sender: UIButton) {
         print("QUARTER NOTE")
         
         noteKeyTapped(noteType: RestNoteType.quarter, isRest: true)
+        
+        updateSelected()
     }
     
     @IBAction func eighthRest(_ sender: UIButton) {
         print("EIGHTH NOTE")
         
         noteKeyTapped(noteType: RestNoteType.eighth, isRest: true)
+        
+        updateSelected()
     }
     
     @IBAction func sixteenthRest(_ sender: UIButton) {
         print("SIXTEENTH NOTE")
         
         noteKeyTapped(noteType: RestNoteType.sixteenth, isRest: true)
+        
+        updateSelected()
     }
     
     @IBAction func thirtySecondRest(_ sender: UIButton) {
         print("THIRTY SECOND NOTE")
         
         noteKeyTapped(noteType: RestNoteType.thirtySecond, isRest: true)
+        
+        updateSelected()
     }
     
     @IBAction func sixtyFourthRest(_ sender: UIButton) {
         print("SIXTY FOURTH NOTE")
         
         noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: true)
+        
+        updateSelected()
     }
     
     @IBAction func deleteNote(_ sender: UIButton) {
@@ -296,11 +331,45 @@ class NotationControlsView: DraggableView {
         }
     }
     
+    public func updateSelected() {
+        if self.keyboardInputOn {
+            if self.wholeNote.isEnabled {
+                self.wholeNote.sendActions(for: .touchUpInside)
+            } else if self.halfNote.isEnabled {
+                self.halfNote.sendActions(for: .touchUpInside)
+            } else if self.quarterNote.isEnabled {
+                self.quarterNote.sendActions(for: .touchUpInside)
+            } else if self.eighthNote.isEnabled {
+                self.eighthNote.sendActions(for: .touchUpInside)
+            } else if self.sixteenthNote.isEnabled {
+                self.sixteenthNote.sendActions(for: .touchUpInside)
+            } else if self.thirtySecondNote.isEnabled {
+                self.thirtySecondNote.sendActions(for: .touchUpInside)
+            } else if self.sixtyFourthNote.isEnabled {
+                self.sixtyFourthNote.sendActions(for: .touchUpInside)
+            }
+        }
+    }
+    
     public func toggleKeyboard() {
         self.keyboardInputOn = !self.keyboardInputOn
         
         if self.keyboardInputOn {
-            self.quarterNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            if self.wholeNote.isEnabled {
+                self.wholeNote.sendActions(for: .touchUpInside)
+            } else if self.halfNote.isEnabled {
+                self.halfNote.sendActions(for: .touchUpInside)
+            } else if self.quarterNote.isEnabled {
+                self.quarterNote.sendActions(for: .touchUpInside)
+            } else if self.eighthNote.isEnabled {
+                self.eighthNote.sendActions(for: .touchUpInside)
+            } else if self.sixteenthNote.isEnabled {
+                self.sixteenthNote.sendActions(for: .touchUpInside)
+            } else if self.thirtySecondNote.isEnabled {
+                self.thirtySecondNote.sendActions(for: .touchUpInside)
+            } else if self.sixtyFourthNote.isEnabled {
+                self.sixtyFourthNote.sendActions(for: .touchUpInside)
+            }
         } else {
             self.wholeNote.backgroundColor = nil
             self.halfNote.backgroundColor = nil
