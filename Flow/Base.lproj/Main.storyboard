@@ -1121,11 +1121,17 @@ Tap '+' to create a new composition.</string>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ae9-dp-GQa" userLabel="Keyboard" customClass="KeyboardView" customModule="Flow" customModuleProvider="target">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LSc-ra-udB">
                                 <rect key="frame" x="0.0" y="630" width="1112" height="140"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ae9-dp-GQa" userLabel="Keyboard" customClass="KeyboardView" customModule="Flow" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="6" width="1800" height="140"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                </subviews>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <accessibility key="accessibilityConfiguration">
@@ -1181,6 +1187,7 @@ Tap '+' to create a new composition.</string>
                         <outlet property="bottomMenu" destination="9Uy-OO-nyR" id="qAP-7j-PpZ"/>
                         <outlet property="connectBtn" destination="9HY-Gc-gcB" id="5H3-f9-1Rs"/>
                         <outlet property="inversionBtn" destination="oVX-49-dcL" id="XAT-Fl-fRM"/>
+                        <outlet property="keyboardScrollView" destination="LSc-ra-udB" id="GLS-3b-S9V"/>
                         <outlet property="keyboardView" destination="Ae9-dp-GQa" id="UWE-BK-yB1"/>
                         <outlet property="menuBar" destination="VHe-OH-6BV" id="EC9-aQ-TAh"/>
                         <outlet property="musicSheet" destination="bCt-Js-Xda" id="E27-p7-Dwf"/>

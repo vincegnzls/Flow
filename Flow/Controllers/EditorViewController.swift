@@ -31,6 +31,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var connectBtn: UIButton!
     @IBOutlet weak var retrogradeBtn: UIButton!
     @IBOutlet weak var inversionBtn: UIButton!
+    @IBOutlet weak var keyboardScrollView: UIScrollView!
     
     var backButton : UIBarButtonItem!
     
@@ -42,6 +43,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         super.viewDidLoad()
     
         toggleKeyboard()
+        keyboardScrollView.panGestureRecognizer.minimumNumberOfTouches = 2
+        keyboardScrollView.panGestureRecognizer.maximumNumberOfTouches = 2
+        self.keyboardScrollView.contentSize = self.keyboardView.bounds.size
         // Revise back button
         
         // Disable the swipe to make sure you get your chance to save
@@ -353,6 +357,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
     public func toggleKeyboard() {
         self.keyboardView.isHidden = !self.keyboardView.isHidden
+        self.keyboardScrollView.isHidden = !self.keyboardScrollView.isHidden
         
         if !self.keyboardView.isHidden {
             self.keyboardView.keyboardInputType = .quarter
