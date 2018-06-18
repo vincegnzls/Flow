@@ -2495,7 +2495,7 @@ class MusicSheet: UIView {
         
     }
 
-    private func drawAccidentalByNote (note: Note, highlighted: Bool = false) {
+    private func drawAccidentalByNote (note: Note, highlighted: Bool = false, forPlayback: Bool = false) {
         if let screenCoordinates = note.screenCoordinates {
             if let accidental = note.accidental {
 
@@ -2573,7 +2573,12 @@ class MusicSheet: UIView {
                         if highlighted {
                             accidentalImageView.image = accidentalImageView.image!.withRenderingMode(.alwaysTemplate)
                             accidentalImageView.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-                            accidentalImageView.tag = HIGHLIGHTED_NOTES_TAG
+                            
+                            if forPlayback {
+                                accidentalImageView.tag = HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG
+                            } else {
+                                accidentalImageView.tag = HIGHLIGHTED_NOTES_TAG
+                            }
                         }
 
                         self.addSubview(accidentalImageView)
@@ -3017,7 +3022,7 @@ class MusicSheet: UIView {
         }
     }
     
-    func drawDotsByNotation(notation: MusicNotation, highlighted: Bool = false, hasFlipped: Bool = false) { // 'hasFlipped' is for chords having flipped notes within it
+    func drawDotsByNotation(notation: MusicNotation, highlighted: Bool = false, hasFlipped: Bool = false, forPlayback: Bool = false) { // 'hasFlipped' is for chords having flipped notes within it
         
         var dotImageView:UIImageView?
         var curSpacing: CGFloat = 45
@@ -3083,7 +3088,12 @@ class MusicSheet: UIView {
                         if highlighted {
                             dotImageView?.image = dotImageView?.image?.withRenderingMode(.alwaysTemplate)
                             dotImageView?.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-                            dotImageView?.tag = HIGHLIGHTED_NOTES_TAG
+                            
+                            if forPlayback {
+                                dotImageView?.tag = HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG
+                            } else {
+                                dotImageView?.tag = HIGHLIGHTED_NOTES_TAG
+                            }
                         }
                         
                         if let dotImageView = dotImageView {
@@ -3130,7 +3140,12 @@ class MusicSheet: UIView {
                     if highlighted {
                         dotImageView?.image = dotImageView?.image?.withRenderingMode(.alwaysTemplate)
                         dotImageView?.tintColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
-                        dotImageView?.tag = HIGHLIGHTED_NOTES_TAG
+                        
+                        if forPlayback {
+                            dotImageView?.tag = HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG
+                        } else {
+                            dotImageView?.tag = HIGHLIGHTED_NOTES_TAG
+                        }
                     }
                     
                     if let dotImageView = dotImageView {
@@ -3958,8 +3973,8 @@ class MusicSheet: UIView {
 
                     if let image = image {
                         notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + noteYOffset, width: image.size.width + noteWidthAlter, height: image.size.height + noteHeightAlter))
-                        drawAccidentalByNote(note: note, highlighted: true)
-                        drawDotsByNotation(notation: note, highlighted: true)
+                        drawAccidentalByNote(note: note, highlighted: true, forPlayback: forPlayback)
+                        drawDotsByNotation(notation: note, highlighted: true, forPlayback: forPlayback)
                     }
                     
                 }
@@ -3981,7 +3996,7 @@ class MusicSheet: UIView {
                         notationImageView = UIImageView(frame: CGRect(x: screenCoordinates.x + noteXOffset, y: screenCoordinates.y + restYOffset, width: image.size.width / restWidthAlter, height: image.size.height / restHeightAlter))
                     }
                     
-                    drawDotsByNotation(notation: rest, highlighted: true)
+                    drawDotsByNotation(notation: rest, highlighted: true, forPlayback: forPlayback)
                 }
                 
             }
