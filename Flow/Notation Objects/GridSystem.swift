@@ -19,6 +19,12 @@ class GridSystem {
     public var selectedMeasureCoord:MeasurePoints? {
         didSet {
             
+            if let selectedMeasureCoord = selectedMeasureCoord {
+                let paramsForSelectedMeasure = Parameters()
+                paramsForSelectedMeasure.put(key: KeyNames.HIGHLIGHT_SELECTED_MEASURE, value: selectedMeasureCoord)
+                EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_SELECTED_MEASURE, params: paramsForSelectedMeasure)
+            }
+            
             if oldValue != nil {
             
                 if let oldPoints = oldValue, let newPoints = selectedMeasureCoord {

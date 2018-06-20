@@ -91,6 +91,7 @@ class MusicSheet: UIView {
     private let cursorXOffsetY:CGFloat = -95 // distance of starting y from measure
     
     private let playbackHighlightRect = CAShapeLayer()
+    private let measureHighlightRect = CAShapeLayer()
     private var playbackScrollLock = false
     
     //@IBOutlet var transformView: UIView!
@@ -884,6 +885,9 @@ class MusicSheet: UIView {
 
         startY += sheetYOffset
 
+        measureHighlightRect.zPosition = -CGFloat.greatestFiniteMagnitude
+        self.layer.addSublayer(self.measureHighlightRect)
+        
         highlightRect.zPosition = CGFloat.greatestFiniteMagnitude
         self.layer.addSublayer(self.highlightRect)
 
@@ -942,6 +946,9 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
         EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MusicSheet.enableInteraction", function: self.enableInteraction))
 
+        EventBroadcaster.instance.removeObservers(event: EventNames.HIGHLIGHT_SELECTED_MEASURE)
+        EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_SELECTED_MEASURE, observer: Observer(id: "MusicSheet.highlightSelectedMeasure", function: self.highlightSelectedMeasure))
+        
         EventBroadcaster.instance.removeObservers(event: EventNames.HIGHLIGHT_MEASURE)
         EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_MEASURE, observer: Observer(id: "MusicSheet.highlightParallelMeasures", function: self.highlightParallelMeasures))
         
@@ -5030,6 +5037,8 @@ class MusicSheet: UIView {
         if !SoundManager.instance.isPlaying {
             sheetCursor.hideCursorY()
             
+            measureHighlightRect.opacity = 0
+            
             for view in self.subviews {
                 if view.tag == HIGHLIGHTED_NOTES_TAG {
                     view.isHidden = true
@@ -5093,6 +5102,8 @@ class MusicSheet: UIView {
             }
             
             sheetCursor.showCursorY()
+            
+            measureHighlightRect.opacity = 100
             
         }
 
@@ -5172,6 +5183,26 @@ class MusicSheet: UIView {
 
         sheetCursor.moveCursorX(location: CGPoint(x: sheetCursor.curXCursorLocation.x + xIterate, y: sheetCursor.curXCursorLocation.y))*/
         
+    }
+    
+    private func highlightSelectedMeasure(params: Parameters) {
+        if let currentMeasurePoints = params.get(key: KeyNames.HIGHLIGHT_SELECTED_MEASURE) as? GridSystem.MeasurePoints {
+            highlightMeasure(measurePoints: currentMeasurePoints)
+        }
+    }
+    
+    private func highlightMeasure(measurePoints: GridSystem.MeasurePoints) {
+        let r: CGRect = CGRect(x: measurePoints.upperLeftPoint.x, y: measurePoints.upperLeftPoint.y,
+                               width: measurePoints.width,
+                               height: measurePoints.lowerRightPoint.y - measurePoints.lowerRightPoint.y + measurePoints.height)
+        
+        let path = CGPath(rect: r, transform: nil)
+        measureHighlightRect.path = path
+        
+        let highlightColor = UIColor(red: 255.0, green: 204.0/255.0, blue: 0.0, alpha: 0.1)
+        measureHighlightRect.fillColor = highlightColor.cgColor
+        
+        self.layer.addSublayer(measureHighlightRect)
     }
 
     private func highlightParallelMeasures(parameters: Parameters) {
