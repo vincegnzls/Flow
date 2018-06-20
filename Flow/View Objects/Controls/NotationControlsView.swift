@@ -30,7 +30,7 @@ class NotationControlsView: DraggableView {
     @IBOutlet var sixtyFourthNote: UIButton!
     @IBOutlet var sixtyFourthRest: UIButton!
     
-    private var keyboardInputOn: Bool
+    public var keyboardInputOn: Bool
     private var activeKeyboardInputType: RestNoteType
     
     override init(frame: CGRect) {

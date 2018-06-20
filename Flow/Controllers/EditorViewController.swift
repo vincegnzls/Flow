@@ -32,6 +32,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var retrogradeBtn: UIButton!
     @IBOutlet weak var inversionBtn: UIButton!
     @IBOutlet weak var keyboardScrollView: UIScrollView!
+    @IBOutlet weak var notationControlsView: NotationControlsView!
     
     var backButton : UIBarButtonItem!
     
@@ -352,7 +353,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
     public func hideViews() {
         self.keyboardView.isHidden = true
+        self.keyboardScrollView.isHidden = true
         scrollView.minimumZoomScale = 1.0
+        
+        if self.notationControlsView.keyboardInputOn && SoundManager.instance.isPlaying {
+            self.keyboardView.isHidden = false
+            self.keyboardScrollView.isHidden = false
+        }
     }
 
     public func toggleKeyboard() {
