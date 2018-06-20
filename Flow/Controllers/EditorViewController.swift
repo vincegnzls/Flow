@@ -204,6 +204,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         EventBroadcaster.instance.removeObservers(event: EventNames.NOTATION_KEY_PRESSED)
         EventBroadcaster.instance.addObserver(event: EventNames.NOTATION_KEY_PRESSED,
                 observer: Observer(id: "EditorViewController.onNoteKeyPressed", function: self.onNoteKeyPressed))
+        EventBroadcaster.instance.addObserver(event: EventNames.KEYBOARD_NOTE_PRESSED,
+                                              observer: Observer(id: "EditorViewController.onNoteKeyPressed", function: self.onKeyboardKeyPressed))
         EventBroadcaster.instance.removeObservers(event: EventNames.ADD_GRAND_STAFF)
         EventBroadcaster.instance.addObserver(event: EventNames.ADD_GRAND_STAFF,
                 observer: Observer(id: "EditorViewController.addGrandStaff", function: self.addGrandStaff))
@@ -431,6 +433,108 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             self.tempoTextField.text = String(Int(comp.tempo))
         }
     }
+    
+    func onKeyboardKeyPressed (params: Parameters) {
+        
+        let passedNotation: MusicNotation = params.get(key: KeyNames.KEYBOARD_NOTE) as! MusicNotation
+        let isRest = params.get(key: KeyNames.IS_REST_KEY, defaultValue: false)
+        
+        let parameters = Parameters()
+        
+        // check if there is a selected measure coord
+        if let measureCoord = GridSystem.instance.selectedMeasureCoord {
+            
+            // check if there is a corresponding measure for the measure coordinate
+            if let measure: Measure = GridSystem.instance.getMeasureFromPoints(
+                measurePoints: measureCoord) {
+                
+                parameters.put(key: KeyNames.NOTE_DETAILS, value: passedNotation)
+                
+                if musicSheet.selectedNotations.count > 0 {
+                    //edit selected notes
+                    editNotations(old: self.musicSheet.selectedNotations, new: [passedNotation])
+                    
+                } else if let notation = GridSystem.instance.getNoteFromX(x: musicSheet.sheetCursor.curYCursorLocation.x) {
+                    // if cursor has a note above or below it, then CREATE CHORD
+                    
+                    if notation.type != passedNotation.type || (notation is Rest && passedNotation is Note) || (notation is Note && passedNotation is Rest) {
+                        if let noteFromX = notation as? Note {
+                            if let chord = noteFromX.chord {
+                                self.editNotations(old: [chord], new: [passedNotation])
+                            } else {
+                                self.editNotations(old: [notation], new: [passedNotation])
+                            }
+                        } else {
+                            self.editNotations(old: [notation], new: [passedNotation])
+                        }
+                        
+                    } else if let note = passedNotation as? Note {
+                        
+                        note.measure = measure
+                        var newChord: Chord = Chord(type: note.type, note: note)
+                        
+                        if let existingNote = notation as? Note {
+                            
+                            // if cursor follows an existing CHORD, pour those existing elements to new chord
+                            if let chord = existingNote.chord {
+                                
+                                newChord = chord.duplicate()
+                                newChord.notes.append(note)
+                                
+                                // if cursor follows an existing NOTE, put that existing element to new chord
+                            } else {
+                                let duplicatedNote = existingNote.duplicate()
+                                
+                                if duplicatedNote.dots > 0 {
+                                    newChord.dots = duplicatedNote.dots
+                                }
+                                
+                                newChord.notes.append(duplicatedNote)
+                            }
+                        }
+                        
+                        if let note = notation as? Note {
+                            
+                            newChord.sortNotes()
+                            
+                            if let oldChord = note.chord {
+                                self.editNotations(old: [oldChord], new: [newChord])
+                            } else {
+                                self.editNotations(old: [notation], new: [newChord])
+                            }
+                        }
+                        
+                        for note in newChord.notes {
+                            note.chord = newChord
+                        }
+                        
+                    }
+                    
+                } else if let hovered = self.musicSheet.hoveredNotation {
+                    //EditAction editAction = EditAction(old: [hovered], new: note)
+                    
+                    GridSystem.instance.recentNotation = passedNotation
+                    
+                    self.editNotations(old: [hovered], new: [passedNotation])
+                    
+                    addGrandStaff()
+                    
+                } else {
+                    
+                    // instantiate add action
+                    
+                    addNotation(measure: measure, notation: passedNotation, playSound: false)
+                    
+                    addGrandStaff()
+                    
+                }
+                
+                
+            }
+            
+        }
+        
+    }
 
     func onNoteKeyPressed (params:Parameters) {
 
@@ -575,7 +679,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         return measures
     }
     
-    func addNotation(measure: Measure, notation: MusicNotation) {
+    func addNotation(measure: Measure, notation: MusicNotation, playSound: Bool = true) {
         let dotMode = musicSheet.getCurrentDotMode()
         
         if dotMode > 0 {
@@ -594,8 +698,10 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         let addAction = AddAction(measure: measure, notation: notation)
         
-        if let note = notation as? Note {
-            SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
+        if playSound {
+            if let note = notation as? Note {
+                SoundManager.instance.playNote(note: note, keySignature: measure.keySignature)
+            }
         }
         
         GridSystem.instance.recentNotation = notation
