@@ -31,7 +31,7 @@ class NotationControlsView: DraggableView {
     @IBOutlet var sixtyFourthRest: UIButton!
     
     public var keyboardInputOn: Bool
-    private var activeKeyboardInputType: RestNoteType
+    private var activeKeyboardInputType: RestNoteType?
     
     override init(frame: CGRect) {
         self.keyboardInputOn = false
@@ -42,7 +42,7 @@ class NotationControlsView: DraggableView {
     
     required init?(coder: NSCoder) {
         self.keyboardInputOn = false
-        self.activeKeyboardInputType = .whole
+        self.activeKeyboardInputType = nil
         super.init(coder: coder)
         self.setup()
     }
@@ -78,22 +78,29 @@ class NotationControlsView: DraggableView {
         print("WHOLE NOTE")
         
         if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.whole, isRest: false)
             
-            self.wholeNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
-            self.wholeRest.backgroundColor = nil
             
-            self.activeKeyboardInputType = .whole
-            
-            if !sender.isEnabled {
-                updateSelected()
+            if self.activeKeyboardInputType == .whole {
+                self.activeKeyboardInputType = nil
+                self.wholeNote.backgroundColor = nil
+                
+                noteKeyboardTapped(noteType: RestNoteType.whole, isRest: true)
+            } else {
+                noteKeyboardTapped(noteType: RestNoteType.whole, isRest: false)
+                
+                self.wholeNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+                self.halfNote.backgroundColor = nil
+                self.quarterNote.backgroundColor = nil
+                self.eighthNote.backgroundColor = nil
+                self.sixteenthNote.backgroundColor = nil
+                self.thirtySecondNote.backgroundColor = nil
+                self.sixtyFourthNote.backgroundColor = nil
+                self.wholeRest.backgroundColor = nil
+                self.activeKeyboardInputType = .whole
             }
+            
+            
+        
         } else {
             noteKeyTapped(noteType: RestNoteType.whole, isRest: false)
         }
@@ -103,15 +110,28 @@ class NotationControlsView: DraggableView {
         print("HALF NOTE")
        
         if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.half, isRest: false)
             
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
+            
+            if self.activeKeyboardInputType == .half {
+                self.activeKeyboardInputType = nil
+                self.halfNote.backgroundColor = nil
+                
+                noteKeyboardTapped(noteType: RestNoteType.half, isRest: true)
+            } else {
+                noteKeyboardTapped(noteType: RestNoteType.half, isRest: false)
+                
+                self.wholeNote.backgroundColor = nil
+                self.halfNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+                self.quarterNote.backgroundColor = nil
+                self.eighthNote.backgroundColor = nil
+                self.sixteenthNote.backgroundColor = nil
+                self.thirtySecondNote.backgroundColor = nil
+                self.sixtyFourthNote.backgroundColor = nil
+                self.activeKeyboardInputType = .half
+            }
+            
+            
+            
         } else {
             noteKeyTapped(noteType: RestNoteType.half, isRest: false)
         }
@@ -121,15 +141,28 @@ class NotationControlsView: DraggableView {
         print("QUARTER NOTE")
         
         if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.quarter, isRest: false)
             
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
+            
+            if self.activeKeyboardInputType == .quarter {
+                self.activeKeyboardInputType = nil
+                self.quarterNote.backgroundColor = nil
+                
+                noteKeyboardTapped(noteType: RestNoteType.quarter, isRest: true)
+            } else {
+                noteKeyboardTapped(noteType: RestNoteType.quarter, isRest: false)
+                
+                self.wholeNote.backgroundColor = nil
+                self.halfNote.backgroundColor = nil
+                self.quarterNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+                self.eighthNote.backgroundColor = nil
+                self.sixteenthNote.backgroundColor = nil
+                self.thirtySecondNote.backgroundColor = nil
+                self.sixtyFourthNote.backgroundColor = nil
+                self.activeKeyboardInputType = .quarter
+            }
+            
+            
+            
         } else {
             noteKeyTapped(noteType: RestNoteType.quarter, isRest: false)
         }
@@ -139,15 +172,28 @@ class NotationControlsView: DraggableView {
         print("EIGHTH NOTE")
         
         if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.eighth, isRest: false)
             
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
+            
+            if self.activeKeyboardInputType == .eighth {
+                self.activeKeyboardInputType = nil
+                self.eighthNote.backgroundColor = nil
+                
+                noteKeyboardTapped(noteType: RestNoteType.eighth, isRest: true)
+            } else {
+                noteKeyboardTapped(noteType: RestNoteType.eighth, isRest: false)
+                
+                self.wholeNote.backgroundColor = nil
+                self.halfNote.backgroundColor = nil
+                self.quarterNote.backgroundColor = nil
+                self.eighthNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+                self.sixteenthNote.backgroundColor = nil
+                self.thirtySecondNote.backgroundColor = nil
+                self.sixtyFourthNote.backgroundColor = nil
+                self.activeKeyboardInputType = .eighth
+            }
+            
+           
+            
         } else {
             noteKeyTapped(noteType: RestNoteType.eighth, isRest: false)
         }
@@ -157,15 +203,27 @@ class NotationControlsView: DraggableView {
         print("SIXTEENTH NOTE")
         
         if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.sixteenth, isRest: false)
             
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = nil
+            if self.activeKeyboardInputType == .sixteenth {
+                self.activeKeyboardInputType = nil
+                self.sixteenthNote.backgroundColor = nil
+                
+                noteKeyboardTapped(noteType: RestNoteType.sixteenth, isRest: true)
+            } else {
+                noteKeyboardTapped(noteType: RestNoteType.sixteenth, isRest: false)
+                
+                self.wholeNote.backgroundColor = nil
+                self.halfNote.backgroundColor = nil
+                self.quarterNote.backgroundColor = nil
+                self.eighthNote.backgroundColor = nil
+                self.sixteenthNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+                self.thirtySecondNote.backgroundColor = nil
+                self.sixtyFourthNote.backgroundColor = nil
+                self.activeKeyboardInputType = .sixteenth
+            }
+            
+            
+            
         } else {
             noteKeyTapped(noteType: RestNoteType.sixteenth, isRest: false)
         }
@@ -175,15 +233,27 @@ class NotationControlsView: DraggableView {
         print("THIRTY SECOND NOTE")
         
         if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.thirtySecond, isRest: false)
             
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
-            self.sixtyFourthNote.backgroundColor = nil
+            if self.activeKeyboardInputType == .thirtySecond {
+                self.activeKeyboardInputType = nil
+                self.thirtySecondNote.backgroundColor = nil
+                
+                noteKeyboardTapped(noteType: RestNoteType.thirtySecond, isRest: true)
+            } else {
+                noteKeyboardTapped(noteType: RestNoteType.thirtySecond, isRest: false)
+                
+                self.wholeNote.backgroundColor = nil
+                self.halfNote.backgroundColor = nil
+                self.quarterNote.backgroundColor = nil
+                self.eighthNote.backgroundColor = nil
+                self.sixteenthNote.backgroundColor = nil
+                self.thirtySecondNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+                self.sixtyFourthNote.backgroundColor = nil
+                self.activeKeyboardInputType = .thirtySecond
+            }
+            
+            
+            
         } else {
             noteKeyTapped(noteType: RestNoteType.thirtySecond, isRest: false)
         }
@@ -193,15 +263,27 @@ class NotationControlsView: DraggableView {
         print("SIXTY FOURTH NOTE")
         
         if self.keyboardInputOn {
-            noteKeyboardTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
             
-            self.wholeNote.backgroundColor = nil
-            self.halfNote.backgroundColor = nil
-            self.quarterNote.backgroundColor = nil
-            self.eighthNote.backgroundColor = nil
-            self.sixteenthNote.backgroundColor = nil
-            self.thirtySecondNote.backgroundColor = nil
-            self.sixtyFourthNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+            if self.activeKeyboardInputType == .sixtyFourth {
+                self.activeKeyboardInputType = nil
+                self.sixtyFourthNote.backgroundColor = nil
+                
+                noteKeyboardTapped(noteType: RestNoteType.sixtyFourth, isRest: true)
+            } else {
+                noteKeyboardTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
+                
+                self.wholeNote.backgroundColor = nil
+                self.halfNote.backgroundColor = nil
+                self.quarterNote.backgroundColor = nil
+                self.eighthNote.backgroundColor = nil
+                self.sixteenthNote.backgroundColor = nil
+                self.thirtySecondNote.backgroundColor = nil
+                self.sixtyFourthNote.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 0.7)
+                self.activeKeyboardInputType = .sixtyFourth
+            }
+            
+            
+            
         } else {
             noteKeyTapped(noteType: RestNoteType.sixtyFourth, isRest: false)
         }
@@ -378,6 +460,8 @@ class NotationControlsView: DraggableView {
             self.sixteenthNote.backgroundColor = nil
             self.thirtySecondNote.backgroundColor = nil
             self.sixtyFourthNote.backgroundColor = nil
+            
+            self.activeKeyboardInputType = nil
         }
     }
 

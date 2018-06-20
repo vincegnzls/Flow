@@ -81,12 +81,14 @@ class KeyboardView: AKKeyboardView, AKKeyboardDelegate {
         
         pianoSound.play(noteNumber: note + 3)
 
-        let params = Parameters()
-        params.put(key: KeyNames.KEYBOARD_NOTE, value: MIDINoteParser.instance.parse(noteNumber: note, type: self.keyboardInputType))
-        params.put(key: KeyNames.IS_REST_KEY, value: self.isRest)
+        if !isRest {
+            let params = Parameters()
+            params.put(key: KeyNames.KEYBOARD_NOTE, value: MIDINoteParser.instance.parse(noteNumber: note, type: self.keyboardInputType))
+            params.put(key: KeyNames.IS_REST_KEY, value: self.isRest)
 
-        print("Note Number: \(note) \(self.keyboardInputType) \(self.isRest)")
-        EventBroadcaster.instance.postEvent(event: EventNames.KEYBOARD_NOTE_PRESSED, params: params)
+            print("Note Number: \(note) \(self.keyboardInputType) \(self.isRest)")
+            EventBroadcaster.instance.postEvent(event: EventNames.KEYBOARD_NOTE_PRESSED, params: params)
+        }
     }
     
     func noteOff(note: MIDINoteNumber) {
