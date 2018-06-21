@@ -725,7 +725,6 @@ Tap '+' to create a new composition.</string>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="bCt-Js-Xda" firstAttribute="centerY" secondItem="9Me-FI-wrK" secondAttribute="centerY" id="6Bm-qu-aKg"/>
                                     <constraint firstAttribute="trailing" secondItem="bCt-Js-Xda" secondAttribute="trailing" id="6yC-YM-h1r"/>
                                     <constraint firstItem="bCt-Js-Xda" firstAttribute="leading" secondItem="9Me-FI-wrK" secondAttribute="leading" id="DfM-UL-Qnd"/>
                                     <constraint firstAttribute="bottom" secondItem="bCt-Js-Xda" secondAttribute="bottom" id="KWw-rM-d9D"/>

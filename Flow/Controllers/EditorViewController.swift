@@ -47,6 +47,12 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         keyboardScrollView.panGestureRecognizer.minimumNumberOfTouches = 2
         keyboardScrollView.panGestureRecognizer.maximumNumberOfTouches = 2
         self.keyboardScrollView.contentSize = self.keyboardView.bounds.size
+        
+        self.musicSheetHeight.constant = self.musicSheetHeight.constant + 180
+        
+        //self.scrollView.contentSize = self.musicSheet.bounds.size
+        
+        
         // Revise back button
         
         // Disable the swipe to make sure you get your chance to save

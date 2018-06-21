@@ -44,10 +44,11 @@ class MusicSheet: UIView {
         }
     }
 
-    private let sheetYOffset:CGFloat = 20
+    private let sheetYOffset:CGFloat = 120
+    private let sheetBottomYOffset:CGFloat = 80
     private let lineSpace:CGFloat = 20 // Spaces between lines in staff
     private let staffSpace:CGFloat = 260 // Spaces between staff
-    private let lefRightPadding:CGFloat = 100 // Left and right padding of a staff
+    private let lefRightPadding:CGFloat = 500 // Left and right padding of a staff
     private var startY:CGFloat = 200
     private var staffIndex:CGFloat = -1
     private var movingStartX: CGFloat = 0
@@ -1461,11 +1462,11 @@ class MusicSheet: UIView {
     // Draws the clef before the staff
     private func drawClefLabel(startX: CGFloat, startY: CGFloat, clefType: Clef) -> CGFloat {
         var clef = UIImage(named:"treble-clef")
-        var clefView = UIImageView(frame: CGRect(x: 110, y: 45 + startY - 167, width: 58.2, height: 154))
+        var clefView = UIImageView(frame: CGRect(x: startX + 10, y: 45 + startY - 167, width: 58.2, height: 154))
 
         if clefType == .F {
             clef = UIImage(named:"bass-clef")
-            clefView = UIImageView(frame: CGRect(x: 110, y: 35 + startY - 116, width: 58.2, height: 68))
+            clefView = UIImageView(frame: CGRect(x: startX + 10, y: 35 + startY - 116, width: 58.2, height: 68))
         }
 
         clefView.image = clef
