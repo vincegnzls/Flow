@@ -13,6 +13,7 @@ class SheetCursor : CAShapeLayer {
 
     private let xCursor = CAShapeLayer()
     private let yCursor = CAShapeLayer()
+    private let yCursorGuide = CAShapeLayer()
 
     var xVisible = true {
         didSet {
@@ -29,6 +30,15 @@ class SheetCursor : CAShapeLayer {
                 yCursor.opacity = 100
             } else {
                 yCursor.opacity = 0
+            }
+        }
+    }
+    var yGuideVisible = false {
+        didSet {
+            if yGuideVisible {
+                yCursorGuide.opacity = 100
+            } else {
+                yCursorGuide.opacity = 0
             }
         }
     }
@@ -72,6 +82,17 @@ class SheetCursor : CAShapeLayer {
         yCursor.strokeColor = UIColor(red:0.00, green:0.47, blue:1.00, alpha:1.0).cgColor
         yCursor.lineWidth = 8
         
+        // Setup horizontal cursor guide
+        let yGuidePath = UIBezierPath()
+        yGuidePath.move(to: .zero)
+        yGuidePath.addLine(to: CGPoint(x: 200, y: 0))
+        
+        yCursorGuide.path = yGuidePath.cgPath
+        yCursorGuide.strokeColor = UIColor(red:0.00, green:0.47, blue:1.00, alpha:1.0).cgColor
+        yCursorGuide.lineWidth = 4
+        
+        yCursorGuide.opacity = 0
+        
         // Setup vertical cursor
         let xPath = UIBezierPath()
         xPath.move(to: CGPoint(x: 10, y: 0))
@@ -99,6 +120,7 @@ class SheetCursor : CAShapeLayer {
         }
         
         self.addSublayer(yCursor)
+        self.addSublayer(yCursorGuide)
         self.addSublayer(xCursor)
     }
     
@@ -109,7 +131,16 @@ class SheetCursor : CAShapeLayer {
     
     public func moveCursorY (location: CGPoint) {
         yCursor.position = location
+        yCursorGuide.position = CGPoint(x: location.x - 90, y: location.y)
         curYCursorLocation = location
+    }
+    
+    public func showCursorYGuide() {
+        yGuideVisible = true
+    }
+    
+    public func hideCursorYGuide() {
+        yGuideVisible = false
     }
     
     public func hideCursorY(){

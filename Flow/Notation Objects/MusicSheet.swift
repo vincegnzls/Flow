@@ -3850,7 +3850,6 @@ class MusicSheet: UIView {
     }
     
     var movingCursor = false
-    
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
         
         EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TEMPO_MENU)
@@ -3864,12 +3863,11 @@ class MusicSheet: UIView {
                 
                 sheetCursor.hideCursors()
             } else {
+                sheetCursor.showCursorYGuide()
                 movingCursor = true
             }
 
         } else if sender.state == UIGestureRecognizerState.ended {
-            
-            let location = sender.location(in: self)
             
             if !movingCursor {
                 self.checkPointsInRect()
@@ -3877,6 +3875,7 @@ class MusicSheet: UIView {
                 self.highlightRect.highlightingEndPoint = nil
             }
             
+            sheetCursor.hideCursorYGuide()
             movingCursor = false
         } else {
             let location = sender.location(in: self)
