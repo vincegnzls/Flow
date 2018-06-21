@@ -3840,31 +3840,54 @@ class MusicSheet: UIView {
 
         print("finished updating the view")
     }
-
+    
+    private func nearCursor(location: CGPoint) -> Bool {
+        if location.x <= sheetCursor.curXCursorLocation.x + 30 && location.x >= sheetCursor.curXCursorLocation.x - 20 {
+            return true
+        }
+        
+        return false
+    }
+    
+    var movingCursor = false
+    
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
         
         EventBroadcaster.instance.postEvent(event: EventNames.HIDE_TEMPO_MENU)
         
         if sender.state == UIGestureRecognizerState.began {
             let locationOfBeganTap = sender.location(in: self)
-            self.highlightRect.highlightingStartPoint = locationOfBeganTap
-            self.highlightRect.highlightingEndPoint = locationOfBeganTap
-
-            /*if let measure = self.getMeasureFromPoint(point: locationOfBeganTap) {
-                print("found measure: \(measure)")
-                self.selectedClef = measure.clef
-            }*/
             
-            sheetCursor.hideCursors()
+            if !nearCursor(location: locationOfBeganTap) {
+                self.highlightRect.highlightingStartPoint = locationOfBeganTap
+                self.highlightRect.highlightingEndPoint = locationOfBeganTap
+                
+                sheetCursor.hideCursors()
+            } else {
+                movingCursor = true
+            }
 
         } else if sender.state == UIGestureRecognizerState.ended {
-            self.checkPointsInRect()
-            self.highlightRect.highlightingEndPoint = nil
             
+            let location = sender.location(in: self)
+            
+            if !movingCursor {
+                self.checkPointsInRect()
+                self.highlightRect.highlightingStartPoint = nil
+                self.highlightRect.highlightingEndPoint = nil
+            }
+            
+            movingCursor = false
         } else {
             let location = sender.location(in: self)
+            
 //            let previousLocation = self.highlightRect.highlightingEndPoint
-            self.highlightRect.highlightingEndPoint = location
+            if movingCursor {
+                self.remapCurrentMeasure(location: location)
+                self.moveCursorsToNearestSnapPoint(location: location)
+            } else {
+                self.highlightRect.highlightingEndPoint = location
+            }
 
             /*if self.selectedClef == nil {
                 if let measure = self.getMeasureFromPoint(point: location) {
