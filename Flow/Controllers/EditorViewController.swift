@@ -839,6 +839,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     @IBAction func onTouchHideButton(_ sender: UIButton) {
 //        self.bottomMenu.isHidden = true
+        if !self.keyboardScrollView.isHidden {
+            self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y - self.menuBar.bounds.height - 5
+        }
         let originalTransform = self.bottomMenu.transform
         let translatedTransform = originalTransform.translatedBy(x: 0, y: 60)
         
@@ -853,7 +856,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     @IBAction func onTouchShowButton(_ sender: UIButton) {
 //        self.bottomMenu.isHidden = false;
-        
+        if !self.keyboardScrollView.isHidden {
+            self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y + self.menuBar.bounds.height + 5
+        }
         let originalTransform = self.bottomMenu.transform
         let translatedTransform = originalTransform.translatedBy(x: 0, y: -60)
         
