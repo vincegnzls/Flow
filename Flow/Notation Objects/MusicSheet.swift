@@ -1053,9 +1053,12 @@ class MusicSheet: UIView {
 
         }
         
-        if newlyOpened {
+        if newlyOpened { // do this when newly opened
             self.remapCurrentMeasure(location: sheetCursor.curYCursorLocation)
             self.moveCursorsToNearestSnapPoint(location: sheetCursor.curYCursorLocation)
+            
+            self.scrollMusicSheetToX(x: 425.0, animated: false, convertPoint: false)
+            self.scrollMusicSheetToY(y: 125.0, animated: false, convertPoint: false)
             
             newlyOpened = false
         }
@@ -4184,19 +4187,27 @@ class MusicSheet: UIView {
         
     }
 
-    private func scrollMusicSheetToY (y: CGFloat, animated: Bool = true) {
+    private func scrollMusicSheetToY (y: CGFloat, animated: Bool = true, convertPoint: Bool = true) {
         if let outerScrollView = self.superview as? UIScrollView {
             
-            let convertedPoint = self.convert(CGPoint(x: outerScrollView.contentOffset.x, y: y), to: outerScrollView)
+            var convertedPoint = CGPoint(x: outerScrollView.contentOffset.x, y: y)
+            
+            if convertPoint {
+                convertedPoint = self.convert(CGPoint(x: outerScrollView.contentOffset.x, y: y), to: outerScrollView)
+            }
             
             outerScrollView.setContentOffset(convertedPoint, animated: animated)
         }
     }
     
-    private func scrollMusicSheetToX (x: CGFloat, animated: Bool = true) {
+    private func scrollMusicSheetToX (x: CGFloat, animated: Bool = true, convertPoint: Bool = true) {
         if let outerScrollView = self.superview as? UIScrollView {
             
-            let convertedPoint = self.convert(CGPoint(x: x, y: outerScrollView.contentOffset.y), to: outerScrollView)
+            var convertedPoint = CGPoint(x: x, y: outerScrollView.contentOffset.y)
+            
+            if convertPoint {
+                convertedPoint = self.convert(CGPoint(x: x, y: outerScrollView.contentOffset.y), to: outerScrollView)
+            }
             
             outerScrollView.setContentOffset(convertedPoint, animated: animated)
         }
