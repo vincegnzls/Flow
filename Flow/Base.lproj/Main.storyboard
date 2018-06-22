@@ -284,10 +284,10 @@ Tap '+' to create a new composition.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VHe-OH-6BV" userLabel="Menu" customClass="MenuBar" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="1112" height="60"/>
+                                <rect key="frame" x="0.0" y="774" width="1112" height="60"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="iEu-Uq-rfU" userLabel="Cut Copy Paste Stack">
-                                        <rect key="frame" x="100" y="10.5" width="130" height="45.5"/>
+                                        <rect key="frame" x="100" y="7.5" width="130" height="45.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="GYH-Nt-qcu" userLabel="Copy Stack">
                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="45.5"/>
@@ -358,7 +358,7 @@ Tap '+' to create a new composition.</string>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="TAn-Ub-OaB" userLabel="Undo Redo Stack">
-                                        <rect key="frame" x="300" y="10.5" width="80" height="45.5"/>
+                                        <rect key="frame" x="300" y="7.5" width="80" height="45.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="ncM-d7-A7N" userLabel="Undo Stack">
                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="45.5"/>
@@ -475,11 +475,11 @@ Tap '+' to create a new composition.</string>
                                     <constraint firstItem="iEu-Uq-rfU" firstAttribute="leading" secondItem="VHe-OH-6BV" secondAttribute="leading" constant="100" id="7aM-jC-bNT"/>
                                     <constraint firstItem="Ycl-gp-KaZ" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" id="L6e-35-TI6"/>
                                     <constraint firstItem="dCD-B0-Oho" firstAttribute="leading" secondItem="F0P-TH-ZFO" secondAttribute="trailing" constant="50" id="SmX-aq-Pwh"/>
-                                    <constraint firstItem="TAn-Ub-OaB" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" constant="3" id="VAi-p1-QqL"/>
+                                    <constraint firstItem="TAn-Ub-OaB" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" id="VAi-p1-QqL"/>
                                     <constraint firstAttribute="trailing" secondItem="dCD-B0-Oho" secondAttribute="trailing" constant="100" id="YDQ-AH-yIY"/>
                                     <constraint firstItem="Ycl-gp-KaZ" firstAttribute="centerX" secondItem="VHe-OH-6BV" secondAttribute="centerX" id="g70-9V-pBu"/>
                                     <constraint firstItem="TAn-Ub-OaB" firstAttribute="leading" secondItem="iEu-Uq-rfU" secondAttribute="trailing" constant="70" id="jR3-DN-cGK"/>
-                                    <constraint firstItem="iEu-Uq-rfU" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" constant="3" id="slP-uX-hxM"/>
+                                    <constraint firstItem="iEu-Uq-rfU" firstAttribute="centerY" secondItem="VHe-OH-6BV" secondAttribute="centerY" id="slP-uX-hxM"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="dSharpBtn" destination="NBh-oB-XfU" id="Ucn-7H-fiF"/>
@@ -496,19 +496,8 @@ Tap '+' to create a new composition.</string>
                                     <outlet property="twoDotsBtn" destination="nzu-Uc-umr" id="u7z-re-ofG"/>
                                 </connections>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4zk-xT-4Cr">
-                                <rect key="frame" x="516.5" y="808" width="80" height="34"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="34" id="2CR-dJ-trW"/>
-                                    <constraint firstAttribute="width" constant="80" id="CPa-rJ-63W"/>
-                                </constraints>
-                                <state key="normal" title="Show" image="show-menu-arrow"/>
-                                <connections>
-                                    <action selector="onTouchShowButton:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="RlN-U1-a4O"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Uy-OO-nyR" userLabel="Bottom Menu">
-                                <rect key="frame" x="0.0" y="774" width="1112" height="60"/>
+                                <rect key="frame" x="0.0" y="714" width="1112" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIn-ix-cFN" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="395" y="8" width="45" height="45"/>
@@ -519,7 +508,7 @@ Tap '+' to create a new composition.</string>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="C9e-be-vdB" userLabel="Accidentals Stack">
-                                        <rect key="frame" x="100" y="8" width="234" height="43"/>
+                                        <rect key="frame" x="30" y="8" width="234" height="43"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uE4-6g-BJV" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="43" height="43"/>
@@ -551,28 +540,17 @@ Tap '+' to create a new composition.</string>
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ccp-hq-7ZC">
-                                        <rect key="frame" x="516" y="-8" width="80" height="34"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="80" id="9UB-z8-haj"/>
-                                            <constraint firstAttribute="height" constant="34" id="wWm-wx-9pq"/>
-                                        </constraints>
-                                        <state key="normal" title="Hide" image="hide-menu-arrow"/>
-                                        <connections>
-                                            <action selector="onTouchHideButton:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="JNQ-tR-Od0"/>
-                                        </connections>
-                                    </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ZLD-aG-meq" userLabel="Dot Stack">
-                                        <rect key="frame" x="822" y="5" width="190" height="50"/>
+                                        <rect key="frame" x="907" y="7.5" width="175" height="45"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rQN-ic-H0l" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
                                                 <accessibility key="accessibilityConfiguration">
                                                     <bool key="isElement" value="NO"/>
                                                 </accessibility>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="1Cu-O8-j93"/>
-                                                    <constraint firstAttribute="width" constant="50" id="8Zm-l2-Rhi"/>
+                                                    <constraint firstAttribute="height" constant="45" id="1Cu-O8-j93"/>
+                                                    <constraint firstAttribute="width" constant="45" id="8Zm-l2-Rhi"/>
                                                 </constraints>
                                                 <state key="normal" title="Button" image="one-dot-icon"/>
                                                 <connections>
@@ -580,13 +558,13 @@ Tap '+' to create a new composition.</string>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzu-Uc-umr" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                <rect key="frame" x="70" y="0.0" width="50" height="50"/>
+                                                <rect key="frame" x="65" y="0.0" width="45" height="45"/>
                                                 <accessibility key="accessibilityConfiguration">
                                                     <bool key="isElement" value="NO"/>
                                                 </accessibility>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="P6l-Ty-C7r"/>
-                                                    <constraint firstAttribute="width" constant="50" id="ur3-yL-vn0"/>
+                                                    <constraint firstAttribute="height" constant="45" id="P6l-Ty-C7r"/>
+                                                    <constraint firstAttribute="width" constant="45" id="ur3-yL-vn0"/>
                                                 </constraints>
                                                 <state key="normal" title="Button" image="two-dot-icon"/>
                                                 <connections>
@@ -594,13 +572,13 @@ Tap '+' to create a new composition.</string>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-U5-9Q2" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                                <rect key="frame" x="140" y="0.0" width="50" height="50"/>
+                                                <rect key="frame" x="130" y="0.0" width="45" height="45"/>
                                                 <accessibility key="accessibilityConfiguration">
                                                     <bool key="isElement" value="NO"/>
                                                 </accessibility>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="BdB-TV-q42"/>
-                                                    <constraint firstAttribute="width" constant="50" id="gum-Jt-1f1"/>
+                                                    <constraint firstAttribute="height" constant="45" id="BdB-TV-q42"/>
+                                                    <constraint firstAttribute="width" constant="45" id="gum-Jt-1f1"/>
                                                 </constraints>
                                                 <state key="normal" title="Button" image="three-dot-icon"/>
                                                 <connections>
@@ -609,57 +587,69 @@ Tap '+' to create a new composition.</string>
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z3k-E7-fzk" userLabel="8va" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="604" y="8" width="45" height="45"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <state key="normal" image="8va-button"/>
-                                        <connections>
-                                            <action selector="eightVa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="LIa-5e-ChF"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L8F-Su-3ZI" userLabel="8vb" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="657" y="8" width="45" height="45"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <state key="normal" image="8vb-button"/>
-                                        <connections>
-                                            <action selector="eightVb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="eju-6W-YT3"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dv2-Ny-LAM" userLabel="15ma" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="710" y="8" width="45" height="45"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <state key="normal" image="15ma-button"/>
-                                        <connections>
-                                            <action selector="fifteenMa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="3Dm-wi-V4V"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCO-cJ-Zg9" userLabel="15mb" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="763" y="8" width="45" height="45"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <state key="normal" image="15mb-button"/>
-                                        <connections>
-                                            <action selector="fifteenMb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="Eyq-43-BXn"/>
-                                        </connections>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="oP1-QM-kWn" userLabel="Ottava Stack">
+                                        <rect key="frame" x="652" y="8" width="225" height="45"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z3k-E7-fzk" userLabel="8va" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="45" id="hEc-2l-Jvr"/>
+                                                    <constraint firstAttribute="width" constant="45" id="idc-X6-SVm"/>
+                                                </constraints>
+                                                <state key="normal" image="8va-button"/>
+                                                <connections>
+                                                    <action selector="eightVa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="LIa-5e-ChF"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L8F-Su-3ZI" userLabel="8vb" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                <rect key="frame" x="60" y="0.0" width="45" height="45"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="45" id="9ZT-DL-KJD"/>
+                                                    <constraint firstAttribute="width" constant="45" id="qT1-JN-oMs"/>
+                                                </constraints>
+                                                <state key="normal" image="8vb-button"/>
+                                                <connections>
+                                                    <action selector="eightVb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="eju-6W-YT3"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dv2-Ny-LAM" userLabel="15ma" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                <rect key="frame" x="120" y="0.0" width="45" height="45"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="45" id="JKM-Iz-Vnu"/>
+                                                    <constraint firstAttribute="width" constant="45" id="gva-Pw-Mrm"/>
+                                                </constraints>
+                                                <state key="normal" image="15ma-button"/>
+                                                <connections>
+                                                    <action selector="fifteenMa:" destination="VHe-OH-6BV" eventType="touchUpInside" id="3Dm-wi-V4V"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCO-cJ-Zg9" userLabel="15mb" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
+                                                <rect key="frame" x="180" y="0.0" width="45" height="45"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="45" id="HyU-2z-ScK"/>
+                                                    <constraint firstAttribute="width" constant="45" id="UxO-Kv-AEd"/>
+                                                </constraints>
+                                                <state key="normal" image="15mb-button"/>
+                                                <connections>
+                                                    <action selector="fifteenMb:" destination="VHe-OH-6BV" eventType="touchUpInside" id="Eyq-43-BXn"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="ZLD-aG-meq" secondAttribute="trailing" constant="100" id="2QK-Y9-VtY"/>
-                                    <constraint firstItem="C9e-be-vdB" firstAttribute="leading" secondItem="9Uy-OO-nyR" secondAttribute="leading" constant="100" id="4Mb-DB-0oh"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZLD-aG-meq" secondAttribute="trailing" constant="30" id="2QK-Y9-VtY"/>
+                                    <constraint firstItem="C9e-be-vdB" firstAttribute="leading" secondItem="9Uy-OO-nyR" secondAttribute="leading" constant="30" id="4Mb-DB-0oh"/>
                                     <constraint firstAttribute="height" constant="60" id="5rs-W5-jyX"/>
-                                    <constraint firstItem="Ccp-hq-7ZC" firstAttribute="centerX" secondItem="9Uy-OO-nyR" secondAttribute="centerX" id="EWW-qC-sXp"/>
                                     <constraint firstItem="C9e-be-vdB" firstAttribute="centerY" secondItem="9Uy-OO-nyR" secondAttribute="centerY" id="Fiz-UI-019"/>
+                                    <constraint firstItem="oP1-QM-kWn" firstAttribute="centerY" secondItem="9Uy-OO-nyR" secondAttribute="centerY" id="NTd-Zp-u8U"/>
                                     <constraint firstItem="ZLD-aG-meq" firstAttribute="centerY" secondItem="9Uy-OO-nyR" secondAttribute="centerY" id="OmV-au-bbA"/>
-                                    <constraint firstItem="Ccp-hq-7ZC" firstAttribute="top" secondItem="9Uy-OO-nyR" secondAttribute="top" constant="-8" id="c2r-34-ooS"/>
+                                    <constraint firstItem="ZLD-aG-meq" firstAttribute="leading" secondItem="oP1-QM-kWn" secondAttribute="trailing" constant="30" id="iC8-5G-YVD"/>
                                 </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="self.layer.borderWidth">
-                                        <integer key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-FI-wrK">
-                                <rect key="frame" x="0.0" y="129" width="1112" height="640"/>
+                                <rect key="frame" x="0.0" y="64" width="1112" height="645"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bCt-Js-Xda" customClass="MusicSheet" customModule="Flow" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="1112" height="640"/>
@@ -693,7 +683,7 @@ Tap '+' to create a new composition.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-Gc-gcB" customClass="ButtonEffect" customModule="Flow" customModuleProvider="target">
-                                        <rect key="frame" x="640" y="297" width="45" height="45"/>
+                                        <rect key="frame" x="640" y="302" width="45" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" image="tie-slur-button"/>
                                         <connections>
@@ -1102,7 +1092,7 @@ Tap '+' to create a new composition.</string>
                                 </connections>
                             </view>
                             <view alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vvK-lH-hA9" userLabel="Tempo Slider">
-                                <rect key="frame" x="815" y="117" width="250" height="50"/>
+                                <rect key="frame" x="800" y="650" width="250" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="30" maxValue="200" translatesAutoresizingMaskIntoConstraints="NO" id="Q0u-RV-0u3">
@@ -1121,7 +1111,7 @@ Tap '+' to create a new composition.</string>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LSc-ra-udB">
-                                <rect key="frame" x="0.0" y="630" width="1112" height="140"/>
+                                <rect key="frame" x="0.0" y="573" width="1112" height="140"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ae9-dp-GQa" userLabel="Keyboard" customClass="KeyboardView" customModule="Flow" customModuleProvider="target">
@@ -1137,16 +1127,14 @@ Tap '+' to create a new composition.</string>
                             <accessibilityTraits key="traits" allowsDirectInteraction="YES"/>
                         </accessibility>
                         <constraints>
-                            <constraint firstItem="9Uy-OO-nyR" firstAttribute="bottom" secondItem="j19-iv-FrW" secondAttribute="bottom" id="63W-Em-kom"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="7NV-X7-x9s"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="96U-OV-wpB"/>
+                            <constraint firstItem="VHe-OH-6BV" firstAttribute="top" secondItem="9Uy-OO-nyR" secondAttribute="bottom" id="HeS-EV-EOK"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="Jdk-b5-cZV"/>
-                            <constraint firstItem="VHe-OH-6BV" firstAttribute="top" secondItem="j19-iv-FrW" secondAttribute="top" id="Mk4-6g-fF2"/>
-                            <constraint firstItem="4zk-xT-4Cr" firstAttribute="centerX" secondItem="ACD-nf-3gA" secondAttribute="centerX" id="MsI-id-h3M"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="top" secondItem="9Me-FI-wrK" secondAttribute="bottom" constant="5" id="NOA-83-POD"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="aWf-I0-eDT"/>
-                            <constraint firstItem="9Me-FI-wrK" firstAttribute="top" secondItem="VHe-OH-6BV" secondAttribute="bottom" constant="5" id="nXp-Hu-rYX"/>
-                            <constraint firstAttribute="bottom" secondItem="4zk-xT-4Cr" secondAttribute="bottom" constant="-8" id="o17-se-kPh"/>
+                            <constraint firstItem="j19-iv-FrW" firstAttribute="bottom" secondItem="VHe-OH-6BV" secondAttribute="bottom" id="bpI-Zd-q7F"/>
+                            <constraint firstItem="9Me-FI-wrK" firstAttribute="top" secondItem="j19-iv-FrW" secondAttribute="top" id="gKL-Yn-93r"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="s53-Nk-Va2"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="uPJ-bS-SXc"/>
                         </constraints>
@@ -1502,7 +1490,6 @@ Tap '+' to create a new composition.</string>
         <image name="flat-icon" width="43" height="43"/>
         <image name="half-note-icon" width="115" height="115"/>
         <image name="half-rest-icon" width="116" height="115"/>
-        <image name="hide-menu-arrow" width="228" height="115"/>
         <image name="keysig-a" width="60" height="60"/>
         <image name="keysig-aflat" width="60" height="60"/>
         <image name="keysig-b" width="60" height="60"/>
@@ -1528,7 +1515,6 @@ Tap '+' to create a new composition.</string>
         <image name="redo-icon" width="50" height="50"/>
         <image name="save-icon" width="100" height="100"/>
         <image name="sharp-icon" width="44" height="43"/>
-        <image name="show-menu-arrow" width="228" height="115"/>
         <image name="three-dot-icon" width="116" height="115"/>
         <image name="tie-slur-button" width="116" height="115"/>
         <image name="time-key-icon" width="100" height="100"/>

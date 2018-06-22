@@ -100,20 +100,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapTempo))
         self.tempoStackView.addGestureRecognizer(tapGesture)
-        
-        self.setupBottomMenu()
-    }
-    
-    private func setupBottomMenu() {
-        self.bottomMenu.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
-        
-        let defaults = UserDefaults.standard
-        
-        let isBottomMenuHidden = defaults.bool(forKey: Constants.keyIsBottomMenuHidden)
-        
-        if isBottomMenuHidden {
-            self.bottomMenu.transform = self.bottomMenu.transform.translatedBy(x: 0, y: 60)
-        }
     }
     
     @IBAction func onBackPressed(_ sender: UIBarButtonItem) {
@@ -834,41 +820,6 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.tempoTextField.endEditing(true)
         return false
-    }
-    
-    
-    @IBAction func onTouchHideButton(_ sender: UIButton) {
-//        self.bottomMenu.isHidden = true
-        if !self.keyboardScrollView.isHidden {
-            self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y - self.menuBar.bounds.height - 5
-        }
-        let originalTransform = self.bottomMenu.transform
-        let translatedTransform = originalTransform.translatedBy(x: 0, y: 60)
-        
-        UIView.transition(with: self.bottomMenu, duration: 0.3, animations: {
-            self.bottomMenu.transform = translatedTransform
-//            self.bottomMenu.isHidden = true
-        })
-        
-        let defaults = UserDefaults.standard
-        defaults.set(true, forKey: Constants.keyIsBottomMenuHidden)
-    }
-    
-    @IBAction func onTouchShowButton(_ sender: UIButton) {
-//        self.bottomMenu.isHidden = false;
-        if !self.keyboardScrollView.isHidden {
-            self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y + self.menuBar.bounds.height + 5
-        }
-        let originalTransform = self.bottomMenu.transform
-        let translatedTransform = originalTransform.translatedBy(x: 0, y: -60)
-        
-        UIView.transition(with: self.bottomMenu, duration: 0.3, animations: {
-            self.bottomMenu.transform = translatedTransform
-//            self.bottomMenu.isHidden = false
-        })
-        
-        let defaults = UserDefaults.standard
-        defaults.set(false, forKey: Constants.keyIsBottomMenuHidden)
     }
 
     @IBAction func transposeUp(_ sender: UIButton) {
