@@ -1165,19 +1165,18 @@ Tap '+' to create a new composition.</string>
                             <accessibilityTraits key="traits" allowsDirectInteraction="YES"/>
                         </accessibility>
                         <constraints>
-                            <constraint firstItem="j19-iv-FrW" firstAttribute="trailing" secondItem="ofr-4l-NNl" secondAttribute="trailing" constant="506" id="2cH-OY-dI4"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="7NV-X7-x9s"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="top" secondItem="V3F-6U-rNx" secondAttribute="bottom" id="7p5-Pr-iu2"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="96U-OV-wpB"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="top" secondItem="9Uy-OO-nyR" secondAttribute="bottom" id="HeS-EV-EOK"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="Jdk-b5-cZV"/>
+                            <constraint firstItem="ofr-4l-NNl" firstAttribute="centerX" secondItem="ACD-nf-3gA" secondAttribute="centerX" id="KPE-9h-Pbk"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="top" secondItem="9Me-FI-wrK" secondAttribute="bottom" constant="5" id="NOA-83-POD"/>
                             <constraint firstItem="V3F-6U-rNx" firstAttribute="centerX" secondItem="ACD-nf-3gA" secondAttribute="centerX" id="Ne0-53-v6x"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="aWf-I0-eDT"/>
                             <constraint firstItem="j19-iv-FrW" firstAttribute="bottom" secondItem="VHe-OH-6BV" secondAttribute="bottom" id="bpI-Zd-q7F"/>
                             <constraint firstItem="V3F-6U-rNx" firstAttribute="top" secondItem="ofr-4l-NNl" secondAttribute="bottom" constant="14" id="dmG-wh-U5J"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="top" secondItem="j19-iv-FrW" secondAttribute="top" id="gKL-Yn-93r"/>
-                            <constraint firstItem="ofr-4l-NNl" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" constant="506" id="hvH-lK-t40"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="s53-Nk-Va2"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="uPJ-bS-SXc"/>
                         </constraints>
@@ -1528,6 +1527,7 @@ Tap '+' to create a new composition.</string>
         <image name="8va-button" width="115" height="115"/>
         <image name="8vb-button" width="115" height="115"/>
         <image name="block-view-icon" width="116" height="115"/>
+        <image name="button:V3F-6U-rNx:image" width="16" height="16"/>
         <image name="circle" width="512" height="512"/>
         <image name="controls-arrow-down" width="320" height="320"/>
         <image name="controls-arrow-left" width="320" height="320"/>
@@ -1567,7 +1567,7 @@ Tap '+' to create a new composition.</string>
         <image name="quarter-rest-icon" width="115" height="115"/>
         <image name="redo-icon" width="50" height="50"/>
         <image name="save-icon" width="100" height="100"/>
-        <image name="sharp-icon" width="44" height="43"/>
+        <image name="sharp-icon" width="115" height="115"/>
         <image name="show-menu-arrow" width="228" height="115"/>
         <image name="three-dot-icon" width="116" height="115"/>
         <image name="tie-slur-button" width="116" height="115"/>
