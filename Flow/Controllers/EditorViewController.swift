@@ -35,6 +35,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var notationControlsView: NotationControlsView!
     
     @IBOutlet weak var showButton: UIButton!
+    @IBOutlet weak var hideButton: UIButton!
     var backButton : UIBarButtonItem!
     
     var composition: Composition?
@@ -86,6 +87,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                 }
             }
         }
+
+        self.hideButton.layer.zPosition = .greatestFiniteMagnitude
+        self.hideButton.isHidden = false
         
         if self.bottomMenu != nil {
             self.bottomMenu.layer.zPosition = .greatestFiniteMagnitude
@@ -867,7 +871,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBAction func onTouchHideButton(_ sender: UIButton) {
         //        self.bottomMenu.isHidden = true
         if !self.keyboardScrollView.isHidden {
-            self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y - self.menuBar.bounds.height - 5
+            //self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y - self.menuBar.bounds.height - 5
         }
         let originalTransform = self.bottomMenu.transform
         let translatedTransform = originalTransform.translatedBy(x: 0, y: 60)
@@ -875,11 +879,14 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         UIView.transition(with: self.bottomMenu, duration: 0.3, animations: {
             self.bottomMenu.transform = translatedTransform
+            self.keyboardScrollView.transform = self.keyboardScrollView.transform.translatedBy(x: 0, y: self.bottomMenu.frame.height)
             //            self.bottomMenu.isHidden = true
         }, completion: {
             finished in
             self.bottomMenu.isHidden = true
             self.showButton.isHidden = false
+            self.showButton.layer.zPosition = .greatestFiniteMagnitude
+            self.hideButton.isHidden = true
             self.adjustLowerBounds(by: -60)
         })
         
@@ -890,7 +897,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBAction func onTouchShowButton(_ sender: UIButton) {
         //        self.bottomMenu.isHidden = false;
         if !self.keyboardScrollView.isHidden {
-            self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y + self.menuBar.bounds.height + 5
+            //self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y + self.menuBar.bounds.height + 5
         }
         let originalTransform = self.bottomMenu.transform
         let translatedTransform = originalTransform.translatedBy(x: 0, y: -60)
@@ -898,11 +905,13 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         UIView.transition(with: self.bottomMenu, duration: 0.3, animations: {
             self.bottomMenu.transform = translatedTransform
+            self.keyboardScrollView.transform = self.keyboardScrollView.transform.translatedBy(x: 0, y: self.bottomMenu.frame.height * -1)
             //            self.bottomMenu.isHidden = false
         }, completion: {
             finished in
-            
+            self.bottomMenu.layer.zPosition = .greatestFiniteMagnitude
             self.showButton.isHidden = true
+            self.hideButton.isHidden = false
             self.adjustLowerBounds(by: 60)
         })
         
