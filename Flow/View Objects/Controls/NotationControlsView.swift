@@ -30,6 +30,8 @@ class NotationControlsView: DraggableView {
     @IBOutlet var sixtyFourthNote: UIButton!
     @IBOutlet var sixtyFourthRest: UIButton!
     
+    @IBOutlet var toggleKeyboardBtn: UIButton!
+    
     public var keyboardInputOn: Bool
     private var activeKeyboardInputType: RestNoteType?
     
@@ -72,6 +74,26 @@ class NotationControlsView: DraggableView {
         EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "NotationControls.hideOnPlay", function: self.hideOnPlay))
         EventBroadcaster.instance.removeObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "NotationControls.toggleKeyboard", function: self.toggleKeyboard))
         EventBroadcaster.instance.addObserver(event: EventNames.TOGGLE_KEYBOARD, observer: Observer(id: "NotationControls.toggleKeyboard", function: self.toggleKeyboard))
+    }
+    
+    func highlightKeyboardBtn() {
+        self.toggleKeyboardBtn.setImage(UIImage(named: "toggle-piano-button-active"), for: .normal)
+    }
+    
+    func removeHighlightKeyboardBtn() {
+        self.toggleKeyboardBtn.setImage(UIImage(named: "toggle-piano-button"), for: .normal)
+    }
+    
+    @IBAction func toggleKeyboard(_ sender: UIButton) {
+        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_KEYBOARD)
+        
+        if keyboardInputOn {
+            self.highlightKeyboardBtn()
+        } else {
+            self.removeHighlightKeyboardBtn()
+        }
+        
+        print("TOGGLE PRESSED")
     }
     
     @IBAction func wholeNote(_ sender: UIButton) {
