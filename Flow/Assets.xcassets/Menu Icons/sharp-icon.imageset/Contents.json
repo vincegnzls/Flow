@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "gesture-screensArtboard 68@3x.png",
+      "filename" : "sharp-icon.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "gesture-screensArtboard 68@3x-1.png",
+      "filename" : "sharp-icon-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "gesture-screensArtboard 68@3x-2.png",
+      "filename" : "sharp-icon-2.png",
       "scale" : "3x"
     }
   ],
