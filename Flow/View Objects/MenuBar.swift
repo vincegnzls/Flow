@@ -404,11 +404,6 @@ class MenuBar: UIView {
         }
     }
     
-    @IBAction func toggleKeyboard(_ sender: UIButton) {
-        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_KEYBOARD)
-        print("TOGGLE PRESSED")
-    }
-    
     @IBAction func eightVa(_ sender: UIButton) {
         let params = Parameters()
         params.put(key: KeyNames.OTTAVA, value: OttavaType.eightVa)
