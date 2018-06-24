@@ -34,6 +34,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var keyboardScrollView: UIScrollView!
     @IBOutlet weak var notationControlsView: NotationControlsView!
     
+    @IBOutlet weak var showButton: UIButton!
     var backButton : UIBarButtonItem!
     
     var composition: Composition?
@@ -84,6 +85,14 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                     }
                 }
             }
+        }
+        
+        if self.bottomMenu != nil {
+            self.bottomMenu.layer.zPosition = .greatestFiniteMagnitude
+        }
+        
+        if self.menuBar != nil {
+            self.menuBar.layer.zPosition = .greatestFiniteMagnitude
         }
         
         if let titleTextField = self.titleTextField, let compositionTitle = self.composition?.compositionInfo.name {
@@ -853,6 +862,58 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         params.put(key: KeyNames.CONNECTION, value: connection)
         
         EventBroadcaster.instance.postEvent(event: EventNames.CONNECTION, params: params)
+    }
+    
+    @IBAction func onTouchHideButton(_ sender: UIButton) {
+        //        self.bottomMenu.isHidden = true
+        if !self.keyboardScrollView.isHidden {
+            self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y - self.menuBar.bounds.height - 5
+        }
+        let originalTransform = self.bottomMenu.transform
+        let translatedTransform = originalTransform.translatedBy(x: 0, y: 60)
+        self.view.sendSubview(toBack: self.bottomMenu)
+        
+        UIView.transition(with: self.bottomMenu, duration: 0.3, animations: {
+            self.bottomMenu.transform = translatedTransform
+            //            self.bottomMenu.isHidden = true
+        }, completion: {
+            finished in
+            self.bottomMenu.isHidden = true
+            self.showButton.isHidden = false
+            self.adjustLowerBounds(by: -60)
+        })
+        
+        let defaults = UserDefaults.standard
+        defaults.set(true, forKey: Constants.keyIsBottomMenuHidden)
+    }
+    
+    @IBAction func onTouchShowButton(_ sender: UIButton) {
+        //        self.bottomMenu.isHidden = false;
+        if !self.keyboardScrollView.isHidden {
+            self.keyboardScrollView.bounds.origin.y = self.keyboardScrollView.bounds.origin.y + self.menuBar.bounds.height + 5
+        }
+        let originalTransform = self.bottomMenu.transform
+        let translatedTransform = originalTransform.translatedBy(x: 0, y: -60)
+        self.bottomMenu.isHidden = false
+        
+        UIView.transition(with: self.bottomMenu, duration: 0.3, animations: {
+            self.bottomMenu.transform = translatedTransform
+            //            self.bottomMenu.isHidden = false
+        }, completion: {
+            finished in
+            
+            self.showButton.isHidden = true
+            self.adjustLowerBounds(by: 60)
+        })
+        
+        let defaults = UserDefaults.standard
+        defaults.set(false, forKey: Constants.keyIsBottomMenuHidden)
+    }
+    
+    private func adjustLowerBounds(by value: CGFloat) {
+        if let view = self.view as? ContainerView {
+            view.bottomHeight += value
+        }
     }
 }
 
