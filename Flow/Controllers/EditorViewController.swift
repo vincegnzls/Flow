@@ -35,6 +35,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var notationControlsView: NotationControlsView!
     
     @IBOutlet weak var showButton: UIButton!
+    @IBOutlet weak var hideButton: UIButton!
     var backButton : UIBarButtonItem!
     
     var composition: Composition?
@@ -86,6 +87,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                 }
             }
         }
+
+        self.hideButton.layer.zPosition = .greatestFiniteMagnitude
+        self.hideButton.isHidden = false
         
         if self.bottomMenu != nil {
             self.bottomMenu.layer.zPosition = .greatestFiniteMagnitude
@@ -880,6 +884,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             finished in
             self.bottomMenu.isHidden = true
             self.showButton.isHidden = false
+            self.showButton.layer.zPosition = .greatestFiniteMagnitude
+            self.hideButton.isHidden = true
             self.adjustLowerBounds(by: -60)
         })
         
@@ -901,8 +907,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             //            self.bottomMenu.isHidden = false
         }, completion: {
             finished in
-            
+            self.bottomMenu.layer.zPosition = .greatestFiniteMagnitude
             self.showButton.isHidden = true
+            self.hideButton.isHidden = false
             self.adjustLowerBounds(by: 60)
         })
         

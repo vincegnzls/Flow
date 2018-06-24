@@ -496,7 +496,7 @@ Tap '+' to create a new composition.</string>
                                     <outlet property="twoDotsBtn" destination="nzu-Uc-umr" id="u7z-re-ofG"/>
                                 </connections>
                             </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-FI-wrK">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-FI-wrK">
                                 <rect key="frame" x="0.0" y="64" width="1112" height="705"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bCt-Js-Xda" customClass="MusicSheet" customModule="Flow" customModuleProvider="target">
@@ -565,7 +565,6 @@ Tap '+' to create a new composition.</string>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="bCt-Js-Xda" secondAttribute="trailing" id="6yC-YM-h1r"/>
                                     <constraint firstItem="bCt-Js-Xda" firstAttribute="leading" secondItem="9Me-FI-wrK" secondAttribute="leading" id="DfM-UL-Qnd"/>
-                                    <constraint firstAttribute="bottom" secondItem="bCt-Js-Xda" secondAttribute="bottom" id="KWw-rM-d9D"/>
                                     <constraint firstItem="bCt-Js-Xda" firstAttribute="top" secondItem="9Me-FI-wrK" secondAttribute="top" id="g4l-Dq-SDk"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -721,17 +720,6 @@ Tap '+' to create a new composition.</string>
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofr-4l-NNl" userLabel="Hide Button">
-                                        <rect key="frame" x="506" y="0.0" width="100" height="45"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="100" id="2qb-UY-hft"/>
-                                            <constraint firstAttribute="height" constant="45" id="SLU-SH-jxu"/>
-                                        </constraints>
-                                        <state key="normal" title="Button" image="hide-menu-arrow"/>
-                                        <connections>
-                                            <action selector="onTouchHideButton:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="1LQ-WE-flS"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -739,11 +727,9 @@ Tap '+' to create a new composition.</string>
                                     <constraint firstItem="C9e-be-vdB" firstAttribute="leading" secondItem="9Uy-OO-nyR" secondAttribute="leading" constant="30" id="4Mb-DB-0oh"/>
                                     <constraint firstAttribute="height" constant="60" id="5rs-W5-jyX"/>
                                     <constraint firstItem="C9e-be-vdB" firstAttribute="centerY" secondItem="9Uy-OO-nyR" secondAttribute="centerY" id="Fiz-UI-019"/>
-                                    <constraint firstItem="ofr-4l-NNl" firstAttribute="top" secondItem="9Uy-OO-nyR" secondAttribute="top" id="Lom-6X-0oT"/>
                                     <constraint firstItem="oP1-QM-kWn" firstAttribute="centerY" secondItem="9Uy-OO-nyR" secondAttribute="centerY" id="NTd-Zp-u8U"/>
                                     <constraint firstItem="ZLD-aG-meq" firstAttribute="centerY" secondItem="9Uy-OO-nyR" secondAttribute="centerY" id="OmV-au-bbA"/>
                                     <constraint firstItem="ZLD-aG-meq" firstAttribute="leading" secondItem="oP1-QM-kWn" secondAttribute="trailing" constant="30" id="iC8-5G-YVD"/>
-                                    <constraint firstItem="ofr-4l-NNl" firstAttribute="centerX" secondItem="9Uy-OO-nyR" secondAttribute="centerX" id="kXZ-DG-j0o"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x7c-ta-wj1" customClass="CursorControlsView" customModule="Flow" customModuleProvider="target">
@@ -1143,13 +1129,24 @@ Tap '+' to create a new composition.</string>
                                     </view>
                                 </subviews>
                             </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofr-4l-NNl" userLabel="Hide Button">
+                                <rect key="frame" x="506" y="670" width="100" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="2qb-UY-hft"/>
+                                    <constraint firstAttribute="height" constant="45" id="SLU-SH-jxu"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="hide-menu-arrow"/>
+                                <connections>
+                                    <action selector="onTouchHideButton:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="1LQ-WE-flS"/>
+                                </connections>
+                            </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V3F-6U-rNx" userLabel="Show Button">
                                 <rect key="frame" x="506" y="729" width="100" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="2tL-td-5VM"/>
                                     <constraint firstAttribute="height" constant="45" id="7bH-3g-7Ng"/>
                                 </constraints>
-                                <state key="normal" title="Button" image="button:V3F-6U-rNx:image"/>
+                                <state key="normal" image="button:V3F-6U-rNx:image" backgroundImage="show-menu-arrow"/>
                                 <connections>
                                     <action selector="onTouchShowButton:" destination="ldS-Qo-c4z" eventType="touchUpInside" id="5XB-Xt-bC2"/>
                                 </connections>
@@ -1160,6 +1157,7 @@ Tap '+' to create a new composition.</string>
                             <accessibilityTraits key="traits" allowsDirectInteraction="YES"/>
                         </accessibility>
                         <constraints>
+                            <constraint firstItem="j19-iv-FrW" firstAttribute="trailing" secondItem="ofr-4l-NNl" secondAttribute="trailing" constant="506" id="2cH-OY-dI4"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="7NV-X7-x9s"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="top" secondItem="V3F-6U-rNx" secondAttribute="bottom" id="7p5-Pr-iu2"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="96U-OV-wpB"/>
@@ -1169,7 +1167,9 @@ Tap '+' to create a new composition.</string>
                             <constraint firstItem="V3F-6U-rNx" firstAttribute="centerX" secondItem="ACD-nf-3gA" secondAttribute="centerX" id="Ne0-53-v6x"/>
                             <constraint firstItem="VHe-OH-6BV" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="aWf-I0-eDT"/>
                             <constraint firstItem="j19-iv-FrW" firstAttribute="bottom" secondItem="VHe-OH-6BV" secondAttribute="bottom" id="bpI-Zd-q7F"/>
+                            <constraint firstItem="V3F-6U-rNx" firstAttribute="top" secondItem="ofr-4l-NNl" secondAttribute="bottom" constant="14" id="dmG-wh-U5J"/>
                             <constraint firstItem="9Me-FI-wrK" firstAttribute="top" secondItem="j19-iv-FrW" secondAttribute="top" id="gKL-Yn-93r"/>
+                            <constraint firstItem="ofr-4l-NNl" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" constant="506" id="hvH-lK-t40"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="leading" secondItem="j19-iv-FrW" secondAttribute="leading" id="s53-Nk-Va2"/>
                             <constraint firstItem="9Uy-OO-nyR" firstAttribute="trailing" secondItem="j19-iv-FrW" secondAttribute="trailing" id="uPJ-bS-SXc"/>
                         </constraints>
@@ -1216,6 +1216,7 @@ Tap '+' to create a new composition.</string>
                     <connections>
                         <outlet property="bottomMenu" destination="9Uy-OO-nyR" id="qAP-7j-PpZ"/>
                         <outlet property="connectBtn" destination="9HY-Gc-gcB" id="5H3-f9-1Rs"/>
+                        <outlet property="hideButton" destination="ofr-4l-NNl" id="4gZ-Ix-r2L"/>
                         <outlet property="inversionBtn" destination="oVX-49-dcL" id="XAT-Fl-fRM"/>
                         <outlet property="keyboardScrollView" destination="LSc-ra-udB" id="GLS-3b-S9V"/>
                         <outlet property="keyboardView" destination="Ae9-dp-GQa" id="UWE-BK-yB1"/>
@@ -3416,6 +3417,7 @@ bgABsHMAAAAAAAAEAQAAAAAAAABZAAAAAAAAAAAAAAAAAAGwdQ
         <image name="redo-icon" width="50" height="50"/>
         <image name="save-icon" width="100" height="100"/>
         <image name="sharp-icon" width="44" height="43"/>
+        <image name="show-menu-arrow" width="228" height="115"/>
         <image name="three-dot-icon" width="116" height="115"/>
         <image name="tie-slur-button" width="116" height="115"/>
         <image name="time-key-icon" width="100" height="100"/>
