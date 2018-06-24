@@ -46,10 +46,10 @@ class MenuBar: UIView {
 
     private func setup() {
         // Set up shadow
-        self.layer.shadowColor = UIColor.black.cgColor
+        /*self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 0.1
         self.layer.shadowOffset = CGSize.zero
-        self.layer.shadowRadius = 5
+        self.layer.shadowRadius = 5*/
 
         EventBroadcaster.instance.removeObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MenuBar.stop", function: self.stop))
         EventBroadcaster.instance.addObserver(event: EventNames.STOP_PLAYBACK, observer: Observer(id: "MenuBar.stop", function: self.stop))
@@ -402,11 +402,6 @@ class MenuBar: UIView {
                 }
             }
         }
-    }
-    
-    @IBAction func toggleKeyboard(_ sender: UIButton) {
-        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_KEYBOARD)
-        print("TOGGLE PRESSED")
     }
     
     @IBAction func eightVa(_ sender: UIButton) {

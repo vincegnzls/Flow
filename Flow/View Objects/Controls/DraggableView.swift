@@ -30,7 +30,7 @@ class DraggableView: UIView {
     }
 
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
-        if let superview = self.superview {
+        if let superview = self.superview as? ContainerView {
             superview.bringSubview(toFront: self)
 
 
@@ -48,8 +48,8 @@ class DraggableView: UIView {
             if #available(iOS 11, *) {
                 let safeArea = superview.safeAreaInsets
 
-                if newCenterY + self.bounds.height / 2 >= superview.bounds.height {
-                    newCenterY = superview.bounds.height - self.bounds.height / 2
+                if newCenterY + self.bounds.height / 2 >= superview.lowerBounds {
+                    newCenterY = superview.lowerBounds - self.bounds.height / 2
                 } else if newCenterY <= self.bounds.height / 2 + safeArea.top {
                     newCenterY = self.bounds.height / 2 + safeArea.top
                 }
@@ -57,8 +57,8 @@ class DraggableView: UIView {
             else {
                 let statusBarHeight = UIApplication.shared.statusBarFrame.height
 
-                if newCenterY + self.bounds.height / 2 >= superview.bounds.height {
-                    newCenterY = superview.bounds.height - self.bounds.height / 2
+                if newCenterY + self.bounds.height / 2 >= superview.lowerBounds {
+                    newCenterY = superview.lowerBounds - self.bounds.height / 2
                 } else if newCenterY <= self.bounds.height / 2  + statusBarHeight {
                     newCenterY = self.bounds.height / 2 + statusBarHeight
                 }
