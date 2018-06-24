@@ -5815,7 +5815,8 @@ class MusicSheet: UIView {
 
                 if sameConnections(notations: self.selectedNotations) && sameInstanceConnections(notations: self.selectedNotations) {
                     // remove all connections
-                    var newNotes = [Note]()
+                    var oldNotes = [MusicNotation]()
+                    var newNotes = [MusicNotation]()
                     
                     var connCount: Int? = nil
                     
@@ -5834,14 +5835,34 @@ class MusicSheet: UIView {
                                 }
                             }
                             
-                            let newNote = note.duplicate()
-                            newNote.connection = nil
+                            if let chord = note.chord {
+                                
+                                let newChord = chord.duplicate()
+                                let newNote = note.duplicate()
+                                newNote.connection = nil
+                                
+                                if let indexToChange = chord.notes.index(of: note) {
+                                
+                                    newChord.notes[indexToChange] = newNote
+                                    
+                                    oldNotes.append(chord)
+                                    newNotes.append(newChord)
+                                    
+                                }
+                                
+                            } else {
                             
-                            newNotes.append(newNote)
+                                let newNote = note.duplicate()
+                                newNote.connection = nil
+                                
+                                oldNotes.append(note)
+                                newNotes.append(newNote)
+                                
+                            }
                         }
                     }
                     
-                    let editAction = EditAction(old: selectedNotations, new: newNotes)
+                    let editAction = EditAction(old: oldNotes, new: newNotes)
                     editAction.execute()
                     
                     selectedNotations.removeAll()
