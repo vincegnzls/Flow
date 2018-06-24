@@ -785,6 +785,7 @@ class SoundManager {
             var nextDuration = 0
             
             for note in chord.notes {
+                nextDuration = 0
                 if let connection = note.connection {
                     
                     if connection.type == .slur {
@@ -803,6 +804,7 @@ class SoundManager {
             }
             
             if allTies {
+                x = 0
                 x += nextDuration
             }
             
@@ -1697,7 +1699,13 @@ class SoundManager {
         
         if let firstStaff = comp.staffList.first {
             
-            if let notationMeasure = from.measure, let notationIndex = notationMeasure.notationObjects.index(of: from) {
+            var notationToBeChecked = from
+            
+            if let note = from as? Note, let chord = note.chord {
+                notationToBeChecked = chord
+            }
+            
+            if let notationMeasure = notationToBeChecked.measure, let notationIndex = notationMeasure.notationObjects.index(of: notationToBeChecked) {
             
                 if let startingIndex = firstStaff.measures.index(of: notationMeasure) {
                     
