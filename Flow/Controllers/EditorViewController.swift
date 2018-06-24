@@ -913,6 +913,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             self.showButton.isHidden = true
             self.hideButton.isHidden = false
             self.adjustLowerBounds(by: 60)
+            self.view.bringSubview(toFront: self.bottomMenu)
         })
         
         let defaults = UserDefaults.standard
