@@ -734,7 +734,7 @@ Tap '+' to create a new composition.</string>
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x7c-ta-wj1" customClass="CursorControlsView" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="800" y="500" width="200" height="200"/>
+                                <rect key="frame" x="800" y="450" width="200" height="200"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zt0-BY-37g">
@@ -774,12 +774,17 @@ Tap '+' to create a new composition.</string>
                                 </subviews>
                             </view>
                             <view alpha="0.94999999999999996" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLW-3Y-Rf2" customClass="NotationControlsView" customModule="Flow" customModuleProvider="target">
-                                <rect key="frame" x="350" y="545" width="400" height="100"/>
+                                <rect key="frame" x="269" y="450" width="483" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tqb-NF-tVa">
+                                        <rect key="frame" x="0.0" y="0.0" width="55" height="99"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="PIANO" image="toggle-piano-button"/>
+                                    </button>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yvv-DJ-7yL" userLabel="NotesView">
-                                        <rect key="frame" x="0.0" y="0.0" width="344" height="99"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="73" y="0.0" width="344" height="99"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XXc-Jk-4Ze" userLabel="Whole">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -1065,8 +1070,8 @@ Tap '+' to create a new composition.</string>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qos-Jd-pgr">
-                                        <rect key="frame" x="350" y="0.0" width="50" height="99"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="433" y="0.0" width="50" height="99"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="0.1972741642609912" blue="0.14941221948879158" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="displayP3"/>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="15"/>
                                         <state key="normal" title="DEL">
@@ -1530,6 +1535,7 @@ Tap '+' to create a new composition.</string>
         <image name="three-dot-icon" width="116" height="115"/>
         <image name="tie-slur-button" width="116" height="115"/>
         <image name="time-key-icon" width="100" height="100"/>
+        <image name="toggle-piano-button" width="75" height="149"/>
         <image name="two-dot-icon" width="115" height="115"/>
         <image name="undo-icon" width="50" height="50"/>
         <image name="whole-note-icon" width="116" height="115"/>
