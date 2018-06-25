@@ -115,6 +115,18 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.tempoStackView.addGestureRecognizer(tapGesture)
     }
     
+    private func setupBottomMenu() {
+        self.bottomMenu.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
+        
+        let defaults = UserDefaults.standard
+        
+        let isBottomMenuHidden = defaults.bool(forKey: Constants.keyIsBottomMenuHidden)
+        
+        if isBottomMenuHidden {
+            self.bottomMenu.transform = self.bottomMenu.transform.translatedBy(x: 0, y: 60)
+        }
+    }
+    
     @IBAction func onBackPressed(_ sender: UIBarButtonItem) {
         // Check if there are unsaved changes
         if let composition = self.musicSheet.composition, self.initialTitle != composition.compositionInfo.name ||
