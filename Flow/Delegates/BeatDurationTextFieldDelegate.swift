@@ -20,4 +20,9 @@ class BeatDurationTextFieldDelegate: NSObject, UITextFieldDelegate {
         
         return allowedCharacters.isSuperset(of: characterSet) && newLength <= 2
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

@@ -20,4 +20,9 @@ class NBeatsTextFieldDelegate:  NSObject, UITextFieldDelegate {
         
         return allowedCharacters.isSuperset(of: characterSet) && newLength <= 3
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
