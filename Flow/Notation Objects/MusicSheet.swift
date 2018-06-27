@@ -839,7 +839,7 @@ class MusicSheet: UIView {
                 EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
             }
         } else {
-            print("EMPTYYY")
+            //print("EMPTYYY")
             EventBroadcaster.instance.postEvent(event: EventNames.REMOVE_ACCIDENTAL_HIGHLIGHT)
 
             if let accidentalMode = self.accidentalMode {
