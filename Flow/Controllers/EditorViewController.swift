@@ -269,6 +269,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.transposeView.isHidden = hidden
         self.riView.isHidden = hidden
         self.connectBtn.isHidden = hidden
+        self.keyboardScrollView.isHidden = hidden
+        self.keyboardView.isHidden = hidden
     }
     
     func highlightConnectBtn() {
@@ -385,6 +387,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.keyboardView.isHidden = !self.keyboardView.isHidden
         self.keyboardScrollView.isHidden = !self.keyboardScrollView.isHidden
         
+        self.notationControlsView.layer.zPosition = .greatestFiniteMagnitude
+        self.keyboardScrollView.layer.zPosition = self.notationControlsView.layer.zPosition - 500
+        
         if !self.keyboardView.isHidden {
             self.keyboardView.keyboardInputType = .quarter
         }
@@ -432,6 +437,8 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                 self.tempoSliderView.isHidden = true
             })
         }
+        
+        self.tempoSliderView.layer.zPosition = .greatestFiniteMagnitude
     }
     
     func hideTempo() {
