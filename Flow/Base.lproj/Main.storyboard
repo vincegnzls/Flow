@@ -1223,6 +1223,7 @@ Tap '+' to create a new composition.</string>
                     <connections>
                         <outlet property="bottomMenu" destination="9Uy-OO-nyR" id="qAP-7j-PpZ"/>
                         <outlet property="connectBtn" destination="9HY-Gc-gcB" id="5H3-f9-1Rs"/>
+                        <outlet property="cursorControlsView" destination="x7c-ta-wj1" id="dRx-N8-uPL"/>
                         <outlet property="hideButton" destination="ofr-4l-NNl" id="4gZ-Ix-r2L"/>
                         <outlet property="inversionBtn" destination="oVX-49-dcL" id="XAT-Fl-fRM"/>
                         <outlet property="keyboardScrollView" destination="LSc-ra-udB" id="GLS-3b-S9V"/>

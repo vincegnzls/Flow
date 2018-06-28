@@ -33,7 +33,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var inversionBtn: UIButton!
     @IBOutlet weak var keyboardScrollView: UIScrollView!
     @IBOutlet weak var notationControlsView: NotationControlsView!
-    
+    @IBOutlet weak var cursorControlsView: CursorControlsView!
     @IBOutlet weak var showButton: UIButton!
     @IBOutlet weak var hideButton: UIButton!
     var backButton : UIBarButtonItem!
@@ -943,6 +943,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         if let view = self.view as? ContainerView {
             view.bottomHeight += value
         }
+        
+        self.cursorControlsView.update()
+        self.notationControlsView.update()
     }
 }
 

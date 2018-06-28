@@ -75,6 +75,36 @@ class DraggableView: UIView {
             self.saveLocation()
         }
     }
+    
+    public func update() {
+        if let superview = self.superview as? ContainerView {
+            // Validation to prevent controls from being dragged outside of the screen
+            if self.center.x + self.bounds.width / 2 >= superview.bounds.width {
+                self.center.x = superview.bounds.width - self.bounds.width / 2
+            } else if self.center.x <= self.bounds.width / 2 {
+                self.center.x = self.bounds.width / 2
+            }
+            
+            if #available(iOS 11, *) {
+                let safeArea = superview.safeAreaInsets
+                
+                if self.center.y + self.bounds.height / 2 >= superview.lowerBounds {
+                    self.center.y = superview.lowerBounds - self.bounds.height / 2
+                } else if self.center.y <= self.bounds.height / 2 + safeArea.top {
+                    self.center.y = self.bounds.height / 2 + safeArea.top
+                }
+            }
+            else {
+                let statusBarHeight = UIApplication.shared.statusBarFrame.height
+                
+                if self.center.y + self.bounds.height / 2 >= superview.lowerBounds {
+                    self.center.y = superview.lowerBounds - self.bounds.height / 2
+                } else if self.center.y <= self.bounds.height / 2  + statusBarHeight {
+                    self.center.y = self.bounds.height / 2 + statusBarHeight
+                }
+            }
+        }
+    }
 
     private func saveLocation() {
         let defaults = UserDefaults.standard
