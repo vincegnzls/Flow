@@ -1756,9 +1756,9 @@ class SoundManager {
         self.grandStaffMixerG.stop()
         self.grandStaffMixerF.stop()
         do {
-            /*try AudioKit.stop()
+            try AudioKit.stop()
             gNotePlayer.stop()
-            fNotePlayer.stop()*/
+            /*fNotePlayer.stop()*/
         } catch let error as NSError{
             print(error.debugDescription)
         }
@@ -1785,7 +1785,7 @@ class SoundManager {
         
         var currentMeasureIndex = 0
         
-        if let currentMeasure = GridSystem.instance.getCurrentMeasure() {
+        /*if let currentMeasure = GridSystem.instance.getCurrentMeasure() {
             for staff in composition.staffList {
                 if staff.measures.contains(currentMeasure) {
                     if let index = staff.measures.index(of: currentMeasure) {
@@ -1793,12 +1793,12 @@ class SoundManager {
                     }
                 }
             }
-        }
+        }*/
         
         gNotes.removeAll()
         fNotes.removeAll()
         
-        if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x), let currentMeasure = GridSystem.instance.getCurrentMeasure() {
+        /*if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x), let currentMeasure = GridSystem.instance.getCurrentMeasure() {
             
             var noteToBeChecked = noteFromX
             
@@ -1882,12 +1882,12 @@ class SoundManager {
             
             }
             
-        } else {
+        } else {*/
             self.gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
             self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
-        }
+        //}
         
-        if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x) {
+        /*if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x) {
 
             self.compMeasures = getCompMeasureStarting(from: noteFromX, comp: composition)
             
@@ -1895,7 +1895,7 @@ class SoundManager {
             
             self.compMeasures = getCompMeasures(comp: composition)
             
-        }
+        }*/
         
         do {
             try AudioKit.start()
