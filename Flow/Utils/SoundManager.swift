@@ -1984,7 +1984,7 @@ class SoundManager {
                     self.gNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
                 }
             } else {
-                self.grandStaffMixerG.stop()
+                //self.grandStaffMixerG.stop()
                 self.grandStaffMixerG = AKMixer()
                 self.grandStaffMixerG.volume = 2.0
                 AudioKit.output = self.grandStaffMixerG
@@ -2052,7 +2052,7 @@ class SoundManager {
                     self.fNotePlayer.play(noteNumber: MIDINoteNumber(noteNumber))
                 }
             } else {
-                self.grandStaffMixerF.stop()
+                //self.grandStaffMixerF.stop()
                 self.grandStaffMixerF = AKMixer()
                 self.grandStaffMixerF.volume = 2.0
                 AudioKit.output = self.grandStaffMixerF
