@@ -173,7 +173,7 @@ class MusicSheet: UIView {
             checkHighlightAccidentalButton()
             checkHighlightOttavaButton()
             checkHighlightConnectButton()
-            print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
+            //print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
             
             let parameters = Parameters() // parameters for dotted notes
             
@@ -205,7 +205,7 @@ class MusicSheet: UIView {
                 sheetCursor.hideCursors()
                 //let params = Parameters()
 
-                print("NANI")
+                //print("NANI")
 
                 var allChordsSelected = [Chord]()
                 
@@ -263,7 +263,7 @@ class MusicSheet: UIView {
                     }
                     
                     //self.transformView.frame = CGRect(x: coord.x + 60, y: coord.y - 53, width: transformView.frame.width, height: transformView.frame.height)
-                    print(selectedNotations)
+                    //print(selectedNotations)
                     let frame = CGRect(x: lastCoord.x + 60, y: firstCoord.y - 53, width: 0, height: 0)
                     let params = Parameters()
                     params.put(key: KeyNames.TRANSORM_VIEW_FRAME, value: frame)
@@ -4068,15 +4068,15 @@ class MusicSheet: UIView {
             for note in selectedNotations {
                 if note.measure == measure {
                     totalBeats = totalBeats + note.type.getBeatValue()
-                    print(note.type.getBeatValue())
+                    //print(note.type.getBeatValue())
                 }
             }
 
             let netBeatValue = measure.curBeatValue - totalBeats
 
             //print("SELECTED NOTES COUNT: " + String(selectedNotations.count))
-            print("CUR MES: " + String(measure.curBeatValue))
-            print("NET BEAT: " + String(netBeatValue))
+            //print("CUR MES: " + String(measure.curBeatValue))
+            //print("NET BEAT: " + String(netBeatValue))
 
             for noteType in RestNoteType.types {
                 if netBeatValue + noteType.getBeatValue() > measure.timeSignature.getMaxBeatValue() {
@@ -4084,13 +4084,8 @@ class MusicSheet: UIView {
                 }
             }
 
-            print("INVALID NOTES")
-            print("COUNT: " + String(invalidNotes.count))
-
-
-            for note in invalidNotes {
-                print(note.toString())
-            }
+            //print("INVALID NOTES")
+            //print("COUNT: " + String(invalidNotes.count))
 
             let params = Parameters()
 
@@ -5187,36 +5182,6 @@ class MusicSheet: UIView {
                 
             }
         }
-        
-        //TODO: IMPLEMENT PLAYBACK FRONTEND
-        
-        /*var xIterate: CGFloat = 0
-
-        if let noteType = SoundManager.instance.currentNoteTypePlaying {
-            print("currently playing \(noteType.toString())")
-            
-            switch noteType {
-            case .whole:
-                xIterate = CGFloat(SoundManager.instance.tempo / 180)
-            case .half:
-                xIterate = CGFloat(SoundManager.instance.tempo / 150)
-            case .quarter:
-                xIterate = CGFloat(SoundManager.instance.tempo / 120)
-            case .eighth:
-                xIterate = CGFloat(SoundManager.instance.tempo / 90)
-            case .sixteenth:
-                xIterate = CGFloat(SoundManager.instance.tempo / 60)
-            case .thirtySecond:
-                xIterate = CGFloat(SoundManager.instance.tempo / 30)
-            case .sixtyFourth:
-                xIterate = CGFloat(SoundManager.instance.tempo / 6.25)
-            }
-        }
-        
-        //let xIterate: CGFloat = CGFloat(SoundManager.instance.tempo / 10)
-
-        sheetCursor.moveCursorX(location: CGPoint(x: sheetCursor.curXCursorLocation.x + xIterate, y: sheetCursor.curXCursorLocation.y))*/
-        
     }
     
     private func highlightSelectedMeasure(params: Parameters) {
@@ -5429,7 +5394,6 @@ class MusicSheet: UIView {
     }
 
     public func titleChanged(params: Parameters) {
-        print("here")
         if let composition = self.composition {
             composition.compositionInfo.name = params.get(key: KeyNames.NEW_TITLE, defaultValue: "Untitled Composition")
         }
@@ -6301,12 +6265,12 @@ class MusicSheet: UIView {
         var invertedNotes = [Note]()
 
         for x in 0...notations.count - 2 {
-            print("XXX: \(x)")
+            //print("XXX: \(x)")
             if notations[0] is Note && notations[x + 1] is Note {
                 
                 let delta = getNoteDifference(note1: notations[0] as! Note, note2: notations[x + 1] as! Note)
                 
-                print("DELTA: \(delta)")
+                //print("DELTA: \(delta)")
 
                 let invertDelta = delta * -1
 
@@ -6314,7 +6278,7 @@ class MusicSheet: UIView {
             }
         }
 
-        print("INVERTED DELTAS: \(invertedDeltas)")
+        //print("INVERTED DELTAS: \(invertedDeltas)")
         
         for y in 1...notations.count - 1 {
             if notations[y] is Note {
@@ -6372,8 +6336,8 @@ class MusicSheet: UIView {
 
         var invertedNote = note
         
-        print("INVERTNOTE STEPS: \(abs(steps))")
-        print("STEPS: \(steps))")
+        //print("INVERTNOTE STEPS: \(abs(steps))")
+        //print("STEPS: \(steps))")
 
         if abs(steps) > 0 {
             for _ in 1...abs(steps) * 2 {
@@ -6399,8 +6363,8 @@ class MusicSheet: UIView {
     }
 
     func getNoteDifference(note1: Note, note2: Note) -> Int {
-        print("note1 pitch : \(note1.pitch.step.rawValue) note2 pitch: \(note2.pitch.step.rawValue)")
-        print("note1 octave: \(note1.pitch.octave) note2 octave: \(note2.pitch.octave)")
+        //print("note1 pitch : \(note1.pitch.step.rawValue) note2 pitch: \(note2.pitch.step.rawValue)")
+        //print("note1 octave: \(note1.pitch.octave) note2 octave: \(note2.pitch.octave)")
         return ((note2.pitch.octave * 7) + note2.pitch.step.rawValue) - ((note1.pitch.octave * 7) + note1.pitch.step.rawValue)
     }
     

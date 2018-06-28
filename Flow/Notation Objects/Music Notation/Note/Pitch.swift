@@ -62,7 +62,7 @@ struct Pitch : Hashable {
             self.step = .C
             self.octave = self.octave + 1
         }
-        print(self.step.toString())
+        //print(self.step.toString())
     }
     
     mutating func transposeDown() {

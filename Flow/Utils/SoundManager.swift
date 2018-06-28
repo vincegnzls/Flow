@@ -1755,6 +1755,10 @@ class SoundManager {
         self.timer.invalidate()
         self.grandStaffMixerG.stop()
         self.grandStaffMixerF.stop()
+        
+        self.gNotesMIDI.removeAll()
+        self.fNotesMIDI.removeAll()
+        
         do {
             /*try AudioKit.stop()
             gNotePlayer.stop()
@@ -1797,6 +1801,9 @@ class SoundManager {
         
         gNotes.removeAll()
         fNotes.removeAll()
+        
+        gNotesType.removeAll()
+        fNotesType.removeAll()
         
         if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x), let currentMeasure = GridSystem.instance.getCurrentMeasure() {
             
@@ -1942,11 +1949,6 @@ class SoundManager {
             currentGNotePlaying = gNotes[self.curBeat]
             currentFNotePlaying = fNotes[self.curBeat]
             
-            /*if gNotes[self.curBeat].type.getBeatValue() <= fNotes[self.curBeat].type.getBeatValue() {
-                self.currentNotePlaying = gNotes[self.curBeat]
-            } else if fNotes[self.curBeat].type.getBeatValue() <= gNotes[self.curBeat].type.getBeatValue() {
-                self.currentNotePlaying = fNotes[self.curBeat]
-            }*/
         }
         
         if !self.gNotesMIDI.isEmpty && self.curBeat < self.gNotesMIDI.count {
@@ -2107,10 +2109,3 @@ class SoundManager {
          }*/
     }
 }
-
-
-
-
-
-
-
