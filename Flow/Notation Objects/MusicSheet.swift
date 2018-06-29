@@ -950,8 +950,12 @@ class MusicSheet: UIView {
         EventBroadcaster.instance.removeObservers(event: EventNames.HIGHLIGHT_SELECTED_MEASURE)
         EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_SELECTED_MEASURE, observer: Observer(id: "MusicSheet.highlightSelectedMeasure", function: self.highlightSelectedMeasure))
         
+        // This is for playback
         EventBroadcaster.instance.removeObservers(event: EventNames.HIGHLIGHT_MEASURE)
         EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_MEASURE, observer: Observer(id: "MusicSheet.highlightParallelMeasures", function: self.highlightParallelMeasures))
+        
+        EventBroadcaster.instance.removeObservers(event: EventNames.HIGHLIGHT_NOTATIONS)
+        EventBroadcaster.instance.addObserver(event: EventNames.HIGHLIGHT_NOTATIONS, observer: Observer(id: "MusicSheet.highlightPlayingNotes", function: self.highlightPlayingNotes))
         
         EventBroadcaster.instance.removeObservers(event: EventNames.ACTION_PERFORMED)
         EventBroadcaster.instance.addObserver(event: EventNames.ACTION_PERFORMED, observer: Observer(id: "MusicSheet.redirectCursorOnAction", function: self.reassignRecentAction))
@@ -5096,26 +5100,6 @@ class MusicSheet: UIView {
         } else {
             SoundManager.instance.stopPlaying()
             
-            if let gNotation = SoundManager.instance.currentGNotePlaying,
-                let fNotation = SoundManager.instance.currentFNotePlaying {
-                
-                if let gCoord = gNotation.screenCoordinates, let fCoord = fNotation.screenCoordinates {
-                    
-                    if gNotation.type.getBeatValue(dots: gNotation.dots) <= fNotation.type.getBeatValue(dots: fNotation.dots) {
-                        self.remapCurrentMeasure(location: CGPoint(x: gCoord.x + noteXOffset, y: gCoord.y))
-                        self.moveCursorsToNearestSnapPoint(location: CGPoint(x: gCoord.x + noteXOffset, y: gCoord.y))
-                    } else if fNotation.type.getBeatValue(dots: fNotation.dots) <= gNotation.type.getBeatValue(dots: gNotation.dots) {
-                        self.remapCurrentMeasure(location: CGPoint(x: fCoord.x + noteXOffset, y: fCoord.y))
-                        self.moveCursorsToNearestSnapPoint(location: CGPoint(x: fCoord.x + noteXOffset, y: fCoord.y))
-                    }
-                    
-                }
-            }
-            
-            SoundManager.instance.currentGNotePlaying = nil
-            SoundManager.instance.currentFNotePlaying = nil
-            playBackTimer.invalidate()
-            
             self.enableInteraction()
             
             for view in self.subviews {
@@ -5130,8 +5114,6 @@ class MusicSheet: UIView {
                 }
             }
             
-            sheetCursor.showCursorY()
-            
             measureHighlightRect.opacity = 100
             
         }
@@ -5141,15 +5123,36 @@ class MusicSheet: UIView {
     func enableInteraction() {
         self.isUserInteractionEnabled = true
         
-        //sheetCursor.showCursors()
-        
         self.playbackHighlightRect.path = nil
+        
+        if let gNotation = SoundManager.instance.currentGNotePlaying,
+            let fNotation = SoundManager.instance.currentFNotePlaying {
+            
+            if let gCoord = gNotation.screenCoordinates, let fCoord = fNotation.screenCoordinates {
+                
+                if gNotation.type.getBeatValue(dots: gNotation.dots) <= fNotation.type.getBeatValue(dots: fNotation.dots) {
+                    self.remapCurrentMeasure(location: CGPoint(x: gCoord.x + noteXOffset, y: gCoord.y))
+                    self.moveCursorsToNearestSnapPoint(location: CGPoint(x: gCoord.x + noteXOffset, y: gCoord.y))
+                } else if fNotation.type.getBeatValue(dots: fNotation.dots) <= gNotation.type.getBeatValue(dots: gNotation.dots) {
+                    self.remapCurrentMeasure(location: CGPoint(x: fCoord.x + noteXOffset, y: fCoord.y))
+                    self.moveCursorsToNearestSnapPoint(location: CGPoint(x: fCoord.x + noteXOffset, y: fCoord.y))
+                }
+                
+            }
+        }
+        
+        SoundManager.instance.currentGNotePlaying = nil
+        SoundManager.instance.currentFNotePlaying = nil
+        
+        sheetCursor.showCursorY()
+        
+        playBackTimer.invalidate()
     }
-
+    
     @objc
     func updateTime() {
         
-        for view in self.subviews {
+        /*for view in self.subviews {
             if view.tag == HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG {
                 view.removeFromSuperview()
             }
@@ -5157,6 +5160,30 @@ class MusicSheet: UIView {
         
         if let gNotation = SoundManager.instance.currentGNotePlaying,
             let fNotation = SoundManager.instance.currentFNotePlaying {
+            
+            if let playedG = playedGNotation {
+                if playedGNotation == gNotation {
+                    
+                }
+            } else {
+                for view in self.subviews {
+                    if view.tag == HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG {
+                        view.removeFromSuperview()
+                    }
+                }
+            }
+            
+            if let playedF = playedFNotation {
+                if playedFNotation == fNotation {
+                    
+                }
+            } else {
+                for view in self.subviews {
+                    if view.tag == HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG {
+                        view.removeFromSuperview()
+                    }
+                }
+            }
             
             highlightNotation(gNotation, forPlayback: true)
             highlightNotation(fNotation, forPlayback: true)
@@ -5181,7 +5208,44 @@ class MusicSheet: UIView {
                 }
                 
             }
+        }*/
+    }
+    
+    private func highlightPlayingNotes(params: Parameters) {
+        if let gNotation = params.get(key: KeyNames.HIGHLIGHT_G_NOTATION) as? MusicNotation, let fNotation = params.get(key: KeyNames.HIGHLIGHT_F_NOTATION) as? MusicNotation {
+            
+            for view in self.subviews {
+                if view.tag == HIGHLIGHTED_NOTES_FOR_PLAYBACK_TAG {
+                    view.removeFromSuperview()
+                }
+            }
+            
+            highlightNotation(gNotation, forPlayback: true)
+            highlightNotation(fNotation, forPlayback: true)
+            
+            var gCoord: CGPoint? = gNotation.screenCoordinates
+            var fCoord: CGPoint? = fNotation.screenCoordinates
+            
+            if let chord = gNotation as? Chord {
+                gCoord = chord.notes[0].screenCoordinates
+            }
+            
+            if let chord = fNotation as? Chord {
+                fCoord = chord.notes[0].screenCoordinates
+            }
+            
+            if let gCoord = gCoord, let fCoord = fCoord {
+                
+                if gNotation.type.getBeatValue(dots: gNotation.dots) <= fNotation.type.getBeatValue(dots: fNotation.dots) {
+                    sheetCursor.moveCursorX(location: CGPoint(x: gCoord.x + noteXOffset, y: sheetCursor.curXCursorLocation.y))
+                } else if fNotation.type.getBeatValue(dots: fNotation.dots) <= gNotation.type.getBeatValue(dots: gNotation.dots) {
+                    sheetCursor.moveCursorX(location: CGPoint(x: fCoord.x + noteXOffset, y: sheetCursor.curXCursorLocation.y))
+                }
+                
+            }
+            
         }
+        
     }
     
     private func highlightSelectedMeasure(params: Parameters) {

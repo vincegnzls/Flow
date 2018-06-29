@@ -1752,27 +1752,29 @@ class SoundManager {
     }
 
     func stopPlaying() {
-        self.timer.invalidate()
-        self.grandStaffMixerG.stop()
-        self.grandStaffMixerF.stop()
-        
-        self.gNotesMIDI.removeAll()
-        self.fNotesMIDI.removeAll()
-        
-        do {
-            /*try AudioKit.stop()
-            gNotePlayer.stop()
-            fNotePlayer.stop()*/
-        } catch let error as NSError{
-            print(error.debugDescription)
+        if isPlaying {
+            self.timer.invalidate()
+            self.grandStaffMixerG.stop()
+            self.grandStaffMixerF.stop()
+            
+            self.gNotesMIDI.removeAll()
+            self.fNotesMIDI.removeAll()
+            
+            do {
+                try AudioKit.stop()
+                gNotePlayer.stop()
+                /*fNotePlayer.stop()*/
+            } catch let error as NSError{
+                print(error.debugDescription)
+            }
+            currentMeasurePlaying = nil
+            EventBroadcaster.instance.postEvent(event: EventNames.STOP_PLAYBACK)
+            
+            let params = Parameters()
+            params.put(key: KeyNames.TRANSFORM_VIEW_TOGGLE, value: false)
+            
+            EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_TRANSFORM_VIEWS, params: params)
         }
-        currentMeasurePlaying = nil
-        EventBroadcaster.instance.postEvent(event: EventNames.STOP_PLAYBACK)
-        
-        let params = Parameters()
-        params.put(key: KeyNames.TRANSFORM_VIEW_TOGGLE, value: false)
-        
-        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_TRANSFORM_VIEWS, params: params)
     }
     
     func musicPlayback(_ composition: Composition){
@@ -1927,8 +1929,29 @@ class SoundManager {
         RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
     }
     
-    public var currentGNotePlaying: MusicNotation?
-    public var currentFNotePlaying: MusicNotation?
+    public var currentGNotePlaying: MusicNotation? {
+        didSet {
+            if currentGNotePlaying != oldValue {
+                let params = Parameters()
+                params.put(key: KeyNames.HIGHLIGHT_G_NOTATION, value: currentGNotePlaying)
+                params.put(key: KeyNames.HIGHLIGHT_F_NOTATION, value: currentFNotePlaying)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_NOTATIONS, params: params)
+            }
+        }
+    }
+    
+    public var currentFNotePlaying: MusicNotation? {
+        didSet {
+            if currentFNotePlaying != oldValue {
+                let params = Parameters()
+                params.put(key: KeyNames.HIGHLIGHT_G_NOTATION, value: currentGNotePlaying)
+                params.put(key: KeyNames.HIGHLIGHT_F_NOTATION, value: currentFNotePlaying)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_NOTATIONS, params: params)
+            }
+        }
+    }
     
     private var currentMeasurePlaying: Measure? {
         didSet {
