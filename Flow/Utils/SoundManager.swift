@@ -1755,6 +1755,10 @@ class SoundManager {
         self.timer.invalidate()
         self.grandStaffMixerG.stop()
         self.grandStaffMixerF.stop()
+        
+        self.gNotesMIDI.removeAll()
+        self.fNotesMIDI.removeAll()
+        
         do {
             try AudioKit.stop()
             gNotePlayer.stop()
@@ -1785,7 +1789,7 @@ class SoundManager {
         
         var currentMeasureIndex = 0
         
-        /*if let currentMeasure = GridSystem.instance.getCurrentMeasure() {
+        if let currentMeasure = GridSystem.instance.getCurrentMeasure() {
             for staff in composition.staffList {
                 if staff.measures.contains(currentMeasure) {
                     if let index = staff.measures.index(of: currentMeasure) {
@@ -1793,12 +1797,15 @@ class SoundManager {
                     }
                 }
             }
-        }*/
+        }
         
         gNotes.removeAll()
         fNotes.removeAll()
         
-        /*if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x), let currentMeasure = GridSystem.instance.getCurrentMeasure() {
+        gNotesType.removeAll()
+        fNotesType.removeAll()
+        
+        if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x), let currentMeasure = GridSystem.instance.getCurrentMeasure() {
             
             var noteToBeChecked = noteFromX
             
@@ -1882,12 +1889,12 @@ class SoundManager {
             
             }
             
-        } else {*/
+        } else {
             self.gNotesMIDI = preProcessStaff(staff: composition.staffList[0])
             self.fNotesMIDI = preProcessStaff(staff: composition.staffList[1])
-        //}
+        }
         
-        /*if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x) {
+        if let selectedCoord = GridSystem.instance.selectedCoord, let noteFromX = GridSystem.instance.getNoteFromX(x: selectedCoord.x) {
 
             self.compMeasures = getCompMeasureStarting(from: noteFromX, comp: composition)
             
@@ -1895,7 +1902,7 @@ class SoundManager {
             
             self.compMeasures = getCompMeasures(comp: composition)
             
-        }*/
+        }
         
         do {
             try AudioKit.start()
@@ -1920,8 +1927,29 @@ class SoundManager {
         RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
     }
     
-    public var currentGNotePlaying: MusicNotation?
-    public var currentFNotePlaying: MusicNotation?
+    public var currentGNotePlaying: MusicNotation? {
+        didSet {
+            if currentGNotePlaying != oldValue {
+                let params = Parameters()
+                params.put(key: KeyNames.HIGHLIGHT_G_NOTATION, value: currentGNotePlaying)
+                params.put(key: KeyNames.HIGHLIGHT_F_NOTATION, value: currentFNotePlaying)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_NOTATIONS, params: params)
+            }
+        }
+    }
+    
+    public var currentFNotePlaying: MusicNotation? {
+        didSet {
+            if currentFNotePlaying != oldValue {
+                let params = Parameters()
+                params.put(key: KeyNames.HIGHLIGHT_G_NOTATION, value: currentGNotePlaying)
+                params.put(key: KeyNames.HIGHLIGHT_F_NOTATION, value: currentFNotePlaying)
+                
+                EventBroadcaster.instance.postEvent(event: EventNames.HIGHLIGHT_NOTATIONS, params: params)
+            }
+        }
+    }
     
     private var currentMeasurePlaying: Measure? {
         didSet {
@@ -1942,11 +1970,6 @@ class SoundManager {
             currentGNotePlaying = gNotes[self.curBeat]
             currentFNotePlaying = fNotes[self.curBeat]
             
-            /*if gNotes[self.curBeat].type.getBeatValue() <= fNotes[self.curBeat].type.getBeatValue() {
-                self.currentNotePlaying = gNotes[self.curBeat]
-            } else if fNotes[self.curBeat].type.getBeatValue() <= gNotes[self.curBeat].type.getBeatValue() {
-                self.currentNotePlaying = fNotes[self.curBeat]
-            }*/
         }
         
         if !self.gNotesMIDI.isEmpty && self.curBeat < self.gNotesMIDI.count {
@@ -2107,10 +2130,3 @@ class SoundManager {
          }*/
     }
 }
-
-
-
-
-
-
-

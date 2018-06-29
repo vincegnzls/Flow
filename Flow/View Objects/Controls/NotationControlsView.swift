@@ -489,8 +489,6 @@ class NotationControlsView: DraggableView {
 
     func hideOnPlay() {
 
-        print("wtf")
-
         if !SoundManager.instance.isPlaying {
             self.isHidden = true
         } else {
