@@ -33,7 +33,7 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBOutlet weak var inversionBtn: UIButton!
     @IBOutlet weak var keyboardScrollView: UIScrollView!
     @IBOutlet weak var notationControlsView: NotationControlsView!
-    
+    @IBOutlet weak var cursorControlsView: CursorControlsView!
     @IBOutlet weak var showButton: UIButton!
     @IBOutlet weak var hideButton: UIButton!
     var backButton : UIBarButtonItem!
@@ -44,8 +44,11 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.keyboardView.isHidden = !self.keyboardView.isHidden
+        self.keyboardScrollView.isHidden = !self.keyboardScrollView.isHidden
     
-        toggleKeyboard()
+        //toggleKeyboard()
         keyboardScrollView.panGestureRecognizer.minimumNumberOfTouches = 2
         keyboardScrollView.panGestureRecognizer.maximumNumberOfTouches = 2
         self.keyboardScrollView.contentSize = self.keyboardView.bounds.size
@@ -392,6 +395,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         if !self.keyboardView.isHidden {
             self.keyboardView.keyboardInputType = .quarter
+            self.adjustLowerBounds(by: self.keyboardScrollView.bounds.height + 45)
+        } else {
+            self.adjustLowerBounds(by: (self.keyboardScrollView.bounds.height + 45) * -1)
         }
     }
     
@@ -943,6 +949,9 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         if let view = self.view as? ContainerView {
             view.bottomHeight += value
         }
+        
+        self.cursorControlsView.update()
+        self.notationControlsView.update()
     }
 }
 
