@@ -5114,8 +5114,6 @@ class MusicSheet: UIView {
                 }
             }
             
-            sheetCursor.showCursorY()
-            
             measureHighlightRect.opacity = 100
             
         }
@@ -5145,6 +5143,8 @@ class MusicSheet: UIView {
         
         SoundManager.instance.currentGNotePlaying = nil
         SoundManager.instance.currentFNotePlaying = nil
+        
+        sheetCursor.showCursorY()
         
         playBackTimer.invalidate()
     }

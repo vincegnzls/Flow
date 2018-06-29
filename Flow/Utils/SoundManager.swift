@@ -1752,27 +1752,29 @@ class SoundManager {
     }
 
     func stopPlaying() {
-        self.timer.invalidate()
-        self.grandStaffMixerG.stop()
-        self.grandStaffMixerF.stop()
-        
-        self.gNotesMIDI.removeAll()
-        self.fNotesMIDI.removeAll()
-        
-        do {
-            try AudioKit.stop()
-            gNotePlayer.stop()
-            /*fNotePlayer.stop()*/
-        } catch let error as NSError{
-            print(error.debugDescription)
+        if isPlaying {
+            self.timer.invalidate()
+            self.grandStaffMixerG.stop()
+            self.grandStaffMixerF.stop()
+            
+            self.gNotesMIDI.removeAll()
+            self.fNotesMIDI.removeAll()
+            
+            do {
+                try AudioKit.stop()
+                gNotePlayer.stop()
+                /*fNotePlayer.stop()*/
+            } catch let error as NSError{
+                print(error.debugDescription)
+            }
+            currentMeasurePlaying = nil
+            EventBroadcaster.instance.postEvent(event: EventNames.STOP_PLAYBACK)
+            
+            let params = Parameters()
+            params.put(key: KeyNames.TRANSFORM_VIEW_TOGGLE, value: false)
+            
+            EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_TRANSFORM_VIEWS, params: params)
         }
-        currentMeasurePlaying = nil
-        EventBroadcaster.instance.postEvent(event: EventNames.STOP_PLAYBACK)
-        
-        let params = Parameters()
-        params.put(key: KeyNames.TRANSFORM_VIEW_TOGGLE, value: false)
-        
-        EventBroadcaster.instance.postEvent(event: EventNames.TOGGLE_TRANSFORM_VIEWS, params: params)
     }
     
     func musicPlayback(_ composition: Composition){
