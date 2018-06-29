@@ -272,8 +272,11 @@ class EditorViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.transposeView.isHidden = hidden
         self.riView.isHidden = hidden
         self.connectBtn.isHidden = hidden
-        self.keyboardScrollView.isHidden = hidden
-        self.keyboardView.isHidden = hidden
+        
+        if self.notationControlsView.keyboardInputOn {
+            self.keyboardScrollView.isHidden = hidden
+            self.keyboardView.isHidden = hidden
+        }
     }
     
     func highlightConnectBtn() {
