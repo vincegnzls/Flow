@@ -229,7 +229,7 @@ class Chord: MusicNotation {
     
     // INSERTION SORT FROM https://github.com/raywenderlich/swift-algorithm-club/tree/master/Insertion%20Sort
     // by raywenderlich : https://github.com/raywenderlich
-    func insertionSort<T>(_ array: [T], _ isOrderedBefore: (T, T) -> Bool) -> [T] {
+    private func insertionSort<T>(_ array: [T], _ isOrderedBefore: (T, T) -> Bool) -> [T] {
         guard array.count > 1 else { return array }
         
         var a = array
